@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
+  <string name="cant_fetch_refresh">Can\'t fetch data, tap to refresh.</string>
   <string name="change_email_title">Change your email</string>
   <string name="common_cancel">Cancel</string>
   <string name="common_change_email">Use another email</string>
@@ -14,7 +15,7 @@
   <string name="common_send_link">Send link</string>
   <string name="common_support">Support</string>
   <string name="common_try_again">Try again</string>
-  <string name="common_user_not_found">User not found</string>
+  <string name="common_user_not_found">No mobile number found, please recheck it and try again.</string>
   <string name="details_already_have_card">I already have a card</string>
   <string name="details_already_used_free_try">You already used your free try</string>
   <string name="details_enough_xor_desription">You have enough XOR</string>
@@ -39,7 +40,7 @@
   <string name="get_prepared_take_selfie_title">Take a selfie</string>
   <string name="get_prepared_title">Get prepared</string>
   <string name="kyc_result_verification_in_progress">Verification in progress</string>
-  <string name="kyc_result_verification_in_progress_description">You have successfully completed your KYC application. The review is pending and you can expect a decision shortly.\n\nUsually the decision is made the same day, but in some cases can take up to 3 days.</string>
+  <string name="kyc_result_verification_in_progress_description">You have successfully completed your KYC application. The review is pending and you can expect a decision shortly.\n\nUsually the decision is made the same day and in some cases can take up to 3 days.</string>
   <string name="no_free_kyc_attempts_description">You have used your free attempt to pass the KYC process.\n\nWe kindly ask you to wait until the next upgrade of the application to proceed with paid attempts.</string>
   <string name="no_free_kyc_attempts_title">No more free attempts</string>
   <string name="terms_and_conditions_accept_and_continue">Accept &amp; Continue</string>
@@ -58,9 +59,9 @@
   <string name="verification_failed_title">Verification failed</string>
   <string name="verification_rejected_description">Your application has failed. To read more about the reason of the failure, please read the following additional description.</string>
   <string name="verification_rejected_support">Support</string>
-  <string name="verification_rejected_title">Verification rejected</string>
+  <string name="verification_rejected_title">Application rejected</string>
   <string name="verification_successful_description">Your KYC verification is successful and we are already preparing to send you the SORA card!</string>
-  <string name="verification_successful_title">Verification successful!</string>
+  <string name="verification_successful_title">Application approved</string>
   <string name="verify_email_description">Follow the magic link that has been sent\nto %s</string>
   <string name="verify_email_resend">RE-SEND IN %s</string>
   <string name="verify_email_title">Verify your email</string>
