@@ -23,7 +23,7 @@ plugins {
 }
 
 val composeCompilerVersion by extra("1.4.3")
-val uiCoreVersion by extra("0.0.63")
+val uiCoreVersion by extra("0.0.64")
 val lifecycleVersion by extra("2.6.0-alpha02")
 val navigationVersion by extra("2.5.0")
 val accompanistVersion by extra("0.26.4-beta")
