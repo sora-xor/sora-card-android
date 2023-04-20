@@ -10,10 +10,12 @@ pluginManagement {
 }
 
 fun secret(name: String): String? {
-    val pr = Properties().apply {
-        load(FileInputStream("local.properties"))
+    val pr = runCatching { FileInputStream("local.properties") }.getOrNull()?.let { file ->
+        Properties().apply {
+            load(file)
+        }
     }
-    return pr.getProperty(name) ?: System.getenv(name)
+    return pr?.getProperty(name) ?: System.getenv(name)
 }
 
 dependencyResolutionManagement {
