@@ -22,17 +22,20 @@ node(jenkinsAgent) {
                     docker.image("${dockerImage}").inside {
                         stage('Test oauth module') {
                             sh '''
+                                chmod +x gradlew
                                 ./gradlew :oauth:test
                             '''
                         }
                         stage('Build oauth module') {
                             sh '''
+                                chmod +x gradlew
                                 ./gradlew :oauth:build
                             '''
                         }
                         if (env.BRANCH_NAME in deploymentBranches) {
                             stage('Publish') {
                                 sh '''
+                                    chmod +x gradlew
                                     ./gradlew publish
                                 '''
                             }
