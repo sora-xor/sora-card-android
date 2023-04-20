@@ -37,7 +37,7 @@ dependencyResolutionManagement {
 
         mavenLocal()
         maven {
-            url = uri(secret("IROHA_NEXUS")!!)
+            url = uri(secret("RELEASE_REPOSITORY_URL")!!)
         }
     }
 }
