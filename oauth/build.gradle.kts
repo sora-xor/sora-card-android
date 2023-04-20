@@ -2,10 +2,12 @@ import java.util.Properties
 import java.io.FileInputStream
 
 fun secret(name: String): String? {
-    val pr = Properties().apply {
-        load(FileInputStream("local.properties"))
+    val pr = runCatching { FileInputStream("local.properties") }.getOrNull()?.let { file ->
+        Properties().apply {
+            load(file)
+        }
     }
-    return pr.getProperty(name) ?: System.getenv(name)
+    return pr?.getProperty(name) ?: System.getenv(name)
 }
 
 fun maybeWrapQuotes(s: String): String {
@@ -142,7 +144,7 @@ kapt {
     correctErrorTypes = true
 }
 
-val currentVersion by extra("0.0.36")
+val currentVersion by extra("0.0.37")
 publishing {
     publications {
         register<MavenPublication>("release") {
