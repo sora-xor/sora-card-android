@@ -24,12 +24,12 @@ plugins {
     kotlin("plugin.serialization")
 }
 
-val composeCompilerVersion by extra("1.4.3")
+val composeCompilerVersion by extra("1.4.6")
 val uiCoreVersion by extra("0.0.64")
 val lifecycleVersion by extra("2.6.0-alpha02")
 val navigationVersion by extra("2.5.0")
 val accompanistVersion by extra("0.26.4-beta")
-val hiltVersion by extra("2.44")
+val hiltVersion by extra("2.45")
 val pwOauthSdkVersion by extra("1.2.2")
 val pwKycSdkVersion by extra("4.2.0")
 val dataStoreVersion by extra("1.0.0")
@@ -74,13 +74,17 @@ android {
         }
     }
 
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    } 
 
     buildFeatures {
         compose = true
@@ -92,14 +96,14 @@ android {
 
 dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.fragment:fragment-ktx:1.5.5")
+    implementation("androidx.core:core-ktx:1.10.0")
+    implementation("androidx.fragment:fragment-ktx:1.5.7")
 
-    implementation("androidx.compose.ui:ui:1.3.3")
-    implementation("androidx.compose.material:material:1.3.1")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.3.3")
-    implementation("androidx.compose.runtime:runtime-livedata:1.3.3")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.3.3")
+    implementation("androidx.compose.ui:ui:1.4.2")
+    implementation("androidx.compose.material:material:1.4.2")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.4.2")
+    implementation("androidx.compose.runtime:runtime-livedata:1.4.2")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.4.2")
 
     implementation("jp.co.soramitsu:ui-core:$uiCoreVersion")
 
@@ -134,10 +138,10 @@ dependencies {
     debugImplementation("junit:junit:4.13.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
     implementation("junit:junit:4.13.2")
-    testImplementation("org.mockito:mockito-inline:4.6.1")
+    testImplementation("org.mockito:mockito-inline:5.2.0")
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
     testImplementation("androidx.arch.core:core-testing:2.2.0")
-    testImplementation("io.mockk:mockk:1.12.4")
+    testImplementation("io.mockk:mockk:1.13.5")
 }
 
 kapt {

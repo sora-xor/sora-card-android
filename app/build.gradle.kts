@@ -55,16 +55,11 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+        kotlinCompilerExtensionVersion = "1.4.6"
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_1_8.toString()
-        }
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
 
@@ -72,12 +67,12 @@ dependencies {
 
     implementation(project(":oauth"))
     implementation("com.google.android.material:material:1.8.0")
-    implementation("androidx.activity:activity-compose:1.6.1")
-    implementation("androidx.compose.material:material:1.3.1")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.3.3")
+    implementation("androidx.activity:activity-compose:1.7.1")
+    implementation("androidx.compose.material:material:1.4.2")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.4.2")
 
-    implementation( "com.google.dagger:hilt-android:2.44")
-    "kapt"("com.google.dagger:hilt-compiler:2.44")
+    implementation( "com.google.dagger:hilt-android:2.45")
+    "kapt"("com.google.dagger:hilt-compiler:2.45")
 
     implementation("jp.co.soramitsu:ui-core:0.0.64")
 }

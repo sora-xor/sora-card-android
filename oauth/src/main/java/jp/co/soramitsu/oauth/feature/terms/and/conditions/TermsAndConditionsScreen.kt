@@ -28,13 +28,12 @@ import jp.co.soramitsu.oauth.feature.KycCallback
 import jp.co.soramitsu.ui_core.component.button.FilledButton
 import jp.co.soramitsu.ui_core.component.button.properties.Order
 import jp.co.soramitsu.ui_core.component.button.properties.Size
-import jp.co.soramitsu.ui_core.component.card.Card
+import jp.co.soramitsu.ui_core.component.card.ContentCard
 import jp.co.soramitsu.ui_core.component.item.MenuItem
 import jp.co.soramitsu.ui_core.resources.Dimens
 import jp.co.soramitsu.ui_core.theme.borderRadius
 import jp.co.soramitsu.ui_core.theme.customColors
 import jp.co.soramitsu.ui_core.theme.customTypography
-import jp.co.soramitsu.ui_core.theme.elevation
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
@@ -119,13 +118,13 @@ private fun TermsAndConditionsMenu(
     onGeneralTermsClick: () -> Unit,
     onPrivacyPolicy: () -> Unit,
 ) {
-    Card(
+    ContentCard(
         modifier = modifier.fillMaxWidth(),
-        elevation = MaterialTheme.elevation.s,
         cornerRadius = MaterialTheme.borderRadius.s
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .clip(RoundedCornerShape(MaterialTheme.borderRadius.s))
                 .background(MaterialTheme.customColors.bgSurface)
         ) {
