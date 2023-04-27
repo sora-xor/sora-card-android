@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import jp.co.soramitsu.oauth.R
+import jp.co.soramitsu.oauth.base.extension.testTagAsId
 import jp.co.soramitsu.oauth.base.state.DialogAlertState
 import jp.co.soramitsu.ui_core.component.button.TextButton
 import jp.co.soramitsu.ui_core.component.button.properties.Order
@@ -29,7 +30,9 @@ fun DialogAlert(state: DialogAlertState) {
         onDismissRequest = state.onDismiss,
         confirmButton = {
             TextButton(
-                modifier = Modifier.padding(vertical = Dimens.x1),
+                modifier = Modifier
+                    .testTagAsId("DialogConfirmationButton")
+                    .padding(vertical = Dimens.x1),
                 text = stringResource(id = R.string.common_ok).uppercase(),
                 size = Size.ExtraSmall,
                 order = Order.SECONDARY,

@@ -24,6 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.Screen
+import jp.co.soramitsu.oauth.base.extension.testTagAsId
 import jp.co.soramitsu.oauth.feature.KycCallback
 import jp.co.soramitsu.ui_core.component.button.FilledButton
 import jp.co.soramitsu.ui_core.component.button.properties.Order
@@ -102,7 +103,9 @@ fun TermsAndConditionsScreen(
             )
 
             FilledButton(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .testTagAsId("AcceptAndContinue")
+                    .fillMaxWidth(),
                 text = stringResource(R.string.terms_and_conditions_accept_and_continue),
                 order = Order.SECONDARY,
                 size = Size.Large,

@@ -15,6 +15,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import jp.co.soramitsu.oauth.base.compose.toTitle
+import jp.co.soramitsu.oauth.base.extension.testTagAsId
 import jp.co.soramitsu.oauth.feature.verify.model.ButtonState
 import jp.co.soramitsu.ui_core.component.button.FilledButton
 import jp.co.soramitsu.ui_core.component.button.LoaderWrapper
@@ -57,8 +58,7 @@ internal fun VerifyUserData(
         )
 
         InputText(
-            modifier = Modifier.fillMaxWidth(),
-            state = inputTextState,
+            modifier = Modifier.testTagAsId("VerifyUserInput").fillMaxWidth(),            state = inputTextState,
             onValueChange = onDataEntered,
             visualTransformation = inputVisualTransformation,
             keyboardOptions = keyboardOptions
@@ -72,8 +72,7 @@ internal fun VerifyUserData(
             loaderSize = Size.Large
         ) { modifier, _ ->
             FilledButton(
-                modifier = modifier,
-                order = Order.SECONDARY,
+                modifier = modifier.testTagAsId("PrimaryButton"),                order = Order.SECONDARY,
                 size = Size.Large,
                 text = buttonState.timer.takeIf { it != null } ?: buttonState.title.toTitle(),
                 enabled = buttonState.enabled,
