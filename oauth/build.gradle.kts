@@ -49,7 +49,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             buildConfigField(
                 "String",
                 "API_BASE_URL",
@@ -82,9 +82,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     } 
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 
     buildFeatures {
         compose = true
@@ -148,7 +151,7 @@ kapt {
     correctErrorTypes = true
 }
 
-val currentVersion by extra("0.0.38")
+val currentVersion by extra("0.0.37")
 publishing {
     publications {
         register<MavenPublication>("release") {
