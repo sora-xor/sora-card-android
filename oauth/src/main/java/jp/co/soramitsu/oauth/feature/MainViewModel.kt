@@ -11,12 +11,16 @@ import com.paywings.onboarding.kyc.android.sdk.data.model.KycUserData
 import com.paywings.onboarding.kyc.android.sdk.data.model.UserCredentials
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.soramitsu.oauth.base.BaseViewModel
+import jp.co.soramitsu.oauth.base.navigation.Destination
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.sdk.SoraCardInfo
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.state.DialogAlertState
 import jp.co.soramitsu.oauth.common.domain.KycRepository
+import jp.co.soramitsu.oauth.common.navigation.flow.api.KycRequirementsUnfulfilledFlow
+import jp.co.soramitsu.oauth.common.navigation.flow.api.NavigationFlow
+import jp.co.soramitsu.oauth.common.navigation.flow.api.destinations.CompatibilityDestination
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,6 +35,7 @@ class MainViewModel @Inject constructor(
     private val kycRepository: KycRepository,
     private val mainRouter: MainRouter,
     val inMemoryRepo: InMemoryRepo,
+    @KycRequirementsUnfulfilledFlow private val kycRequirementsUnfulfilledFlow: NavigationFlow
 ) : BaseViewModel() {
 
     private val _state = MutableStateFlow(MainScreenState())
@@ -192,7 +197,9 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             kycRepository.getKycLastFinalStatus(accessToken).onSuccess { kycResponse ->
                 if (kycResponse != null &&
-                    (kycResponse == SoraCardCommonVerification.Pending || kycResponse == SoraCardCommonVerification.Successful)
+                    (kycResponse == SoraCardCommonVerification.Rejected ||
+                            kycResponse == SoraCardCommonVerification.Pending ||
+                            kycResponse == SoraCardCommonVerification.Successful)
                 ) {
                     showKycStatusScreen(kycResponse)
                 } else {
@@ -207,7 +214,9 @@ class MainViewModel @Inject constructor(
             if (it) {
                 mainRouter.openGetPrepared()
             } else {
-                mainRouter.openNoFreeKycAttempts()
+                kycRequirementsUnfulfilledFlow.start(
+                    fromDestination = CompatibilityDestination(Destination.ENTER_PHONE_NUMBER.route)
+                )
             }
         }
     }

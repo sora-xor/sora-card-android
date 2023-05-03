@@ -14,6 +14,7 @@ class InMemoryRepo @Inject constructor() {
     var mode: Mode? = null
     var environment: SoraCardEnvironmentType = SoraCardEnvironmentType.NOT_DEFINED
     var client: String = BuildConfig.LIBRARY_PACKAGE_NAME
+    var userAvailableXorAmount: Float = 0f
 }
 
 enum class Mode {

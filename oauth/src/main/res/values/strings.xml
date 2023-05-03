@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
+  <string name="cant_fetch_data">Can\'t fetch data</string>
   <string name="cant_fetch_refresh">Can\'t fetch data, tap to refresh.</string>
+  <string name="card_issuance_screen_free_card_description">To issue a card for FREE: \nHold, stake or provide liquidity for at least €100 worth of XOR in your SORA account</string>
+  <string name="card_issuance_screen_free_card_get_xor">Get %s XOR</string>
+  <string name="card_issuance_screen_free_card_title">Free card issuance</string>
+  <string name="card_issuance_screen_paid_card_description">One time fee to issue a card</string>
+  <string name="card_issuance_screen_paid_card_pay_euro">Pay €%s issuance fee</string>
+  <string name="card_issuance_screen_paid_card_title">€%s issuance fee</string>
+  <string name="card_issuance_screen_title">Card issuance</string>
   <string name="change_email_title">Change your email</string>
   <string name="common_cancel">Cancel</string>
   <string name="common_change_email">Use another email</string>
@@ -27,6 +35,10 @@
   <string name="enter_email_title">Enter your email</string>
   <string name="enter_phone_number_description">You will receive\na verification code via SMS</string>
   <string name="enter_phone_number_phone_input_field_label">Phone Number</string>
+  <string name="get_more_xor_dialog_buy_option">Buy XOR with EUR</string>
+  <string name="get_more_xor_dialog_deposit_option">Deposit XOR</string>
+  <string name="get_more_xor_dialog_description">You can swap for XOR or buy with Euro</string>
+  <string name="get_more_xor_dialog_swap_option">Swap crypto for XOR</string>
   <string name="get_prepared_alert">ATTENTION: You have only 2 free attempts to pass the KYC process. Every other attempt after that will cost €3.8. Paid attempts will be available after the next update of the app.</string>
   <string name="get_prepared_need">To complete the KYC you will need to:</string>
   <string name="get_prepared_ok_title">OK, I am ready</string>
@@ -41,11 +53,12 @@
   <string name="get_prepared_title">Get prepared</string>
   <string name="kyc_result_verification_in_progress">Verification in progress</string>
   <string name="kyc_result_verification_in_progress_description">You have successfully completed your KYC application. The review is pending and you can expect a decision shortly.\n\nUsually the decision is made the same day and in some cases can take up to 3 days.</string>
+  <string name="login_title">Log in or Sign up</string>
   <string name="no_free_kyc_attempts_description">You have used your free attempt to pass the KYC process.\n\nWe kindly ask you to wait until the next upgrade of the application to proceed with paid attempts.</string>
   <string name="no_free_kyc_attempts_title">No more free attempts</string>
   <string name="terms_and_conditions_accept_and_continue">Accept &amp; Continue</string>
-  <string name="terms_and_conditions_confirm_description">By continuing you confirm that you have read understood and accept these policies</string>
-  <string name="terms_and_conditions_description">We want you to know exactly how SORA Card services work, who and why needs your details. Reviewing these policies will help you continue using the app with peace of mind.</string>
+  <string name="terms_and_conditions_confirm_description">By continuing you confirm that you have read, understood and accepted these policies</string>
+  <string name="terms_and_conditions_description">We want you to know exactly how the SORA card service will work, who needs your details and why. Reviewing these policies will help you use the app with peace of mind.</string>
   <string name="terms_and_conditions_general_terms">General Terms of Use</string>
   <string name="terms_and_conditions_privacy_policy">Privacy Policy</string>
   <string name="terms_and_conditions_sora_community_alert">The SORA community does not collect any personal data, to get the SORA Card and IBAN account you will need to complete a KYC process directly with the card issuer.</string>
@@ -57,9 +70,15 @@
   <string name="user_registration_title">Introduce yourself</string>
   <string name="verification_failed_description">The KYC was terminated or it failed otherwise.</string>
   <string name="verification_failed_title">Verification failed</string>
-  <string name="verification_rejected_description">Your application has failed. To read more about the reason of the failure, please read the following additional description.</string>
+  <string name="verification_rejected_description">Your application has been rejected.</string>
+  <string name="verification_rejected_screen_attempts_left">You have %s more free KYC attempt.</string>
+  <string name="verification_rejected_screen_attempts_price_disclaimer">Every other attempt will cost you €%s</string>
+  <string name="verification_rejected_screen_attempts_used">You have used your free KYC attempts.</string>
+  <string name="verification_rejected_screen_support_telegram">Telegram support</string>
+  <string name="verification_rejected_screen_try_again_for_euros">Try again for €%s</string>
+  <string name="verification_rejected_screen_try_again_for_free">Try again for free</string>
   <string name="verification_rejected_support">Support</string>
-  <string name="verification_rejected_title">Application rejected</string>
+  <string name="verification_rejected_title">Verification rejected</string>
   <string name="verification_successful_description">Your KYC verification is successful and we are already preparing to send you the SORA card!</string>
   <string name="verification_successful_title">Application approved</string>
   <string name="verify_email_description">Follow the magic link that has been sent\nto %s</string>

@@ -16,4 +16,5 @@ data class SoraCardContractData(
     val environment: SoraCardEnvironmentType,
     val soraCardInfo: SoraCardInfo?,
     val client: String,
+    val userAvailableXorAmount: Float,
 ) : Parcelable
