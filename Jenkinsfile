@@ -1,5 +1,5 @@
-// def dockerImage = 'build-tools/android-build-box-jdk11:latest'
-def dockerImage = 'build-tools/android-build-box:latest'
+def dockerImage = 'build-tools/android-build-box-jdk11:latest'
+// def dockerImage = 'build-tools/android-build-box:latest'
 def jenkinsAgent = 'android'
 def deploymentBranches = ['master']
 
@@ -47,7 +47,7 @@ node(jenkinsAgent) {
                         if (env.BRANCH_NAME in deploymentBranches) {
                             stage('Publish') {
                                 sh '''
-                                    chmod +x ./gradlew
+                                    chmod +x ./gradlew  
                                     ./gradlew publish
                                 '''
                             }
