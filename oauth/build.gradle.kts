@@ -25,7 +25,7 @@ plugins {
 }
 
 val composeCompilerVersion by extra("1.4.6")
-val uiCoreVersion by extra("0.0.64")
+val uiCoreVersion by extra("0.0.67")
 val lifecycleVersion by extra("2.6.0-alpha02")
 val navigationVersion by extra("2.5.0")
 val accompanistVersion by extra("0.26.4-beta")
@@ -151,7 +151,7 @@ kapt {
     correctErrorTypes = true
 }
 
-val currentVersion by extra("0.0.37")
+val currentVersion by extra("0.0.38")
 publishing {
     publications {
         register<MavenPublication>("release") {
