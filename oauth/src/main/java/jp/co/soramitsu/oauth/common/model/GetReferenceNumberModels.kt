@@ -17,12 +17,14 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class GetReferenceNumberRequest(
-    @SerialName("ReferenceID") val referenceID: String,
-    @SerialName("MobileNumber") val mobileNumber: String?,
-    @SerialName("Email") val email: String?,
-    @SerialName("AddressChanged") val addressChanged: Boolean,
-    @SerialName("DocumentChanged") val documentChanged: Boolean,
     @SerialName("AdditionalData") val additionalData: String,
+    @SerialName("AddressChanged") val addressChanged: Boolean,
+    @SerialName("CardTypeId") val cardTypeId: String,
+    @SerialName("DocumentChanged") val documentChanged: Boolean,
+    @SerialName("Email") val email: String?,
+    @SerialName("IbanTypeId") val ibanTypeId: String,
+    @SerialName("MobileNumber") val mobileNumber: String?,
+    @SerialName("ReferenceID") val referenceID: String,
 )
 
 /**

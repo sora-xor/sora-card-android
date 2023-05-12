@@ -67,6 +67,16 @@ android {
                 "API_BASE_URL",
                 maybeWrapQuotes(secret("SORA_BACKEND_DEBUG")!!)
             )
+            buildConfigField(
+                "String",
+                "KYC_IBAN_TYPE_ID",
+                maybeWrapQuotes(secret("KYC_IBAN_TYPE_ID")!!)
+            )
+            buildConfigField(
+                "String",
+                "KYC_CARD_TYPE_ID",
+                maybeWrapQuotes(secret("KYC_CARD_TYPE_ID")!!)
+            )
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

@@ -20,19 +20,23 @@ class KycRepositoryImpl(
     override suspend fun getReferenceNumber(
         accessToken: String,
         phoneNumber: String?,
-        email: String?
+        email: String?,
+        cardTypeId: String,
+        ibanTypeId: String
     ): Result<String> {
         return runCatching {
             apiClient.post(
                 bearerToken = accessToken,
                 url = NetworkRequest.GET_REFERENCE_NUMBER.url,
                 body = GetReferenceNumberRequest(
-                    referenceID = UUID.randomUUID().toString(),
-                    mobileNumber = phoneNumber,
-                    email = email,
+                    additionalData = "",
                     addressChanged = false,
+                    cardTypeId = cardTypeId,
+                    email = email,
+                    ibanTypeId = ibanTypeId,
                     documentChanged = false,
-                    additionalData = ""
+                    mobileNumber = phoneNumber,
+                    referenceID = UUID.randomUUID().toString()
                 )
             ).body<GetReferenceNumberResponse>()
                 .referenceNumber

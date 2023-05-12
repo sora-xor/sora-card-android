@@ -24,7 +24,7 @@ import kotlinx.serialization.json.Json
 
 class SoraCardNetworkClient(
     timeout: Long = 10000,
-    logging: Boolean = false,
+    logging: Boolean = BuildConfig.DEBUG,
     provider: SoraCardClientProvider,
     inMemoryRepo: InMemoryRepo,
 ) {
