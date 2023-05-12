@@ -1,12 +1,14 @@
 package jp.co.soramitsu.oauth.feature.cardissuance.state
 
 import jp.co.soramitsu.oauth.R
+import jp.co.soramitsu.oauth.base.compose.ScreenStatus
 import jp.co.soramitsu.oauth.base.compose.Text
-import kotlin.math.absoluteValue
 
 data class FreeCardIssuanceState(
-    val xorCurrentAmount: Float,
-    val xorInsufficientAmount: Float
+    val screenStatus: ScreenStatus,
+    val xorInsufficientAmount: Double,
+    val euroInsufficientAmount: Double,
+    val euroLiquidityThreshold: Double
 ) {
 
     val titleText: Text =
@@ -15,36 +17,19 @@ data class FreeCardIssuanceState(
         )
 
     val descriptionText: Text =
-        Text.StringRes(
-            id = R.string.card_issuance_screen_free_card_description
+        Text.StringResWithArgs(
+            id = R.string.card_issuance_screen_free_card_description,
+            payload = arrayOf(euroLiquidityThreshold.toInt().toString())
         )
 
     val xorSufficiencyText: Text
         get() {
-            if (xorInsufficientAmount > 0 && xorCurrentAmount >= 0)
+            if (screenStatus === ScreenStatus.READY_TO_RENDER)
                 return Text.StringResWithArgs(
                     id = R.string.details_need_xor_desription,
                     payload = arrayOf(
-                        xorInsufficientAmount.toString(),
-                        xorCurrentAmount.toString()
-                    )
-                )
-
-            if (xorInsufficientAmount > 0 && xorCurrentAmount < 0)
-                return Text.StringResWithArgs(
-                    id = R.string.details_need_xor_desription,
-                    payload = arrayOf(
-                        (xorCurrentAmount.absoluteValue + xorInsufficientAmount).toString(),
-                        xorCurrentAmount.toString()
-                    )
-                )
-
-            if (xorInsufficientAmount == 0f && xorCurrentAmount > 0)
-                return Text.StringResWithArgs(
-                    id = R.string.details_need_xor_desription,
-                    payload = arrayOf(
-                        xorInsufficientAmount.toString(),
-                        xorCurrentAmount.toString()
+                        String.format("%.2f", xorInsufficientAmount),
+                        String.format("%.2f", euroInsufficientAmount)
                     )
                 )
 
@@ -53,50 +38,22 @@ data class FreeCardIssuanceState(
 
     val xorSufficiencyPercentage: Float
         get() {
-            if (xorInsufficientAmount > 0 && xorCurrentAmount >= 0)
-                return xorInsufficientAmount / (xorCurrentAmount + xorInsufficientAmount)
-
-            if (xorInsufficientAmount > 0 && xorCurrentAmount < 0)
-                return xorInsufficientAmount / (xorCurrentAmount.absoluteValue + xorInsufficientAmount)
-
-            if (xorInsufficientAmount == 0f && xorCurrentAmount > 0)
-                return xorCurrentAmount / (xorCurrentAmount + xorInsufficientAmount)
+            if (screenStatus === ScreenStatus.READY_TO_RENDER)
+                return (euroLiquidityThreshold.minus(euroInsufficientAmount))
+                    .div(euroLiquidityThreshold).toFloat()
 
             return 0f
         }
 
-    val shouldGetInsufficientXorButtonBeShown: Boolean
-        get() {
-            if (xorInsufficientAmount > 0 && xorCurrentAmount >= 0)
-                return true
-
-            if (xorInsufficientAmount > 0 && xorCurrentAmount < 0)
-                return true
-
-            if (xorInsufficientAmount == 0f && xorCurrentAmount > 0)
-                return true
-
-            return false
-        }
+    val isGetInsufficientXorButtonEnabled: Boolean =
+        screenStatus === ScreenStatus.READY_TO_RENDER
 
     val getInsufficientXorText: Text
         get() {
-            if (xorInsufficientAmount > 0 && xorCurrentAmount >= 0)
+            if (screenStatus === ScreenStatus.READY_TO_RENDER)
                 return Text.StringResWithArgs(
                     id = R.string.card_issuance_screen_free_card_get_xor,
-                    payload = arrayOf(xorInsufficientAmount.toString())
-                )
-
-            if (xorInsufficientAmount > 0 && xorCurrentAmount < 0)
-                return Text.StringResWithArgs(
-                    id = R.string.card_issuance_screen_free_card_get_xor,
-                    payload = arrayOf((xorCurrentAmount.absoluteValue + xorInsufficientAmount).toString())
-                )
-
-            if (xorInsufficientAmount == 0f && xorCurrentAmount > 0)
-                return Text.StringResWithArgs(
-                    id = R.string.card_issuance_screen_free_card_get_xor,
-                    payload = arrayOf(xorInsufficientAmount.toString())
+                    payload = arrayOf(String.format("%.2f", xorInsufficientAmount))
                 )
 
             return Text.StringRes(id = R.string.card_issuance_screen_free_card_get_xor,)

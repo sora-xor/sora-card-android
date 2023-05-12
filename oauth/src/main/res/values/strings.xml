@@ -2,7 +2,7 @@
 <resources>
   <string name="cant_fetch_data">Can\'t fetch data</string>
   <string name="cant_fetch_refresh">Can\'t fetch data, tap to refresh.</string>
-  <string name="card_issuance_screen_free_card_description">To issue a card for FREE: \nHold, stake or provide liquidity for at least €100 worth of XOR in your SORA account</string>
+  <string name="card_issuance_screen_free_card_description">To issue a card for FREE: \nHold, stake or provide liquidity for at least €%s worth of XOR in your SORA account</string>
   <string name="card_issuance_screen_free_card_get_xor">Get %s XOR</string>
   <string name="card_issuance_screen_free_card_title">Free card issuance</string>
   <string name="card_issuance_screen_paid_card_description">One time fee to issue a card</string>

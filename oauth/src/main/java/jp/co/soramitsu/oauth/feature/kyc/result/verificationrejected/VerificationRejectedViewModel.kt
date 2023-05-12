@@ -12,6 +12,7 @@ import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.contract.OutwardsScreen
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.common.domain.KycRepository
+import jp.co.soramitsu.oauth.common.domain.PriceInteractor
 import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
@@ -26,12 +27,13 @@ class VerificationRejectedViewModel @Inject constructor(
     private val mainRouter: MainRouter,
     private val userSessionRepository: UserSessionRepository,
     private val kycRepository: KycRepository,
-    private val setActivityResult: SetActivityResult
+    private val setActivityResult: SetActivityResult,
+    private val priceInteractor: PriceInteractor
 ) : BaseViewModel() {
 
     var verificationRejectedScreenState by mutableStateOf(
         VerificationRejectedScreenState(
-            screenStatus = ScreenStatus.LOADING,
+            screenStatus = ScreenStatus.ERROR,
             kycAttemptsCount = 0,
             kycAttemptCostInEuros = (-1).toDouble()
         )
@@ -53,26 +55,25 @@ class VerificationRejectedViewModel @Inject constructor(
 
     private fun fetchKycAttemptInfo() {
         viewModelScope.launch {
-            val token = userSessionRepository.getAccessToken()
+            kotlin.runCatching {
+                val token = userSessionRepository.getAccessToken()
 
-            val kycCountDeferred = async { kycRepository.getFreeKycAttemptsInfo(token).getOrNull() }
-            val xorEuroPriceDeferred = async { kycRepository.getCurrentXorEuroPrice(token).getOrNull() }
+                val kycAttemptsLeft = kycRepository.getFreeKycAttemptsInfo(token)
+                    .getOrThrow().run { total - completed }
 
-            val kycCount = kycCountDeferred.await()
-            val xorEuroPrice = xorEuroPriceDeferred.await()
+                val kycAttemptPrice = priceInteractor.calculateKycAttemptPrice().getOrThrow()
 
-            if (kycCount == null || xorEuroPrice == null) {
+                verificationRejectedScreenState = verificationRejectedScreenState.copy(
+                    screenStatus = ScreenStatus.READY_TO_RENDER,
+                    kycAttemptsCount = kycAttemptsLeft,
+                    kycAttemptCostInEuros = kycAttemptPrice
+                )
+            }.onFailure {
+                it.printStackTrace()
                 verificationRejectedScreenState = verificationRejectedScreenState.copy(
                     screenStatus = ScreenStatus.ERROR
                 )
-                return@launch
             }
-
-            verificationRejectedScreenState = verificationRejectedScreenState.copy(
-                screenStatus = ScreenStatus.READY_TO_RENDER,
-                kycAttemptsCount = kycCount.total - kycCount.completed,
-                kycAttemptCostInEuros = xorEuroPrice.price
-            )
         }
     }
 

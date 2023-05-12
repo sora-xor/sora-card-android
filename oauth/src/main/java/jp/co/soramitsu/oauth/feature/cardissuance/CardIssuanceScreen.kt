@@ -1,12 +1,16 @@
 package jp.co.soramitsu.oauth.feature.cardissuance
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -15,16 +19,13 @@ import jp.co.soramitsu.oauth.base.compose.BalanceIndicator
 import jp.co.soramitsu.oauth.base.compose.InlineTextDivider
 import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.base.compose.retrieveString
-import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
-import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
-import jp.co.soramitsu.oauth.common.domain.KycRepository
-import jp.co.soramitsu.oauth.common.model.KycCount
-import jp.co.soramitsu.oauth.common.model.XorEuroPrice
+import jp.co.soramitsu.oauth.common.domain.PriceInteractor
+import jp.co.soramitsu.oauth.common.model.EuroLiquiditySufficiency
+import jp.co.soramitsu.oauth.common.model.XorLiquiditySufficiency
 import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.common.navigation.flow.api.NavigationFlow
 import jp.co.soramitsu.oauth.common.navigation.flow.api.destinations.NavigationFlowDestination
-import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.ui_core.component.button.FilledButton
 import jp.co.soramitsu.ui_core.component.button.OutlinedButton
 import jp.co.soramitsu.ui_core.component.button.properties.Order
@@ -41,12 +42,23 @@ fun CardIssuanceScreen(
     Screen(
         viewModel = viewModel
     ) { scrollState ->
-        Column(
-            modifier = Modifier.verticalScroll(scrollState)
-        ) {
-            FreeCardIssuance(viewModel)
-            InlineTextDivider()
-            PaidCardIssuance(viewModel)
+        if (viewModel.cardIssuanceScreenState.isScreenLoading) {
+            Box(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center),
+                    color = MaterialTheme.customColors.fgPrimary
+                )
+            }
+        } else {
+            Column(
+                modifier = Modifier.verticalScroll(scrollState)
+            ) {
+                FreeCardIssuance(viewModel)
+                InlineTextDivider()
+                PaidCardIssuance(viewModel)
+            }
         }
     }
 }
@@ -55,6 +67,8 @@ fun CardIssuanceScreen(
 private fun FreeCardIssuance(
     viewModel: CardIssuanceViewModel
 ) {
+    val state = viewModel.cardIssuanceScreenState.freeCardIssuanceState
+
     ContentCard(
         modifier = Modifier
             .fillMaxWidth()
@@ -67,7 +81,7 @@ private fun FreeCardIssuance(
                     .fillMaxWidth()
                     .padding(horizontal = Dimens.x3, vertical = Dimens.x2)
                     .padding(top = Dimens.x1),
-                text = viewModel.freeCardIssuanceState.titleText.retrieveString(),
+                text = state.titleText.retrieveString(),
                 style = MaterialTheme.customTypography.textLBold,
                 color = MaterialTheme.customColors.fgPrimary,
                 textAlign = TextAlign.Left
@@ -78,7 +92,7 @@ private fun FreeCardIssuance(
                     .fillMaxWidth()
                     .padding(horizontal = Dimens.x3)
                     .padding(bottom = Dimens.x2),
-                text = viewModel.freeCardIssuanceState.descriptionText.retrieveString(),
+                text = state.descriptionText.retrieveString(),
                 style = MaterialTheme.customTypography.textM,
                 color = MaterialTheme.customColors.fgPrimary,
                 textAlign = TextAlign.Left
@@ -89,21 +103,21 @@ private fun FreeCardIssuance(
                     .fillMaxWidth()
                     .padding(horizontal = Dimens.x3)
                     .padding(bottom = Dimens.x2),
-                percent = viewModel.freeCardIssuanceState.xorSufficiencyPercentage,
-                label = viewModel.freeCardIssuanceState.xorSufficiencyText.retrieveString(),
+                percent = state.xorSufficiencyPercentage,
+                label = state.xorSufficiencyText.retrieveString(),
             )
 
-            if (viewModel.freeCardIssuanceState.shouldGetInsufficientXorButtonBeShown)
-                FilledButton(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = Dimens.x3)
-                        .padding(bottom = Dimens.x3),
-                    text = viewModel.freeCardIssuanceState.getInsufficientXorText.retrieveString(),
-                    order = Order.PRIMARY,
-                    size = Size.Large,
-                    onClick = viewModel::onGetXorClick
-                )
+            FilledButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = Dimens.x3)
+                    .padding(bottom = Dimens.x3),
+                text = state.getInsufficientXorText.retrieveString(),
+                order = Order.PRIMARY,
+                size = Size.Large,
+                enabled = state.isGetInsufficientXorButtonEnabled,
+                onClick = viewModel::onGetXorClick
+            )
         }
     }
 }
@@ -112,6 +126,8 @@ private fun FreeCardIssuance(
 private fun PaidCardIssuance(
     viewModel: CardIssuanceViewModel
 ) {
+    val state = viewModel.cardIssuanceScreenState.paidCardIssuanceState
+
     ContentCard(
         modifier = Modifier
             .fillMaxWidth()
@@ -125,7 +141,7 @@ private fun PaidCardIssuance(
                     .fillMaxWidth()
                     .padding(horizontal = Dimens.x3, vertical = Dimens.x2)
                     .padding(top = Dimens.x1),
-                text = viewModel.paidCardIssuanceState.titleText.retrieveString(),
+                text = state.titleText.retrieveString(),
                 style = MaterialTheme.customTypography.textLBold,
                 color = MaterialTheme.customColors.fgPrimary,
                 textAlign = TextAlign.Left
@@ -136,23 +152,23 @@ private fun PaidCardIssuance(
                     .fillMaxWidth()
                     .padding(horizontal = Dimens.x3)
                     .padding(bottom = Dimens.x2),
-                text = viewModel.paidCardIssuanceState.descriptionText.retrieveString(),
+                text = state.descriptionText.retrieveString(),
                 style = MaterialTheme.customTypography.textM,
                 color = MaterialTheme.customColors.fgPrimary,
                 textAlign = TextAlign.Left
             )
 
-            if (viewModel.paidCardIssuanceState.shouldPayIssuanceAmountButtonBeEnabled)
-                OutlinedButton(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = Dimens.x3)
-                        .padding(bottom = Dimens.x3),
-                    text = viewModel.paidCardIssuanceState.payIssuanceAmountText.retrieveString(),
-                    order = Order.PRIMARY,
-                    size = Size.Large,
-                    onClick = viewModel::onPayIssuance
-                )
+            OutlinedButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = Dimens.x3)
+                    .padding(bottom = Dimens.x3),
+                text = state.payIssuanceAmountText.retrieveString(),
+                order = Order.PRIMARY,
+                size = Size.Large,
+                enabled = state.isPayIssuanceAmountButtonEnabled,
+                onClick = viewModel::onPayIssuance
+            )
         }
     }
 }
@@ -173,80 +189,23 @@ private fun PreviewCardIssuanceScreen() {
         setActivityResult = object : SetActivityResult {
             override fun setResult(soraCardResult: SoraCardResult) {}
         },
-        inMemoryRepo = InMemoryRepo(),
-        userSessionRepository = object : UserSessionRepository {
-            override suspend fun getRefreshToken(): String {
+        priceInteractor = object : PriceInteractor {
+            override suspend fun calculateXorLiquiditySufficiency(): Result<XorLiquiditySufficiency> {
                 TODO("Not yet implemented")
             }
 
-            override suspend fun getAccessToken(): String {
+            override suspend fun calculateEuroLiquiditySufficiency(): Result<EuroLiquiditySufficiency> {
                 TODO("Not yet implemented")
             }
 
-            override suspend fun getAccessTokenExpirationTime(): Long {
+            override suspend fun calculateCardIssuancePrice(): Result<Double> {
                 TODO("Not yet implemented")
             }
 
-            override suspend fun signInUser(
-                refreshToken: String,
-                accessToken: String,
-                expirationTime: Long
-            ) {
+            override suspend fun calculateKycAttemptPrice(): Result<Double> {
                 TODO("Not yet implemented")
             }
 
-            override suspend fun setNewAccessToken(accessToken: String, expirationTime: Long) {
-                TODO("Not yet implemented")
-            }
-
-            override suspend fun setRefreshToken(refreshToken: String) {
-                TODO("Not yet implemented")
-            }
-
-            override suspend fun setUserId(userId: String?) {
-                TODO("Not yet implemented")
-            }
-
-            override suspend fun setPersonId(personId: String?) {
-                TODO("Not yet implemented")
-            }
-
-            override suspend fun getUserId(): String {
-                TODO("Not yet implemented")
-            }
-
-            override suspend fun getPersonId(): String {
-                TODO("Not yet implemented")
-            }
-
-            override suspend fun logOutUser() {
-                TODO("Not yet implemented")
-            }
-        },
-        kycRepository = object : KycRepository {
-            override suspend fun getReferenceNumber(
-                accessToken: String,
-                phoneNumber: String?,
-                email: String?
-            ): Result<String> {
-                TODO("Not yet implemented")
-            }
-
-            override suspend fun getKycLastFinalStatus(accessToken: String): Result<SoraCardCommonVerification?> {
-                TODO("Not yet implemented")
-            }
-
-            override suspend fun hasFreeKycAttempt(accessToken: String): Result<Boolean> {
-                TODO("Not yet implemented")
-            }
-
-            override suspend fun getFreeKycAttemptsInfo(accessToken: String): Result<KycCount> {
-                TODO("Not yet implemented")
-            }
-
-            override suspend fun getCurrentXorEuroPrice(accessToken: String): Result<XorEuroPrice> {
-                TODO("Not yet implemented")
-            }
         }
     ))
 }

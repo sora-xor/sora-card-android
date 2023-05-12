@@ -78,7 +78,7 @@ internal class MainFragment : BaseFragment() {
                         Intent().putExtra(SoraCardConstants.EXTRA_SORA_CARD_RESULT, result)
                     )
                 }
-                else -> { TODO("HANDLE OTHER CASE") }
+                else -> { /*DO NOTHING*/ }
             }
             requireActivity().finish()
         }

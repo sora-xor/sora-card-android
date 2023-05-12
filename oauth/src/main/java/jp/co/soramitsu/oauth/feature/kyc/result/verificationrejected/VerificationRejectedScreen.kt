@@ -25,15 +25,15 @@ import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.common.domain.KycRepository
+import jp.co.soramitsu.oauth.common.domain.PriceInteractor
+import jp.co.soramitsu.oauth.common.model.EuroLiquiditySufficiency
 import jp.co.soramitsu.oauth.common.model.KycCount
 import jp.co.soramitsu.oauth.common.model.XorEuroPrice
+import jp.co.soramitsu.oauth.common.model.XorLiquiditySufficiency
 import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
-import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.impl.SetActivityResultImpl
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.oauth.feature.terms.and.conditions.model.WebUrl
-import jp.co.soramitsu.ui_core.component.button.BleachedButton
 import jp.co.soramitsu.ui_core.component.button.FilledButton
-import jp.co.soramitsu.ui_core.component.button.OutlinedButton
 import jp.co.soramitsu.ui_core.component.button.TonalButton
 import jp.co.soramitsu.ui_core.component.button.properties.Order
 import jp.co.soramitsu.ui_core.component.button.properties.Size
@@ -313,6 +313,23 @@ private fun PreviewApplicationRejected() {
             },
             setActivityResult = object : SetActivityResult {
                 override fun setResult(soraCardResult: SoraCardResult) {
+                    TODO("Not yet implemented")
+                }
+            },
+            priceInteractor = object : PriceInteractor {
+                override suspend fun calculateXorLiquiditySufficiency(): Result<XorLiquiditySufficiency> {
+                    TODO("Not yet implemented")
+                }
+
+                override suspend fun calculateEuroLiquiditySufficiency(): Result<EuroLiquiditySufficiency> {
+                    TODO("Not yet implemented")
+                }
+
+                override suspend fun calculateCardIssuancePrice(): Result<Double> {
+                    TODO("Not yet implemented")
+                }
+
+                override suspend fun calculateKycAttemptPrice(): Result<Double> {
                     TODO("Not yet implemented")
                 }
             }

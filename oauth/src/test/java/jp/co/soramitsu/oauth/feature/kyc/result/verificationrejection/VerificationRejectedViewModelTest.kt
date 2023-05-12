@@ -7,6 +7,7 @@ import jp.co.soramitsu.oauth.base.sdk.contract.OutwardsScreen
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
 import jp.co.soramitsu.oauth.common.domain.KycRepository
+import jp.co.soramitsu.oauth.common.domain.PriceInteractor
 import jp.co.soramitsu.oauth.common.model.KycCount
 import jp.co.soramitsu.oauth.common.model.XorEuroPrice
 import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
@@ -53,6 +54,9 @@ class VerificationRejectedViewModelTest {
     @Mock
     private lateinit var kycRepository: KycRepository
 
+    @Mock
+    private lateinit var priceInteractor: PriceInteractor
+
     private lateinit var viewModel: VerificationRejectedViewModel
 
     private lateinit var kycCountAttemptsAvailable: KycCount
@@ -83,17 +87,18 @@ class VerificationRejectedViewModelTest {
             source = "test source",
             timeOfUpdate = 7
         ).apply { xorEuroPrice = this }
-
-        VerificationRejectedViewModel(
-            mainRouter = mainRouter,
-            userSessionRepository = userSessionRepository,
-            kycRepository = kycRepository,
-            setActivityResult = setActivityResult
-        ).apply { viewModel = this }
     }
 
     @Test
     fun `init EXPECT toolbar title`() {
+        val viewModel = VerificationRejectedViewModel(
+            mainRouter = mainRouter,
+            userSessionRepository = userSessionRepository,
+            kycRepository = kycRepository,
+            setActivityResult = setActivityResult,
+            priceInteractor = priceInteractor
+        )
+
         assertEquals(R.string.verification_rejected_title, viewModel.toolbarState.value?.basic?.title)
         assertNull(viewModel.toolbarState.value?.basic?.navIcon)
     }
@@ -101,25 +106,28 @@ class VerificationRejectedViewModelTest {
     @Test
     fun `try again on available attempts EXPECT main router navigate to get prepared screen`() =
         runTest {
-            /* TODO resolve issues with mockito and coroutines
+            given(userSessionRepository.getAccessToken())
+                .willReturn("Token")
 
             given(kycRepository.getFreeKycAttemptsInfo(any()))
                 .willReturn(Result.success(kycCountAttemptsAvailable))
 
-            given(kycRepository.getCurrentXorEuroPrice(any()))
-                .willReturn(Result.success(xorEuroPrice))
+            given(priceInteractor.calculateKycAttemptPrice())
+                .willReturn(Result.success(3.80))
 
             val viewModel = VerificationRejectedViewModel(
                 mainRouter = mainRouter,
                 userSessionRepository = userSessionRepository,
                 kycRepository = kycRepository,
-                setActivityResult = setActivityResult
+                setActivityResult = setActivityResult,
+                priceInteractor = priceInteractor
             )
 
             viewModel.onTryAgain()
             advanceUntilIdle()
 
-            verify(mainRouter).openGetPrepared() */
+            verify(mainRouter).openGetPrepared()
+            verify(setActivityResult, times(0)).setResult(any())
         }
 
     @Test
@@ -129,7 +137,8 @@ class VerificationRejectedViewModelTest {
                 mainRouter = mainRouter,
                 userSessionRepository = userSessionRepository,
                 kycRepository = kycRepository,
-                setActivityResult = setActivityResult
+                setActivityResult = setActivityResult,
+                priceInteractor = priceInteractor
             )
 
             viewModel.onTryAgain()
@@ -141,6 +150,14 @@ class VerificationRejectedViewModelTest {
 
     @Test
     fun `open telegram support EXPECT navigate to support chat`() = runTest {
+        val viewModel = VerificationRejectedViewModel(
+            mainRouter = mainRouter,
+            userSessionRepository = userSessionRepository,
+            kycRepository = kycRepository,
+            setActivityResult = setActivityResult,
+            priceInteractor = priceInteractor
+        )
+
         viewModel.openTelegramSupport()
         advanceUntilIdle()
 
