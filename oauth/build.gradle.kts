@@ -31,7 +31,7 @@ val navigationVersion by extra("2.5.0")
 val accompanistVersion by extra("0.26.4-beta")
 val hiltVersion by extra("2.45")
 val pwOauthSdkVersion by extra("1.2.2")
-val pwKycSdkVersion by extra("4.2.0")
+val pwKycSdkVersion by extra("4.3.0")
 val dataStoreVersion by extra("1.0.0")
 val ktorVersion by extra("2.2.3")
 
@@ -151,7 +151,7 @@ kapt {
     correctErrorTypes = true
 }
 
-val currentVersion by extra("0.0.39")
+val currentVersion by extra("0.0.40")
 publishing {
     publications {
         register<MavenPublication>("release") {
