@@ -71,10 +71,10 @@ android {
 dependencies {
 
     implementation(project(":oauth"))
-    implementation("com.google.android.material:material:1.8.0")
+    implementation("com.google.android.material:material:1.9.0")
     implementation("androidx.activity:activity-compose:1.7.1")
-    implementation("androidx.compose.material:material:1.4.2")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.4.2")
+    implementation("androidx.compose.material:material:1.4.3")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.4.3")
 
     implementation( "com.google.dagger:hilt-android:2.45")
     "kapt"("com.google.dagger:hilt-compiler:2.45")
