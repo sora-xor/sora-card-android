@@ -97,7 +97,7 @@ class KycRepositoryImpl(
 
     override suspend fun hasFreeKycAttempt(accessToken: String): Result<Boolean> {
         return runCatching {
-            apiClient.get(accessToken, NetworkRequest.GET_KYC_ATTEMPT_COUNT.url)
+            apiClient.get(accessToken, NetworkRequest.GET_KYC_FREE_ATTEMPT_INFO.url)
                 .body<KycAttemptsDto>()
                 .freeAttemptAvailable
         }
