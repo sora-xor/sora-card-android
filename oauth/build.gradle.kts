@@ -31,7 +31,7 @@ val navigationVersion by extra("2.5.0")
 val accompanistVersion by extra("0.26.4-beta")
 val hiltVersion by extra("2.45")
 val pwOauthSdkVersion by extra("1.2.2")
-val pwKycSdkVersion by extra("4.2.0")
+val pwKycSdkVersion by extra("4.3.0")
 val dataStoreVersion by extra("1.0.0")
 val ktorVersion by extra("2.2.3")
 
@@ -49,7 +49,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             buildConfigField(
                 "String",
                 "API_BASE_URL",
@@ -99,14 +99,14 @@ android {
 
 dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("androidx.core:core-ktx:1.10.0")
+    implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.fragment:fragment-ktx:1.5.7")
 
-    implementation("androidx.compose.ui:ui:1.4.2")
-    implementation("androidx.compose.material:material:1.4.2")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.4.2")
-    implementation("androidx.compose.runtime:runtime-livedata:1.4.2")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.4.2")
+    implementation("androidx.compose.ui:ui:1.4.3")
+    implementation("androidx.compose.material:material:1.4.3")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.4.3")
+    implementation("androidx.compose.runtime:runtime-livedata:1.4.3")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.4.3")
 
     implementation("jp.co.soramitsu:ui-core:$uiCoreVersion")
 
@@ -142,7 +142,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
     implementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-inline:5.2.0")
-    testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
     testImplementation("androidx.arch.core:core-testing:2.2.0")
     testImplementation("io.mockk:mockk:1.13.5")
 }
@@ -151,7 +151,7 @@ kapt {
     correctErrorTypes = true
 }
 
-val currentVersion by extra("0.0.38")
+val currentVersion by extra("0.0.40")
 publishing {
     publications {
         register<MavenPublication>("release") {
