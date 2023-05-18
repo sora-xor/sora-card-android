@@ -26,9 +26,6 @@ plugins {
 
 val composeCompilerVersion by extra("1.4.6")
 val uiCoreVersion by extra("0.0.67")
-val lifecycleVersion by extra("2.6.0-alpha02")
-val navigationVersion by extra("2.5.0")
-val accompanistVersion by extra("0.26.4-beta")
 val hiltVersion by extra("2.45")
 val pwOauthSdkVersion by extra("1.2.2")
 val pwKycSdkVersion by extra("4.3.0")
@@ -110,11 +107,11 @@ dependencies {
 
     implementation("jp.co.soramitsu:ui-core:$uiCoreVersion")
 
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
 
-    implementation("androidx.navigation:navigation-compose:$navigationVersion")
-    implementation("com.google.accompanist:accompanist-navigation-animation:$accompanistVersion")
+    implementation("androidx.navigation:navigation-compose:2.5.3")
+    implementation("com.google.accompanist:accompanist-navigation-animation:0.30.1")
 
     implementation( "com.google.dagger:hilt-android:$hiltVersion")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
@@ -151,7 +148,7 @@ kapt {
     correctErrorTypes = true
 }
 
-val currentVersion by extra("0.0.40")
+val currentVersion by extra("0.1.0")
 publishing {
     publications {
         register<MavenPublication>("release") {

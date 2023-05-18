@@ -21,6 +21,7 @@ import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants.SIGN_IN_BUNDLE_EXTRA
 import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants.SIGN_IN_DATA
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardContractData
 import jp.co.soramitsu.oauth.base.sdk.toPayWingsType
+import jp.co.soramitsu.oauth.common.domain.CurrentActivityRetriever
 import jp.co.soramitsu.oauth.feature.MainFragment
 import javax.inject.Inject
 
@@ -36,12 +37,17 @@ class CardActivity : AppCompatActivity(R.layout.card_activity) {
 
     private val vm: CardViewModel by viewModels()
 
+    @Inject
+    lateinit var currentActivityRetriever: CurrentActivityRetriever
+
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(ContextManager.setBaseContext(base))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        currentActivityRetriever.setActivity(this)
 
         intent.getBundleExtra(BUNDLE_EXTRA_SORA_CARD_CONTRACT_DATA)
             ?.let(::setUpRegistrationFlow)
@@ -98,6 +104,7 @@ class CardActivity : AppCompatActivity(R.layout.card_activity) {
             vm.inMemoryRepo.mode = Mode.SIGN_IN
             vm.inMemoryRepo.environment = data.environment
             vm.inMemoryRepo.client = data.client
+            vm.inMemoryRepo.userAvailableXorAmount = data.userAvailableXorAmount
 
             PayWingsOAuthClient.init(
                 applicationContext,

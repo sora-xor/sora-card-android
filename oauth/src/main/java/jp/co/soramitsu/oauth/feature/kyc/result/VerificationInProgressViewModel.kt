@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
+import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.feature.KycCallback
@@ -16,6 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class VerificationInProgressViewModel @Inject constructor(
+    private val mainRouter: MainRouter,
     private val userSessionRepository: UserSessionRepository
 ) : BaseViewModel() {
 
@@ -36,16 +38,7 @@ class VerificationInProgressViewModel @Inject constructor(
         this.kycCallback = kycCallback
     }
 
-    fun onClose() {
-        viewModelScope.launch {
-            kycCallback?.onFinish(
-                result = SoraCardResult.Success(
-                    accessToken = userSessionRepository.getAccessToken(),
-                    accessTokenExpirationTime = userSessionRepository.getAccessTokenExpirationTime(),
-                    refreshToken = userSessionRepository.getRefreshToken(),
-                    status = SoraCardCommonVerification.Pending,
-                )
-            )
-        }
+    fun openTelegramSupport() {
+        mainRouter.openSupportChat()
     }
 }
