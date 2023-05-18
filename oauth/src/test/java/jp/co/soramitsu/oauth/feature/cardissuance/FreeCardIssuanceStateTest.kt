@@ -33,7 +33,10 @@ class FreeCardIssuanceStateTest {
         )
 
         Assert.assertEquals(
-            Text.StringRes(R.string.card_issuance_screen_free_card_description),
+            Text.StringResWithArgs(
+                id = R.string.card_issuance_screen_free_card_description,
+                payload = arrayOf(100.toString())
+            ),
             state.descriptionText
         )
     }
@@ -44,7 +47,7 @@ class FreeCardIssuanceStateTest {
 
         Assert.assertEquals(
             Text.StringResWithArgs(
-                id = R.string.cant_fetch_data,
+                id = R.string.details_need_xor_desription,
                 payload = arrayOf(
                     String.format("%.2f", .0f),
                     String.format("%.2f", .0f)
@@ -54,7 +57,7 @@ class FreeCardIssuanceStateTest {
         )
 
         Assert.assertEquals(
-            0f,
+            1f,
             state.xorSufficiencyPercentage
         )
 
