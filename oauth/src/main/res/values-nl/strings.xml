@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
+  <string name="cant_fetch_data">Can\'t fetch data</string>
   <string name="cant_fetch_refresh">Can\'t fetch data, tap to refresh.</string>
+  <string name="card_issuance_screen_free_card_description">To issue a card for FREE: \nHold, stake or provide liquidity for at least €%s worth of XOR in your SORA account</string>
+  <string name="card_issuance_screen_free_card_get_xor">Get %s XOR</string>
+  <string name="card_issuance_screen_free_card_title">Free card issuance</string>
+  <string name="card_issuance_screen_paid_card_description">One time fee to issue a card</string>
+  <string name="card_issuance_screen_paid_card_pay_euro">Pay €%s issuance fee</string>
+  <string name="card_issuance_screen_paid_card_title">€%s issuance fee</string>
+  <string name="card_issuance_screen_title">Card issuance</string>
   <string name="change_email_title">Wijzig uw e-mailadres</string>
   <string name="common_cancel">Annuleren</string>
   <string name="common_change_email">Probeer een ander e-mailadres</string>
@@ -27,6 +35,10 @@
   <string name="enter_email_title">Voer uw e-mailadres in</string>
   <string name="enter_phone_number_description">U ontvangt een verificatiecode via SMS.</string>
   <string name="enter_phone_number_phone_input_field_label">Telefoonnummer</string>
+  <string name="get_more_xor_dialog_buy_option">Buy XOR with EUR</string>
+  <string name="get_more_xor_dialog_deposit_option">Deposit XOR</string>
+  <string name="get_more_xor_dialog_description">You can swap for XOR or buy with Euro</string>
+  <string name="get_more_xor_dialog_swap_option">Swap crypto for XOR</string>
   <string name="get_prepared_alert">LET OP:\nJe hebt slechts 1 gratis poging om het KYC-proces te doorlopen. Elke andere poging kost je €3,8. Om je kansen op succes te maximaliseren, volg je deze eenvoudige richtlijnen:</string>
   <string name="get_prepared_need">Om de KYC te voltooien, dient u:</string>
   <string name="get_prepared_ok_title">OK, ik ben klaar</string>
@@ -41,8 +53,13 @@
   <string name="get_prepared_title">Bereid je voor.</string>
   <string name="kyc_result_verification_in_progress">Verificatie is gaande</string>
   <string name="kyc_result_verification_in_progress_description">U heeft uw KYC-aanvraag succesvol afgerond. De beoordeling is in behandeling en u kunt binnenkort een beslissing verwachten. \n \n Meestal wordt de beslissing dezelfde dag genomen, en in sommige gevallen kan dit tot 3 dagen duren.</string>
+  <string name="login_title">Log in or Sign up</string>
   <string name="no_free_kyc_attempts_description">Je hebt je gratis pogingen gebruikt om het KYC proces kostenloos te doorlopen. We vragen je te wachten tot de volgende upgrade van de applicatie om verder te gaan met pogingen tegen betaling.</string>
   <string name="no_free_kyc_attempts_title">Geen gratis KYC pogingen meer</string>
+  <string name="payment_widget_unavailable_confirm">Yes, I understand</string>
+  <string name="payment_widget_unavailable_description">Apologies for the inconvenience.\nWe’re working diligently to resolve this.\nPlease, try again later.</string>
+  <string name="payment_widget_unavailable_message">The payment widget is currently unavailable</string>
+  <string name="payment_widget_unavailable_title">Widget unavailable</string>
   <string name="terms_and_conditions_accept_and_continue">Accepteren en doorgaan</string>
   <string name="terms_and_conditions_confirm_description">Door verder te gaan, bevestigt u dat u dit beleid hebt gelezen en accepteert</string>
   <string name="terms_and_conditions_description">Wij willen dat u precies weet hoe de SORA Card diensten werken en wie uw gegevens nodig heeft, en waarom ze die nodig hebben. Als u dit beleid doorneemt, kunt u de app met een gerust hart blijven gebruiken.</string>
@@ -58,6 +75,12 @@
   <string name="verification_failed_description">De KYC is beëindigd of mislukt.</string>
   <string name="verification_failed_title">verificatie is mislukt</string>
   <string name="verification_rejected_description">Uw aanvraag is mislukt. Lees de volgende aanvullende beschrijving voor meer informatie over de reden van het falen.</string>
+  <string name="verification_rejected_screen_attempts_left">You have %s more free KYC attempt.</string>
+  <string name="verification_rejected_screen_attempts_price_disclaimer">Every other attempt will cost you €%s</string>
+  <string name="verification_rejected_screen_attempts_used">You have used your free KYC attempts.</string>
+  <string name="verification_rejected_screen_support_telegram">Telegram support</string>
+  <string name="verification_rejected_screen_try_again_for_euros">Try again for €%s</string>
+  <string name="verification_rejected_screen_try_again_for_free">Try again for free</string>
   <string name="verification_rejected_support">Support</string>
   <string name="verification_rejected_title">Aanvraag afgewezen</string>
   <string name="verification_successful_description">Uw KYC-verificatie is succesvol en we zijn al bezig met de voorbereidingen om u de SORA Card te sturen!</string>
