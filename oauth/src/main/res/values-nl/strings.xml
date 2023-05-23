@@ -26,6 +26,7 @@
   <string name="common_user_not_found">Geen mobiel nummer gevonden, controleer het opnieuw en probeer het opnieuw.</string>
   <string name="details_already_have_card">Ik heb al een kaart</string>
   <string name="details_already_used_free_try">Je hebt je gratis poging reeds gebruikt</string>
+  <string name="details_description">Get a Euro IBAN account and Mastercard Debit Card accessible within your SORA Wallet</string>
   <string name="details_enough_xor_desription">Je hebt genoeg XOR</string>
   <string name="details_get_more_xor">Verkrijg meer XOR</string>
   <string name="details_issue_card">Kaart gratis uitreiken</string>
@@ -53,6 +54,7 @@
   <string name="get_prepared_title">Bereid je voor.</string>
   <string name="kyc_result_verification_in_progress">Verificatie is gaande</string>
   <string name="kyc_result_verification_in_progress_description">U heeft uw KYC-aanvraag succesvol afgerond. De beoordeling is in behandeling en u kunt binnenkort een beslissing verwachten. \n \n Meestal wordt de beslissing dezelfde dag genomen, en in sommige gevallen kan dit tot 3 dagen duren.</string>
+  <string name="log_out">Log out</string>
   <string name="login_title">Log in or Sign up</string>
   <string name="no_free_kyc_attempts_description">Je hebt je gratis pogingen gebruikt om het KYC proces kostenloos te doorlopen. We vragen je te wachten tot de volgende upgrade van de applicatie om verder te gaan met pogingen tegen betaling.</string>
   <string name="no_free_kyc_attempts_title">Geen gratis KYC pogingen meer</string>
