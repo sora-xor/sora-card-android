@@ -26,7 +26,8 @@ fun EnterPhoneNumberScreen(
             inputVisualTransformation = state.phoneVisualTransformation,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             onDataEntered = viewModel::onPhoneChanged,
-            onConfirm = viewModel::onRequestCode
+            onConfirm = viewModel::onRequestCode,
+            testTagIdPrefix = "EnterPhoneNumber"
         )
     }
 }
