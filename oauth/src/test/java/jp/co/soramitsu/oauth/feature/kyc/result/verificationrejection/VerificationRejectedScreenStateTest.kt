@@ -3,7 +3,7 @@ package jp.co.soramitsu.oauth.feature.kyc.result.verificationrejection
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.ScreenStatus
 import jp.co.soramitsu.oauth.base.compose.Text
-import jp.co.soramitsu.oauth.feature.kyc.result.verificationrejected.VerificationRejectedScreenState
+import jp.co.soramitsu.oauth.feature.verification.result.verificationrejected.VerificationRejectedScreenState
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test

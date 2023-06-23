@@ -8,7 +8,8 @@ import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
 import jp.co.soramitsu.oauth.feature.KycCallback
 import jp.co.soramitsu.oauth.feature.OAuthCallback
-import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
+import jp.co.soramitsu.oauth.core.datasources.session.api.UserSessionRepository
+import jp.co.soramitsu.oauth.feature.login.conditions.phone.VerifyPhoneNumberViewModel
 import jp.co.soramitsu.oauth.feature.verify.Timer
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle

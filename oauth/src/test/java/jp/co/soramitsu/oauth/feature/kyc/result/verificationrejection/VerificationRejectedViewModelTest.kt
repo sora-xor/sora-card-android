@@ -3,16 +3,16 @@ package jp.co.soramitsu.oauth.feature.kyc.result.verificationrejection
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
-import jp.co.soramitsu.oauth.base.sdk.contract.OutwardsScreen
-import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
+import jp.co.soramitsu.oauth.common.navigation.activityresult.api.OutwardsScreen
+import jp.co.soramitsu.oauth.common.navigation.activityresult.api.SoraCardResult
 import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
-import jp.co.soramitsu.oauth.common.domain.KycRepository
-import jp.co.soramitsu.oauth.common.domain.PriceInteractor
-import jp.co.soramitsu.oauth.common.model.KycCount
-import jp.co.soramitsu.oauth.common.model.XorEuroPrice
-import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
-import jp.co.soramitsu.oauth.feature.kyc.result.verificationrejected.VerificationRejectedViewModel
-import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
+import jp.co.soramitsu.oauth.core.datasources.tachi.api.KycRepository
+import jp.co.soramitsu.oauth.common.interactors.prices.api.PriceInteractor
+import jp.co.soramitsu.oauth.core.datasources.tachi.api.KycCount
+import jp.co.soramitsu.oauth.core.datasources.tachi.api.XorEuroPrice
+import jp.co.soramitsu.oauth.common.navigation.activityresult.api.ActivityResult
+import jp.co.soramitsu.oauth.feature.verification.result.verificationrejected.VerificationRejectedViewModel
+import jp.co.soramitsu.oauth.core.datasources.session.api.UserSessionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -46,7 +46,7 @@ class VerificationRejectedViewModelTest {
     private lateinit var mainRouter: MainRouter
 
     @Mock
-    private lateinit var setActivityResult: SetActivityResult
+    private lateinit var activityResult: ActivityResult
 
     @Mock
     private lateinit var userSessionRepository: UserSessionRepository
@@ -95,7 +95,7 @@ class VerificationRejectedViewModelTest {
             mainRouter = mainRouter,
             userSessionRepository = userSessionRepository,
             kycRepository = kycRepository,
-            setActivityResult = setActivityResult,
+            setActivityResult = activityResult,
             priceInteractor = priceInteractor
         )
 
@@ -119,7 +119,7 @@ class VerificationRejectedViewModelTest {
                 mainRouter = mainRouter,
                 userSessionRepository = userSessionRepository,
                 kycRepository = kycRepository,
-                setActivityResult = setActivityResult,
+                setActivityResult = activityResult,
                 priceInteractor = priceInteractor
             )
 
@@ -127,7 +127,7 @@ class VerificationRejectedViewModelTest {
             advanceUntilIdle()
 
             verify(mainRouter).openGetPrepared()
-            verify(setActivityResult, times(0)).setResult(any())
+            verify(activityResult, times(0)).setResult(any())
         }
 
     @Test
@@ -137,14 +137,14 @@ class VerificationRejectedViewModelTest {
                 mainRouter = mainRouter,
                 userSessionRepository = userSessionRepository,
                 kycRepository = kycRepository,
-                setActivityResult = setActivityResult,
+                setActivityResult = activityResult,
                 priceInteractor = priceInteractor
             )
 
             viewModel.onTryAgain()
             advanceUntilIdle()
 
-            verify(setActivityResult).setResult(SoraCardResult.NavigateTo(OutwardsScreen.BUY))
+            verify(activityResult).setResult(SoraCardResult.NavigateTo(OutwardsScreen.BUY))
             verify(mainRouter, times(0)).openGetPrepared()
         }
 
@@ -154,7 +154,7 @@ class VerificationRejectedViewModelTest {
             mainRouter = mainRouter,
             userSessionRepository = userSessionRepository,
             kycRepository = kycRepository,
-            setActivityResult = setActivityResult,
+            setActivityResult = activityResult,
             priceInteractor = priceInteractor
         )
 

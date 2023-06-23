@@ -9,6 +9,7 @@ import jp.co.soramitsu.oauth.base.extension.getParcelableCompat
 import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants
 import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants.BUNDLE_EXTRA_SORA_CARD_CONTRACT_DATA
 import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants.EXTRA_SORA_CARD_CONTRACT_DATA
+import jp.co.soramitsu.oauth.common.navigation.activityresult.api.SoraCardResult
 
 
 class SoraCardContract :

@@ -1,19 +1,26 @@
 package jp.co.soramitsu.oauth.base
 
-import android.content.Context
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.add
-import androidx.fragment.app.commit
-import androidx.lifecycle.ViewModel
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.paywings.oauth.android.sdk.initializer.PayWingsOAuthClient
+import com.paywings.onboarding.kyc.android.sdk.PayWingsOnboardingKycContract
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.extension.getParcelableCompat
 import jp.co.soramitsu.oauth.base.resources.ContextManager
-import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.sdk.Mode
 import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants.BUNDLE_EXTRA_SORA_CARD_CONTRACT_DATA
 import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants.EXTRA_SORA_CARD_CONTRACT_DATA
@@ -21,46 +28,76 @@ import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants.SIGN_IN_BUNDLE_EXTRA
 import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants.SIGN_IN_DATA
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardContractData
 import jp.co.soramitsu.oauth.base.sdk.toPayWingsType
-import jp.co.soramitsu.oauth.common.domain.CurrentActivityRetriever
-import jp.co.soramitsu.oauth.feature.MainFragment
+import jp.co.soramitsu.oauth.common.navigation.coordinator.api.NavigationCoordinator
+import jp.co.soramitsu.oauth.common.navigation.activityresult.api.ActivityResult
+import jp.co.soramitsu.oauth.common.navigation.router.api.ComposeRouter
+import jp.co.soramitsu.oauth.common.navigation.router.api.SoraCardDestinations
+import jp.co.soramitsu.oauth.common.navigation.router.api.SoraCardNavGraph
+import jp.co.soramitsu.oauth.feature.MainViewModel
+import jp.co.soramitsu.oauth.theme.AuthSdkTheme
+import kotlinx.coroutines.launch
 import javax.inject.Inject
-
-@HiltViewModel
-class CardViewModel @Inject constructor(
-    val inMemoryRepo: InMemoryRepo,
-) : ViewModel() {
-
-}
 
 @AndroidEntryPoint
 class CardActivity : AppCompatActivity(R.layout.card_activity) {
 
-    private val vm: CardViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModels()
 
     @Inject
-    lateinit var currentActivityRetriever: CurrentActivityRetriever
+    lateinit var coordinator: NavigationCoordinator
 
-    override fun attachBaseContext(base: Context) {
-        super.attachBaseContext(ContextManager.setBaseContext(base))
-    }
+    @Inject
+    lateinit var composeRouter: ComposeRouter
+
+    @Inject
+    lateinit var activityResult: ActivityResult
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContent {
+            AuthSdkTheme {
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    val isLoading = remember {
+                        derivedStateOf {
+                            composeRouter.startDestination.value === SoraCardDestinations.Loading
+                        }
+                    }
 
-        currentActivityRetriever.setActivity(this)
+                    if(isLoading.value) {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .wrapContentSize()
+                                .align(Alignment.Center)
+                        )
+                    }
+
+                    SoraCardNavGraph(
+                        navHostController = composeRouter.navController,
+                        startDestination = composeRouter.startDestination.value,
+                    )
+                }
+            }
+        }
+
+        with(activityResult) {
+            setActivity(this@CardActivity)
+
+            registerForActivityResult(PayWingsOnboardingKycContract()) {
+                viewModel.setPayWingsKycResult(it)
+            }.run { activityResult.setKycContract(this) }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(state = Lifecycle.State.RESUMED) {
+                coordinator.start(this)
+            }
+        }
 
         intent.getBundleExtra(BUNDLE_EXTRA_SORA_CARD_CONTRACT_DATA)
             ?.let(::setUpRegistrationFlow)
 
         intent.getBundleExtra(SIGN_IN_BUNDLE_EXTRA)
             ?.let(::setUpSignInFlow)
-
-        if (savedInstanceState == null) {
-            supportFragmentManager.commit {
-                setReorderingAllowed(true)
-                add<MainFragment>(R.id.fragment_container_view)
-            }
-        }
     }
 
     private fun setUpRegistrationFlow(bundle: Bundle) {
@@ -72,13 +109,13 @@ class CardActivity : AppCompatActivity(R.layout.card_activity) {
         contractData?.let { data ->
             ContextManager.setLocale(data.locale)
 
-            vm.inMemoryRepo.endpointUrl = data.kycCredentials.endpointUrl
-            vm.inMemoryRepo.username = data.kycCredentials.username
-            vm.inMemoryRepo.password = data.kycCredentials.password
-            vm.inMemoryRepo.soraCardInfo = data.soraCardInfo
-            vm.inMemoryRepo.mode = Mode.REGISTRATION
-            vm.inMemoryRepo.environment = data.environment
-            vm.inMemoryRepo.client = data.client
+            viewModel.inMemoryRepo.endpointUrl = data.kycCredentials.endpointUrl
+            viewModel.inMemoryRepo.username = data.kycCredentials.username
+            viewModel.inMemoryRepo.password = data.kycCredentials.password
+            viewModel.inMemoryRepo.soraCardInfo = data.soraCardInfo
+            viewModel.inMemoryRepo.mode = Mode.REGISTRATION
+            viewModel.inMemoryRepo.environment = data.environment
+            viewModel.inMemoryRepo.client = data.client
 
             PayWingsOAuthClient.init(
                 applicationContext,
@@ -97,14 +134,14 @@ class CardActivity : AppCompatActivity(R.layout.card_activity) {
 
         contractData?.let { data ->
             ContextManager.setLocale(data.locale)
-            vm.inMemoryRepo.endpointUrl = data.kycCredentials.endpointUrl
-            vm.inMemoryRepo.username = data.kycCredentials.username
-            vm.inMemoryRepo.password = data.kycCredentials.password
-            vm.inMemoryRepo.soraCardInfo = data.soraCardInfo
-            vm.inMemoryRepo.mode = Mode.SIGN_IN
-            vm.inMemoryRepo.environment = data.environment
-            vm.inMemoryRepo.client = data.client
-            vm.inMemoryRepo.userAvailableXorAmount = data.userAvailableXorAmount
+            viewModel.inMemoryRepo.endpointUrl = data.kycCredentials.endpointUrl
+            viewModel.inMemoryRepo.username = data.kycCredentials.username
+            viewModel.inMemoryRepo.password = data.kycCredentials.password
+            viewModel.inMemoryRepo.soraCardInfo = data.soraCardInfo
+            viewModel.inMemoryRepo.mode = Mode.SIGN_IN
+            viewModel.inMemoryRepo.environment = data.environment
+            viewModel.inMemoryRepo.client = data.client
+            viewModel.inMemoryRepo.userAvailableXorAmount = data.userAvailableXorAmount
 
             PayWingsOAuthClient.init(
                 applicationContext,

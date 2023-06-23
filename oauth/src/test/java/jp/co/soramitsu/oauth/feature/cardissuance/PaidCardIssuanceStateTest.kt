@@ -1,7 +1,7 @@
 package jp.co.soramitsu.oauth.feature.cardissuance
 
 import jp.co.soramitsu.oauth.base.compose.Text
-import jp.co.soramitsu.oauth.feature.cardissuance.state.PaidCardIssuanceState
+import jp.co.soramitsu.oauth.feature.verification.result.cardissuance.state.PaidCardIssuanceState
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test

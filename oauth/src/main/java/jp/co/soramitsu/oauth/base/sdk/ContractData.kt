@@ -2,7 +2,6 @@ package jp.co.soramitsu.oauth.base.sdk
 
 import android.os.Parcelable
 import com.paywings.oauth.android.sdk.data.enums.EnvironmentType
-import jp.co.soramitsu.oauth.common.model.KycStatus
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

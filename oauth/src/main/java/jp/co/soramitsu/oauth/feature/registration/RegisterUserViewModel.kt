@@ -8,6 +8,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
+import jp.co.soramitsu.oauth.common.navigation.flow.registration.api.RegistrationFlow
+import jp.co.soramitsu.oauth.common.navigation.flow.verification.api.VerificationFlow
 import jp.co.soramitsu.oauth.feature.registration.model.RegisterUserState
 import jp.co.soramitsu.oauth.feature.verify.model.ButtonState
 import jp.co.soramitsu.ui_core.component.input.InputTextState
@@ -18,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterUserViewModel @Inject constructor(
-    private val mainRouter: MainRouter
+    private val registrationFlow: RegistrationFlow
 ) : BaseViewModel() {
 
     var state by mutableStateOf(
@@ -65,13 +67,14 @@ class RegisterUserViewModel @Inject constructor(
     }
 
     fun onConfirm() {
-        mainRouter.openEnterEmail(
-            firstName = state.firstNameState.value.text,
-            lastName = state.lastNameState.value.text
-        )
+        registrationFlow.onEnterEmail()
+//        mainRouter.openEnterEmail(
+//            firstName = state.firstNameState.value.text,
+//            lastName = state.lastNameState.value.text
+//        )
     }
 
     override fun onToolbarNavigation() {
-        mainRouter.back()
+        registrationFlow.onBack()
     }
 }

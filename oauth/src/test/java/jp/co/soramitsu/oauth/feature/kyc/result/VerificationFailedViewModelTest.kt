@@ -2,10 +2,11 @@ package jp.co.soramitsu.oauth.feature.kyc.result
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
-import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
+import jp.co.soramitsu.oauth.common.navigation.activityresult.api.SoraCardCommonVerification
+import jp.co.soramitsu.oauth.common.navigation.activityresult.api.SoraCardResult
 import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
 import jp.co.soramitsu.oauth.feature.KycCallback
+import jp.co.soramitsu.oauth.feature.verification.result.VerificationFailedViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull

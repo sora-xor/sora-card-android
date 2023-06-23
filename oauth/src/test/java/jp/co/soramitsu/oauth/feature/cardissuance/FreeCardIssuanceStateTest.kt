@@ -3,7 +3,7 @@ package jp.co.soramitsu.oauth.feature.cardissuance
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.ScreenStatus
 import jp.co.soramitsu.oauth.base.compose.Text
-import jp.co.soramitsu.oauth.feature.cardissuance.state.FreeCardIssuanceState
+import jp.co.soramitsu.oauth.feature.verification.result.cardissuance.state.FreeCardIssuanceState
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test

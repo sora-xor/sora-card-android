@@ -3,7 +3,8 @@ package jp.co.soramitsu.oauth.feature.terms.and.conditions
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
-import jp.co.soramitsu.oauth.feature.terms.and.conditions.model.WebUrl
+import jp.co.soramitsu.oauth.feature.login.conditions.WebPageViewModel
+import jp.co.soramitsu.oauth.feature.login.conditions.model.WebUrl
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert.assertEquals
 import org.junit.Before

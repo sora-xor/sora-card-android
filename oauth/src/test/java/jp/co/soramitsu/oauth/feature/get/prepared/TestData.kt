@@ -1,7 +1,7 @@
 package jp.co.soramitsu.oauth.feature.get.prepared
 
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.feature.get.prepared.model.Step
+import jp.co.soramitsu.oauth.feature.verification.result.prepared.model.Step
 
 object TestData {
 

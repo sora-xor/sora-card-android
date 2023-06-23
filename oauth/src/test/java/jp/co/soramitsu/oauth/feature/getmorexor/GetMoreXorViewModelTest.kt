@@ -1,11 +1,9 @@
 package jp.co.soramitsu.oauth.feature.getmorexor
 
-import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
+import jp.co.soramitsu.oauth.common.navigation.activityresult.api.ActivityResult
 import jp.co.soramitsu.oauth.common.navigation.flow.api.NavigationFlow
-import jp.co.soramitsu.oauth.feature.getmorexor.state.XorPurchaseMethod
-import jp.co.soramitsu.oauth.feature.kyc.result.verificationrejected.VerificationRejectedViewModel
-import org.junit.Assert
+import jp.co.soramitsu.oauth.feature.verification.result.getmorexor.state.XorPurchaseMethod
+import jp.co.soramitsu.oauth.feature.verification.result.getmorexor.GetMoreXorViewModel
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -17,7 +15,7 @@ import org.mockito.kotlin.verify
 class GetMoreXorViewModelTest {
 
     @Mock
-    private lateinit var setActivityResult: SetActivityResult
+    private lateinit var activityResult: ActivityResult
 
     @Mock
     private lateinit var kycRequirementsUnfulfilledFlow: NavigationFlow
@@ -28,7 +26,7 @@ class GetMoreXorViewModelTest {
     fun setUp() {
         GetMoreXorViewModel(
             kycRequirementsUnfulfilledFlow = kycRequirementsUnfulfilledFlow,
-            setActivityResult = setActivityResult
+            setActivityResult = activityResult
         ).apply { viewModel = this }
     }
 
@@ -36,7 +34,7 @@ class GetMoreXorViewModelTest {
     fun `call onPurchaseMethodClicked EXPECT set activity result is called`() {
         XorPurchaseMethod.values().forEachIndexed { index, xorPurchaseMethod ->
             viewModel.onPurchaseMethodClicked(index)
-            verify(setActivityResult).setResult(xorPurchaseMethod.mapToSoraCardNavigation())
+            verify(activityResult).setResult(xorPurchaseMethod.mapToSoraCardNavigation())
         }
     }
 

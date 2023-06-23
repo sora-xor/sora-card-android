@@ -1,10 +1,10 @@
 package jp.co.soramitsu.oauth.feature
 
 import jp.co.soramitsu.oauth.base.sdk.SoraCardInfo
-import jp.co.soramitsu.oauth.common.model.IbanStatus
-import jp.co.soramitsu.oauth.common.model.KycResponse
-import jp.co.soramitsu.oauth.common.model.KycStatus
-import jp.co.soramitsu.oauth.common.model.VerificationStatus
+import jp.co.soramitsu.oauth.core.datasources.tachi.api.IbanStatus
+import jp.co.soramitsu.oauth.core.datasources.tachi.api.KycResponse
+import jp.co.soramitsu.oauth.core.datasources.tachi.api.KycStatus
+import jp.co.soramitsu.oauth.core.datasources.tachi.api.VerificationStatus
 
 object TestData {
 

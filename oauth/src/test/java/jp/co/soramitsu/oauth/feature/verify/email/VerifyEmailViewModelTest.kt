@@ -5,7 +5,8 @@ import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
 import jp.co.soramitsu.oauth.feature.OAuthCallback
-import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
+import jp.co.soramitsu.oauth.core.datasources.session.api.UserSessionRepository
+import jp.co.soramitsu.oauth.feature.registration.email.VerifyEmailViewModel
 import jp.co.soramitsu.oauth.feature.verify.Timer
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle

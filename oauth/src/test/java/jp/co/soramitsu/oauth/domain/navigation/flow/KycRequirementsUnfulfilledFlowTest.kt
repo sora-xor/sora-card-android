@@ -3,9 +3,9 @@ package jp.co.soramitsu.oauth.domain.navigation.flow
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.common.navigation.flow.api.NavigationFlow
 import jp.co.soramitsu.oauth.common.navigation.flow.api.destinations.CompatibilityDestination
-import jp.co.soramitsu.oauth.common.navigation.flow.api.destinations.KycRequirementsUnfulfilledDestination
+import jp.co.soramitsu.oauth.common.navigation.flow.api.destinations.KycRequirementsUnfulfilledFlowDestination
 import jp.co.soramitsu.oauth.common.navigation.flow.api.destinations.NavigationFlowDestination
-import jp.co.soramitsu.oauth.common.navigation.flow.impl.kycrequiremetsunfulflled.KycRequirementsUnfulfilledFlowImpl
+import jp.co.soramitsu.oauth.common.navigation.flow.impl.flows.KycRequirementsUnfulfilledFlowImpl
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -39,25 +39,25 @@ class KycRequirementsUnfulfilledFlowTest {
     fun `start, proceed, back, proceed, exit flow EXPECT correct navigation`() {
         kycRequirementsUnfulfilledFlow.start(startingDestination)
 
-        KycRequirementsUnfulfilledDestination.CardIssuanceOptionsScreen().destination.let {
+        KycRequirementsUnfulfilledFlowDestination.CardIssuanceOptionsScreen().destination.let {
             verify(mainRouter).navigate(destinationRoute = it)
         }
 
         kycRequirementsUnfulfilledFlow.proceed()
 
-        KycRequirementsUnfulfilledDestination.GetMoreXorDialog().destination.let {
+        KycRequirementsUnfulfilledFlowDestination.GetMoreXorDialog().destination.let {
             verify(mainRouter).navigate(destinationRoute = it)
         }
 
         kycRequirementsUnfulfilledFlow.back()
 
-        KycRequirementsUnfulfilledDestination.CardIssuanceOptionsScreen().destination.let {
+        KycRequirementsUnfulfilledFlowDestination.CardIssuanceOptionsScreen().destination.let {
             verify(mainRouter).popUpTo(destinationRoute = it)
         }
 
         kycRequirementsUnfulfilledFlow.proceed()
 
-        KycRequirementsUnfulfilledDestination.GetMoreXorDialog().destination.let {
+        KycRequirementsUnfulfilledFlowDestination.GetMoreXorDialog().destination.let {
             verify(
                 mainRouter,
                 times(2)

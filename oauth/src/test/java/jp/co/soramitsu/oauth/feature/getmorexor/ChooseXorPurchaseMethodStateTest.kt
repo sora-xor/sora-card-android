@@ -3,8 +3,8 @@ package jp.co.soramitsu.oauth.feature.getmorexor
 import io.mockk.InternalPlatformDsl.toArray
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.Text
-import jp.co.soramitsu.oauth.feature.getmorexor.state.ChooseXorPurchaseMethodState
-import jp.co.soramitsu.oauth.feature.getmorexor.state.XorPurchaseMethod
+import jp.co.soramitsu.oauth.feature.verification.result.getmorexor.state.ChooseXorPurchaseMethodState
+import jp.co.soramitsu.oauth.feature.verification.result.getmorexor.state.XorPurchaseMethod
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test

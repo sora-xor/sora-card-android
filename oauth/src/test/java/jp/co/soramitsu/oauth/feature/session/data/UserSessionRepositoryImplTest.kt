@@ -1,8 +1,9 @@
 package jp.co.soramitsu.oauth.feature.session.data
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import jp.co.soramitsu.oauth.base.data.SoraCardDataStore
+import jp.co.soramitsu.oauth.core.engines.SoraCardDataStore
 import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
+import jp.co.soramitsu.oauth.core.datasources.session.impl.UserSessionRepositoryImpl
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals

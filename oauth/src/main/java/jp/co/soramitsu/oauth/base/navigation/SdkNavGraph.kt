@@ -7,25 +7,25 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.dialog
 import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
-import jp.co.soramitsu.oauth.common.navigation.flow.api.destinations.KycRequirementsUnfulfilledDestination
+import jp.co.soramitsu.oauth.common.navigation.flow.api.destinations.KycRequirementsUnfulfilledFlowDestination
+import jp.co.soramitsu.oauth.common.navigation.flow.api.destinations.LoginFlowDestination
 import jp.co.soramitsu.oauth.feature.KycCallback
 import jp.co.soramitsu.oauth.feature.OAuthCallback
-import jp.co.soramitsu.oauth.feature.attempts.NoFreeKycAttemptsScreen
-import jp.co.soramitsu.oauth.feature.cardissuance.CardIssuanceScreen
-import jp.co.soramitsu.oauth.feature.change.email.ChangeEmailScreen
-import jp.co.soramitsu.oauth.feature.get.prepared.GetPreparedScreen
-import jp.co.soramitsu.oauth.feature.getmorexor.ChooseXorPurchaseMethodDialog
-import jp.co.soramitsu.oauth.feature.kyc.result.VerificationFailedScreen
-import jp.co.soramitsu.oauth.feature.kyc.result.VerificationInProgressScreen
-import jp.co.soramitsu.oauth.feature.kyc.result.verificationrejected.VerificationRejectedScreen
-import jp.co.soramitsu.oauth.feature.kyc.result.VerificationSuccessfulScreen
+import jp.co.soramitsu.oauth.feature.verification.result.cardissuance.CardIssuanceScreen
+import jp.co.soramitsu.oauth.feature.registration.email.ChangeEmailScreen
+import jp.co.soramitsu.oauth.feature.verification.result.prepared.GetPreparedScreen
+import jp.co.soramitsu.oauth.feature.verification.result.getmorexor.ChooseXorPurchaseMethodDialog
+import jp.co.soramitsu.oauth.feature.verification.result.VerificationFailedScreen
+import jp.co.soramitsu.oauth.feature.verification.result.VerificationInProgressScreen
+import jp.co.soramitsu.oauth.feature.verification.result.verificationrejected.VerificationRejectedScreen
+import jp.co.soramitsu.oauth.feature.verification.result.VerificationSuccessfulScreen
 import jp.co.soramitsu.oauth.feature.registration.RegisterUserScreen
-import jp.co.soramitsu.oauth.feature.terms.and.conditions.TermsAndConditionsScreen
-import jp.co.soramitsu.oauth.feature.terms.and.conditions.WebPageScreen
-import jp.co.soramitsu.oauth.feature.verify.email.EnterEmailScreen
-import jp.co.soramitsu.oauth.feature.verify.email.VerifyEmailScreen
-import jp.co.soramitsu.oauth.feature.verify.phone.EnterPhoneNumberScreen
-import jp.co.soramitsu.oauth.feature.verify.phone.VerifyPhoneNumberScreen
+import jp.co.soramitsu.oauth.feature.login.conditions.TermsAndConditionsScreen
+import jp.co.soramitsu.oauth.feature.login.conditions.WebPageScreen
+import jp.co.soramitsu.oauth.feature.registration.email.EnterEmailScreen
+import jp.co.soramitsu.oauth.feature.registration.email.VerifyEmailScreen
+import jp.co.soramitsu.oauth.feature.login.conditions.phone.EnterPhoneNumberScreen
+import jp.co.soramitsu.oauth.feature.login.conditions.phone.VerifyPhoneNumberScreen
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -36,20 +36,16 @@ internal fun SdkNavGraph(
     kycCallback: KycCallback,
 ) {
     AnimatedNavHost(navHostController, startDestination = startDestination.route) {
-        animatedComposable(Destination.TERMS_AND_CONDITIONS.route) {
+        animatedComposable(LoginFlowDestination.TermsAndConditionsScreen().destination) {
             TermsAndConditionsScreen(kycCallback)
         }
 
-        animatedComposable(Destination.GET_PREPARED.route) {
-            GetPreparedScreen(authCallback)
-        }
-
-        animatedComposable(Destination.ENTER_PHONE_NUMBER.route) {
+        animatedComposable(LoginFlowDestination.EnterPhoneScreen().destination) {
             EnterPhoneNumberScreen()
         }
 
         animatedComposable(
-            Destination.VERIFY_PHONE_NUMBER.route + Argument.PHONE_NUMBER.path() + Argument.OTP_LENGTH.path(),
+            LoginFlowDestination.VerifyPhoneScreen().destination + Argument.PHONE_NUMBER.path() + Argument.OTP_LENGTH.path(),
             arguments = listOf(
                 navArgument(Argument.PHONE_NUMBER.arg) { type = NavType.StringType },
                 navArgument(Argument.OTP_LENGTH.arg) { type = NavType.IntType },
@@ -61,6 +57,10 @@ internal fun SdkNavGraph(
                 authCallback = authCallback,
                 kycCallback = kycCallback
             )
+        }
+
+        animatedComposable(Destination.GET_PREPARED.route) {
+            GetPreparedScreen(authCallback)
         }
 
         animatedComposable(Destination.REGISTER_USER.route) {
@@ -130,18 +130,14 @@ internal fun SdkNavGraph(
             VerificationSuccessfulScreen(kycCallback)
         }
 
-        animatedComposable(Destination.NO_MORE_FREE_ATTEMPTS.route) {
-            NoFreeKycAttemptsScreen(kycCallback)
-        }
-
         animatedComposable(
-            route = KycRequirementsUnfulfilledDestination.CardIssuanceOptionsScreen().destination
+            route = KycRequirementsUnfulfilledFlowDestination.CardIssuanceOptionsScreen().destination
         ) {
             CardIssuanceScreen()
         }
 
         dialog(
-            route = KycRequirementsUnfulfilledDestination.GetMoreXorDialog().destination
+            route = KycRequirementsUnfulfilledFlowDestination.GetMoreXorDialog().destination
         ) {
             ChooseXorPurchaseMethodDialog()
         }
