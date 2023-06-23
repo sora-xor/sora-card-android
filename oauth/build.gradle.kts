@@ -27,8 +27,8 @@ plugins {
 val composeCompilerVersion by extra("1.4.6")
 val uiCoreVersion by extra("0.0.68")
 val hiltVersion by extra("2.45")
-val pwOauthSdkVersion by extra("1.2.2")
-val pwKycSdkVersion by extra("4.2.0")
+val pwOauthSdkVersion by extra("1.2.3")
+val pwKycSdkVersion by extra("4.4.0")
 val dataStoreVersion by extra("1.0.0")
 val ktorVersion by extra("2.2.3")
 
@@ -95,6 +95,7 @@ android {
 }
 
 dependencies {
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.fragment:fragment-ktx:1.5.7")
@@ -148,7 +149,7 @@ kapt {
     correctErrorTypes = true
 }
 
-val currentVersion by extra("0.0.43")
+val currentVersion by extra("0.0.44")
 publishing {
     publications {
         register<MavenPublication>("release") {
