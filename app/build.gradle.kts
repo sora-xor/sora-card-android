@@ -2,7 +2,8 @@ import java.util.Properties
 import java.io.FileInputStream
 
 fun secret(name: String): String? {
-    val pr = runCatching { FileInputStream("local.properties") }.getOrNull()?.let { file ->
+    val fileProperties = File(rootProject.projectDir.absolutePath, "local.properties")
+    val pr = runCatching { FileInputStream(fileProperties) }.getOrNull()?.let { file ->
         Properties().apply {
             load(file)
         }
