@@ -19,7 +19,6 @@ import com.paywings.onboarding.kyc.android.sdk.data.model.KycCredentials
 import com.paywings.onboarding.kyc.android.sdk.data.model.KycSettings
 import com.paywings.onboarding.kyc.android.sdk.util.PayWingsOnboardingKycResult
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
 import jp.co.soramitsu.oauth.base.BaseFragment
 import jp.co.soramitsu.oauth.base.extension.onBackPressed
 import jp.co.soramitsu.oauth.base.navigation.Destination
@@ -31,6 +30,7 @@ import jp.co.soramitsu.oauth.feature.terms.and.conditions.ProgressDialog
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 @AndroidEntryPoint
 internal class MainFragment : BaseFragment() {
@@ -78,6 +78,7 @@ internal class MainFragment : BaseFragment() {
                         Intent().putExtra(SoraCardConstants.EXTRA_SORA_CARD_RESULT, result)
                     )
                 }
+                else -> { /*DO NOTHING*/ }
             }
             requireActivity().finish()
         }
