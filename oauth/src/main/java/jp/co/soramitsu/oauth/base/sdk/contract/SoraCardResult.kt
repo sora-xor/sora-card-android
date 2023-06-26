@@ -26,16 +26,6 @@ sealed class SoraCardResult : Parcelable {
 
     @Parcelize
     object Canceled : SoraCardResult()
-
-    @Parcelize
-    data class NavigateTo(
-        val screen: OutwardsScreen
-    ) : SoraCardResult()
-
-}
-
-enum class OutwardsScreen {
-    DEPOSIT, SWAP, BUY
 }
 
 enum class SoraCardError {

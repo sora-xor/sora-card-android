@@ -2,7 +2,6 @@ package jp.co.soramitsu.oauth.feature.kyc.result
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
@@ -38,16 +37,13 @@ class VerificationInProgressViewModelTest {
     private lateinit var userSessionRepository: UserSessionRepository
 
     @Mock
-    private lateinit var mainRouter: MainRouter
-
-    @Mock
     private lateinit var kycCallback: KycCallback
 
     private lateinit var viewModel: VerificationInProgressViewModel
 
     @Before
     fun setUp() {
-        viewModel = VerificationInProgressViewModel(mainRouter, userSessionRepository)
+        viewModel = VerificationInProgressViewModel(userSessionRepository)
     }
 
     @Test
@@ -57,9 +53,22 @@ class VerificationInProgressViewModelTest {
     }
 
     @Test
-    fun `call openTelegramSupport EXPECT flow routes to telegram support`() = runTest {
-        viewModel.openTelegramSupport()
+    fun `call onClose EXPECT finish kyc`() = runTest {
+        given(userSessionRepository.getAccessToken()).willReturn("accessToken")
+        given(userSessionRepository.getAccessTokenExpirationTime()).willReturn(Long.MAX_VALUE)
+        given(userSessionRepository.getRefreshToken()).willReturn("refreshToken")
 
-        verify(mainRouter).openSupportChat()
+        viewModel.setArgs(kycCallback)
+        viewModel.onClose()
+        advanceUntilIdle()
+
+        verify(kycCallback).onFinish(
+            result = SoraCardResult.Success(
+                accessToken = "accessToken",
+                accessTokenExpirationTime = Long.MAX_VALUE,
+                refreshToken = "refreshToken",
+                SoraCardCommonVerification.Pending,
+            )
+        )
     }
 }

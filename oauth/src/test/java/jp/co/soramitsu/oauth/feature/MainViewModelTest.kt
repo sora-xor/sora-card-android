@@ -5,8 +5,6 @@ import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
 import jp.co.soramitsu.oauth.common.domain.KycRepository
-import jp.co.soramitsu.oauth.common.navigation.flow.api.KycRequirementsUnfulfilledFlow
-import jp.co.soramitsu.oauth.common.navigation.flow.api.NavigationFlow
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -18,7 +16,6 @@ import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
-import org.mockito.kotlin.any
 import org.mockito.kotlin.given
 import org.mockito.kotlin.verify
 
@@ -43,9 +40,6 @@ class MainViewModelTest {
     private lateinit var mainRouter: MainRouter
 
     @Mock
-    private lateinit var kycRequirementsUnfulfilledFlow: NavigationFlow
-
-    @Mock
     private lateinit var inMemoryRepo: InMemoryRepo
 
     private lateinit var viewModel: MainViewModel
@@ -57,18 +51,17 @@ class MainViewModelTest {
             kycRepository,
             mainRouter,
             inMemoryRepo,
-            kycRequirementsUnfulfilledFlow
         )
     }
 
     @Test
-    fun `no free kyc tries EXPECT show kyc requirements unfulfilled flow started`() = runTest {
+    fun `no free kyc tries EXPECT show no free tries screen`() = runTest {
         given(kycRepository.hasFreeKycAttempt("accessToken")).willReturn(Result.success(false))
 
         viewModel.onAuthSucceed("accessToken")
         advanceUntilIdle()
 
-        verify(kycRequirementsUnfulfilledFlow).start(any())
+        verify(mainRouter).openNoFreeKycAttempts()
     }
 
     @Test
