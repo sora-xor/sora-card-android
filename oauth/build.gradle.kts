@@ -93,15 +93,9 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = composeCompilerVersion
     }
-    configurations {
-        all {
-            exclude("com.chaos.view", "pinview")
-        }
-    }
 }
 
 dependencies {
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.fragment:fragment-ktx:1.5.7")
@@ -157,7 +151,7 @@ kapt {
     correctErrorTypes = true
 }
 
-val currentVersion by extra("0.777.44")
+val currentVersion by extra("0.0.44")
 publishing {
     publications {
         register<MavenPublication>("release") {
