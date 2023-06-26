@@ -43,7 +43,7 @@ fun VerificationInProgressScreen(
     ) { scrollState ->
         VerificationInProgressContent(
             scrollState = scrollState,
-            onClose = viewModel::onClose
+            onClose = viewModel::openTelegramSupport
         )
     }
 }
@@ -54,7 +54,8 @@ private fun VerificationInProgressContent(
     onClose: () -> Unit
 ) {
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .verticalScroll(scrollState)
             .padding(top = Dimens.x3, start = Dimens.x3, end = Dimens.x3, bottom = Dimens.x5)
     ) {
@@ -80,10 +81,12 @@ private fun VerificationInProgressContent(
         }
 
         TonalButton(
-            modifier = Modifier.fillMaxWidth().padding(top = Dimens.x3),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = Dimens.x3),
             order = Order.SECONDARY,
             size = Size.Large,
-            text = stringResource(R.string.common_close),
+            text = stringResource(id = R.string.verification_rejected_screen_support_telegram),
             enabled = true,
             onClick = onClose
         )

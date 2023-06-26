@@ -2,7 +2,8 @@ import java.util.Properties
 import java.io.FileInputStream
 
 fun secret(name: String): String? {
-    val pr = runCatching { FileInputStream("local.properties") }.getOrNull()?.let { file ->
+    val fileProperties = File(rootProject.projectDir.absolutePath, "local.properties")
+    val pr = runCatching { FileInputStream(fileProperties) }.getOrNull()?.let { file ->
         Properties().apply {
             load(file)
         }
@@ -27,10 +28,10 @@ plugins {
 val composeCompilerVersion by extra("1.4.6")
 val uiCoreVersion by extra("0.0.68")
 val hiltVersion by extra("2.45")
-val pwOauthSdkVersion by extra("1.2.2")
-val pwKycSdkVersion by extra("4.2.0")
+val pwOauthSdkVersion by extra("1.2.3")
+val pwKycSdkVersion by extra("4.4.0")
 val dataStoreVersion by extra("1.0.0")
-val ktorVersion by extra("2.2.3")
+val ktorVersion by extra("2.3.1")
 
 android {
     namespace = "jp.co.soramitsu.oauth"
@@ -124,7 +125,9 @@ dependencies {
     implementation("com.paywings.onboarding.kyc:android-sdk:$pwKycSdkVersion") {
         exclude("com.android.support", "support-compat")
         exclude("com.android.support", "support-media-compat")
+        exclude(module = "pinview")
     }
+    implementation("io.github.chaosleung:pinview:1.4.4")
 
     implementation("androidx.datastore:datastore-preferences:$dataStoreVersion")
 
@@ -148,7 +151,7 @@ kapt {
     correctErrorTypes = true
 }
 
-val currentVersion by extra("0.0.43")
+val currentVersion by extra("0.1.0")
 publishing {
     publications {
         register<MavenPublication>("release") {
