@@ -10,7 +10,8 @@ pluginManagement {
 }
 
 fun secret(name: String): String? {
-    val pr = runCatching { FileInputStream("local.properties") }.getOrNull()?.let { file ->
+    val fileProperties = File(rootProject.projectDir.absolutePath, "local.properties")
+    val pr = runCatching { FileInputStream(fileProperties) }.getOrNull()?.let { file ->
         Properties().apply {
             load(file)
         }
@@ -23,9 +24,6 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-
-        // Have to add jcenter repo because of KYC sdk dependencies
-        jcenter()
 
         maven {
             url = uri(secret("PAY_WINGS_REPOSITORY_URL")!!)
