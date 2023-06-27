@@ -40,13 +40,9 @@ interface MainRouter {
 
     fun openVerificationRejected(additionalDescription: String?)
 
+    fun openNoFreeKycAttempts()
+
     fun openSupportChat()
-
-    fun navigate(destinationRoute: String)
-
-    fun popUpToAndNavigate(popUpRoute: String, destinationRoute: String)
-
-    fun popUpTo(destinationRoute: String)
 }
 
 class MainRouterImpl : MainRouter {
@@ -166,6 +162,12 @@ class MainRouterImpl : MainRouter {
         }
     }
 
+    override fun openNoFreeKycAttempts() {
+        navHostController?.navigate(Destination.NO_MORE_FREE_ATTEMPTS.route) {
+            popUpTo(Destination.ENTER_PHONE_NUMBER.route)
+        }
+    }
+
     override fun openSupportChat() {
         val appAvailable = activity?.let {
             it.isAppAvailableCompat(APP_TELEGRAM) || it.isAppAvailableCompat(APP_TELEGRAM_X)
@@ -178,19 +180,5 @@ class MainRouterImpl : MainRouter {
         }
 
         activity?.startActivity(intent)
-    }
-
-    override fun navigate(destinationRoute: String) {
-        navHostController?.navigate(destinationRoute)
-    }
-
-    override fun popUpToAndNavigate(popUpRoute: String, destinationRoute: String) {
-        navHostController?.navigate(destinationRoute) {
-            popUpTo(popUpRoute)
-        }
-    }
-
-    override fun popUpTo(destinationRoute: String) {
-        navHostController?.popBackStack(destinationRoute, inclusive = false)
     }
 }

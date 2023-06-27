@@ -12,7 +12,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -21,37 +20,37 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.Screen
-import jp.co.soramitsu.oauth.feature.KycCallback
-import jp.co.soramitsu.ui_core.component.button.TonalButton
+import jp.co.soramitsu.ui_core.component.button.FilledButton
 import jp.co.soramitsu.ui_core.component.button.properties.Order
 import jp.co.soramitsu.ui_core.component.button.properties.Size
 import jp.co.soramitsu.ui_core.resources.Dimens
 import jp.co.soramitsu.ui_core.theme.customColors
 import jp.co.soramitsu.ui_core.theme.customTypography
 
-@Composable
-fun VerificationInProgressScreen(
-    kycCallback: KycCallback,
-    viewModel: VerificationInProgressViewModel = hiltViewModel()
-) {
-    LaunchedEffect(Unit) {
-        viewModel.setArgs(kycCallback)
-    }
 
+@Composable
+fun VerificationRejectedScreen(
+    viewModel: VerificationRejectedViewModel = hiltViewModel(),
+    additionalDescription: String? = null
+) {
     Screen(
         viewModel = viewModel
     ) { scrollState ->
-        VerificationInProgressContent(
+        VerificationRejectedContent(
             scrollState = scrollState,
-            onClose = viewModel::onClose
+            additionalDescription = additionalDescription,
+            tryAgainAvailable = viewModel.uiState,
+            onTryAgain = viewModel::onTryAgain,
         )
     }
 }
 
 @Composable
-private fun VerificationInProgressContent(
+private fun VerificationRejectedContent(
     scrollState: ScrollState,
-    onClose: () -> Unit
+    additionalDescription: String?,
+    tryAgainAvailable: Boolean,
+    onTryAgain: () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
@@ -59,13 +58,22 @@ private fun VerificationInProgressContent(
             .padding(top = Dimens.x3, start = Dimens.x3, end = Dimens.x3, bottom = Dimens.x5)
     ) {
         Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = Dimens.x1),
-            text = stringResource(R.string.kyc_result_verification_in_progress_description),
+            modifier = Modifier.fillMaxWidth(),
+            text = stringResource(R.string.verification_rejected_description),
             style = MaterialTheme.customTypography.paragraphM,
             color = MaterialTheme.customColors.fgPrimary
         )
+
+        additionalDescription?.let {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = Dimens.x3),
+                text = additionalDescription,
+                style = MaterialTheme.customTypography.paragraphM,
+                color = MaterialTheme.customColors.fgPrimary
+            )
+        }
 
         Box(
             modifier = Modifier
@@ -74,29 +82,29 @@ private fun VerificationInProgressContent(
             contentAlignment = Alignment.Center
         ) {
             Image(
-                painter = painterResource(R.drawable.ic_verification_in_progress),
+                painter = painterResource(R.drawable.ic_verification_rejected),
                 contentDescription = null
             )
         }
 
-        TonalButton(
+        FilledButton(
             modifier = Modifier.fillMaxWidth().padding(top = Dimens.x3),
             order = Order.SECONDARY,
             size = Size.Large,
-            text = stringResource(R.string.common_close),
-            enabled = true,
-            onClick = onClose
+            text = stringResource(R.string.common_try_again),
+            enabled = tryAgainAvailable,
+            onClick = onTryAgain
         )
     }
 }
 
-@Preview
 @Composable
-private fun PreviewVerificationInProgressScreen() {
-    Box(modifier = Modifier.fillMaxSize()) {
-        VerificationInProgressContent(
-            scrollState = rememberScrollState(),
-            onClose = {}
-        )
-    }
+@Preview
+private fun PreviewApplicationRejected() {
+    VerificationRejectedContent(
+        scrollState = rememberScrollState(),
+        additionalDescription = "PLACEHOLDER",
+        tryAgainAvailable = false,
+        onTryAgain = {}
+    )
 }

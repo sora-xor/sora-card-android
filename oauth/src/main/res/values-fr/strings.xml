@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string name="cant_fetch_data">Impossible de récupérer les données</string>
-  <string name="cant_fetch_refresh">Impossible de récupérer les données, tapez pour rafraîchir</string>
+  <string name="cant_fetch_refresh">Impossible de récupérer les données, tappez pour rafraîchir</string>
   <string name="card_issuance_screen_free_card_description">Pour commander la carte gratuitement:\nDétenez, stakez, ou fournissez des liquidités pour un montant d\'au moins %s€ de XOR avec votre compte SORA</string>
   <string name="card_issuance_screen_free_card_get_xor">Obtenir %s XOR</string>
   <string name="card_issuance_screen_free_card_title">Émission de carte gratuite</string>
@@ -39,7 +39,7 @@
   <string name="get_more_xor_dialog_buy_option">Acheter du XOR avec des EUR</string>
   <string name="get_more_xor_dialog_deposit_option">Déposer du XOR</string>
   <string name="get_more_xor_dialog_description">Vous pouvez échanger vers du XOR ou en acheter avec des Euros</string>
-  <string name="get_more_xor_dialog_swap_option">Échanger de la crypto pour du XOR</string>
+  <string name="get_more_xor_dialog_swap_option">Échangez de la crypto pour du XOR</string>
   <string name="get_prepared_alert">ATTENTION: Seulement 2 essais gratuits sont fournis pour passer la procédure de KYC. Après ces deux essais, tout autre essai coûtera 3,8€. Les essais payants seront disponibles après la prochaine mise à jour de l\'application.</string>
   <string name="get_prepared_need">Pour compléter la procédure de KYC vous aurez besoin de:</string>
   <string name="get_prepared_ok_title">OK, je suis prêt(e)</string>
@@ -59,7 +59,7 @@
   <string name="no_free_kyc_attempts_description">Vous avez épuisé votre nombre d\'essais gratuits pour l\'opération de KYC.\nNous vous prions d\'attendre la prochaine mise à jour pour continuer avec les essais payants</string>
   <string name="no_free_kyc_attempts_title">Nombre d\'essais gratuits épuisé</string>
   <string name="payment_widget_unavailable_confirm">Oui, je comprends</string>
-  <string name="payment_widget_unavailable_description">Veuillez nous excuser du désagrément. Nous travaillons actuellement à résoudre le problème. Veuillez réessayer plus tard.</string>
+  <string name="payment_widget_unavailable_description">Veuillez nous excuser pour le désagrément. Nous travaillons actuellement à résoudre le problème. Veuillez réessayer plus tard.</string>
   <string name="payment_widget_unavailable_message">Le widget de paiement est actuellement indisponible</string>
   <string name="payment_widget_unavailable_title">Widget indisponible</string>
   <string name="terms_and_conditions_accept_and_continue">Accepter et continuer</string>
@@ -67,9 +67,9 @@
   <string name="terms_and_conditions_description">Nous souhaitons que vous sachiez exactement comment les services SORA Card fonctionnent, ainsi que les entités et les conditions d\'utilisation de vos données. Examiner les politiques d\'utilisation vous aidera à continuer à utiliser l\'application l\'esprit tranquille.</string>
   <string name="terms_and_conditions_general_terms">Conditions générales d\'utilisation</string>
   <string name="terms_and_conditions_privacy_policy">Politique de confidentialité</string>
-  <string name="terms_and_conditions_sora_community_alert">Pour obtenir un compte IBAN nécessaire pour la SORA Card, les utilisateurs doivent se soumettre à un processus KYC avec l\'émetteur de la carte. Il s\'agit d\'une conformité obligatoire. La communauté SORA ne collecte et ne collectera aucune de vos données personnelles.</string>
+  <string name="terms_and_conditions_sora_community_alert">Pour obtenir un compte IBAN nécessaire pour la carte SORA, les utilisateurs doivent se soumettre à un processus KYC avec l\'émetteur de la carte. Il s\'agit d\'une conformité obligatoire. La communauté SORA ne collecte et ne collectera aucune de vos données personnelles.</string>
   <string name="terms_and_conditions_title">Conditions d\'utilisation</string>
-  <string name="unsupported_countries_disclaimer">Les résidents de certains pays ne peuvent pas accéder à SORA Card pour le moment</string>
+  <string name="unsupported_countries_disclaimer">Les résidents de certains pays ne peuvent pas demander de carte SORA pour le moment</string>
   <string name="unsupported_countries_link">Voir la liste</string>
   <string name="user_registration_first_name_input_filed_label">Prénom</string>
   <string name="user_registration_last_name_input_filed_label">Nom de famille</string>
