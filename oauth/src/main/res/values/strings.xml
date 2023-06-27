@@ -26,6 +26,7 @@
   <string name="common_user_not_found">No mobile number found, please recheck it and try again.</string>
   <string name="details_already_have_card">I already have a card</string>
   <string name="details_already_used_free_try">You already used your free try</string>
+  <string name="details_description">Get a Euro IBAN account and Mastercard Debit Card accessible within your SORA Wallet</string>
   <string name="details_enough_xor_desription">You have enough XOR</string>
   <string name="details_get_more_xor">Get more XOR</string>
   <string name="details_issue_card">Issue card for free</string>
@@ -53,9 +54,14 @@
   <string name="get_prepared_title">Get prepared</string>
   <string name="kyc_result_verification_in_progress">Verification in progress</string>
   <string name="kyc_result_verification_in_progress_description">You have successfully completed your KYC application. The review is pending and you can expect a decision shortly.\n\nUsually the decision is made the same day and in some cases can take up to 3 days.</string>
+  <string name="log_out">Log out</string>
   <string name="login_title">Log in or Sign up</string>
   <string name="no_free_kyc_attempts_description">You have used your free attempt to pass the KYC process.\n\nWe kindly ask you to wait until the next upgrade of the application to proceed with paid attempts.</string>
   <string name="no_free_kyc_attempts_title">No more free attempts</string>
+  <string name="payment_widget_unavailable_confirm">Yes, I understand</string>
+  <string name="payment_widget_unavailable_description">Apologies for the inconvenience.\nWe’re working diligently to resolve this.\nPlease, try again later.</string>
+  <string name="payment_widget_unavailable_message">The payment widget is currently unavailable</string>
+  <string name="payment_widget_unavailable_title">Widget unavailable</string>
   <string name="terms_and_conditions_accept_and_continue">Accept &amp; Continue</string>
   <string name="terms_and_conditions_confirm_description">By continuing you confirm that you have read, understood and accepted these policies</string>
   <string name="terms_and_conditions_description">We want you to know exactly how the SORA card service will work, who needs your details and why. Reviewing these policies will help you use the app with peace of mind.</string>
