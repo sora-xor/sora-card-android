@@ -9,6 +9,7 @@ import jp.co.soramitsu.oauth.base.compose.Text
 data class VerificationRejectedScreenState(
     private val screenStatus: ScreenStatus,
     val kycAttemptsCount: Int,
+    val isFreeAttemptsLeft: Boolean,
     val kycAttemptCostInEuros: Double
 ) {
 
@@ -18,7 +19,7 @@ data class VerificationRejectedScreenState(
     val imageRes: Int =
         R.drawable.ic_verification_rejected
 
-    val shouldKycAttemptsLeftTextBeShown: Boolean = screenStatus === ScreenStatus.READY_TO_RENDER
+    val shouldKycAttemptsLeftTextBeShown: Boolean = false // Will be available latter
 
     val kycAttemptsLeftText: Text
         get() {
@@ -31,7 +32,7 @@ data class VerificationRejectedScreenState(
             )
         }
 
-    val shouldKycAttemptsDisclaimerTextBeShown: Boolean = screenStatus === ScreenStatus.READY_TO_RENDER
+    val shouldKycAttemptsDisclaimerTextBeShown: Boolean = false // Will be available latter
 
     val kycAttemptsDisclaimerText: Text =
         Text.StringResWithArgs(
@@ -39,15 +40,16 @@ data class VerificationRejectedScreenState(
             payload = arrayOf(kycAttemptCostInEuros.toString())
         )
 
-    val shouldTryAgainButtonBeShown: Boolean = screenStatus === ScreenStatus.READY_TO_RENDER
+    val shouldTryAgainButtonBeShown: Boolean = kycAttemptsCount > 0
 
     val tryAgainText: Text
         get() {
-            if (kycAttemptsCount <= 0)
-                return Text.StringResWithArgs(
-                    id = R.string.verification_rejected_screen_try_again_for_euros,
-                    payload = arrayOf(kycAttemptCostInEuros.toString())
-                )
+            /* Will be available latter */
+//            if (kycAttemptsCount <= 0)
+//                return Text.StringResWithArgs(
+//                    id = R.string.verification_rejected_screen_try_again_for_euros,
+//                    payload = arrayOf(kycAttemptCostInEuros.toString())
+//                )
 
             return Text.StringRes(id = R.string.verification_rejected_screen_try_again_for_free)
         }

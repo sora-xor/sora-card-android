@@ -6,7 +6,6 @@ import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.model.GetReferenceNumberRequest
 import jp.co.soramitsu.oauth.common.model.GetReferenceNumberResponse
 import jp.co.soramitsu.oauth.common.model.KycAttemptsDto
-import jp.co.soramitsu.oauth.common.model.KycCount
 import jp.co.soramitsu.oauth.common.model.KycResponse
 import jp.co.soramitsu.oauth.common.model.KycStatus
 import jp.co.soramitsu.oauth.common.model.VerificationStatus
@@ -56,7 +55,7 @@ class KycRepositoryImpl(
     override suspend fun getKycLastFinalStatus(accessToken: String): Result<SoraCardCommonVerification?> {
         return getKycInfo(accessToken).map { kycStatuses ->
             val status =
-                getFinalizedFromList(kycStatuses) ?: kycStatuses.getOrNull(kycStatuses.lastIndex)
+                getFinalizedFromList(kycStatuses) ?: kycStatuses.firstOrNull()
             map(status)
         }
     }
@@ -103,7 +102,7 @@ class KycRepositoryImpl(
         }
     }
 
-    override suspend fun getFreeKycAttemptsInfo(accessToken: String): Result<KycCount> {
+    override suspend fun getFreeKycAttemptsInfo(accessToken: String): Result<KycAttemptsDto> {
         return runCatching {
             apiClient.get(
                 accessToken,

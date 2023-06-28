@@ -5,12 +5,15 @@ import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
+import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.feature.KycCallback
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
@@ -34,6 +37,9 @@ class VerificationSuccessfulViewModelTest {
     var mainCoroutineRule = MainCoroutineRule()
 
     @Mock
+    private lateinit var setActivityResult: SetActivityResult
+
+    @Mock
     private lateinit var userSessionRepository: UserSessionRepository
 
     @Mock
@@ -43,13 +49,16 @@ class VerificationSuccessfulViewModelTest {
 
     @Before
     fun setUp() {
-        viewModel = VerificationSuccessfulViewModel(userSessionRepository)
+        viewModel = VerificationSuccessfulViewModel(
+            setActivityResult = setActivityResult,
+            userSessionRepository = userSessionRepository
+        )
     }
 
     @Test
     fun `init EXPECT toolbar title`() {
         assertEquals(R.string.verification_successful_title, viewModel.toolbarState.value?.basic?.title)
-        assertNull(viewModel.toolbarState.value?.basic?.navIcon)
+        assertNotNull(viewModel.toolbarState.value?.basic?.navIcon)
     }
 
     @Test

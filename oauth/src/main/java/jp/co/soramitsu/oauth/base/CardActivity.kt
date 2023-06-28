@@ -75,10 +75,12 @@ class CardActivity : AppCompatActivity(R.layout.card_activity) {
             vm.inMemoryRepo.endpointUrl = data.kycCredentials.endpointUrl
             vm.inMemoryRepo.username = data.kycCredentials.username
             vm.inMemoryRepo.password = data.kycCredentials.password
-            vm.inMemoryRepo.soraCardInfo = data.soraCardInfo
             vm.inMemoryRepo.mode = Mode.REGISTRATION
             vm.inMemoryRepo.environment = data.environment
             vm.inMemoryRepo.client = data.client
+            vm.inMemoryRepo.areAttemptsPaidSuccessfully = data.areAttemptsPaidSuccessfully
+            vm.inMemoryRepo.isEnoughXorAvailable = data.isEnoughXorAvailable
+            vm.inMemoryRepo.isIssuancePaid = data.isIssuancePaid
 
             PayWingsOAuthClient.init(
                 applicationContext,
@@ -100,11 +102,13 @@ class CardActivity : AppCompatActivity(R.layout.card_activity) {
             vm.inMemoryRepo.endpointUrl = data.kycCredentials.endpointUrl
             vm.inMemoryRepo.username = data.kycCredentials.username
             vm.inMemoryRepo.password = data.kycCredentials.password
-            vm.inMemoryRepo.soraCardInfo = data.soraCardInfo
             vm.inMemoryRepo.mode = Mode.SIGN_IN
             vm.inMemoryRepo.environment = data.environment
             vm.inMemoryRepo.client = data.client
             vm.inMemoryRepo.userAvailableXorAmount = data.userAvailableXorAmount
+            vm.inMemoryRepo.areAttemptsPaidSuccessfully = data.areAttemptsPaidSuccessfully
+            vm.inMemoryRepo.isEnoughXorAvailable = data.isEnoughXorAvailable
+            vm.inMemoryRepo.isIssuancePaid = data.isIssuancePaid
 
             PayWingsOAuthClient.init(
                 applicationContext,

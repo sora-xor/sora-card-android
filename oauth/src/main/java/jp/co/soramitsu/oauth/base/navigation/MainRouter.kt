@@ -191,6 +191,9 @@ class MainRouterImpl : MainRouter {
     }
 
     override fun popUpTo(destinationRoute: String) {
-        navHostController?.popBackStack(destinationRoute, inclusive = false)
+        if (navHostController?.currentBackStackEntry?.destination?.route?.contains(destinationRoute) == true)
+            navHostController?.popBackStack(destinationRoute, inclusive = false)
+        else
+            navHostController?.popBackStack(Destination.TERMS_AND_CONDITIONS.route, inclusive = false)
     }
 }

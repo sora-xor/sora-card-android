@@ -86,9 +86,9 @@ class CardIssuanceViewModel @Inject constructor(
     }
 
     fun onPayIssuance() {
-        setActivityResult.setResult(
-            SoraCardResult.NavigateTo(OutwardsScreen.BUY)
-        )
+//        setActivityResult.setResult(
+//            SoraCardResult.NavigateTo(OutwardsScreen.BUY)
+//        )
     }
 
 }

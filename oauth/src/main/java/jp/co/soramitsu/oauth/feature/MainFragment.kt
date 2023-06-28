@@ -91,8 +91,6 @@ internal class MainFragment : BaseFragment() {
             finishWithCancel()
         }
 
-        setSoraCardInfo(soraCardInfo = viewModel.inMemoryRepo.soraCardInfo)
-
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.state
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
@@ -117,10 +115,6 @@ internal class MainFragment : BaseFragment() {
                     }
                 }
         }
-    }
-
-    private fun setSoraCardInfo(soraCardInfo: SoraCardInfo?) {
-        viewModel.setSoraCardInfo(soraCardInfo)
     }
 
     @Composable

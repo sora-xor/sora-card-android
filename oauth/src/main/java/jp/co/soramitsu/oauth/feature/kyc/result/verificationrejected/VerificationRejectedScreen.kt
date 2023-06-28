@@ -27,7 +27,7 @@ import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PriceInteractor
 import jp.co.soramitsu.oauth.common.model.EuroLiquiditySufficiency
-import jp.co.soramitsu.oauth.common.model.KycCount
+import jp.co.soramitsu.oauth.common.model.KycAttemptsDto
 import jp.co.soramitsu.oauth.common.model.XorEuroPrice
 import jp.co.soramitsu.oauth.common.model.XorLiquiditySufficiency
 import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
@@ -303,7 +303,7 @@ private fun PreviewApplicationRejected() {
                     TODO("Not yet implemented")
                 }
 
-                override suspend fun getFreeKycAttemptsInfo(accessToken: String): Result<KycCount> {
+                override suspend fun getFreeKycAttemptsInfo(accessToken: String): Result<KycAttemptsDto> {
                     TODO("Not yet implemented")
                 }
 

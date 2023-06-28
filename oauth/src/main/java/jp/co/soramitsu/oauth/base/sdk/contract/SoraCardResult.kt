@@ -35,7 +35,7 @@ sealed class SoraCardResult : Parcelable {
 }
 
 enum class OutwardsScreen {
-    DEPOSIT, SWAP, BUY
+    DEPOSIT, SWAP, BUY, MAIN_SCREEN
 }
 
 enum class SoraCardError {
