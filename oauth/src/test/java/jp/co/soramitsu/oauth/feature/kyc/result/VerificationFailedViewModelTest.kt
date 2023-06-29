@@ -5,9 +5,11 @@ import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
+import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.feature.KycCallback
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
@@ -30,19 +32,24 @@ class VerificationFailedViewModelTest {
     var mainCoroutineRule = MainCoroutineRule()
 
     @Mock
+    private lateinit var setActivityResult: SetActivityResult
+
+    @Mock
     private lateinit var kycCallback: KycCallback
 
     private lateinit var viewModel: VerificationFailedViewModel
 
     @Before
     fun setUp() {
-        viewModel = VerificationFailedViewModel()
+        viewModel = VerificationFailedViewModel(
+            setActivityResult = setActivityResult
+        )
     }
 
     @Test
     fun `init EXPECT toolbar title`() {
         assertEquals(R.string.verification_failed_title, viewModel.toolbarState.value?.basic?.title)
-        assertNull(viewModel.toolbarState.value?.basic?.navIcon)
+        assertNotNull(viewModel.toolbarState.value?.basic?.navIcon)
     }
 
     @Test

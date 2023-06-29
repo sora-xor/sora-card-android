@@ -108,7 +108,7 @@ internal fun SdkNavGraph(
         animatedComposable(Destination.VERIFICATION_FAILED.route) {
             VerificationFailedScreen(
                 additionalDescription = navHostController.previousBackStackEntry
-                    ?.requireArguments()
+                    ?.arguments
                     ?.getString(Argument.ADDITIONAL_DESCRIPTION.arg),
                 kycCallback = kycCallback
             )
@@ -117,7 +117,7 @@ internal fun SdkNavGraph(
         animatedComposable(Destination.VERIFICATION_REJECTED.route) {
             VerificationRejectedScreen(
                 additionalDescription = navHostController.previousBackStackEntry
-                    ?.requireArguments()
+                    ?.arguments
                     ?.getString(Argument.ADDITIONAL_DESCRIPTION.arg),
             )
         }

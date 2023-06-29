@@ -14,7 +14,6 @@ import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.Destination
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
-import jp.co.soramitsu.oauth.base.sdk.SoraCardInfo
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.state.DialogAlertState
 import jp.co.soramitsu.oauth.common.domain.KycRepository
@@ -43,6 +42,19 @@ class MainViewModel @Inject constructor(
 
     var uiState by mutableStateOf(MainScreenUiState())
         private set
+
+    init {
+        viewModelScope.launch {
+            showLoading(loading = true)
+
+            checkAccessTokenValidity { accessToken, accessTokenExpirationTime ->
+                updateAccessToken(accessToken, accessTokenExpirationTime)
+
+                onAuthSucceed(accessToken)
+                showLoading(false)
+            }
+        }
+    }
 
     private val getUserDataCallback = object : GetUserDataCallback {
         override fun onError(error: OAuthErrorCode, errorMessage: String?) {
@@ -117,28 +129,6 @@ class MainViewModel @Inject constructor(
         uiState = uiState.copy(loading = loading)
     }
 
-    fun setSoraCardInfo(soraCardInfo: SoraCardInfo?) {
-        if (soraCardInfo == null) {
-            return
-        }
-
-        viewModelScope.launch {
-            showLoading(loading = true)
-            userSessionRepository.signInUser(
-                refreshToken = soraCardInfo.refreshToken,
-                accessToken = soraCardInfo.accessToken,
-                expirationTime = soraCardInfo.accessTokenExpirationTime
-            )
-
-            checkAccessTokenValidity { accessToken, accessTokenExpirationTime ->
-                updateAccessToken(accessToken, accessTokenExpirationTime)
-
-                onAuthSucceed(accessToken)
-                showLoading(false)
-            }
-        }
-    }
-
     private suspend fun checkAccessTokenValidity(
         onNewToken: suspend (accessToken: String, accessTokenExpirationTime: Long) -> Unit
     ) {
@@ -196,28 +186,26 @@ class MainViewModel @Inject constructor(
     fun onAuthSucceed(accessToken: String) {
         viewModelScope.launch {
             kycRepository.getKycLastFinalStatus(accessToken).onSuccess { kycResponse ->
-                if (kycResponse != null &&
-                    (kycResponse == SoraCardCommonVerification.Rejected ||
-                            kycResponse == SoraCardCommonVerification.Pending ||
-                            kycResponse == SoraCardCommonVerification.Successful)
+                if (kycResponse != null
+                    && (kycResponse == SoraCardCommonVerification.Rejected ||
+                        kycResponse == SoraCardCommonVerification.Pending ||
+                        kycResponse == SoraCardCommonVerification.Successful)
                 ) {
                     showKycStatusScreen(kycResponse)
                 } else {
-                    checkKycAttemptIsFree(accessToken)
+                    checkKycRequirementsFulfilled()
                 }
             }
         }
     }
 
-    private suspend fun checkKycAttemptIsFree(accessToken: String) {
-        kycRepository.hasFreeKycAttempt(accessToken).onSuccess {
-            if (it) {
-                mainRouter.openGetPrepared()
-            } else {
-                kycRequirementsUnfulfilledFlow.start(
-                    fromDestination = CompatibilityDestination(Destination.ENTER_PHONE_NUMBER.route)
-                )
-            }
+    private suspend fun checkKycRequirementsFulfilled() {
+        if (inMemoryRepo.isEnoughXorAvailable) {
+            mainRouter.openGetPrepared()
+        } else {
+            kycRequirementsUnfulfilledFlow.start(
+                fromDestination = CompatibilityDestination(Destination.ENTER_PHONE_NUMBER.route)
+            )
         }
     }
 
@@ -254,7 +242,9 @@ class MainViewModel @Inject constructor(
             }
 
             kycResponse == SoraCardCommonVerification.Rejected -> {
-                mainRouter.openVerificationRejected(additionalDescription = statusDescription)
+                mainRouter.openVerificationRejected(
+                    additionalDescription = statusDescription
+                )
             }
         }
     }

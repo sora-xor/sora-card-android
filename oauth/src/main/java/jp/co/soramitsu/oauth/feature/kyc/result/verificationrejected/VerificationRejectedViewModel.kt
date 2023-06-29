@@ -35,6 +35,7 @@ class VerificationRejectedViewModel @Inject constructor(
         VerificationRejectedScreenState(
             screenStatus = ScreenStatus.ERROR,
             kycAttemptsCount = 0,
+            isFreeAttemptsLeft = false,
             kycAttemptCostInEuros = (-1).toDouble()
         )
     )
@@ -46,7 +47,7 @@ class VerificationRejectedViewModel @Inject constructor(
             basic = BasicToolbarState(
                 title = R.string.verification_rejected_title,
                 visibility = true,
-                navIcon = null,
+                navIcon = R.drawable.ic_cross
             ),
         )
 
@@ -58,23 +59,28 @@ class VerificationRejectedViewModel @Inject constructor(
             kotlin.runCatching {
                 val token = userSessionRepository.getAccessToken()
 
-                val kycAttemptsLeft = kycRepository.getFreeKycAttemptsInfo(token)
-                    .getOrThrow().run { total - completed }
+                val (actualKycAttemptsLeft, isKycAttemptsLeft) = kycRepository.getFreeKycAttemptsInfo(token)
+                    .getOrThrow().run { total - completed - rejected to freeAttemptAvailable }
 
                 val kycAttemptPrice = priceInteractor.calculateKycAttemptPrice().getOrThrow()
 
                 verificationRejectedScreenState = verificationRejectedScreenState.copy(
                     screenStatus = ScreenStatus.READY_TO_RENDER,
-                    kycAttemptsCount = kycAttemptsLeft,
-                    kycAttemptCostInEuros = kycAttemptPrice
+                    kycAttemptsCount = actualKycAttemptsLeft,
+                    kycAttemptCostInEuros = kycAttemptPrice,
+                    isFreeAttemptsLeft = isKycAttemptsLeft
                 )
             }.onFailure {
-                it.printStackTrace()
                 verificationRejectedScreenState = verificationRejectedScreenState.copy(
                     screenStatus = ScreenStatus.ERROR
                 )
             }
         }
+    }
+
+    override fun onToolbarNavigation() {
+        super.onToolbarNavigation()
+        setActivityResult.setResult(SoraCardResult.NavigateTo(OutwardsScreen.MAIN_SCREEN))
     }
 
     fun onTryAgain() {
@@ -83,7 +89,8 @@ class VerificationRejectedViewModel @Inject constructor(
             return
         }
 
-        setActivityResult.setResult(SoraCardResult.NavigateTo(OutwardsScreen.BUY))
+        /* Will be available latter */
+//        setActivityResult.setResult(SoraCardResult.NavigateTo(OutwardsScreen.BUY))
     }
 
     fun openTelegramSupport() {

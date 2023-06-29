@@ -56,8 +56,9 @@ fun CardIssuanceScreen(
                 modifier = Modifier.verticalScroll(scrollState)
             ) {
                 FreeCardIssuance(viewModel)
-                InlineTextDivider()
-                PaidCardIssuance(viewModel)
+                /* Will be available latter */
+                //InlineTextDivider()
+                //PaidCardIssuance(viewModel)
             }
         }
     }
@@ -73,7 +74,7 @@ private fun FreeCardIssuance(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = Dimens.x3, vertical = Dimens.x1)
-            .padding(top = Dimens.x1)
+            .padding(top = Dimens.x1, bottom = Dimens.x7)
     ) {
         Column {
             Text(

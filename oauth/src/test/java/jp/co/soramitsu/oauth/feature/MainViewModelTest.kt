@@ -1,6 +1,7 @@
 package jp.co.soramitsu.oauth.feature
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import io.mockk.every
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
@@ -63,8 +64,6 @@ class MainViewModelTest {
 
     @Test
     fun `no free kyc tries EXPECT show kyc requirements unfulfilled flow started`() = runTest {
-        given(kycRepository.hasFreeKycAttempt("accessToken")).willReturn(Result.success(false))
-
         viewModel.onAuthSucceed("accessToken")
         advanceUntilIdle()
 
@@ -73,7 +72,7 @@ class MainViewModelTest {
 
     @Test
     fun `free kyc tries available EXPECT show get prepared screen`() = runTest {
-        given(kycRepository.hasFreeKycAttempt("accessToken")).willReturn(Result.success(true))
+        given(inMemoryRepo.isEnoughXorAvailable).willReturn(true)
 
         viewModel.onAuthSucceed("accessToken")
         advanceUntilIdle()
