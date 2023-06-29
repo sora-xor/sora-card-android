@@ -1,5 +1,6 @@
 package jp.co.soramitsu.oauth.feature.cardissuance
 
+import android.app.Activity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,12 +21,14 @@ import jp.co.soramitsu.oauth.base.compose.InlineTextDivider
 import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.base.compose.retrieveString
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
+import jp.co.soramitsu.oauth.common.domain.CurrentActivityRetriever
 import jp.co.soramitsu.oauth.common.domain.PriceInteractor
 import jp.co.soramitsu.oauth.common.model.EuroLiquiditySufficiency
 import jp.co.soramitsu.oauth.common.model.XorLiquiditySufficiency
 import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.common.navigation.flow.api.NavigationFlow
 import jp.co.soramitsu.oauth.common.navigation.flow.api.destinations.NavigationFlowDestination
+import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.ui_core.component.button.FilledButton
 import jp.co.soramitsu.ui_core.component.button.OutlinedButton
 import jp.co.soramitsu.ui_core.component.button.properties.Order
@@ -178,6 +181,64 @@ private fun PaidCardIssuance(
 @Composable
 private fun PreviewCardIssuanceScreen() {
     CardIssuanceScreen(viewModel = CardIssuanceViewModel(
+        currentActivityRetriever = object : CurrentActivityRetriever {
+            override fun setActivity(activity: Activity) {
+                TODO("Not yet implemented")
+            }
+
+            override fun getCurrentActivity(): Activity {
+                TODO("Not yet implemented")
+            }
+        },
+        userSessionRepository = object : UserSessionRepository {
+            override suspend fun getRefreshToken(): String {
+                TODO("Not yet implemented")
+            }
+
+            override suspend fun getAccessToken(): String {
+                TODO("Not yet implemented")
+            }
+
+            override suspend fun getAccessTokenExpirationTime(): Long {
+                TODO("Not yet implemented")
+            }
+
+            override suspend fun signInUser(
+                refreshToken: String,
+                accessToken: String,
+                expirationTime: Long
+            ) {
+                TODO("Not yet implemented")
+            }
+
+            override suspend fun setNewAccessToken(accessToken: String, expirationTime: Long) {
+                TODO("Not yet implemented")
+            }
+
+            override suspend fun setRefreshToken(refreshToken: String) {
+                TODO("Not yet implemented")
+            }
+
+            override suspend fun setUserId(userId: String?) {
+                TODO("Not yet implemented")
+            }
+
+            override suspend fun setPersonId(personId: String?) {
+                TODO("Not yet implemented")
+            }
+
+            override suspend fun getUserId(): String {
+                TODO("Not yet implemented")
+            }
+
+            override suspend fun getPersonId(): String {
+                TODO("Not yet implemented")
+            }
+
+            override suspend fun logOutUser() {
+                TODO("Not yet implemented")
+            }
+        },
         kycRequirementsUnfulfilledFlow = object : NavigationFlow {
             override fun start(fromDestination: NavigationFlowDestination) {}
 

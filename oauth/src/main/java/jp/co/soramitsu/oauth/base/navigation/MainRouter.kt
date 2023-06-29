@@ -133,30 +133,28 @@ class MainRouterImpl : MainRouter {
     }
 
     override fun openVerificationSuccessful() {
-        navHostController?.navigate(Destination.VERIFICATION_SUCCESSFUL.route) {
-            popUpTo(Destination.ENTER_PHONE_NUMBER.route)
-        }
+        navHostController?.popBackStack()
+        navHostController?.navigate(Destination.VERIFICATION_SUCCESSFUL.route)
     }
 
     override fun openVerificationInProgress() {
-        navHostController?.navigate(Destination.VERIFICATION_IN_PROGRESS.route) {
-            popUpTo(Destination.ENTER_PHONE_NUMBER.route)
-        }
+        navHostController?.popBackStack()
+        navHostController?.navigate(Destination.VERIFICATION_IN_PROGRESS.route)
     }
 
     override fun openVerificationFailed(additionalDescription: String?) {
+        navHostController?.popBackStack()
         navHostController?.apply {
             currentBackStackEntry?.arguments?.putString(
                 Argument.ADDITIONAL_DESCRIPTION.arg,
                 additionalDescription
             )
-            navigate(Destination.VERIFICATION_FAILED.route) {
-                popUpTo(Destination.ENTER_PHONE_NUMBER.route)
-            }
+            navigate(Destination.VERIFICATION_FAILED.route)
         }
     }
 
     override fun openVerificationRejected(additionalDescription: String?) {
+        navHostController?.popBackStack()
         navHostController?.apply {
             currentBackStackEntry?.arguments?.putString(
                 Argument.ADDITIONAL_DESCRIPTION.arg,

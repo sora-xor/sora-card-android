@@ -6,6 +6,7 @@ import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.contract.OutwardsScreen
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
+import jp.co.soramitsu.oauth.common.domain.CurrentActivityRetriever
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PriceInteractor
 import jp.co.soramitsu.oauth.common.model.KycAttemptsDto
@@ -58,6 +59,9 @@ class VerificationRejectedViewModelTest {
     @Mock
     private lateinit var priceInteractor: PriceInteractor
 
+    @Mock
+    private lateinit var currentActivityRetriever: CurrentActivityRetriever
+
     private lateinit var viewModel: VerificationRejectedViewModel
 
     private lateinit var kycCountAttemptsAvailable: KycAttemptsDto
@@ -97,7 +101,8 @@ class VerificationRejectedViewModelTest {
             userSessionRepository = userSessionRepository,
             kycRepository = kycRepository,
             setActivityResult = setActivityResult,
-            priceInteractor = priceInteractor
+            priceInteractor = priceInteractor,
+            currentActivityRetriever = currentActivityRetriever
         )
 
         assertEquals(R.string.verification_rejected_title, viewModel.toolbarState.value?.basic?.title)
@@ -121,7 +126,8 @@ class VerificationRejectedViewModelTest {
                 userSessionRepository = userSessionRepository,
                 kycRepository = kycRepository,
                 setActivityResult = setActivityResult,
-                priceInteractor = priceInteractor
+                priceInteractor = priceInteractor,
+                currentActivityRetriever = currentActivityRetriever
             )
 
             viewModel.onTryAgain()
@@ -156,7 +162,8 @@ class VerificationRejectedViewModelTest {
             userSessionRepository = userSessionRepository,
             kycRepository = kycRepository,
             setActivityResult = setActivityResult,
-            priceInteractor = priceInteractor
+            priceInteractor = priceInteractor,
+            currentActivityRetriever = currentActivityRetriever
         )
 
         viewModel.openTelegramSupport()

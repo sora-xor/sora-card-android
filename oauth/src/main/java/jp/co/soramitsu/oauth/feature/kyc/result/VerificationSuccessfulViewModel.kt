@@ -37,7 +37,20 @@ class VerificationSuccessfulViewModel @Inject constructor(
 
     override fun onToolbarNavigation() {
         super.onToolbarNavigation()
-        setActivityResult.setResult(SoraCardResult.NavigateTo(OutwardsScreen.MAIN_SCREEN))
+        viewModelScope.launch {
+            val accessToken = userSessionRepository.getAccessToken()
+            val accessTokenExpirationTime = userSessionRepository.getAccessTokenExpirationTime()
+            val refreshToken = userSessionRepository.getRefreshToken()
+            val kycStatus = SoraCardCommonVerification.Successful
+            setActivityResult.setResult(
+                SoraCardResult.Success(
+                    accessToken = accessToken,
+                    accessTokenExpirationTime = accessTokenExpirationTime,
+                    refreshToken = refreshToken,
+                    status = kycStatus
+                )
+            )
+        }
     }
 
     fun setArgs(kycCallback: KycCallback) {
