@@ -38,8 +38,6 @@ class VerificationInProgressViewModel @Inject constructor(
         )
     }
 
-    private var kycCallback: KycCallback? = null
-
     override fun onToolbarAction() {
         super.onToolbarAction()
         try {
@@ -59,20 +57,15 @@ class VerificationInProgressViewModel @Inject constructor(
             val accessToken = userSessionRepository.getAccessToken()
             val accessTokenExpirationTime = userSessionRepository.getAccessTokenExpirationTime()
             val refreshToken = userSessionRepository.getRefreshToken()
-            val kycStatus = SoraCardCommonVerification.Successful
             setActivityResult.setResult(
                 SoraCardResult.Success(
                     accessToken = accessToken,
                     accessTokenExpirationTime = accessTokenExpirationTime,
                     refreshToken = refreshToken,
-                    status = kycStatus
+                    status = SoraCardCommonVerification.Pending,
                 )
             )
         }
-    }
-
-    fun setArgs(kycCallback: KycCallback) {
-        this.kycCallback = kycCallback
     }
 
     fun openTelegramSupport() {
