@@ -28,7 +28,6 @@ class CardIssuanceViewModel @Inject constructor(
     @KycRequirementsUnfulfilledFlow private val kycRequirementsUnfulfilledFlow: NavigationFlow,
     private val setActivityResult: SetActivityResult,
     private val userSessionRepository: UserSessionRepository,
-    private val currentActivityRetriever: CurrentActivityRetriever,
     private val priceInteractor: PriceInteractor
 ): BaseViewModel() {
 
@@ -87,7 +86,7 @@ class CardIssuanceViewModel @Inject constructor(
             viewModelScope.launch {
                 userSessionRepository.logOutUser()
             }.invokeOnCompletion {
-                currentActivityRetriever.getCurrentActivity().finish()
+                setActivityResult.setResult(SoraCardResult.Logout)
             }
         } catch (e: Exception) {
             /* DO NOTHING */

@@ -3,10 +3,7 @@ package jp.co.soramitsu.oauth.feature.kyc.result.verificationrejection
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
-import jp.co.soramitsu.oauth.base.sdk.contract.OutwardsScreen
-import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
-import jp.co.soramitsu.oauth.common.domain.CurrentActivityRetriever
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PriceInteractor
 import jp.co.soramitsu.oauth.common.model.KycAttemptsDto
@@ -20,7 +17,6 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -58,9 +54,6 @@ class VerificationRejectedViewModelTest {
 
     @Mock
     private lateinit var priceInteractor: PriceInteractor
-
-    @Mock
-    private lateinit var currentActivityRetriever: CurrentActivityRetriever
 
     private lateinit var viewModel: VerificationRejectedViewModel
 
@@ -102,10 +95,12 @@ class VerificationRejectedViewModelTest {
             kycRepository = kycRepository,
             setActivityResult = setActivityResult,
             priceInteractor = priceInteractor,
-            currentActivityRetriever = currentActivityRetriever
         )
 
-        assertEquals(R.string.verification_rejected_title, viewModel.toolbarState.value?.basic?.title)
+        assertEquals(
+            R.string.verification_rejected_title,
+            viewModel.toolbarState.value?.basic?.title
+        )
         assertNotNull(viewModel.toolbarState.value?.basic?.navIcon)
     }
 
@@ -127,7 +122,6 @@ class VerificationRejectedViewModelTest {
                 kycRepository = kycRepository,
                 setActivityResult = setActivityResult,
                 priceInteractor = priceInteractor,
-                currentActivityRetriever = currentActivityRetriever
             )
 
             viewModel.onTryAgain()
@@ -163,7 +157,6 @@ class VerificationRejectedViewModelTest {
             kycRepository = kycRepository,
             setActivityResult = setActivityResult,
             priceInteractor = priceInteractor,
-            currentActivityRetriever = currentActivityRetriever
         )
 
         viewModel.openTelegramSupport()

@@ -1,6 +1,5 @@
 package jp.co.soramitsu.oauth.feature.cardissuance
 
-import android.app.Activity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,11 +16,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import jp.co.soramitsu.oauth.base.compose.BalanceIndicator
-import jp.co.soramitsu.oauth.base.compose.InlineTextDivider
 import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.base.compose.retrieveString
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
-import jp.co.soramitsu.oauth.common.domain.CurrentActivityRetriever
 import jp.co.soramitsu.oauth.common.domain.PriceInteractor
 import jp.co.soramitsu.oauth.common.model.EuroLiquiditySufficiency
 import jp.co.soramitsu.oauth.common.model.XorLiquiditySufficiency
@@ -181,15 +178,6 @@ private fun PaidCardIssuance(
 @Composable
 private fun PreviewCardIssuanceScreen() {
     CardIssuanceScreen(viewModel = CardIssuanceViewModel(
-        currentActivityRetriever = object : CurrentActivityRetriever {
-            override fun setActivity(activity: Activity) {
-                TODO("Not yet implemented")
-            }
-
-            override fun getCurrentActivity(): Activity {
-                TODO("Not yet implemented")
-            }
-        },
         userSessionRepository = object : UserSessionRepository {
             override suspend fun getRefreshToken(): String {
                 TODO("Not yet implemented")

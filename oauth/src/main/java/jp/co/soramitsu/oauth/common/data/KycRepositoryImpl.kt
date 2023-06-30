@@ -84,7 +84,7 @@ class KycRepositoryImpl(
             }
 
             kycResponse.kycStatus == KycStatus.Failed -> {
-                SoraCardCommonVerification.Failed
+                SoraCardCommonVerification.Rejected
             }
 
             kycResponse.kycStatus == KycStatus.Rejected -> {

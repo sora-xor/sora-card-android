@@ -67,8 +67,8 @@ class MainActivity : ComponentActivity() {
                 ),
                 environment = SoraCardEnvironmentType.TEST,
                 client = buildClient(),
-                userAvailableXorAmount = 1.9,
-                isEnoughXorAvailable = false,
+                userAvailableXorAmount = 19999.9,
+                isEnoughXorAvailable = true,
                 areAttemptsPaidSuccessfully = true,
                 isIssuancePaid = false
             )
@@ -84,8 +84,8 @@ class MainActivity : ComponentActivity() {
                 environment = SoraCardEnvironmentType.TEST,
                 kycCredentials = SoraCardKycCredentials("", "", ""),
                 client = buildClient(),
-                userAvailableXorAmount = 1.9,
-                isEnoughXorAvailable = false,
+                userAvailableXorAmount = 19999.9,
+                isEnoughXorAvailable = true,
                 areAttemptsPaidSuccessfully = true,
                 isIssuancePaid = false
             )

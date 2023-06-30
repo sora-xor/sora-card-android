@@ -28,10 +28,12 @@ sealed class SoraCardResult : Parcelable {
     object Canceled : SoraCardResult()
 
     @Parcelize
+    object Logout : SoraCardResult()
+
+    @Parcelize
     data class NavigateTo(
         val screen: OutwardsScreen
     ) : SoraCardResult()
-
 }
 
 enum class OutwardsScreen {
