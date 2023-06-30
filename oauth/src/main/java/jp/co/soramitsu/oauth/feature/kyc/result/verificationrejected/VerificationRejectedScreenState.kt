@@ -19,7 +19,7 @@ data class VerificationRejectedScreenState(
     val imageRes: Int =
         R.drawable.ic_verification_rejected
 
-    val shouldKycAttemptsLeftTextBeShown: Boolean = false // Will be available latter
+    val shouldKycAttemptsLeftTextBeShown: Boolean = true // Will be available latter
 
     val kycAttemptsLeftText: Text
         get() {
@@ -40,7 +40,7 @@ data class VerificationRejectedScreenState(
             payload = arrayOf(kycAttemptCostInEuros.toString())
         )
 
-    val shouldTryAgainButtonBeShown: Boolean = kycAttemptsCount > 0
+    val shouldTryAgainButtonBeEnabled: Boolean = kycAttemptsCount > 0
 
     val tryAgainText: Text
         get() {

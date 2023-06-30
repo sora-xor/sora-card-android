@@ -6,6 +6,7 @@ import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
+import jp.co.soramitsu.oauth.common.domain.CurrentActivityRetriever
 import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.feature.KycCallback
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
@@ -43,6 +44,9 @@ class VerificationInProgressViewModelTest {
     private lateinit var setActivityResult: SetActivityResult
 
     @Mock
+    private lateinit var currentActivityRetriever: CurrentActivityRetriever
+
+    @Mock
     private lateinit var mainRouter: MainRouter
 
     @Mock
@@ -55,7 +59,8 @@ class VerificationInProgressViewModelTest {
         viewModel = VerificationInProgressViewModel(
             mainRouter = mainRouter,
             setActivityResult = setActivityResult,
-            userSessionRepository = userSessionRepository
+            userSessionRepository = userSessionRepository,
+            currentActivityRetriever = currentActivityRetriever
         )
     }
 

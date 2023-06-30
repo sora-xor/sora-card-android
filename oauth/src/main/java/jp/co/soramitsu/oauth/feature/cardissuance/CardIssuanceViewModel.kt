@@ -10,11 +10,13 @@ import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.compose.ScreenStatus
 import jp.co.soramitsu.oauth.base.sdk.contract.OutwardsScreen
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
+import jp.co.soramitsu.oauth.common.domain.CurrentActivityRetriever
 import jp.co.soramitsu.oauth.common.domain.PriceInteractor
 import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.common.navigation.flow.api.KycRequirementsUnfulfilledFlow
 import jp.co.soramitsu.oauth.common.navigation.flow.api.NavigationFlow
 import jp.co.soramitsu.oauth.feature.cardissuance.state.CardIssuanceScreenState
+import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
@@ -25,6 +27,8 @@ import javax.inject.Inject
 class CardIssuanceViewModel @Inject constructor(
     @KycRequirementsUnfulfilledFlow private val kycRequirementsUnfulfilledFlow: NavigationFlow,
     private val setActivityResult: SetActivityResult,
+    private val userSessionRepository: UserSessionRepository,
+    private val currentActivityRetriever: CurrentActivityRetriever,
     private val priceInteractor: PriceInteractor
 ): BaseViewModel() {
 
@@ -45,7 +49,8 @@ class CardIssuanceViewModel @Inject constructor(
             basic = BasicToolbarState(
                 title = R.string.card_issuance_screen_title,
                 visibility = true,
-                navIcon = R.drawable.ic_cross
+                navIcon = R.drawable.ic_cross,
+                actionLabel = R.string.log_out
             ),
         )
 
@@ -75,6 +80,19 @@ class CardIssuanceViewModel @Inject constructor(
                 )
             }
         }
+
+    override fun onToolbarAction() {
+        super.onToolbarAction()
+        try {
+            viewModelScope.launch {
+                userSessionRepository.logOutUser()
+            }.invokeOnCompletion {
+                currentActivityRetriever.getCurrentActivity().finish()
+            }
+        } catch (e: Exception) {
+            /* DO NOTHING */
+        }
+    }
 
     override fun onToolbarNavigation() {
         super.onToolbarNavigation()

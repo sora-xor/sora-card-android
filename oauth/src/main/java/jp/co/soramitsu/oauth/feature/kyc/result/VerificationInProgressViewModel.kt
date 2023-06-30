@@ -8,6 +8,7 @@ import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.contract.OutwardsScreen
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
+import jp.co.soramitsu.oauth.common.domain.CurrentActivityRetriever
 import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.feature.KycCallback
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
@@ -21,7 +22,8 @@ import javax.inject.Inject
 class VerificationInProgressViewModel @Inject constructor(
     private val mainRouter: MainRouter,
     private val setActivityResult: SetActivityResult,
-    private val userSessionRepository: UserSessionRepository
+    private val userSessionRepository: UserSessionRepository,
+    private val currentActivityRetriever: CurrentActivityRetriever,
 ) : BaseViewModel() {
 
     init {
@@ -30,16 +32,43 @@ class VerificationInProgressViewModel @Inject constructor(
             basic = BasicToolbarState(
                 title = R.string.kyc_result_verification_in_progress,
                 visibility = true,
-                navIcon = R.drawable.ic_cross
+                navIcon = R.drawable.ic_cross,
+                actionLabel = R.string.log_out
             ),
         )
     }
 
     private var kycCallback: KycCallback? = null
 
+    override fun onToolbarAction() {
+        super.onToolbarAction()
+        try {
+            viewModelScope.launch {
+                userSessionRepository.logOutUser()
+            }.invokeOnCompletion {
+                currentActivityRetriever.getCurrentActivity().finish()
+            }
+        } catch (e: Exception) {
+            /* DO NOTHING */
+        }
+    }
+
     override fun onToolbarNavigation() {
         super.onToolbarNavigation()
-        setActivityResult.setResult(SoraCardResult.NavigateTo(OutwardsScreen.MAIN_SCREEN))
+        viewModelScope.launch {
+            val accessToken = userSessionRepository.getAccessToken()
+            val accessTokenExpirationTime = userSessionRepository.getAccessTokenExpirationTime()
+            val refreshToken = userSessionRepository.getRefreshToken()
+            val kycStatus = SoraCardCommonVerification.Successful
+            setActivityResult.setResult(
+                SoraCardResult.Success(
+                    accessToken = accessToken,
+                    accessTokenExpirationTime = accessTokenExpirationTime,
+                    refreshToken = refreshToken,
+                    status = kycStatus
+                )
+            )
+        }
     }
 
     fun setArgs(kycCallback: KycCallback) {
