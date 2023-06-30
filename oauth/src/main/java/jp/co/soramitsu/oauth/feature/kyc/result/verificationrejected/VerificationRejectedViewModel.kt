@@ -27,7 +27,6 @@ class VerificationRejectedViewModel @Inject constructor(
     private val mainRouter: MainRouter,
     private val userSessionRepository: UserSessionRepository,
     private val kycRepository: KycRepository,
-    private val currentActivityRetriever: CurrentActivityRetriever,
     private val setActivityResult: SetActivityResult,
     private val priceInteractor: PriceInteractor
 ) : BaseViewModel() {
@@ -86,7 +85,7 @@ class VerificationRejectedViewModel @Inject constructor(
             viewModelScope.launch {
                 userSessionRepository.logOutUser()
             }.invokeOnCompletion {
-                currentActivityRetriever.getCurrentActivity().finish()
+                setActivityResult.setResult(SoraCardResult.Logout)
             }
         } catch (e: Exception) {
             /* DO NOTHING */

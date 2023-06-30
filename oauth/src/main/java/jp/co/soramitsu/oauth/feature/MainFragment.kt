@@ -1,15 +1,11 @@
 package jp.co.soramitsu.oauth.feature
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -24,10 +20,10 @@ import com.paywings.onboarding.kyc.android.sdk.util.PayWingsOnboardingKycResult
 import dagger.hilt.android.AndroidEntryPoint
 import jp.co.soramitsu.oauth.base.BaseFragment
 import jp.co.soramitsu.oauth.base.extension.onBackPressed
+import jp.co.soramitsu.oauth.base.mapSoraCardResult
 import jp.co.soramitsu.oauth.base.navigation.Destination
 import jp.co.soramitsu.oauth.base.navigation.SdkNavGraph
 import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants
-import jp.co.soramitsu.oauth.base.sdk.SoraCardInfo
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.feature.terms.and.conditions.ProgressDialog
 import kotlinx.coroutines.flow.collectLatest
@@ -47,6 +43,7 @@ internal class MainFragment : BaseFragment() {
             is PayWingsOnboardingKycResult.Success -> {
                 viewModel.checkKycStatus()
             }
+
             is PayWingsOnboardingKycResult.Failure -> {
                 viewModel.onKycFailed(
                     statusDescription = payWingsOnboardingKycResult.statusDescription
@@ -67,22 +64,10 @@ internal class MainFragment : BaseFragment() {
 
     private var kycCallback = object : KycCallback {
         override fun onFinish(result: SoraCardResult) {
-            when (result) {
-                is SoraCardResult.Success -> {
-                    requireActivity().setResult(
-                        Activity.RESULT_OK,
-                        Intent().putExtra(SoraCardConstants.EXTRA_SORA_CARD_RESULT, result)
-                    )
-                }
-                is SoraCardResult.Canceled,
-                is SoraCardResult.Failure -> {
-                    requireActivity().setResult(
-                        Activity.RESULT_CANCELED,
-                        Intent().putExtra(SoraCardConstants.EXTRA_SORA_CARD_RESULT, result)
-                    )
-                }
-                else -> { /*DO NOTHING*/ }
-            }
+            requireActivity().setResult(
+                mapSoraCardResult(result),
+                Intent().putExtra(SoraCardConstants.EXTRA_SORA_CARD_RESULT, result)
+            )
             requireActivity().finish()
         }
     }

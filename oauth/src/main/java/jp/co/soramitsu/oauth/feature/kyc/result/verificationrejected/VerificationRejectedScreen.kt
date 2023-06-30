@@ -25,7 +25,6 @@ import jp.co.soramitsu.oauth.base.compose.retrieveString
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
-import jp.co.soramitsu.oauth.common.domain.CurrentActivityRetriever
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PriceInteractor
 import jp.co.soramitsu.oauth.common.model.EuroLiquiditySufficiency
@@ -155,15 +154,6 @@ private fun VerificationRejectedContent(
 private fun PreviewApplicationRejected() {
     VerificationRejectedScreen(
         viewModel = VerificationRejectedViewModel(
-            currentActivityRetriever = object : CurrentActivityRetriever {
-                override fun setActivity(activity: Activity) {
-                    TODO("Not yet implemented")
-                }
-
-                override fun getCurrentActivity(): Activity {
-                    TODO("Not yet implemented")
-                }
-            },
             mainRouter = object : MainRouter {
                 override fun attachNavController(
                     activity: Activity,

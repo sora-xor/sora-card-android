@@ -23,7 +23,6 @@ class VerificationInProgressViewModel @Inject constructor(
     private val mainRouter: MainRouter,
     private val setActivityResult: SetActivityResult,
     private val userSessionRepository: UserSessionRepository,
-    private val currentActivityRetriever: CurrentActivityRetriever,
 ) : BaseViewModel() {
 
     init {
@@ -44,7 +43,7 @@ class VerificationInProgressViewModel @Inject constructor(
             viewModelScope.launch {
                 userSessionRepository.logOutUser()
             }.invokeOnCompletion {
-                currentActivityRetriever.getCurrentActivity().finish()
+                setActivityResult.setResult(SoraCardResult.Logout)
             }
         } catch (e: Exception) {
             /* DO NOTHING */
