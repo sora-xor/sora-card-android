@@ -11,7 +11,6 @@ import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -38,16 +37,13 @@ class VerificationFailedViewModelTest {
     @Mock
     private lateinit var userSessionRepository: UserSessionRepository
 
-    @Mock
-    private lateinit var kycCallback: KycCallback
-
     private lateinit var viewModel: VerificationFailedViewModel
 
     @Before
     fun setUp() {
         viewModel = VerificationFailedViewModel(
             setActivityResult = setActivityResult,
-            userSessionRepository = userSessionRepository
+            userSessionRepository = userSessionRepository,
         )
     }
 
@@ -59,11 +55,10 @@ class VerificationFailedViewModelTest {
 
     @Test
     fun `call onClose EXPECT finish kyc`() {
-        viewModel.setArgs(kycCallback)
         viewModel.onClose()
 
-        verify(kycCallback).onFinish(
-            result = SoraCardResult.Failure(SoraCardCommonVerification.Failed)
+        verify(setActivityResult).setResult(
+            SoraCardResult.Failure(SoraCardCommonVerification.Failed)
         )
     }
 }
