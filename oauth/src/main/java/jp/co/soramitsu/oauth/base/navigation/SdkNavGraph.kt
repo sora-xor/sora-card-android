@@ -110,7 +110,6 @@ internal fun SdkNavGraph(
                 additionalDescription = navHostController.previousBackStackEntry
                     ?.arguments
                     ?.getString(Argument.ADDITIONAL_DESCRIPTION.arg),
-                kycCallback = kycCallback
             )
         }
 
@@ -123,11 +122,11 @@ internal fun SdkNavGraph(
         }
 
         animatedComposable(Destination.VERIFICATION_IN_PROGRESS.route) {
-            VerificationInProgressScreen(kycCallback)
+            VerificationInProgressScreen()
         }
 
         animatedComposable(Destination.VERIFICATION_SUCCESSFUL.route) {
-            VerificationSuccessfulScreen(kycCallback)
+            VerificationSuccessfulScreen()
         }
 
         animatedComposable(Destination.NO_MORE_FREE_ATTEMPTS.route) {

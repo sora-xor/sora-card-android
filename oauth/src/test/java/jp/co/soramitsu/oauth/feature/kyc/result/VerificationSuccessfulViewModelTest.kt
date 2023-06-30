@@ -11,10 +11,8 @@ import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -42,16 +40,13 @@ class VerificationSuccessfulViewModelTest {
     @Mock
     private lateinit var userSessionRepository: UserSessionRepository
 
-    @Mock
-    private lateinit var kycCallback: KycCallback
-
     private lateinit var viewModel: VerificationSuccessfulViewModel
 
     @Before
     fun setUp() {
         viewModel = VerificationSuccessfulViewModel(
             setActivityResult = setActivityResult,
-            userSessionRepository = userSessionRepository
+            userSessionRepository = userSessionRepository,
         )
     }
 
@@ -67,12 +62,11 @@ class VerificationSuccessfulViewModelTest {
         given(userSessionRepository.getAccessTokenExpirationTime()).willReturn(Long.MAX_VALUE)
         given(userSessionRepository.getRefreshToken()).willReturn("refreshToken")
 
-        viewModel.setArgs(kycCallback)
         viewModel.onClose()
         advanceUntilIdle()
 
-        verify(kycCallback).onFinish(
-            result = SoraCardResult.Success(
+        verify(setActivityResult).setResult(
+            SoraCardResult.Success(
                 accessToken = "accessToken",
                 accessTokenExpirationTime = Long.MAX_VALUE,
                 refreshToken = "refreshToken",

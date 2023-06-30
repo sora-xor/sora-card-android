@@ -1,5 +1,6 @@
 package jp.co.soramitsu.oauth.feature.kyc.result
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Box
@@ -12,7 +13,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -21,7 +21,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.Screen
-import jp.co.soramitsu.oauth.feature.KycCallback
 import jp.co.soramitsu.ui_core.component.button.TonalButton
 import jp.co.soramitsu.ui_core.component.button.properties.Order
 import jp.co.soramitsu.ui_core.component.button.properties.Size
@@ -31,19 +30,17 @@ import jp.co.soramitsu.ui_core.theme.customTypography
 
 @Composable
 fun VerificationSuccessfulScreen(
-    kycCallback: KycCallback,
     viewModel: VerificationSuccessfulViewModel = hiltViewModel()
 ) {
-    LaunchedEffect(Unit) {
-        viewModel.setArgs(kycCallback)
+    BackHandler {
+        viewModel.onClose()
     }
-
     Screen(
         viewModel = viewModel
     ) { scrollState ->
         VerificationSuccessfulContent(
             scrollState = scrollState,
-            onClose = viewModel::onClose
+            onClose = viewModel::onClose,
         )
     }
 }
@@ -54,7 +51,8 @@ private fun VerificationSuccessfulContent(
     onClose: () -> Unit
 ) {
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .verticalScroll(scrollState)
             .padding(top = Dimens.x3, start = Dimens.x3, end = Dimens.x3, bottom = Dimens.x5)
     ) {
@@ -78,7 +76,9 @@ private fun VerificationSuccessfulContent(
         }
 
         TonalButton(
-            modifier = Modifier.fillMaxWidth().padding(top = Dimens.x3),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = Dimens.x3),
             order = Order.SECONDARY,
             size = Size.Large,
             text = stringResource(R.string.common_close),
