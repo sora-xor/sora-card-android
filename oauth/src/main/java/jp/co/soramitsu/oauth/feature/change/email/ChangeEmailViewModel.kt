@@ -6,12 +6,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.viewModelScope
 import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
-import com.paywings.oauth.android.sdk.initializer.PayWingsOAuthClient
 import com.paywings.oauth.android.sdk.service.callback.ChangeUnverifiedEmailCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
+import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.feature.change.email.model.ChangeEmailState
 import jp.co.soramitsu.oauth.feature.verify.model.ButtonState
 import jp.co.soramitsu.ui_core.component.input.InputTextState
@@ -23,7 +23,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChangeEmailViewModel @Inject constructor(
-    private val mainRouter: MainRouter
+    private val mainRouter: MainRouter,
+    private val pwoAuthClientProxy: PWOAuthClientProxy,
 ) : BaseViewModel() {
 
     var state by mutableStateOf(
@@ -96,9 +97,9 @@ class ChangeEmailViewModel @Inject constructor(
     fun onConfirm() {
         viewModelScope.launch {
             loading(true)
-            PayWingsOAuthClient.instance.changeUnverifiedEmail(
+            pwoAuthClientProxy.changeUnverifiedEmail(
                 email = state.inputTextState.value.text,
-                callback = changeUnverifiedEmailCallback
+                callback = changeUnverifiedEmailCallback,
             )
         }
     }

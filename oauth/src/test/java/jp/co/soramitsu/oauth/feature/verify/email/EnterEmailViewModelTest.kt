@@ -5,6 +5,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
+import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -38,11 +39,18 @@ class EnterEmailViewModelTest {
     @Mock
     private lateinit var userSessionRepository: UserSessionRepository
 
+    @Mock
+    private lateinit var pwoAuthClientProxy: PWOAuthClientProxy
+
     private lateinit var viewModel: EnterEmailViewModel
 
     @Before
     fun setUp() {
-        viewModel = EnterEmailViewModel(mainRouter, userSessionRepository)
+        viewModel = EnterEmailViewModel(
+            mainRouter,
+            userSessionRepository,
+            pwoAuthClientProxy,
+        )
     }
 
     @Test

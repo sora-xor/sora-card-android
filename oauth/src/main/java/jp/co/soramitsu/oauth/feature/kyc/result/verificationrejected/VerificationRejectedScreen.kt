@@ -134,7 +134,7 @@ private fun VerificationRejectedContent(
             enabled = state.shouldTryAgainButtonBeEnabled,
             size = Size.Large,
             text = state.tryAgainText.retrieveString(),
-            onClick = viewModel::onTryAgain
+            onClick = viewModel::onTryAgain,
         )
 
         TonalButton(
@@ -144,7 +144,7 @@ private fun VerificationRejectedContent(
             order = Order.SECONDARY,
             size = Size.Large,
             text = state.telegramSupportText.retrieveString(),
-            onClick = viewModel::openTelegramSupport
+            onClick = viewModel::openTelegramSupport,
         )
     }
 }

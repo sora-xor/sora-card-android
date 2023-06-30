@@ -5,6 +5,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
+import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -34,11 +35,14 @@ class ChangeEmailViewModelTest {
     @Mock
     private lateinit var mainRouter: MainRouter
 
+    @Mock
+    private lateinit var pwoAuthClientProxy: PWOAuthClientProxy
+
     private lateinit var viewModel: ChangeEmailViewModel
 
     @Before
     fun setUp() {
-        viewModel = ChangeEmailViewModel(mainRouter)
+        viewModel = ChangeEmailViewModel(mainRouter, pwoAuthClientProxy)
     }
 
     @Test
@@ -96,7 +100,6 @@ class ChangeEmailViewModelTest {
     fun `send link EXPECT input filed is disabled`() = runTest {
         viewModel.onConfirm()
         advanceUntilIdle()
-
         assertFalse(viewModel.state.inputTextState.enabled)
     }
 

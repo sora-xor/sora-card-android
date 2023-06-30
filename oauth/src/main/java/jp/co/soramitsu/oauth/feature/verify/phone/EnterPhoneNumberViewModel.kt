@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.viewModelScope
 import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
-import com.paywings.oauth.android.sdk.initializer.PayWingsOAuthClient
 import com.paywings.oauth.android.sdk.service.callback.SignInWithPhoneNumberRequestOtpCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.soramitsu.oauth.R
@@ -14,6 +13,7 @@ import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.sdk.SoraCardEnvironmentType
+import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.feature.verify.formatForAuth
 import jp.co.soramitsu.oauth.feature.verify.model.ButtonState
 import jp.co.soramitsu.oauth.feature.verify.phone.model.EnterPhoneNumberState
@@ -27,7 +27,8 @@ import javax.inject.Inject
 @HiltViewModel
 class EnterPhoneNumberViewModel @Inject constructor(
     private val mainRouter: MainRouter,
-    private val inMemoryRepo: InMemoryRepo,
+    inMemoryRepo: InMemoryRepo,
+    private val pwoAuthClientProxy: PWOAuthClientProxy,
 ) : BaseViewModel() {
 
     private companion object {
@@ -113,9 +114,9 @@ class EnterPhoneNumberViewModel @Inject constructor(
     fun onRequestCode() {
         viewModelScope.launch {
             loading(true)
-            PayWingsOAuthClient.instance.signInWithPhoneNumberRequestOtp(
+            pwoAuthClientProxy.signInWithPhoneNumberRequestOtp(
                 phoneNumber = state.inputTextState.value.text.formatForAuth(),
-                callback = requestOtpCallback
+                callback = requestOtpCallback,
             )
         }
     }

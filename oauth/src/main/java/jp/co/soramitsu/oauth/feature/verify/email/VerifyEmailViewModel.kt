@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
-import com.paywings.oauth.android.sdk.initializer.PayWingsOAuthClient
 import com.paywings.oauth.android.sdk.service.callback.CheckEmailVerifiedCallback
 import com.paywings.oauth.android.sdk.service.callback.SendNewVerificationEmailCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,6 +12,7 @@ import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.state.DialogAlertState
+import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.oauth.feature.verify.Timer
@@ -29,7 +29,8 @@ import javax.inject.Inject
 class VerifyEmailViewModel @Inject constructor(
     private val mainRouter: MainRouter,
     private val userSessionRepository: UserSessionRepository,
-    private val timer: Timer
+    private val timer: Timer,
+    private val pwoAuthClientProxy: PWOAuthClientProxy,
 ) : BaseViewModel() {
 
     private companion object {
@@ -135,14 +136,14 @@ class VerifyEmailViewModel @Inject constructor(
 
     private fun checkVerificationStatus() {
         viewModelScope.launch {
-            PayWingsOAuthClient.instance.checkEmailVerified(callback = checkEmailVerifiedCallback)
+            pwoAuthClientProxy.checkEmailVerified(checkEmailVerifiedCallback)
         }
     }
 
     fun onResendLink() {
         viewModelScope.launch {
             loading(true)
-            PayWingsOAuthClient.instance.sendNewVerificationEmail(callback = sendNewVerificationEmailCallback)
+            pwoAuthClientProxy.sendNewVerificationEmail(sendNewVerificationEmailCallback)
         }
     }
 

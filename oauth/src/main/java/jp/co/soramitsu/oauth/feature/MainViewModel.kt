@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
-import com.paywings.oauth.android.sdk.initializer.PayWingsOAuthClient
 import com.paywings.oauth.android.sdk.service.callback.GetUserDataCallback
 import com.paywings.onboarding.kyc.android.sdk.data.model.KycUserData
 import com.paywings.onboarding.kyc.android.sdk.data.model.UserCredentials
@@ -17,6 +16,7 @@ import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.state.DialogAlertState
 import jp.co.soramitsu.oauth.common.domain.KycRepository
+import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.common.navigation.flow.api.KycRequirementsUnfulfilledFlow
 import jp.co.soramitsu.oauth.common.navigation.flow.api.NavigationFlow
 import jp.co.soramitsu.oauth.common.navigation.flow.api.destinations.CompatibilityDestination
@@ -34,7 +34,8 @@ class MainViewModel @Inject constructor(
     private val kycRepository: KycRepository,
     private val mainRouter: MainRouter,
     val inMemoryRepo: InMemoryRepo,
-    @KycRequirementsUnfulfilledFlow private val kycRequirementsUnfulfilledFlow: NavigationFlow
+    private val pwoAuthClientProxy: PWOAuthClientProxy,
+    @KycRequirementsUnfulfilledFlow private val kycRequirementsUnfulfilledFlow: NavigationFlow,
 ) : BaseViewModel() {
 
     private val _state = MutableStateFlow(MainScreenState())
@@ -81,7 +82,7 @@ class MainViewModel @Inject constructor(
                     firstName = firstName,
                     lastName = lastName,
                     email = email,
-                    mobileNumber = phoneNumber
+                    mobileNumber = phoneNumber,
                 )
             )
 
@@ -116,9 +117,9 @@ class MainViewModel @Inject constructor(
                     )
                 )
 
-                PayWingsOAuthClient.instance.getUserData(
+                pwoAuthClientProxy.getUserData(
                     accessToken = accessToken,
-                    callback = getUserDataCallback
+                    callback = getUserDataCallback,
                 )
                 showLoading(false)
             }
@@ -148,7 +149,8 @@ class MainViewModel @Inject constructor(
         onNewToken: suspend (accessToken: String, accessTokenExpirationTime: Long) -> Unit
     ) {
         val refreshToken = userSessionRepository.getRefreshToken()
-        PayWingsOAuthClient.instance.getNewAccessToken(
+
+        pwoAuthClientProxy.getNewAccessToken(
             refreshToken = refreshToken,
             callback = RefreshTokenCallbackWrapper(
                 onNewAccessToken = { accessToken, accessTokenExpirationTime ->
@@ -156,7 +158,7 @@ class MainViewModel @Inject constructor(
                 },
                 onError = this@MainViewModel::onError,
                 onUserSignInRequired = this@MainViewModel::onUserSignInRequired
-            ).getNewAccessTokenCallback
+            ).getNewAccessTokenCallback,
         )
     }
 
@@ -193,15 +195,20 @@ class MainViewModel @Inject constructor(
                 ) {
                     showKycStatusScreen(kycResponse)
                 } else {
-                    checkKycRequirementsFulfilled()
+                    checkKycRequirementsFulfilled(accessToken)
                 }
             }
         }
     }
 
-    private suspend fun checkKycRequirementsFulfilled() {
+    private suspend fun checkKycRequirementsFulfilled(accessToken: String) {
+        val hasFreeAttempt = kycRepository.hasFreeKycAttempt(accessToken).getOrDefault(false)
         if (inMemoryRepo.isEnoughXorAvailable) {
-            mainRouter.openGetPrepared()
+            if (hasFreeAttempt) {
+                mainRouter.openGetPrepared()
+            } else {
+                showKycStatusScreen(SoraCardCommonVerification.Rejected)
+            }
         } else {
             kycRequirementsUnfulfilledFlow.start(
                 fromDestination = CompatibilityDestination(Destination.ENTER_PHONE_NUMBER.route)
