@@ -1,5 +1,6 @@
 package jp.co.soramitsu.oauth.feature.kyc.result
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Box
@@ -34,6 +35,10 @@ fun VerificationInProgressScreen(
     kycCallback: KycCallback,
     viewModel: VerificationInProgressViewModel = hiltViewModel()
 ) {
+    BackHandler {
+        viewModel.onToolbarNavigation()
+    }
+
     LaunchedEffect(Unit) {
         viewModel.setArgs(kycCallback)
     }

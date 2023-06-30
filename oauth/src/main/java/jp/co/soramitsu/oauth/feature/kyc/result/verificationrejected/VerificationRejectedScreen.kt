@@ -1,6 +1,7 @@
 package jp.co.soramitsu.oauth.feature.kyc.result.verificationrejected
 
 import android.app.Activity
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Box
@@ -48,6 +49,9 @@ fun VerificationRejectedScreen(
     viewModel: VerificationRejectedViewModel = hiltViewModel(),
     additionalDescription: String? = null
 ) {
+    BackHandler {
+        viewModel.onToolbarNavigation()
+    }
     Screen(
         viewModel = viewModel
     ) { scrollState ->
