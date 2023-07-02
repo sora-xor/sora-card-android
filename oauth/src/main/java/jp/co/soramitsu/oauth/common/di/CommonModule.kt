@@ -11,6 +11,8 @@ import jp.co.soramitsu.oauth.common.data.KycRepositoryImpl
 import jp.co.soramitsu.oauth.common.data.PriceInteractorImpl
 import jp.co.soramitsu.oauth.common.domain.CurrentActivityRetriever
 import jp.co.soramitsu.oauth.common.domain.KycRepository
+import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
+import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxyImpl
 import jp.co.soramitsu.oauth.common.domain.PriceInteractor
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.oauth.network.SoraCardNetworkClient
@@ -18,6 +20,10 @@ import jp.co.soramitsu.oauth.network.SoraCardNetworkClient
 @Module
 @InstallIn(SingletonComponent::class)
 class CommonModule {
+
+    @Singleton
+    @Provides
+    fun providePWOAuthClientProxy(): PWOAuthClientProxy = PWOAuthClientProxyImpl()
 
     @Singleton
     @Provides

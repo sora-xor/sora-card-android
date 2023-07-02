@@ -11,7 +11,6 @@ import jp.co.soramitsu.oauth.base.compose.ScreenStatus
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
-import jp.co.soramitsu.oauth.common.domain.CurrentActivityRetriever
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PriceInteractor
 import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
@@ -69,7 +68,7 @@ class VerificationRejectedViewModel @Inject constructor(
                     screenStatus = ScreenStatus.READY_TO_RENDER,
                     kycAttemptsCount = actualKycAttemptsLeft,
                     kycAttemptCostInEuros = kycAttemptPrice,
-                    isFreeAttemptsLeft = isKycAttemptsLeft
+                    isFreeAttemptsLeft = isKycAttemptsLeft,
                 )
             }.onFailure {
                 verificationRejectedScreenState = verificationRejectedScreenState.copy(
@@ -110,9 +109,8 @@ class VerificationRejectedViewModel @Inject constructor(
     }
 
     fun onTryAgain() {
-        if (verificationRejectedScreenState.kycAttemptsCount > 0) {
+        if (verificationRejectedScreenState.isFreeAttemptsLeft) {
             mainRouter.openGetPrepared()
-            return
         }
 
         /* Will be available latter */

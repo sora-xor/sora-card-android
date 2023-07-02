@@ -15,7 +15,6 @@ enum class Destination(val route: String) {
     VERIFICATION_REJECTED("oauth/verificationRejected"),
     VERIFICATION_IN_PROGRESS("oauth/verificationInProgress"),
     VERIFICATION_SUCCESSFUL("oauth/verificationSuccessful"),
-    NO_MORE_FREE_ATTEMPTS("oauth/noMoreFreeAttempts"),
 }
 
 

@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 enum class SoraCardCommonVerification {
-    Failed, Rejected, Pending, Successful, NoFreeAttempt
+    Failed, Rejected, Pending, Successful
 }
 
 @Parcelize

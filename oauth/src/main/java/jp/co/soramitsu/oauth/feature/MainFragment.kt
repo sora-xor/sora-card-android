@@ -62,21 +62,16 @@ internal class MainFragment : BaseFragment() {
         }
     }
 
-    private var kycCallback = object : KycCallback {
-        override fun onFinish(result: SoraCardResult) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        onBackPressed {
+            val result = SoraCardResult.Canceled
             requireActivity().setResult(
                 mapSoraCardResult(result),
                 Intent().putExtra(SoraCardConstants.EXTRA_SORA_CARD_RESULT, result)
             )
             requireActivity().finish()
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        onBackPressed {
-            finishWithCancel()
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -112,16 +107,11 @@ internal class MainFragment : BaseFragment() {
                 navHostController = navHostController,
                 startDestination = Destination.TERMS_AND_CONDITIONS,
                 authCallback = authCallback,
-                kycCallback = kycCallback
             )
 
             if (viewModel.uiState.loading) {
                 ProgressDialog()
             }
         }
-    }
-
-    private fun finishWithCancel() {
-        kycCallback.onFinish(SoraCardResult.Canceled)
     }
 }

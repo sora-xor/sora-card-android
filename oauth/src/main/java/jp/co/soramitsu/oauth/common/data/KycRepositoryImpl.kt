@@ -55,7 +55,7 @@ class KycRepositoryImpl(
     override suspend fun getKycLastFinalStatus(accessToken: String): Result<SoraCardCommonVerification?> {
         return getKycInfo(accessToken).map { kycStatuses ->
             val status =
-                getFinalizedFromList(kycStatuses) ?: kycStatuses.firstOrNull()
+                getFinalizedFromList(kycStatuses) ?: kycStatuses.lastOrNull()
             map(status)
         }
     }
@@ -84,7 +84,7 @@ class KycRepositoryImpl(
             }
 
             kycResponse.kycStatus == KycStatus.Failed -> {
-                SoraCardCommonVerification.Rejected
+                SoraCardCommonVerification.Failed
             }
 
             kycResponse.kycStatus == KycStatus.Rejected -> {
