@@ -4,17 +4,19 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
+import androidx.navigation.compose.dialog
 import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
-import jp.co.soramitsu.oauth.feature.KycCallback
+import jp.co.soramitsu.oauth.common.navigation.flow.api.destinations.KycRequirementsUnfulfilledDestination
 import jp.co.soramitsu.oauth.feature.OAuthCallback
-import jp.co.soramitsu.oauth.feature.attempts.NoFreeKycAttemptsScreen
+import jp.co.soramitsu.oauth.feature.cardissuance.CardIssuanceScreen
 import jp.co.soramitsu.oauth.feature.change.email.ChangeEmailScreen
 import jp.co.soramitsu.oauth.feature.get.prepared.GetPreparedScreen
+import jp.co.soramitsu.oauth.feature.getmorexor.ChooseXorPurchaseMethodDialog
 import jp.co.soramitsu.oauth.feature.kyc.result.VerificationFailedScreen
 import jp.co.soramitsu.oauth.feature.kyc.result.VerificationInProgressScreen
-import jp.co.soramitsu.oauth.feature.kyc.result.VerificationRejectedScreen
 import jp.co.soramitsu.oauth.feature.kyc.result.VerificationSuccessfulScreen
+import jp.co.soramitsu.oauth.feature.kyc.result.verificationrejected.VerificationRejectedScreen
 import jp.co.soramitsu.oauth.feature.registration.RegisterUserScreen
 import jp.co.soramitsu.oauth.feature.terms.and.conditions.TermsAndConditionsScreen
 import jp.co.soramitsu.oauth.feature.terms.and.conditions.WebPageScreen
@@ -29,11 +31,10 @@ internal fun SdkNavGraph(
     navHostController: NavHostController,
     startDestination: Destination,
     authCallback: OAuthCallback,
-    kycCallback: KycCallback,
 ) {
     AnimatedNavHost(navHostController, startDestination = startDestination.route) {
         animatedComposable(Destination.TERMS_AND_CONDITIONS.route) {
-            TermsAndConditionsScreen(kycCallback)
+            TermsAndConditionsScreen()
         }
 
         animatedComposable(Destination.GET_PREPARED.route) {
@@ -55,7 +56,6 @@ internal fun SdkNavGraph(
                 phoneNumber = backStackEntry.arguments?.getString(Argument.PHONE_NUMBER.arg),
                 otpLength = backStackEntry.arguments?.getInt(Argument.OTP_LENGTH.arg),
                 authCallback = authCallback,
-                kycCallback = kycCallback
             )
         }
 
@@ -104,30 +104,37 @@ internal fun SdkNavGraph(
         animatedComposable(Destination.VERIFICATION_FAILED.route) {
             VerificationFailedScreen(
                 additionalDescription = navHostController.previousBackStackEntry
-                    ?.requireArguments()
+                    ?.arguments
                     ?.getString(Argument.ADDITIONAL_DESCRIPTION.arg),
-                kycCallback = kycCallback
             )
         }
 
         animatedComposable(Destination.VERIFICATION_REJECTED.route) {
             VerificationRejectedScreen(
                 additionalDescription = navHostController.previousBackStackEntry
-                    ?.requireArguments()
+                    ?.arguments
                     ?.getString(Argument.ADDITIONAL_DESCRIPTION.arg),
             )
         }
 
         animatedComposable(Destination.VERIFICATION_IN_PROGRESS.route) {
-            VerificationInProgressScreen(kycCallback)
+            VerificationInProgressScreen()
         }
 
         animatedComposable(Destination.VERIFICATION_SUCCESSFUL.route) {
-            VerificationSuccessfulScreen(kycCallback)
+            VerificationSuccessfulScreen()
         }
 
-        animatedComposable(Destination.NO_MORE_FREE_ATTEMPTS.route) {
-            NoFreeKycAttemptsScreen(kycCallback)
+        animatedComposable(
+            route = KycRequirementsUnfulfilledDestination.CardIssuanceOptionsScreen().destination
+        ) {
+            CardIssuanceScreen()
+        }
+
+        dialog(
+            route = KycRequirementsUnfulfilledDestination.GetMoreXorDialog().destination
+        ) {
+            ChooseXorPurchaseMethodDialog()
         }
     }
 }

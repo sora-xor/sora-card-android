@@ -9,6 +9,7 @@ import jp.co.soramitsu.oauth.common.model.KycAttemptsDto
 import jp.co.soramitsu.oauth.common.model.KycResponse
 import jp.co.soramitsu.oauth.common.model.KycStatus
 import jp.co.soramitsu.oauth.common.model.VerificationStatus
+import jp.co.soramitsu.oauth.common.model.XorEuroPrice
 import jp.co.soramitsu.oauth.network.NetworkRequest
 import jp.co.soramitsu.oauth.network.SoraCardNetworkClient
 import java.util.UUID
@@ -54,7 +55,7 @@ class KycRepositoryImpl(
     override suspend fun getKycLastFinalStatus(accessToken: String): Result<SoraCardCommonVerification?> {
         return getKycInfo(accessToken).map { kycStatuses ->
             val status =
-                getFinalizedFromList(kycStatuses) ?: kycStatuses.getOrNull(kycStatuses.lastIndex)
+                getFinalizedFromList(kycStatuses) ?: kycStatuses.lastOrNull()
             map(status)
         }
     }
@@ -95,9 +96,27 @@ class KycRepositoryImpl(
 
     override suspend fun hasFreeKycAttempt(accessToken: String): Result<Boolean> {
         return runCatching {
-            apiClient.get(accessToken, NetworkRequest.GET_KYC_ATTEMPT_COUNT.url)
+            apiClient.get(accessToken, NetworkRequest.GET_KYC_FREE_ATTEMPT_INFO.url)
                 .body<KycAttemptsDto>()
                 .freeAttemptAvailable
+        }
+    }
+
+    override suspend fun getFreeKycAttemptsInfo(accessToken: String): Result<KycAttemptsDto> {
+        return runCatching {
+            apiClient.get(
+                accessToken,
+                NetworkRequest.GET_KYC_FREE_ATTEMPT_INFO.url
+            ).body()
+        }
+    }
+
+    override suspend fun getCurrentXorEuroPrice(accessToken: String): Result<XorEuroPrice> {
+        return runCatching {
+            apiClient.get(
+                accessToken,
+                NetworkRequest.GET_CURRENT_XOR_EURO_PRICE.url
+            ).body()
         }
     }
 }

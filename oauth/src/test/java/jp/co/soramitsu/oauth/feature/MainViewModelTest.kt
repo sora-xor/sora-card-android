@@ -1,26 +1,31 @@
 package jp.co.soramitsu.oauth.feature
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.paywings.oauth.android.sdk.service.callback.GetUserDataCallback
+import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.junit4.MockKRule
+import io.mockk.slot
+import io.mockk.verify
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
+import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
 import jp.co.soramitsu.oauth.common.domain.KycRepository
+import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
+import jp.co.soramitsu.oauth.common.navigation.flow.api.NavigationFlow
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
-import org.mockito.kotlin.given
-import org.mockito.kotlin.verify
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@RunWith(MockitoJUnitRunner::class)
 class MainViewModelTest {
 
     @Rule
@@ -30,56 +35,98 @@ class MainViewModelTest {
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-    @Mock
+    @get:Rule
+    val mockkRule = MockKRule(this)
+
+    @MockK
     private lateinit var userSessionRepository: UserSessionRepository
 
-    @Mock
+    @MockK
     private lateinit var kycRepository: KycRepository
 
-    @Mock
+    @MockK
     private lateinit var mainRouter: MainRouter
 
-    @Mock
+    @MockK
+    private lateinit var kycRequirementsUnfulfilledFlow: NavigationFlow
+
+    @MockK
+    private lateinit var pwoAuthClientProxy: PWOAuthClientProxy
+
+    @MockK
     private lateinit var inMemoryRepo: InMemoryRepo
 
     private lateinit var viewModel: MainViewModel
 
     @Before
     fun setUp() = runTest {
+        coEvery { userSessionRepository.getAccessToken() } returns "accessToken"
+        coEvery { userSessionRepository.getAccessTokenExpirationTime() } returns System.currentTimeMillis() + 300000
+        coEvery { userSessionRepository.setNewAccessToken(any(), any()) } returns Unit
+        coEvery { kycRequirementsUnfulfilledFlow.start(any()) } returns Unit
+        every { mainRouter.openGetPrepared() } returns Unit
+        every { mainRouter.openVerificationFailed(any()) } returns Unit
+    }
+
+    private fun setupViewModel(status: SoraCardCommonVerification) {
+        coEvery { kycRepository.getKycLastFinalStatus("accessToken") } returns Result.success(status)
         viewModel = MainViewModel(
             userSessionRepository,
             kycRepository,
             mainRouter,
             inMemoryRepo,
+            pwoAuthClientProxy,
+            kycRequirementsUnfulfilledFlow,
         )
     }
 
     @Test
-    fun `no free kyc tries EXPECT show no free tries screen`() = runTest {
-        given(kycRepository.hasFreeKycAttempt("accessToken")).willReturn(Result.success(false))
+    fun `authCallback getUserData`() = runTest {
+        every { inMemoryRepo.isEnoughXorAvailable } returns true
+        coEvery { kycRepository.hasFreeKycAttempt("accessToken") } returns Result.success(true)
+        coEvery { userSessionRepository.getRefreshToken() } returns "refreshToken"
+        val slot = slot<GetUserDataCallback>()
+        coEvery { pwoAuthClientProxy.getUserData(any(), capture(slot)) } answers {
+            slot.captured.onUserData("", "", "", "", false, "")
+        }
+        coEvery { userSessionRepository.setUserId(any()) } returns Unit
+        coEvery { kycRepository.getReferenceNumber(any(), any(), any()) } returns Result.success("refnumber")
+        setupViewModel(SoraCardCommonVerification.Failed)
+        advanceUntilIdle()
+        viewModel.getUserData()
+        advanceUntilIdle()
+        val refNumber = viewModel.state.value?.referenceNumber
+        assertTrue(refNumber != null)
+    }
 
+    @Test
+    fun `no free kyc tries EXPECT show kyc requirements unfulfilled flow started`() = runTest {
+        every { inMemoryRepo.isEnoughXorAvailable } returns false
+        coEvery { kycRepository.hasFreeKycAttempt("accessToken") } returns Result.success(true)
+        setupViewModel(SoraCardCommonVerification.Failed)
         viewModel.onAuthSucceed("accessToken")
         advanceUntilIdle()
-
-        verify(mainRouter).openNoFreeKycAttempts()
+        verify { kycRequirementsUnfulfilledFlow.start(any()) }
     }
 
     @Test
     fun `free kyc tries available EXPECT show get prepared screen`() = runTest {
-        given(kycRepository.hasFreeKycAttempt("accessToken")).willReturn(Result.success(true))
-
+        every { inMemoryRepo.isEnoughXorAvailable } returns true
+        coEvery { kycRepository.hasFreeKycAttempt("accessToken") } returns Result.success(true)
+        setupViewModel(SoraCardCommonVerification.Failed)
         viewModel.onAuthSucceed("accessToken")
         advanceUntilIdle()
-
-        verify(mainRouter).openGetPrepared()
+        verify { mainRouter.openGetPrepared() }
     }
 
     @Test
     fun `on onKycFailed EXPECT navigate to verification failed screen`() = runTest {
+        every { inMemoryRepo.isEnoughXorAvailable } returns true
+        coEvery { kycRepository.hasFreeKycAttempt("accessToken") } returns Result.success(true)
+        setupViewModel(SoraCardCommonVerification.Failed)
         val description = "description"
         viewModel.onKycFailed(statusDescription = description)
         advanceUntilIdle()
-
-        verify(mainRouter).openVerificationFailed(additionalDescription = description)
+        verify { mainRouter.openVerificationFailed(description) }
     }
 }

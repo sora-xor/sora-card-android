@@ -5,7 +5,7 @@ import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
-import jp.co.soramitsu.oauth.feature.KycCallback
+import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.feature.terms.and.conditions.model.WebUrl
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert.assertEquals
@@ -33,18 +33,21 @@ class TermsAndConditionsViewModelTest {
     private lateinit var mainRouter: MainRouter
 
     @Mock
-    private lateinit var kycCallback: KycCallback
+    private lateinit var setActivityResult: SetActivityResult
 
     private lateinit var viewModel: TermsAndConditionsViewModel
 
     @Before
     fun setUp() {
-        viewModel = TermsAndConditionsViewModel(mainRouter)
+        viewModel = TermsAndConditionsViewModel(mainRouter, setActivityResult)
     }
 
     @Test
     fun `init EXPECT toolbar title`() {
-        assertEquals(R.string.terms_and_conditions_title, viewModel.toolbarState.value?.basic?.title)
+        assertEquals(
+            R.string.terms_and_conditions_title,
+            viewModel.toolbarState.value?.basic?.title
+        )
     }
 
     @Test
@@ -76,9 +79,8 @@ class TermsAndConditionsViewModelTest {
 
     @Test
     fun `back EXPECT finish kyc`() {
-        viewModel.setArgs(kycCallback)
         viewModel.onToolbarNavigation()
 
-        verify(kycCallback).onFinish(SoraCardResult.Canceled)
+        verify(setActivityResult).setResult(SoraCardResult.Canceled)
     }
 }

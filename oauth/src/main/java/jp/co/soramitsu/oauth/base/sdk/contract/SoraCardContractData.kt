@@ -14,6 +14,9 @@ data class SoraCardContractData(
     val domain: String,
     val kycCredentials: SoraCardKycCredentials,
     val environment: SoraCardEnvironmentType,
-    val soraCardInfo: SoraCardInfo?,
     val client: String,
+    val userAvailableXorAmount: Double,
+    val areAttemptsPaidSuccessfully: Boolean,
+    val isEnoughXorAvailable: Boolean,
+    val isIssuancePaid: Boolean
 ) : Parcelable

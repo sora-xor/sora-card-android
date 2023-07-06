@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModel
-import com.paywings.oauth.android.sdk.initializer.PayWingsOAuthClient
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.soramitsu.oauth.R
@@ -20,7 +19,8 @@ import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants.EXTRA_SORA_CARD_CONTRACT
 import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants.SIGN_IN_BUNDLE_EXTRA
 import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants.SIGN_IN_DATA
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardContractData
-import jp.co.soramitsu.oauth.base.sdk.toPayWingsType
+import jp.co.soramitsu.oauth.common.domain.CurrentActivityRetriever
+import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.feature.MainFragment
 import javax.inject.Inject
 
@@ -36,12 +36,20 @@ class CardActivity : AppCompatActivity(R.layout.card_activity) {
 
     private val vm: CardViewModel by viewModels()
 
+    @Inject
+    lateinit var currentActivityRetriever: CurrentActivityRetriever
+
+    @Inject
+    lateinit var pwoAuthClientProxy: PWOAuthClientProxy
+
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(ContextManager.setBaseContext(base))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        currentActivityRetriever.setActivity(this)
 
         intent.getBundleExtra(BUNDLE_EXTRA_SORA_CARD_CONTRACT_DATA)
             ?.let(::setUpRegistrationFlow)
@@ -69,16 +77,18 @@ class CardActivity : AppCompatActivity(R.layout.card_activity) {
             vm.inMemoryRepo.endpointUrl = data.kycCredentials.endpointUrl
             vm.inMemoryRepo.username = data.kycCredentials.username
             vm.inMemoryRepo.password = data.kycCredentials.password
-            vm.inMemoryRepo.soraCardInfo = data.soraCardInfo
             vm.inMemoryRepo.mode = Mode.REGISTRATION
             vm.inMemoryRepo.environment = data.environment
             vm.inMemoryRepo.client = data.client
+            vm.inMemoryRepo.areAttemptsPaidSuccessfully = data.areAttemptsPaidSuccessfully
+            vm.inMemoryRepo.isEnoughXorAvailable = data.isEnoughXorAvailable
+            vm.inMemoryRepo.isIssuancePaid = data.isIssuancePaid
 
-            PayWingsOAuthClient.init(
+            pwoAuthClientProxy.init(
                 applicationContext,
-                data.environment.toPayWingsType(),
+                data.environment,
                 data.apiKey,
-                data.domain
+                data.domain,
             )
         }
     }
@@ -94,16 +104,19 @@ class CardActivity : AppCompatActivity(R.layout.card_activity) {
             vm.inMemoryRepo.endpointUrl = data.kycCredentials.endpointUrl
             vm.inMemoryRepo.username = data.kycCredentials.username
             vm.inMemoryRepo.password = data.kycCredentials.password
-            vm.inMemoryRepo.soraCardInfo = data.soraCardInfo
             vm.inMemoryRepo.mode = Mode.SIGN_IN
             vm.inMemoryRepo.environment = data.environment
             vm.inMemoryRepo.client = data.client
+            vm.inMemoryRepo.userAvailableXorAmount = data.userAvailableXorAmount
+            vm.inMemoryRepo.areAttemptsPaidSuccessfully = data.areAttemptsPaidSuccessfully
+            vm.inMemoryRepo.isEnoughXorAvailable = data.isEnoughXorAvailable
+            vm.inMemoryRepo.isIssuancePaid = data.isIssuancePaid
 
-            PayWingsOAuthClient.init(
+            pwoAuthClientProxy.init(
                 applicationContext,
-                data.environment.toPayWingsType(),
+                data.environment,
                 data.apiKey,
-                data.domain
+                data.domain,
             )
         }
     }

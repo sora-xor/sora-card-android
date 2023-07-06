@@ -6,6 +6,7 @@ import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
+import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -36,13 +37,20 @@ class EnterPhoneNumberViewModelTest {
     private lateinit var mainRouter: MainRouter
 
     @Mock
+    private lateinit var pwoAuthClientProxy: PWOAuthClientProxy
+
+    @Mock
     private lateinit var inMemoryRepo: InMemoryRepo
 
     private lateinit var viewModel: EnterPhoneNumberViewModel
 
     @Before
     fun setUp() {
-        viewModel = EnterPhoneNumberViewModel(mainRouter, inMemoryRepo)
+        viewModel = EnterPhoneNumberViewModel(
+            mainRouter,
+            inMemoryRepo,
+            pwoAuthClientProxy,
+        )
     }
 
     @Test

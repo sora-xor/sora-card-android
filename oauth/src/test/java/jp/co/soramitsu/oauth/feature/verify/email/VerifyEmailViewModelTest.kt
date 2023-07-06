@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
+import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.oauth.feature.verify.Timer
@@ -43,13 +44,21 @@ class VerifyEmailViewModelTest {
     private lateinit var userSessionRepository: UserSessionRepository
 
     @Mock
+    private lateinit var pwoAuthClientProxy: PWOAuthClientProxy
+
+    @Mock
     private lateinit var timer: Timer
 
     private lateinit var viewModel: VerifyEmailViewModel
 
     @Before
     fun setUp() {
-        viewModel = VerifyEmailViewModel(mainRouter, userSessionRepository, timer)
+        viewModel = VerifyEmailViewModel(
+            mainRouter,
+            userSessionRepository,
+            timer,
+            pwoAuthClientProxy,
+        )
     }
 
     @Test

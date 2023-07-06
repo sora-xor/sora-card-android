@@ -5,10 +5,11 @@ import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
-import jp.co.soramitsu.oauth.feature.KycCallback
+import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
+import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -30,28 +31,33 @@ class VerificationFailedViewModelTest {
     var mainCoroutineRule = MainCoroutineRule()
 
     @Mock
-    private lateinit var kycCallback: KycCallback
+    private lateinit var setActivityResult: SetActivityResult
+
+    @Mock
+    private lateinit var userSessionRepository: UserSessionRepository
 
     private lateinit var viewModel: VerificationFailedViewModel
 
     @Before
     fun setUp() {
-        viewModel = VerificationFailedViewModel()
+        viewModel = VerificationFailedViewModel(
+            setActivityResult = setActivityResult,
+            userSessionRepository = userSessionRepository,
+        )
     }
 
     @Test
     fun `init EXPECT toolbar title`() {
         assertEquals(R.string.verification_failed_title, viewModel.toolbarState.value?.basic?.title)
-        assertNull(viewModel.toolbarState.value?.basic?.navIcon)
+        assertNotNull(viewModel.toolbarState.value?.basic?.navIcon)
     }
 
     @Test
     fun `call onClose EXPECT finish kyc`() {
-        viewModel.setArgs(kycCallback)
         viewModel.onClose()
 
-        verify(kycCallback).onFinish(
-            result = SoraCardResult.Failure(SoraCardCommonVerification.Failed)
+        verify(setActivityResult).setResult(
+            SoraCardResult.Failure(SoraCardCommonVerification.Failed)
         )
     }
 }

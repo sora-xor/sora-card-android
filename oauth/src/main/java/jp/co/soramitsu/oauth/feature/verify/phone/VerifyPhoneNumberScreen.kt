@@ -8,7 +8,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.base.compose.maskFilter
-import jp.co.soramitsu.oauth.feature.KycCallback
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.verify.VerifyUserData
 
@@ -17,11 +16,10 @@ fun VerifyPhoneNumberScreen(
     phoneNumber: String?,
     otpLength: Int?,
     authCallback: OAuthCallback,
-    kycCallback: KycCallback,
     viewModel: VerifyPhoneNumberViewModel = hiltViewModel()
 ) {
     LaunchedEffect(Unit) {
-        viewModel.setArgs(phoneNumber, otpLength, authCallback, kycCallback)
+        viewModel.setArgs(phoneNumber, otpLength, authCallback)
     }
 
     Screen(

@@ -6,7 +6,7 @@ import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
-import jp.co.soramitsu.oauth.feature.KycCallback
+import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
@@ -16,6 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class VerificationSuccessfulViewModel @Inject constructor(
+    private val setActivityResult: SetActivityResult,
     private val userSessionRepository: UserSessionRepository
 ) : BaseViewModel() {
 
@@ -25,21 +26,20 @@ class VerificationSuccessfulViewModel @Inject constructor(
             basic = BasicToolbarState(
                 title = R.string.verification_successful_title,
                 visibility = true,
-                navIcon = null,
+                navIcon = R.drawable.ic_cross
             ),
         )
     }
 
-    private var kycCallback: KycCallback? = null
-
-    fun setArgs(kycCallback: KycCallback) {
-        this.kycCallback = kycCallback
+    override fun onToolbarNavigation() {
+        super.onToolbarNavigation()
+        onClose()
     }
 
     fun onClose() {
         viewModelScope.launch {
-            kycCallback?.onFinish(
-                result = SoraCardResult.Success(
+            setActivityResult.setResult(
+                soraCardResult = SoraCardResult.Success(
                     accessToken = userSessionRepository.getAccessToken(),
                     accessTokenExpirationTime = userSessionRepository.getAccessTokenExpirationTime(),
                     refreshToken = userSessionRepository.getRefreshToken(),
