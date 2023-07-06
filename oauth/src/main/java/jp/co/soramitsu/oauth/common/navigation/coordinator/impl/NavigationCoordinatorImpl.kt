@@ -1,6 +1,6 @@
 package jp.co.soramitsu.oauth.common.navigation.coordinator.impl
 
-import jp.co.soramitsu.oauth.core.datasources.tachi.api.KycStatus
+import jp.co.soramitsu.oauth.core.datasources.tachi.api.models.KycStatus
 import jp.co.soramitsu.oauth.common.navigation.flow.login.api.LoginDestination
 import jp.co.soramitsu.oauth.common.navigation.coordinator.api.NavigationCoordinator
 import jp.co.soramitsu.oauth.common.navigation.flow.registration.api.RegistrationDestination
@@ -12,10 +12,14 @@ import jp.co.soramitsu.oauth.core.datasources.paywings.api.PayWingsRepository
 import jp.co.soramitsu.oauth.core.datasources.paywings.api.PayWingsResponse
 import jp.co.soramitsu.oauth.core.datasources.session.api.UserSessionRepository
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
 
 class NavigationCoordinatorImpl @Inject constructor(
@@ -26,44 +30,52 @@ class NavigationCoordinatorImpl @Inject constructor(
     private val verificationFlow: VerificationFlow,
 ): NavigationCoordinator {
 
-    private val kycAndVerificationFlow = userSessionRepository.kycStatusFlow
-        .map { kycStatus ->
-            when(kycStatus) {
-                KycStatus.FirstInitialization -> {
-                    verificationFlow.onStart(
-                        destination = VerificationDestination.Start
-                    )
-                }
-                KycStatus.Started -> {
-                    verificationFlow.onStart(
-                        destination = VerificationDestination.Start
-                    )
-                }
-                KycStatus.Failed -> {
-                    verificationFlow.onStart(
-                        destination = VerificationDestination.Start
-                    )
-                }
-                KycStatus.Completed -> {
-                    verificationFlow.onStart(
-                        destination = VerificationDestination.VerificationInProgress
-                    )
-                }
-                KycStatus.Rejected -> {
-                    verificationFlow.onStart(
-                        destination = VerificationDestination.VerificationRejected
-                    )
-                }
-                KycStatus.Successful -> {
-                    verificationFlow.onStart(
-                        destination = VerificationDestination.VerificationSuccessful
-                    )
+    private val kycAndVerificationFlow =
+        userSessionRepository.run {
+            combine(kycStatusFlow, additionalVerificationInfoFlow) { kycStatus, additionalVerificationInfo ->
+                println("This is checkpoint: kycAndVerificationFlow.kycStatus - $kycStatus")
+
+                when(kycStatus) {
+                    KycStatus.NotInitialized -> {
+                        /* DO NOTHING */
+                    }
+                    KycStatus.Started -> {
+                        verificationFlow.onStart(
+                            destination = VerificationDestination.Start
+                        )
+                    }
+                    KycStatus.Failed -> {
+                        verificationFlow.onStart(
+                            destination = VerificationDestination.VerificationFailed(
+                                additionalInfo = additionalVerificationInfo
+                            )
+                        )
+                    }
+                    KycStatus.Completed -> {
+                        verificationFlow.onStart(
+                            destination = VerificationDestination.VerificationInProgress
+                        )
+                    }
+                    KycStatus.Rejected -> {
+                        verificationFlow.onStart(
+                            destination = VerificationDestination.VerificationRejected(
+                                additionalInfo = additionalVerificationInfo
+                            )
+                        )
+                    }
+                    KycStatus.Successful -> {
+                        verificationFlow.onStart(
+                            destination = VerificationDestination.VerificationSuccessful
+                        )
+                    }
                 }
             }
         }
 
     private val loginAndRegistrationFlow = payWingsRepository.responseFlow
-        .filter {
+        .onEach {
+            println("This is checkpoint: loginAndRegistrationFlow.payWingsResponse - $it")
+        }.filter {
             it is PayWingsResponse.NavigationIncentive
                     || it is PayWingsResponse.Error.OnGetNewAccessToken
         }.map { payWingsResponse ->
@@ -85,7 +97,9 @@ class NavigationCoordinatorImpl @Inject constructor(
                         }
                         is PayWingsResponse.NavigationIncentive.OnVerificationOtpBeenSent -> {
                             loginFlow.onStart(
-                                destination = LoginDestination.EnterOtp
+                                destination = LoginDestination.EnterOtp(
+                                    otpLength = payWingsResponse.otpLength
+                                )
                             )
                         }
                         is PayWingsResponse.NavigationIncentive.OnRegistrationRequiredScreen -> {
@@ -95,7 +109,10 @@ class NavigationCoordinatorImpl @Inject constructor(
                         }
                         is PayWingsResponse.NavigationIncentive.OnEmailConfirmationRequiredScreen -> {
                             registrationFlow.onStart(
-                                destination = RegistrationDestination.EmailConfirmation
+                                destination = RegistrationDestination.EmailConfirmation(
+                                    email = payWingsResponse.email,
+                                    autoEmailBeenSent = payWingsResponse.autoEmailBeenSent
+                                )
                             )
                         }
                     }
@@ -106,6 +123,10 @@ class NavigationCoordinatorImpl @Inject constructor(
         }
 
     override fun start(coroutineScope: CoroutineScope) =
-        merge(loginAndRegistrationFlow, kycAndVerificationFlow).launchIn(coroutineScope)
+        merge(loginAndRegistrationFlow, kycAndVerificationFlow).onStart {
+            println("This is checkpoint: NavigationCoordinatorImpl.onStart")
+        }.onCompletion {
+            println("This is checkpoint: NavigationCoordinatorImpl.onCompletion")
+        }.launchIn(coroutineScope)
 
 }

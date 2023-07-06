@@ -6,7 +6,7 @@ import android.net.Uri
 import androidx.annotation.StringRes
 import androidx.navigation.NavHostController
 import jp.co.soramitsu.oauth.base.extension.isAppAvailableCompat
-import jp.co.soramitsu.oauth.feature.login.conditions.model.WebUrl
+import jp.co.soramitsu.oauth.feature.login.web.model.WebUrl
 
 interface MainRouter {
 

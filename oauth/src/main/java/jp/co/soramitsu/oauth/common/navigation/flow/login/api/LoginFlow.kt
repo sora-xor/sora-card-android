@@ -14,6 +14,4 @@ interface LoginFlow {
 
     fun onAcceptTermsAndConditions()
 
-    fun onConfirmSendingOtpCode()
-
 }

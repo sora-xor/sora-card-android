@@ -8,7 +8,7 @@ import jp.co.soramitsu.oauth.base.CardActivity
 import jp.co.soramitsu.oauth.base.extension.getParcelableCompat
 import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardContractData
-import jp.co.soramitsu.oauth.common.navigation.activityresult.api.SoraCardResult
+import jp.co.soramitsu.oauth.core.engines.activityresult.api.SoraCardResult
 
 class SoraCardSignInContract :
     ActivityResultContract<SoraCardContractData, SoraCardResult>() {

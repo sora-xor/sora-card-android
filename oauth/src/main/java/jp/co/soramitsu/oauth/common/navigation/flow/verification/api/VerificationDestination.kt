@@ -1,5 +1,7 @@
 package jp.co.soramitsu.oauth.common.navigation.flow.verification.api
 
+import android.hardware.SensorAdditionalInfo
+
 
 sealed interface VerificationDestination {
 
@@ -9,6 +11,12 @@ sealed interface VerificationDestination {
 
     object VerificationSuccessful: VerificationDestination
 
-    object VerificationRejected: VerificationDestination
+    class VerificationRejected(
+        val additionalInfo: String?
+    ): VerificationDestination
+
+    class VerificationFailed(
+        val additionalInfo: String?
+    ): VerificationDestination
 
 }

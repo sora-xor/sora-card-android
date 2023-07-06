@@ -1,5 +1,6 @@
 package jp.co.soramitsu.oauth.base
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -29,11 +30,9 @@ import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants.SIGN_IN_DATA
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardContractData
 import jp.co.soramitsu.oauth.base.sdk.toPayWingsType
 import jp.co.soramitsu.oauth.common.navigation.coordinator.api.NavigationCoordinator
-import jp.co.soramitsu.oauth.common.navigation.activityresult.api.ActivityResult
-import jp.co.soramitsu.oauth.common.navigation.router.api.ComposeRouter
-import jp.co.soramitsu.oauth.common.navigation.router.api.SoraCardDestinations
-import jp.co.soramitsu.oauth.common.navigation.router.api.SoraCardNavGraph
-import jp.co.soramitsu.oauth.feature.MainViewModel
+import jp.co.soramitsu.oauth.core.engines.activityresult.api.ActivityResult
+import jp.co.soramitsu.oauth.core.engines.router.api.ComposeRouter
+import jp.co.soramitsu.oauth.core.engines.router.api.SoraCardDestinations
 import jp.co.soramitsu.oauth.theme.AuthSdkTheme
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -51,6 +50,10 @@ class CardActivity : AppCompatActivity(R.layout.card_activity) {
 
     @Inject
     lateinit var activityResult: ActivityResult
+
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(ContextManager.setBaseContext(base))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

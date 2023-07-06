@@ -8,4 +8,6 @@ interface UserInteractor {
 
     suspend fun getUserData()
 
+    suspend fun calculateFreeKycAttemptsLeft(): Result<Int>
+
 }

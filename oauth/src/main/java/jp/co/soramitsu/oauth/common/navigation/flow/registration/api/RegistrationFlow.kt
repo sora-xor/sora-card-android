@@ -8,6 +8,6 @@ interface RegistrationFlow {
 
     fun onExit()
 
-    fun onEnterEmail()
+    fun onEnterEmail(firstName: String, lastName: String)
 
 }

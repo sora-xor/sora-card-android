@@ -6,12 +6,13 @@ import com.paywings.onboarding.kyc.android.sdk.data.model.KycSettings
 import com.paywings.onboarding.kyc.android.sdk.data.model.KycUserData
 import com.paywings.onboarding.kyc.android.sdk.data.model.UserCredentials
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
-import jp.co.soramitsu.oauth.common.navigation.activityresult.api.OutwardsScreen
-import jp.co.soramitsu.oauth.common.navigation.activityresult.api.SoraCardResult
+import jp.co.soramitsu.oauth.core.engines.activityresult.api.OutwardsScreen
+import jp.co.soramitsu.oauth.core.engines.activityresult.api.SoraCardResult
 import jp.co.soramitsu.oauth.common.navigation.flow.verification.api.VerificationDestination
 import jp.co.soramitsu.oauth.common.navigation.flow.verification.api.VerificationFlow
-import jp.co.soramitsu.oauth.common.navigation.activityresult.api.ActivityResult
-import jp.co.soramitsu.oauth.common.navigation.router.api.ComposeRouter
+import jp.co.soramitsu.oauth.core.engines.activityresult.api.ActivityResult
+import jp.co.soramitsu.oauth.core.engines.router.api.ComposeRouter
+import jp.co.soramitsu.oauth.core.engines.router.api.SoraCardDestinations
 import java.util.UUID
 import javax.inject.Inject
 
@@ -25,14 +26,24 @@ class VerificationFlowImpl @Inject constructor(
         when (destination) {
             is VerificationDestination.Start ->
                 if (inMemoryRepo.userAvailableXorAmount < 100)
-                    composeRouter.setNewStartDestination("NOT_ENOUGH_XOR") else
-                    composeRouter.setNewStartDestination("GET_PREPARED")
+                    composeRouter.setNewStartDestination(SoraCardDestinations.NotEnoughXor) else
+                        composeRouter.setNewStartDestination(SoraCardDestinations.GetPrepared)
             is VerificationDestination.VerificationSuccessful ->
-                composeRouter.setNewStartDestination("VERIFICATION_IN_SUCCESSFUL")
+                composeRouter.setNewStartDestination(SoraCardDestinations.VerificationSuccessful)
             is VerificationDestination.VerificationInProgress ->
-                composeRouter.setNewStartDestination("VERIFICATION_IN_PROGRESS")
+                composeRouter.setNewStartDestination(SoraCardDestinations.VerificationInProgress)
             is VerificationDestination.VerificationRejected ->
-                composeRouter.setNewStartDestination("VERIFICATION_REJECTED")
+                composeRouter.setNewStartDestination(
+                    SoraCardDestinations.VerificationRejected(
+                        additionalInfo = destination.additionalInfo
+                    )
+                )
+            is VerificationDestination.VerificationFailed ->
+                composeRouter.setNewStartDestination(
+                    SoraCardDestinations.VerificationRejected(
+                        additionalInfo = destination.additionalInfo
+                    )
+                )
         }.run { composeRouter.clearBackStack() }
 
     override fun onBack() {
@@ -66,7 +77,9 @@ class VerificationFlowImpl @Inject constructor(
     }
 
     override fun onTryAgain() {
-        TODO("Not yet implemented")
+        if (inMemoryRepo.userAvailableXorAmount < 100)
+            composeRouter.setNewStartDestination(SoraCardDestinations.NotEnoughXor) else
+                composeRouter.setNewStartDestination(SoraCardDestinations.GetPrepared)
     }
 
     override fun onOpenSupport() {
@@ -74,7 +87,7 @@ class VerificationFlowImpl @Inject constructor(
     }
 
     override fun onGetMoreXor() {
-        TODO("Not yet implemented")
+        composeRouter.navigateTo(SoraCardDestinations.GetMoreXor)
     }
 
     override fun onDepositMoreXor() {

@@ -12,9 +12,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class PaywingsCheckEmailStatusUseCase @Inject constructor(
-    private val userSessionRepository: UserSessionRepository
-) {
+class PaywingsCheckEmailStatusUseCase @Inject constructor() {
 
     private var callback: CheckEmailVerifiedCallback? = null
 
@@ -61,19 +59,7 @@ class PaywingsCheckEmailStatusUseCase @Inject constructor(
         }
 
     suspend operator fun invoke() = callback?.let {
-        val (accessToken, accessTokenExpirationTime, refreshToken) =
-            userSessionRepository.run {
-                Triple(getAccessToken(), getAccessTokenExpirationTime(), getRefreshToken())
-            }
-
-        if (accessToken.isBlank() || refreshToken.isBlank() ||
-            accessTokenExpirationTime <= TimeUnit.MILLISECONDS
-                .toSeconds(System.currentTimeMillis())
-        ) it.onSignInSuccessful(
-            accessToken = accessToken,
-            accessTokenExpirationTime = accessTokenExpirationTime,
-            refreshToken = refreshToken
-        ) else PayWingsOAuthClient.instance.checkEmailVerified(callback = it)
+        PayWingsOAuthClient.instance.checkEmailVerified(callback = it)
     }
 
 }

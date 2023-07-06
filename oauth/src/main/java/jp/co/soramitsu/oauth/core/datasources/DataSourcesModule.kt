@@ -8,8 +8,8 @@ import jp.co.soramitsu.oauth.core.datasources.paywings.api.PayWingsRepository
 import jp.co.soramitsu.oauth.core.datasources.paywings.impl.PayWingsRepositoryImpl
 import jp.co.soramitsu.oauth.core.datasources.session.api.UserSessionRepository
 import jp.co.soramitsu.oauth.core.datasources.session.impl.UserSessionRepositoryImpl
-import jp.co.soramitsu.oauth.core.datasources.tachi.api.KycRepository
-import jp.co.soramitsu.oauth.core.datasources.tachi.impl.KycRepositoryImpl
+import jp.co.soramitsu.oauth.core.datasources.tachi.api.TachiRepository
+import jp.co.soramitsu.oauth.core.datasources.tachi.impl.TachiRepositoryImpl
 import javax.inject.Singleton
 
 @Module
@@ -28,6 +28,6 @@ interface DataSourcesModule {
 
     @Binds
     @Singleton
-    fun bindKycRepository(kycRepositoryImpl: KycRepositoryImpl): KycRepository
+    fun bindKycRepository(tachiRepositoryImpl: TachiRepositoryImpl): TachiRepository
 
 }

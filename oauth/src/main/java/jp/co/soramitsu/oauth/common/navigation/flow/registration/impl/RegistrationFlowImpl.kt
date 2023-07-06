@@ -1,10 +1,11 @@
 package jp.co.soramitsu.oauth.common.navigation.flow.registration.impl
 
-import jp.co.soramitsu.oauth.common.navigation.activityresult.api.SoraCardResult
+import jp.co.soramitsu.oauth.core.engines.activityresult.api.SoraCardResult
 import jp.co.soramitsu.oauth.common.navigation.flow.registration.api.RegistrationDestination
 import jp.co.soramitsu.oauth.common.navigation.flow.registration.api.RegistrationFlow
-import jp.co.soramitsu.oauth.common.navigation.activityresult.api.ActivityResult
-import jp.co.soramitsu.oauth.common.navigation.router.api.ComposeRouter
+import jp.co.soramitsu.oauth.core.engines.activityresult.api.ActivityResult
+import jp.co.soramitsu.oauth.core.engines.router.api.ComposeRouter
+import jp.co.soramitsu.oauth.core.engines.router.api.SoraCardDestinations
 import javax.inject.Inject
 
 class RegistrationFlowImpl @Inject constructor(
@@ -15,11 +16,15 @@ class RegistrationFlowImpl @Inject constructor(
     override fun onStart(destination: RegistrationDestination) =
         when (destination) {
             is RegistrationDestination.EnterFirstAndLastName ->
-                composeRouter.setNewStartDestination("ENTER_FIRST_AND_LAST_NAME")
-            is RegistrationDestination.EnterEmail ->
-                composeRouter.setNewStartDestination("ENTER_EMAIL")
+                composeRouter.setNewStartDestination(SoraCardDestinations.EnterFirstAndLastName)
+            is RegistrationDestination.EnterEmail -> { /* DO NOTHING */ }
             is RegistrationDestination.EmailConfirmation ->
-                composeRouter.setNewStartDestination("SEND_VERIFICATION_EMAIL")
+                composeRouter.setNewStartDestination(
+                    SoraCardDestinations.SendVerificationEmail(
+                        email = destination.email,
+                        autoEmailBeenSent = destination.autoEmailBeenSent
+                    )
+                )
         }.run { composeRouter.clearBackStack() }
 
     override fun onBack() {
@@ -30,8 +35,12 @@ class RegistrationFlowImpl @Inject constructor(
         activityResult.setResult(SoraCardResult.Canceled)
     }
 
-    override fun onEnterEmail() {
-        composeRouter.navigateTo("ENTER_EMAIL")
-        TODO("Add arguments")
+    override fun onEnterEmail(firstName: String, lastName: String) {
+        composeRouter.navigateTo(
+            SoraCardDestinations.EnterEmail(
+                firstName = firstName,
+                lastName = lastName
+            )
+        )
     }
 }

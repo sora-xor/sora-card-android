@@ -6,6 +6,9 @@ sealed interface RegistrationDestination {
 
     object EnterEmail: RegistrationDestination
 
-    object EmailConfirmation: RegistrationDestination
+    class EmailConfirmation(
+        val email: String,
+        val autoEmailBeenSent: Boolean
+    ): RegistrationDestination
 
 }

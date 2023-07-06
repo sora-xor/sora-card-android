@@ -2,7 +2,7 @@ package jp.co.soramitsu.oauth.common.interactors.user.api
 
 import com.paywings.onboarding.kyc.android.sdk.data.model.KycUserData
 import com.paywings.onboarding.kyc.android.sdk.data.model.UserCredentials
-import jp.co.soramitsu.oauth.base.compose.Text
+import jp.co.soramitsu.oauth.theme.views.Text
 
 sealed interface UserOperationResult {
 

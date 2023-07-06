@@ -1,6 +1,6 @@
 package jp.co.soramitsu.oauth.common.interactors.account.api
 
-import jp.co.soramitsu.oauth.base.compose.Text
+import jp.co.soramitsu.oauth.theme.views.Text
 
 sealed interface AccountOperationResult {
 

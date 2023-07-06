@@ -6,6 +6,9 @@ sealed interface LoginDestination {
 
     object EnterPhone: LoginDestination
 
-    object EnterOtp: LoginDestination
+    @JvmInline
+    value class EnterOtp(
+        val otpLength: Int
+    ): LoginDestination
 
 }

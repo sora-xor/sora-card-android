@@ -6,6 +6,8 @@ interface AccountInteractor {
 
     val resultFlow: Flow<AccountOperationResult.Error>
 
+    suspend fun checkKycVerificationStatus()
+
     suspend fun requestOtpCode(phoneNumber: String)
 
     suspend fun verifyOtpCode(otpCode: String)

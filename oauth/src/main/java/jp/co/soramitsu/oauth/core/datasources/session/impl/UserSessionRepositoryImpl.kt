@@ -1,71 +1,54 @@
 package jp.co.soramitsu.oauth.core.datasources.session.impl
 
-import jp.co.soramitsu.oauth.core.datasources.tachi.api.KycStatus
+import androidx.datastore.preferences.core.stringPreferencesKey
+import jp.co.soramitsu.oauth.core.datasources.tachi.api.models.KycStatus
 import javax.inject.Inject
-import jp.co.soramitsu.oauth.core.engines.SoraCardDataStore
 import jp.co.soramitsu.oauth.core.datasources.session.api.UserSessionRepository
+import jp.co.soramitsu.oauth.core.engines.preferences.api.KeyValuePreferences
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class UserSessionRepositoryImpl @Inject constructor(
-    private val dataStore: SoraCardDataStore
+    private val preferences: KeyValuePreferences
 ) : UserSessionRepository {
 
     private companion object {
-        const val REFRESH_TOKEN_KEY = "REFRESH_TOKEN_KEY"
         const val ACCESS_TOKEN_KEY = "ACCESS_TOKEN_KEY"
         const val ACCESS_TOKEN_EXPIRATION_TIME_KEY = "ACCESS_TOKEN_EXPIRATION_TIME_KEY"
-        const val USER_ID = "USER_ID"
-        const val PERSON_ID = "PERSON_ID"
+        const val REFRESH_TOKEN_KEY = "REFRESH_TOKEN_KEY"
+        const val KYC_STATUS_KEY = "KYC_STATUS_KEY"
+        const val ADDITIONAL_VERIFICATION_INFO_KEY = "ADDITIONAL_VERIFICATION_INFO_KEY"
     }
+    override val kycStatusFlow: Flow<KycStatus> =
+        preferences.dataFlow.map {
+            it[stringPreferencesKey(KYC_STATUS_KEY)]?.let { status ->
+                KycStatus.valueOf(status)
+            } ?: KycStatus.NotInitialized
+        }
 
-    override suspend fun setKycStatus(status: KycStatus) {
-        TODO("Not yet implemented")
-    }
+    override val additionalVerificationInfoFlow: Flow<String?> =
+        preferences.dataFlow.map {
+            it[stringPreferencesKey(ADDITIONAL_VERIFICATION_INFO_KEY)]
+        }
 
-    override val kycStatusFlow: Flow<KycStatus>
-        get() = TODO()
+    override suspend fun setNewAccessToken(accessToken: String, expirationTime: Long) =
+        preferences.run {
+            putString(ACCESS_TOKEN_KEY, accessToken)
+            putLong(ACCESS_TOKEN_EXPIRATION_TIME_KEY, expirationTime)
+        }
 
-    override suspend fun getRefreshToken(): String =
-        dataStore.getString(REFRESH_TOKEN_KEY)
+    override suspend fun setRefreshToken(refreshToken: String) =
+        preferences.putString(REFRESH_TOKEN_KEY, refreshToken)
+
+    override suspend fun setKycStatus(status: KycStatus) =
+        preferences.putString(KYC_STATUS_KEY, status.name)
 
     override suspend fun getAccessToken(): String =
-        dataStore.getString(ACCESS_TOKEN_KEY)
+        preferences.getString(ACCESS_TOKEN_KEY)
 
     override suspend fun getAccessTokenExpirationTime(): Long =
-        dataStore.getLong(ACCESS_TOKEN_EXPIRATION_TIME_KEY, 0)
+        preferences.getLong(ACCESS_TOKEN_EXPIRATION_TIME_KEY, -1)
 
-    override suspend fun signInUser(
-        refreshToken: String,
-        accessToken: String,
-        expirationTime: Long
-    ) {
-        dataStore.putString(REFRESH_TOKEN_KEY, refreshToken)
-        dataStore.putString(ACCESS_TOKEN_KEY, accessToken)
-        dataStore.putLong(ACCESS_TOKEN_EXPIRATION_TIME_KEY, expirationTime)
-    }
-
-    override suspend fun setNewAccessToken(accessToken: String, expirationTime: Long) {
-        dataStore.putString(ACCESS_TOKEN_KEY, accessToken)
-        dataStore.putLong(ACCESS_TOKEN_EXPIRATION_TIME_KEY, expirationTime)
-    }
-
-    override suspend fun setRefreshToken(refreshToken: String) {
-        dataStore.putString(REFRESH_TOKEN_KEY, refreshToken)
-    }
-
-    override suspend fun setUserId(userId: String?) {
-        dataStore.putString(USER_ID, userId ?: "")
-    }
-
-    override suspend fun setPersonId(personId: String?) {
-        dataStore.putString(PERSON_ID, personId ?: "")
-    }
-
-    override suspend fun getUserId(): String = dataStore.getString(USER_ID)
-
-    override suspend fun getPersonId(): String = dataStore.getString(PERSON_ID)
-
-    override suspend fun logOutUser() {
-        dataStore.clearAll()
-    }
+    override suspend fun getRefreshToken(): String =
+        preferences.getString(REFRESH_TOKEN_KEY)
 }
