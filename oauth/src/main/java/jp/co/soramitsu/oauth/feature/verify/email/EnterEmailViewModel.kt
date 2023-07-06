@@ -6,12 +6,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.viewModelScope
 import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
-import com.paywings.oauth.android.sdk.initializer.PayWingsOAuthClient
 import com.paywings.oauth.android.sdk.service.callback.RegisterUserCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
+import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.oauth.feature.verify.email.model.EnterEmailState
@@ -27,6 +27,7 @@ import javax.inject.Inject
 class EnterEmailViewModel @Inject constructor(
     private val mainRouter: MainRouter,
     private val userSessionRepository: UserSessionRepository,
+    private val pwoAuthClientProxy: PWOAuthClientProxy,
 ) : BaseViewModel() {
 
     var state by mutableStateOf(
@@ -131,11 +132,11 @@ class EnterEmailViewModel @Inject constructor(
     fun onRegisterUser() {
         viewModelScope.launch {
             loading(true)
-            PayWingsOAuthClient.instance.registerUser(
+            pwoAuthClientProxy.registerUser(
                 firstName = firstName,
                 lastName = lastName,
                 email = state.inputTextState.value.text,
-                callback = registerUserCallback
+                callback = registerUserCallback,
             )
         }
     }

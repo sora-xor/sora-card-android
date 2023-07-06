@@ -1,6 +1,5 @@
 package jp.co.soramitsu.oauth.feature
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -19,18 +18,18 @@ import com.paywings.onboarding.kyc.android.sdk.data.model.KycCredentials
 import com.paywings.onboarding.kyc.android.sdk.data.model.KycSettings
 import com.paywings.onboarding.kyc.android.sdk.util.PayWingsOnboardingKycResult
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
 import jp.co.soramitsu.oauth.base.BaseFragment
 import jp.co.soramitsu.oauth.base.extension.onBackPressed
+import jp.co.soramitsu.oauth.base.mapSoraCardResult
 import jp.co.soramitsu.oauth.base.navigation.Destination
 import jp.co.soramitsu.oauth.base.navigation.SdkNavGraph
 import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants
-import jp.co.soramitsu.oauth.base.sdk.SoraCardInfo
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.feature.terms.and.conditions.ProgressDialog
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 @AndroidEntryPoint
 internal class MainFragment : BaseFragment() {
@@ -44,6 +43,7 @@ internal class MainFragment : BaseFragment() {
             is PayWingsOnboardingKycResult.Success -> {
                 viewModel.checkKycStatus()
             }
+
             is PayWingsOnboardingKycResult.Failure -> {
                 viewModel.onKycFailed(
                     statusDescription = payWingsOnboardingKycResult.statusDescription
@@ -62,35 +62,17 @@ internal class MainFragment : BaseFragment() {
         }
     }
 
-    private var kycCallback = object : KycCallback {
-        override fun onFinish(result: SoraCardResult) {
-            when (result) {
-                is SoraCardResult.Success -> {
-                    requireActivity().setResult(
-                        Activity.RESULT_OK,
-                        Intent().putExtra(SoraCardConstants.EXTRA_SORA_CARD_RESULT, result)
-                    )
-                }
-                is SoraCardResult.Canceled,
-                is SoraCardResult.Failure -> {
-                    requireActivity().setResult(
-                        Activity.RESULT_CANCELED,
-                        Intent().putExtra(SoraCardConstants.EXTRA_SORA_CARD_RESULT, result)
-                    )
-                }
-            }
-            requireActivity().finish()
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         onBackPressed {
-            finishWithCancel()
+            val result = SoraCardResult.Canceled
+            requireActivity().setResult(
+                mapSoraCardResult(result),
+                Intent().putExtra(SoraCardConstants.EXTRA_SORA_CARD_RESULT, result)
+            )
+            requireActivity().finish()
         }
-
-        setSoraCardInfo(soraCardInfo = viewModel.inMemoryRepo.soraCardInfo)
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.state
@@ -118,10 +100,6 @@ internal class MainFragment : BaseFragment() {
         }
     }
 
-    private fun setSoraCardInfo(soraCardInfo: SoraCardInfo?) {
-        viewModel.setSoraCardInfo(soraCardInfo)
-    }
-
     @Composable
     override fun NavGraph(navHostController: NavHostController) {
         Box(modifier = Modifier.fillMaxWidth()) {
@@ -129,16 +107,11 @@ internal class MainFragment : BaseFragment() {
                 navHostController = navHostController,
                 startDestination = Destination.TERMS_AND_CONDITIONS,
                 authCallback = authCallback,
-                kycCallback = kycCallback
             )
 
             if (viewModel.uiState.loading) {
                 ProgressDialog()
             }
         }
-    }
-
-    private fun finishWithCancel() {
-        kycCallback.onFinish(SoraCardResult.Canceled)
     }
 }

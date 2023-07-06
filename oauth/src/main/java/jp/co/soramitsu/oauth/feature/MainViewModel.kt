@@ -5,18 +5,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
-import com.paywings.oauth.android.sdk.initializer.PayWingsOAuthClient
 import com.paywings.oauth.android.sdk.service.callback.GetUserDataCallback
 import com.paywings.onboarding.kyc.android.sdk.data.model.KycUserData
 import com.paywings.onboarding.kyc.android.sdk.data.model.UserCredentials
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.soramitsu.oauth.base.BaseViewModel
+import jp.co.soramitsu.oauth.base.navigation.Destination
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
-import jp.co.soramitsu.oauth.base.sdk.SoraCardInfo
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.state.DialogAlertState
 import jp.co.soramitsu.oauth.common.domain.KycRepository
+import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
+import jp.co.soramitsu.oauth.common.navigation.flow.api.KycRequirementsUnfulfilledFlow
+import jp.co.soramitsu.oauth.common.navigation.flow.api.NavigationFlow
+import jp.co.soramitsu.oauth.common.navigation.flow.api.destinations.CompatibilityDestination
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,6 +34,8 @@ class MainViewModel @Inject constructor(
     private val kycRepository: KycRepository,
     private val mainRouter: MainRouter,
     val inMemoryRepo: InMemoryRepo,
+    private val pwoAuthClientProxy: PWOAuthClientProxy,
+    @KycRequirementsUnfulfilledFlow private val kycRequirementsUnfulfilledFlow: NavigationFlow,
 ) : BaseViewModel() {
 
     private val _state = MutableStateFlow(MainScreenState())
@@ -38,6 +43,19 @@ class MainViewModel @Inject constructor(
 
     var uiState by mutableStateOf(MainScreenUiState())
         private set
+
+    init {
+        viewModelScope.launch {
+            showLoading(loading = true)
+
+            checkAccessTokenValidity { accessToken, accessTokenExpirationTime ->
+                updateAccessToken(accessToken, accessTokenExpirationTime)
+
+                onAuthSucceed(accessToken)
+                showLoading(false)
+            }
+        }
+    }
 
     private val getUserDataCallback = object : GetUserDataCallback {
         override fun onError(error: OAuthErrorCode, errorMessage: String?) {
@@ -64,7 +82,7 @@ class MainViewModel @Inject constructor(
                     firstName = firstName,
                     lastName = lastName,
                     email = email,
-                    mobileNumber = phoneNumber
+                    mobileNumber = phoneNumber,
                 )
             )
 
@@ -99,9 +117,9 @@ class MainViewModel @Inject constructor(
                     )
                 )
 
-                PayWingsOAuthClient.instance.getUserData(
+                pwoAuthClientProxy.getUserData(
                     accessToken = accessToken,
-                    callback = getUserDataCallback
+                    callback = getUserDataCallback,
                 )
                 showLoading(false)
             }
@@ -110,28 +128,6 @@ class MainViewModel @Inject constructor(
 
     private fun showLoading(loading: Boolean) {
         uiState = uiState.copy(loading = loading)
-    }
-
-    fun setSoraCardInfo(soraCardInfo: SoraCardInfo?) {
-        if (soraCardInfo == null) {
-            return
-        }
-
-        viewModelScope.launch {
-            showLoading(loading = true)
-            userSessionRepository.signInUser(
-                refreshToken = soraCardInfo.refreshToken,
-                accessToken = soraCardInfo.accessToken,
-                expirationTime = soraCardInfo.accessTokenExpirationTime
-            )
-
-            checkAccessTokenValidity { accessToken, accessTokenExpirationTime ->
-                updateAccessToken(accessToken, accessTokenExpirationTime)
-
-                onAuthSucceed(accessToken)
-                showLoading(false)
-            }
-        }
     }
 
     private suspend fun checkAccessTokenValidity(
@@ -153,7 +149,8 @@ class MainViewModel @Inject constructor(
         onNewToken: suspend (accessToken: String, accessTokenExpirationTime: Long) -> Unit
     ) {
         val refreshToken = userSessionRepository.getRefreshToken()
-        PayWingsOAuthClient.instance.getNewAccessToken(
+
+        pwoAuthClientProxy.getNewAccessToken(
             refreshToken = refreshToken,
             callback = RefreshTokenCallbackWrapper(
                 onNewAccessToken = { accessToken, accessTokenExpirationTime ->
@@ -161,7 +158,7 @@ class MainViewModel @Inject constructor(
                 },
                 onError = this@MainViewModel::onError,
                 onUserSignInRequired = this@MainViewModel::onUserSignInRequired
-            ).getNewAccessTokenCallback
+            ).getNewAccessTokenCallback,
         )
     }
 
@@ -191,24 +188,31 @@ class MainViewModel @Inject constructor(
     fun onAuthSucceed(accessToken: String) {
         viewModelScope.launch {
             kycRepository.getKycLastFinalStatus(accessToken).onSuccess { kycResponse ->
-                if (kycResponse != null &&
-                    (kycResponse == SoraCardCommonVerification.Pending || kycResponse == SoraCardCommonVerification.Successful)
+                if (kycResponse != null
+                    && (kycResponse == SoraCardCommonVerification.Rejected ||
+                        kycResponse == SoraCardCommonVerification.Pending ||
+                        kycResponse == SoraCardCommonVerification.Successful)
                 ) {
                     showKycStatusScreen(kycResponse)
                 } else {
-                    checkKycAttemptIsFree(accessToken)
+                    checkKycRequirementsFulfilled(accessToken)
                 }
             }
         }
     }
 
-    private suspend fun checkKycAttemptIsFree(accessToken: String) {
-        kycRepository.hasFreeKycAttempt(accessToken).onSuccess {
-            if (it) {
+    private suspend fun checkKycRequirementsFulfilled(accessToken: String) {
+        val hasFreeAttempt = kycRepository.hasFreeKycAttempt(accessToken).getOrDefault(false)
+        if (inMemoryRepo.isEnoughXorAvailable) {
+            if (hasFreeAttempt) {
                 mainRouter.openGetPrepared()
             } else {
-                mainRouter.openNoFreeKycAttempts()
+                showKycStatusScreen(SoraCardCommonVerification.Rejected)
             }
+        } else {
+            kycRequirementsUnfulfilledFlow.start(
+                fromDestination = CompatibilityDestination(Destination.ENTER_PHONE_NUMBER.route)
+            )
         }
     }
 
@@ -245,7 +249,9 @@ class MainViewModel @Inject constructor(
             }
 
             kycResponse == SoraCardCommonVerification.Rejected -> {
-                mainRouter.openVerificationRejected(additionalDescription = statusDescription)
+                mainRouter.openVerificationRejected(
+                    additionalDescription = statusDescription
+                )
             }
         }
     }

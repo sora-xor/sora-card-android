@@ -6,7 +6,8 @@ import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
-import jp.co.soramitsu.oauth.feature.KycCallback
+import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
+import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.oauth.feature.verify.Timer
@@ -43,10 +44,13 @@ class VerifyPhoneNumberViewModelTest {
     private lateinit var authCallback: OAuthCallback
 
     @Mock
-    private lateinit var kycCallback: KycCallback
+    private lateinit var setActivityResult: SetActivityResult
 
     @Mock
     private lateinit var userSessionRepository: UserSessionRepository
+
+    @Mock
+    private lateinit var pwoAuthClientProxy: PWOAuthClientProxy
 
     @Mock
     private lateinit var inMemoryRepo: InMemoryRepo
@@ -62,14 +66,15 @@ class VerifyPhoneNumberViewModelTest {
             mainRouter,
             userSessionRepository,
             timer,
+            setActivityResult,
             inMemoryRepo,
+            pwoAuthClientProxy,
         )
 
         viewModel.setArgs(
             phoneNumber = "1111111",
             otpLength = 6,
             authCallback = authCallback,
-            kycCallback = kycCallback
         )
     }
 

@@ -40,9 +40,13 @@ interface MainRouter {
 
     fun openVerificationRejected(additionalDescription: String?)
 
-    fun openNoFreeKycAttempts()
-
     fun openSupportChat()
+
+    fun navigate(destinationRoute: String)
+
+    fun popUpToAndNavigate(popUpRoute: String, destinationRoute: String)
+
+    fun popUpTo(destinationRoute: String)
 }
 
 class MainRouterImpl : MainRouter {
@@ -129,42 +133,34 @@ class MainRouterImpl : MainRouter {
     }
 
     override fun openVerificationSuccessful() {
-        navHostController?.navigate(Destination.VERIFICATION_SUCCESSFUL.route) {
-            popUpTo(Destination.ENTER_PHONE_NUMBER.route)
-        }
+        navHostController?.popBackStack()
+        navHostController?.navigate(Destination.VERIFICATION_SUCCESSFUL.route)
     }
 
     override fun openVerificationInProgress() {
-        navHostController?.navigate(Destination.VERIFICATION_IN_PROGRESS.route) {
-            popUpTo(Destination.ENTER_PHONE_NUMBER.route)
-        }
+        navHostController?.popBackStack()
+        navHostController?.navigate(Destination.VERIFICATION_IN_PROGRESS.route)
     }
 
     override fun openVerificationFailed(additionalDescription: String?) {
+        navHostController?.popBackStack()
         navHostController?.apply {
             currentBackStackEntry?.arguments?.putString(
                 Argument.ADDITIONAL_DESCRIPTION.arg,
                 additionalDescription
             )
-            navigate(Destination.VERIFICATION_FAILED.route) {
-                popUpTo(Destination.ENTER_PHONE_NUMBER.route)
-            }
+            navigate(Destination.VERIFICATION_FAILED.route)
         }
     }
 
     override fun openVerificationRejected(additionalDescription: String?) {
+        navHostController?.popBackStack()
         navHostController?.apply {
             currentBackStackEntry?.arguments?.putString(
                 Argument.ADDITIONAL_DESCRIPTION.arg,
                 additionalDescription
             )
             navigate(Destination.VERIFICATION_REJECTED.route)
-        }
-    }
-
-    override fun openNoFreeKycAttempts() {
-        navHostController?.navigate(Destination.NO_MORE_FREE_ATTEMPTS.route) {
-            popUpTo(Destination.ENTER_PHONE_NUMBER.route)
         }
     }
 
@@ -180,5 +176,22 @@ class MainRouterImpl : MainRouter {
         }
 
         activity?.startActivity(intent)
+    }
+
+    override fun navigate(destinationRoute: String) {
+        navHostController?.navigate(destinationRoute)
+    }
+
+    override fun popUpToAndNavigate(popUpRoute: String, destinationRoute: String) {
+        navHostController?.navigate(destinationRoute) {
+            popUpTo(popUpRoute)
+        }
+    }
+
+    override fun popUpTo(destinationRoute: String) {
+        if (navHostController?.currentBackStackEntry?.destination?.route?.contains(destinationRoute) == true)
+            navHostController?.popBackStack(destinationRoute, inclusive = false)
+        else
+            navHostController?.popBackStack(Destination.TERMS_AND_CONDITIONS.route, inclusive = false)
     }
 }

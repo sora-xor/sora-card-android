@@ -5,7 +5,7 @@ import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
-import jp.co.soramitsu.oauth.feature.KycCallback
+import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.feature.terms.and.conditions.model.WebUrl
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
@@ -14,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TermsAndConditionsViewModel @Inject constructor(
-    private val mainRouter: MainRouter
+    private val mainRouter: MainRouter,
+    private val setActivityResult: SetActivityResult,
 ) : BaseViewModel() {
 
     init {
@@ -26,12 +27,6 @@ class TermsAndConditionsViewModel @Inject constructor(
                 navIcon = R.drawable.ic_cross,
             ),
         )
-    }
-
-    private var kycCallback: KycCallback? = null
-
-    fun setArgs(kycCallback: KycCallback) {
-        this.kycCallback = kycCallback
     }
 
     fun onGeneralTermsClick() {
@@ -53,6 +48,6 @@ class TermsAndConditionsViewModel @Inject constructor(
     }
 
     override fun onToolbarNavigation() {
-        kycCallback?.onFinish(SoraCardResult.Canceled)
+        setActivityResult.setResult(SoraCardResult.Canceled)
     }
 }

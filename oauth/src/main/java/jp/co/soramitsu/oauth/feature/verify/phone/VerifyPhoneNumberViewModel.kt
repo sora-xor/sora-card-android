@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.viewModelScope
 import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
-import com.paywings.oauth.android.sdk.initializer.PayWingsOAuthClient
 import com.paywings.oauth.android.sdk.service.callback.SignInWithPhoneNumberRequestOtpCallback
 import com.paywings.oauth.android.sdk.service.callback.SignInWithPhoneNumberVerifyOtpCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +18,8 @@ import jp.co.soramitsu.oauth.base.sdk.SoraCardEnvironmentType
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardError
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.base.state.DialogAlertState
-import jp.co.soramitsu.oauth.feature.KycCallback
+import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
+import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.oauth.feature.verify.Timer
@@ -40,7 +40,9 @@ class VerifyPhoneNumberViewModel @Inject constructor(
     private val mainRouter: MainRouter,
     private val userSessionRepository: UserSessionRepository,
     private val timer: Timer,
+    private val setActivityResult: SetActivityResult,
     private val inMemoryRepo: InMemoryRepo,
+    private val pwoAuthClientProxy: PWOAuthClientProxy,
 ) : BaseViewModel() {
 
     private companion object {
@@ -68,7 +70,6 @@ class VerifyPhoneNumberViewModel @Inject constructor(
     private var otpLength: Int = Int.MAX_VALUE
 
     private var authCallback: OAuthCallback? = null
-    private var kycCallback: KycCallback? = null
 
     init {
         _toolbarState.value = SoramitsuToolbarState(
@@ -112,7 +113,6 @@ class VerifyPhoneNumberViewModel @Inject constructor(
         phoneNumber: String?,
         otpLength: Int?,
         authCallback: OAuthCallback,
-        kycCallback: KycCallback
     ) {
         phoneNumber?.let {
             this.phoneNumber = it
@@ -121,7 +121,6 @@ class VerifyPhoneNumberViewModel @Inject constructor(
             this.otpLength = it
         }
         this.authCallback = authCallback
-        this.kycCallback = kycCallback
     }
 
     private val verifyOtpCallback = object : SignInWithPhoneNumberVerifyOtpCallback {
@@ -198,7 +197,7 @@ class VerifyPhoneNumberViewModel @Inject constructor(
     }
 
     private fun finishWithError(error: SoraCardError) {
-        kycCallback?.onFinish(SoraCardResult.Failure(error = error))
+        setActivityResult.setResult(SoraCardResult.Failure(error = error))
     }
 
     private suspend fun signInUser(
@@ -266,9 +265,9 @@ class VerifyPhoneNumberViewModel @Inject constructor(
         viewModelScope.launch {
             loading(true)
             delay(LOADING_DELAY)
-            PayWingsOAuthClient.instance.signInWithPhoneNumberVerifyOtp(
+            pwoAuthClientProxy.signInWithPhoneNumberVerifyOtp(
                 otp = state.inputTextState.value.text,
-                callback = verifyOtpCallback
+                callback = verifyOtpCallback,
             )
         }
     }
@@ -277,9 +276,9 @@ class VerifyPhoneNumberViewModel @Inject constructor(
         viewModelScope.launch {
             loading(true)
             delay(LOADING_DELAY)
-            PayWingsOAuthClient.instance.signInWithPhoneNumberRequestOtp(
+            pwoAuthClientProxy.signInWithPhoneNumberRequestOtp(
                 phoneNumber = phoneNumber.formatForAuth(),
-                callback = requestOtpCallback
+                callback = requestOtpCallback,
             )
         }
     }
