@@ -97,6 +97,15 @@ private fun GetPreparedScreenContent(
             )
         }
 
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = Dimens.x4),
+            text = stringResource(id = R.string.get_prepared_need),
+            style = MaterialTheme.customTypography.paragraphM,
+            color = MaterialTheme.customColors.fgPrimary
+        )
+
         state.steps.forEach {
             Step(it)
         }

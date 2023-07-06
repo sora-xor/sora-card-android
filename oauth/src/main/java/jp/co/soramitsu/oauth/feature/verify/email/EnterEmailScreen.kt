@@ -34,8 +34,7 @@ fun EnterEmailScreen(
             buttonState = state.buttonState,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             onDataEntered = viewModel::onEmailChanged,
-            onConfirm = viewModel::onRegisterUser,
-            testTagIdPrefix = "EnterEmail"
+            onConfirm = viewModel::onRegisterUser
         )
     }
 }

@@ -37,8 +37,7 @@ fun VerifyPhoneNumberScreen(
             inputTextState = state.inputTextState,
             buttonState = state.buttonState,
             onDataEntered = viewModel::onCodeChanged,
-            onConfirm = viewModel::resendOtp,
-            testTagIdPrefix = "VerifyPhoneNumber"
+            onConfirm = viewModel::resendOtp
         )
     }
 }

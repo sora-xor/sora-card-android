@@ -49,8 +49,7 @@ private fun ChangeEmailContent(
         buttonState = buttonState,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         onDataEntered = onEmailChanged,
-        onConfirm = onConfirm,
-        testTagIdPrefix = "ChangeEmail"
+        onConfirm = onConfirm
     )
 }
 
