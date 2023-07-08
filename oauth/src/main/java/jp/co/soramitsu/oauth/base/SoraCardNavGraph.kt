@@ -168,7 +168,7 @@ internal fun SoraCardNavGraph(
                             name = "/{additionalInfo}"
                         ) {
                             type = NavType.StringType
-                            defaultValue = null
+                            defaultValue = ""
                         },
                     )
                 ) {backStackEntry ->
@@ -182,10 +182,10 @@ internal fun SoraCardNavGraph(
                     route = SoraCardDestinations.VerificationRejected.template,
                     arguments = listOf(
                         navArgument(
-                            name = "/{additionalInfo}"
+                            name = "additionalInfo"
                         ) {
                             type = NavType.StringType
-                            defaultValue = null
+                            defaultValue = ""
                         },
                     )
                 ) {backStackEntry ->

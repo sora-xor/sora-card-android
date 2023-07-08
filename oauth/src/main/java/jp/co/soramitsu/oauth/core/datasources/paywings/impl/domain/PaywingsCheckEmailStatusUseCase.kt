@@ -5,11 +5,9 @@ import com.paywings.oauth.android.sdk.initializer.PayWingsOAuthClient
 import com.paywings.oauth.android.sdk.service.callback.CheckEmailVerifiedCallback
 import jp.co.soramitsu.oauth.core.datasources.paywings.api.PayWingsResponse
 import jp.co.soramitsu.oauth.core.datasources.paywings.impl.utils.parseToString
-import jp.co.soramitsu.oauth.core.datasources.session.api.UserSessionRepository
+import jp.co.soramitsu.oauth.theme.views.Text
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.callbackFlow
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class PaywingsCheckEmailStatusUseCase @Inject constructor() {
@@ -20,15 +18,17 @@ class PaywingsCheckEmailStatusUseCase @Inject constructor() {
         callbackFlow<PayWingsResponse> {
             callback = object : CheckEmailVerifiedCallback {
                 override fun onEmailNotVerified() {
-                    trySendBlocking(
+                    trySend(
                         PayWingsResponse.Result.ResendDelayedVerificationEmailRepeatedly()
                     )
                 }
 
                 override fun onError(error: OAuthErrorCode, errorMessage: String?) {
-                    trySendBlocking(
+                    trySend(
                         PayWingsResponse.Error.OnCheckEmailVerification(
-                            errorMessage = errorMessage ?: error.parseToString()
+                            errorText = Text.SimpleText(
+                                text = errorMessage ?: error.parseToString()
+                            )
                         )
                     )
                 }
@@ -38,7 +38,7 @@ class PaywingsCheckEmailStatusUseCase @Inject constructor() {
                     accessToken: String,
                     accessTokenExpirationTime: Long
                 ) {
-                    trySendBlocking(
+                    trySend(
                         PayWingsResponse.Result.ReceivedAccessTokens(
                             accessToken = accessToken,
                             accessTokenExpirationTime = accessTokenExpirationTime,
@@ -48,7 +48,7 @@ class PaywingsCheckEmailStatusUseCase @Inject constructor() {
                 }
 
                 override fun onUserSignInRequired() {
-                    trySendBlocking(
+                    trySend(
                         PayWingsResponse.NavigationIncentive.OnUserSignInRequiredScreen()
                     )
                 }
@@ -61,5 +61,4 @@ class PaywingsCheckEmailStatusUseCase @Inject constructor() {
     suspend operator fun invoke() = callback?.let {
         PayWingsOAuthClient.instance.checkEmailVerified(callback = it)
     }
-
 }

@@ -5,8 +5,8 @@ import com.paywings.oauth.android.sdk.initializer.PayWingsOAuthClient
 import com.paywings.oauth.android.sdk.service.callback.SendNewVerificationEmailCallback
 import jp.co.soramitsu.oauth.core.datasources.paywings.api.PayWingsResponse
 import jp.co.soramitsu.oauth.core.datasources.paywings.impl.utils.parseToString
+import jp.co.soramitsu.oauth.theme.views.Text
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
@@ -18,15 +18,17 @@ class PaywingsSendVerificationEmailUseCase @Inject constructor() {
         callbackFlow {
             callback = object : SendNewVerificationEmailCallback {
                 override fun onError(error: OAuthErrorCode, errorMessage: String?) {
-                    trySendBlocking(
+                    trySend(
                         PayWingsResponse.Error.OnSendNewVerificationEmail(
-                            errorMessage = errorMessage ?: error.parseToString()
+                            errorText = Text.SimpleText(
+                                text = errorMessage ?: error.parseToString()
+                            )
                         )
                     )
                 }
 
                 override fun onShowEmailConfirmationScreen(email: String, autoEmailSent: Boolean) {
-                    trySendBlocking(
+                    trySend(
                         PayWingsResponse.NavigationIncentive.OnEmailConfirmationRequiredScreen(
                             email = email,
                             autoEmailBeenSent = autoEmailSent
@@ -35,7 +37,7 @@ class PaywingsSendVerificationEmailUseCase @Inject constructor() {
                 }
 
                 override fun onUserSignInRequired() {
-                    trySendBlocking(
+                    trySend(
                         PayWingsResponse.NavigationIncentive.OnUserSignInRequiredScreen()
                     )
                 }
@@ -49,5 +51,4 @@ class PaywingsSendVerificationEmailUseCase @Inject constructor() {
             callback = it
         )
     }
-
 }

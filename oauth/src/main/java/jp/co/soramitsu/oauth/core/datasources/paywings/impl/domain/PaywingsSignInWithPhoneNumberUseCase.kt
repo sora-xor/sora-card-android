@@ -5,8 +5,8 @@ import com.paywings.oauth.android.sdk.initializer.PayWingsOAuthClient
 import com.paywings.oauth.android.sdk.service.callback.SignInWithPhoneNumberVerifyOtpCallback
 import jp.co.soramitsu.oauth.core.datasources.paywings.api.PayWingsResponse
 import jp.co.soramitsu.oauth.core.datasources.paywings.impl.utils.parseToString
+import jp.co.soramitsu.oauth.theme.views.Text
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
@@ -18,15 +18,17 @@ class PaywingsSignInWithPhoneNumberUseCase @Inject constructor() {
         callbackFlow {
             callback = object : SignInWithPhoneNumberVerifyOtpCallback {
                 override fun onError(error: OAuthErrorCode, errorMessage: String?) {
-                    trySendBlocking(
+                    trySend(
                         PayWingsResponse.Error.OnSignInWithPhoneNumberVerifyOtp(
-                            errorMessage = errorMessage ?: error.parseToString()
+                            errorText = Text.SimpleText(
+                                text = errorMessage ?: error.parseToString()
+                            )
                         )
                     )
                 }
 
                 override fun onShowEmailConfirmationScreen(email: String, autoEmailSent: Boolean) {
-                    trySendBlocking(
+                    trySend(
                         PayWingsResponse.NavigationIncentive.OnEmailConfirmationRequiredScreen(
                             email = email,
                             autoEmailBeenSent = autoEmailSent
@@ -35,7 +37,7 @@ class PaywingsSignInWithPhoneNumberUseCase @Inject constructor() {
                 }
 
                 override fun onShowRegistrationScreen() {
-                    trySendBlocking(
+                    trySend(
                         PayWingsResponse.NavigationIncentive.OnRegistrationRequiredScreen()
                     )
                 }
@@ -45,7 +47,7 @@ class PaywingsSignInWithPhoneNumberUseCase @Inject constructor() {
                     accessToken: String,
                     accessTokenExpirationTime: Long
                 ) {
-                    trySendBlocking(
+                    trySend(
                         PayWingsResponse.Result.ReceivedAccessTokens(
                             accessToken = accessToken,
                             accessTokenExpirationTime = accessTokenExpirationTime,
@@ -55,14 +57,14 @@ class PaywingsSignInWithPhoneNumberUseCase @Inject constructor() {
                 }
 
                 override fun onUserSignInRequired() {
-                    trySendBlocking(
+                    trySend(
                         PayWingsResponse.Result.ResendDelayedOtpRepeatedly()
                     )
                 }
 
                 override fun onVerificationFailed() {
-                    trySendBlocking(
-                        PayWingsResponse.Error.OnVerificationByOtpFailed()
+                    trySend(
+                        PayWingsResponse.Error.OnVerificationByOtpFailed
                     )
                 }
             }
@@ -76,5 +78,4 @@ class PaywingsSignInWithPhoneNumberUseCase @Inject constructor() {
             callback = it
         )
     }
-
 }

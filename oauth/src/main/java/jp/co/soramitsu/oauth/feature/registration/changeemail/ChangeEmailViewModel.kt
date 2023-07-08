@@ -50,12 +50,12 @@ class ChangeEmailViewModel @Inject constructor(
         )
 
         accountInteractor.resultFlow.onEach {
-            state = state.copy(
-                inputTextState = state.inputTextState.copy(
-                    error = true,
-                    descriptionText = it.text
-                )
-            )
+//            state = state.copy(
+//                inputTextState = state.inputTextState.copy(
+//                    error = true,
+//                    descriptionText = it.text
+//                )
+//            )
         }.launchIn(viewModelScope)
     }
 

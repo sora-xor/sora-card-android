@@ -18,18 +18,18 @@ class ComposeRouterImpl @Inject constructor(
     override val navController: NavHostController = navHostController
 
     override fun setNewStartDestination(destination: SoraCardDestinations) {
-        _startDestinationState.value = destination
+//        _startDestinationState.value = destination
     }
 
     override fun navigateTo(destination: SoraCardDestinations) {
-        navHostController.navigate(destination.route)
+//        navHostController.navigate(destination.route)
     }
 
     override fun popBack() {
-        navHostController.popBackStack()
+//        navHostController.popBackStack()
     }
 
     override fun clearBackStack() {
-        navHostController.popBackStack(navHostController.graph.id, true)
+//        navHostController.popBackStack(navHostController.graph.id, true)
     }
 }

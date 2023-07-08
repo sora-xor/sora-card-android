@@ -65,13 +65,13 @@ class VerifyPhoneNumberViewModel @Inject constructor(
 
         accountInteractor.resultFlow
             .onEach {
-                loading(false)
-                state = state.copy(
-                    inputTextState = state.inputTextState.copy(
-                        error = true,
-                        descriptionText = it.text
-                    )
-                )
+//                loading(false)
+//                state = state.copy(
+//                    inputTextState = state.inputTextState.copy(
+//                        error = true,
+//                        descriptionText = it.text
+//                    )
+//                )
             }
 
         setUpOtpResendTimer()

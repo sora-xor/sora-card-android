@@ -5,8 +5,8 @@ import com.paywings.oauth.android.sdk.initializer.PayWingsOAuthClient
 import com.paywings.oauth.android.sdk.service.callback.SignInWithPhoneNumberRequestOtpCallback
 import jp.co.soramitsu.oauth.core.datasources.paywings.impl.utils.parseToString
 import jp.co.soramitsu.oauth.core.datasources.paywings.api.PayWingsResponse
+import jp.co.soramitsu.oauth.theme.views.Text
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
@@ -18,15 +18,17 @@ class PaywingsRequestOtpByPhoneNumberUseCase @Inject constructor() {
         callbackFlow<PayWingsResponse> {
             callback = object : SignInWithPhoneNumberRequestOtpCallback {
                 override fun onError(error: OAuthErrorCode, errorMessage: String?) {
-                    trySendBlocking(
+                    trySend(
                         PayWingsResponse.Error.OnSignWithPhoneNumberRequestOtp(
-                            errorMessage = errorMessage ?: error.parseToString()
+                            errorText = Text.SimpleText(
+                                text = errorMessage ?: error.parseToString()
+                            )
                         )
                     )
                 }
 
                 override fun onShowOtpInputScreen(otpLength: Int) {
-                    trySendBlocking(
+                    trySend(
                         PayWingsResponse.NavigationIncentive.OnVerificationOtpBeenSent(
                             otpLength = otpLength
                         )
@@ -45,5 +47,4 @@ class PaywingsRequestOtpByPhoneNumberUseCase @Inject constructor() {
             callback = it
         )
     }
-
 }

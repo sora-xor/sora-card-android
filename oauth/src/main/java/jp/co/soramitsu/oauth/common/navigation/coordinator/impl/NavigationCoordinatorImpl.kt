@@ -17,9 +17,6 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
 
 class NavigationCoordinatorImpl @Inject constructor(
@@ -33,8 +30,6 @@ class NavigationCoordinatorImpl @Inject constructor(
     private val kycAndVerificationFlow =
         userSessionRepository.run {
             combine(kycStatusFlow, additionalVerificationInfoFlow) { kycStatus, additionalVerificationInfo ->
-                println("This is checkpoint: kycAndVerificationFlow.kycStatus - $kycStatus")
-
                 when(kycStatus) {
                     KycStatus.NotInitialized -> {
                         /* DO NOTHING */
@@ -73,11 +68,9 @@ class NavigationCoordinatorImpl @Inject constructor(
         }
 
     private val loginAndRegistrationFlow = payWingsRepository.responseFlow
-        .onEach {
-            println("This is checkpoint: loginAndRegistrationFlow.payWingsResponse - $it")
-        }.filter {
+        .filter {
             it is PayWingsResponse.NavigationIncentive
-                    || it is PayWingsResponse.Error.OnGetNewAccessToken
+                || it is PayWingsResponse.Error.OnGetNewAccessToken
         }.map { payWingsResponse ->
             when(payWingsResponse) {
                 is PayWingsResponse.Error -> {
@@ -123,10 +116,6 @@ class NavigationCoordinatorImpl @Inject constructor(
         }
 
     override fun start(coroutineScope: CoroutineScope) =
-        merge(loginAndRegistrationFlow, kycAndVerificationFlow).onStart {
-            println("This is checkpoint: NavigationCoordinatorImpl.onStart")
-        }.onCompletion {
-            println("This is checkpoint: NavigationCoordinatorImpl.onCompletion")
-        }.launchIn(coroutineScope)
+        merge(loginAndRegistrationFlow, kycAndVerificationFlow).launchIn(coroutineScope)
 
 }

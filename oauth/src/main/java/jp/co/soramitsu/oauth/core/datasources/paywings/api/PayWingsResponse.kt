@@ -1,42 +1,54 @@
 package jp.co.soramitsu.oauth.core.datasources.paywings.api
 
+import jp.co.soramitsu.oauth.theme.views.Text
+
 sealed interface PayWingsResponse {
+
+    object Loading: PayWingsResponse
 
     sealed interface Error : PayWingsResponse {
 
-        class OnChangeUnverifiedEmail(
-            val errorMessage: String
+        @JvmInline
+        value class OnChangeUnverifiedEmail(
+            val errorText: Text
         ): Error
 
-        class OnCheckEmailVerification(
-            val errorMessage: String
+        @JvmInline
+        value class OnCheckEmailVerification(
+            val errorText: Text
         ): Error
 
-        class OnGetNewAccessToken(
-            val errorMessage: String
+        @JvmInline
+        value class OnGetNewAccessToken(
+            val errorText: Text
         ): Error
 
-        class OnGetUserData(
-            val errorMessage: String
+        @JvmInline
+        value class OnGetUserData(
+            val errorText: Text
         ): Error
 
-        class OnRegisterUser(
-            val errorMessage: String
+        @JvmInline
+        value class OnRegisterUser(
+            val errorText: Text
         ): Error
 
-        class OnSendNewVerificationEmail(
-            val errorMessage: String
+        @JvmInline
+        value class OnSendNewVerificationEmail(
+            val errorText: Text
         ): Error
 
-        class OnSignInWithPhoneNumberVerifyOtp(
-            val errorMessage: String
+        @JvmInline
+        value class OnSignInWithPhoneNumberVerifyOtp(
+            val errorText: Text
         ): Error
 
-        class OnSignWithPhoneNumberRequestOtp(
-            val errorMessage: String
+        @JvmInline
+        value class OnSignWithPhoneNumberRequestOtp(
+            val errorText: Text
         ): Error
 
-        class OnVerificationByOtpFailed: Error
+        object OnVerificationByOtpFailed: Error
 
     }
 

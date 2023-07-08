@@ -8,6 +8,8 @@ import dagger.hilt.android.scopes.ActivityRetainedScoped
 import dagger.hilt.components.SingletonComponent
 import jp.co.soramitsu.oauth.core.engines.activityresult.api.ActivityResult
 import jp.co.soramitsu.oauth.core.engines.activityresult.impl.ActivityResultImpl
+import jp.co.soramitsu.oauth.core.engines.coroutines.api.CoroutinesStorage
+import jp.co.soramitsu.oauth.core.engines.coroutines.impl.CoroutinesStorageImpl
 import jp.co.soramitsu.oauth.core.engines.preferences.api.KeyValuePreferences
 import jp.co.soramitsu.oauth.core.engines.preferences.impl.KeyValuePreferencesImpl
 import jp.co.soramitsu.oauth.core.engines.rest.api.RestClient
@@ -30,6 +32,12 @@ interface ActivityRetainedEnginesBinderModule {
 @Module
 @InstallIn(SingletonComponent::class)
 interface SingletonEnginesBinderModule {
+
+    @Binds
+    @Singleton
+    fun bindCoroutinesStorage(
+        coroutinesStorageImpl: CoroutinesStorageImpl
+    ): CoroutinesStorage
 
     @Binds
     @Singleton

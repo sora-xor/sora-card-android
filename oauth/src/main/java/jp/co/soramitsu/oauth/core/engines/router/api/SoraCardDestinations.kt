@@ -43,14 +43,14 @@ sealed class SoraCardDestinations(val route: String) {
     object VerificationInProgress: SoraCardDestinations("VERIFICATION_IN_PROGRESS")
     class VerificationRejected(
         additionalInfo: String?
-    ): SoraCardDestinations("VERIFICATION_REJECTED/{$additionalInfo}") {
+    ): SoraCardDestinations("VERIFICATION_REJECTED/${additionalInfo ?: "1"}") {
         companion object {
             const val template = "VERIFICATION_REJECTED/{additionalInfo}"
         }
     }
     class VerificationFailed(
         additionalInfo: String?
-    ): SoraCardDestinations("VERIFICATION_FAILED/{$additionalInfo}") {
+    ): SoraCardDestinations("VERIFICATION_FAILED/{${additionalInfo ?: ""}}") {
         companion object {
             const val template = "VERIFICATION_FAILED/{additionalInfo}"
         }

@@ -10,8 +10,11 @@ import jp.co.soramitsu.oauth.core.datasources.paywings.impl.domain.PaywingsRegis
 import jp.co.soramitsu.oauth.core.datasources.paywings.impl.domain.PaywingsRequestOtpByPhoneNumberUseCase
 import jp.co.soramitsu.oauth.core.datasources.paywings.impl.domain.PaywingsSendVerificationEmailUseCase
 import jp.co.soramitsu.oauth.core.datasources.paywings.impl.domain.PaywingsSignInWithPhoneNumberUseCase
-import kotlinx.coroutines.flow.Flow
+import jp.co.soramitsu.oauth.core.engines.coroutines.api.CoroutinesStorage
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 class PayWingsRepositoryImpl @Inject constructor(
@@ -22,10 +25,11 @@ class PayWingsRepositoryImpl @Inject constructor(
     private val registerUserUseCase: PaywingsRegisterUserUseCase,
     private val requestOtpByPhoneNumberUseCase: PaywingsRequestOtpByPhoneNumberUseCase,
     private val sendVerificationEmailUseCase: PaywingsSendVerificationEmailUseCase,
-    private val signInWithPhoneNumberUseCase: PaywingsSignInWithPhoneNumberUseCase
+    private val signInWithPhoneNumberUseCase: PaywingsSignInWithPhoneNumberUseCase,
+    private val coroutinesStorage: CoroutinesStorage
 ): PayWingsRepository {
 
-    override val responseFlow: Flow<PayWingsResponse> = merge(
+    override val responseFlow: StateFlow<PayWingsResponse> = merge(
         changeUnverifiedEmailUseCase.changeUnverifiedEmailCallbackFlow,
         checkEmailStatusUseCase.checkEmailVerifiedCallbackFlow,
         getAccessTokenUseCase.getNewAccessTokenCallbackFlow,
@@ -34,6 +38,10 @@ class PayWingsRepositoryImpl @Inject constructor(
         requestOtpByPhoneNumberUseCase.requestOtpByPhoneNumberCallbackFlow,
         sendVerificationEmailUseCase.sendNewVerificationEmailCallbackFlow,
         signInWithPhoneNumberUseCase.signInWithPhoneNumberVerifyOtpCallbackFlow
+    ).stateIn(
+        coroutinesStorage.supervisedIoScope,
+        SharingStarted.WhileSubscribed(STOP_STATES_EMISSION_AFTER),
+        PayWingsResponse.Loading
     )
 
     override suspend fun changeUnverifiedEmail(email: String) {
@@ -66,5 +74,9 @@ class PayWingsRepositoryImpl @Inject constructor(
 
     override suspend fun verifyPhoneNumberWithOtp(otpCode: String) {
         signInWithPhoneNumberUseCase.invoke(otpCode)
+    }
+
+    private companion object {
+        const val STOP_STATES_EMISSION_AFTER = 5_000L
     }
 }

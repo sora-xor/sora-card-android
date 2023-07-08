@@ -37,15 +37,15 @@ class VerifyEmailViewModel @Inject constructor(
             }
 
             resultFlow.onEach {
-                loading(false)
-                dialogState = DialogAlertState(
-                    title = it.text,
-                    message = it.text,
-                    dismissAvailable = true,
-                    onPositive = {
-                        dialogState = null
-                    }
-                )
+//                loading(false)
+//                dialogState = DialogAlertState(
+//                    title = it.text,
+//                    message = it.text,
+//                    dismissAvailable = true,
+//                    onPositive = {
+//                        dialogState = null
+//                    }
+//                )
             }.launchIn(viewModelScope)
         }
 

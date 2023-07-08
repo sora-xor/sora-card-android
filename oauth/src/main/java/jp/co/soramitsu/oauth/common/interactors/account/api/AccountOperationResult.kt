@@ -4,6 +4,8 @@ import jp.co.soramitsu.oauth.theme.views.Text
 
 sealed interface AccountOperationResult {
 
+    object Loading: AccountOperationResult
+
     object Executed: AccountOperationResult
 
     @JvmInline

@@ -5,8 +5,8 @@ import com.paywings.oauth.android.sdk.initializer.PayWingsOAuthClient
 import com.paywings.oauth.android.sdk.service.callback.GetUserDataCallback
 import jp.co.soramitsu.oauth.core.datasources.paywings.api.PayWingsResponse
 import jp.co.soramitsu.oauth.core.datasources.paywings.impl.utils.parseToString
+import jp.co.soramitsu.oauth.theme.views.Text
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
@@ -18,9 +18,11 @@ class PaywingsGetUserDataUseCase @Inject constructor() {
         callbackFlow {
             callback = object : GetUserDataCallback {
                 override fun onError(error: OAuthErrorCode, errorMessage: String?) {
-                    trySendBlocking(
+                    trySend(
                         PayWingsResponse.Error.OnGetUserData(
-                            errorMessage = errorMessage ?: error.parseToString()
+                            errorText = Text.SimpleText(
+                                text = errorMessage ?: error.parseToString()
+                            )
                         )
                     )
                 }
@@ -33,7 +35,7 @@ class PaywingsGetUserDataUseCase @Inject constructor() {
                     emailConfirmed: Boolean,
                     phoneNumber: String?
                 ) {
-                    trySendBlocking(
+                    trySend(
                         PayWingsResponse.Result.ReceivedUserData(
                             userId = userId,
                             firstName = firstName,
@@ -55,5 +57,4 @@ class PaywingsGetUserDataUseCase @Inject constructor() {
             callback = it
         )
     }
-
 }

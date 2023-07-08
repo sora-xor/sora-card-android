@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.CircularProgressIndicator
@@ -59,8 +60,8 @@ class CardActivity : AppCompatActivity(R.layout.card_activity) {
         super.onCreate(savedInstanceState)
         setContent {
             AuthSdkTheme {
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    val isLoading = remember {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    val isLoading = remember(composeRouter.startDestination.value) {
                         derivedStateOf {
                             composeRouter.startDestination.value === SoraCardDestinations.Loading
                         }

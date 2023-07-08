@@ -1,10 +1,10 @@
 package jp.co.soramitsu.oauth.common.interactors.account.api
 
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharedFlow
 
 interface AccountInteractor {
 
-    val resultFlow: Flow<AccountOperationResult.Error>
+    val resultFlow: SharedFlow<AccountOperationResult>
 
     suspend fun checkKycVerificationStatus()
 

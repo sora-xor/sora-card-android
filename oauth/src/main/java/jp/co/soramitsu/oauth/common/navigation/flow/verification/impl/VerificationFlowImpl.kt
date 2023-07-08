@@ -40,7 +40,7 @@ class VerificationFlowImpl @Inject constructor(
                 )
             is VerificationDestination.VerificationFailed ->
                 composeRouter.setNewStartDestination(
-                    SoraCardDestinations.VerificationRejected(
+                    SoraCardDestinations.VerificationFailed(
                         additionalInfo = destination.additionalInfo
                     )
                 )

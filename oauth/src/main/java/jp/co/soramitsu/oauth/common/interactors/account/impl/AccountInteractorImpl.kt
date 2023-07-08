@@ -11,19 +11,16 @@ import jp.co.soramitsu.oauth.core.datasources.paywings.api.PayWingsRepository
 import jp.co.soramitsu.oauth.core.datasources.paywings.api.PayWingsResponse
 import jp.co.soramitsu.oauth.core.datasources.session.api.UserSessionRepository
 import jp.co.soramitsu.oauth.core.datasources.tachi.api.TachiRepository
+import jp.co.soramitsu.oauth.core.engines.coroutines.api.CoroutinesStorage
 import jp.co.soramitsu.oauth.core.engines.rest.api.RestException
 import jp.co.soramitsu.oauth.core.engines.rest.api.parseToError
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.launch
 import java.util.StringJoiner
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -32,7 +29,8 @@ class AccountInteractorImpl @Inject constructor(
     private val inMemoryRepo: InMemoryRepo,
     private val tachiRepository: TachiRepository,
     private val payWingsRepository: PayWingsRepository,
-    private val userSessionRepository: UserSessionRepository
+    private val userSessionRepository: UserSessionRepository,
+    private val coroutinesStorage: CoroutinesStorage
 ): AccountInteractor {
 
     private val header by lazy {
@@ -45,163 +43,165 @@ class AccountInteractorImpl @Inject constructor(
 
     private val cache: MutableMap<String, Any> = mutableMapOf()
 
-    override val resultFlow: Flow<AccountOperationResult.Error> = payWingsRepository.responseFlow
-        .onStart {
-            println("This is checkpoint: accountInteractor.resultFlow.onStart")
-        }.onEach {
-            println("This is checkpoint: resultFlow.payWingsResponse - $it")
-        }.onCompletion {
-            println("This is checkpoint: accountInteractor.resultFlow.onCompletion")
-        }.filter {
-            val result = it !is PayWingsResponse.NavigationIncentive
-                    && it !is PayWingsResponse.Error.OnGetUserData
-                    && it !is PayWingsResponse.Result.ReceivedUserData
-
-            println("This is checkpoint: payWingsResponse filter result - $result")
-
-            result
-        }.map {
-            return@map when (it) {
-                is PayWingsResponse.Result -> {
+    override val resultFlow: SharedFlow<AccountOperationResult> =
+        payWingsRepository.responseFlow
+            .filter {
+                it !is PayWingsResponse.NavigationIncentive
+                        && it !is PayWingsResponse.Error.OnGetUserData
+                        && it !is PayWingsResponse.Result.ReceivedUserData
+            }.map {
+                try {
                     when (it) {
-                        is PayWingsResponse.Result.ReceivedAccessTokens -> {
-                            userSessionRepository.setNewAccessToken(
-                                accessToken = it.accessToken,
-                                expirationTime = it.accessTokenExpirationTime
-                            )
-                            userSessionRepository.setRefreshToken(
-                                refreshToken = it.refreshToken
-                            )
+                        is PayWingsResponse.Result -> {
+                            when (it) {
+                                is PayWingsResponse.Result.ReceivedAccessTokens -> {
+                                    coroutinesStorage.supervisedIoScope.launch {
+                                        userSessionRepository.setNewAccessToken(
+                                            accessToken = it.accessToken,
+                                            expirationTime = it.accessTokenExpirationTime
+                                        )
+                                        userSessionRepository.setRefreshToken(
+                                            refreshToken = it.refreshToken
+                                        )
 
-                            val kycStatusToSave =
-                                tachiRepository.getKycStatus(header, it.accessToken).getOrThrow()
-                                    ?: KycStatus.NotInitialized
+                                        val kycStatusToSave =
+                                            tachiRepository.getKycStatus(header, it.accessToken).getOrThrow()
+                                                ?: KycStatus.NotInitialized
 
-                            userSessionRepository.setKycStatus(kycStatusToSave)
+                                        userSessionRepository.setKycStatus(kycStatusToSave)
+                                    }
 
-                            AccountOperationResult.Executed
+                                    AccountOperationResult.Executed
+                                }
+
+                                is PayWingsResponse.Result.ReceivedNewAccessToken -> {
+                                    coroutinesStorage.supervisedIoScope.launch {
+                                        userSessionRepository.setNewAccessToken(
+                                            accessToken = it.accessToken,
+                                            expirationTime = it.accessTokenExpirationTime
+                                        )
+
+                                        val kycStatusToSave =
+                                            tachiRepository.getKycStatus(header, it.accessToken).getOrThrow()
+                                                ?: KycStatus.NotInitialized
+
+                                        userSessionRepository.setKycStatus(kycStatusToSave)
+                                    }
+
+                                    AccountOperationResult.Executed
+                                }
+
+                                is PayWingsResponse.Result.ReceivedUserData -> {
+                                    AccountOperationResult.Executed // is handled in UserInteractor
+                                }
+
+                                is PayWingsResponse.Result.ResendDelayedOtpRepeatedly -> {
+                                    coroutinesStorage.supervisedIoScope.launch {
+                                        delay(OTP_VERIFICATION_STATUS_DELAY_IN_MILLS)
+                                        requestOtpCode(
+                                            phoneNumber = cache[PHONE_NUMBER] as String
+                                        )
+                                    }
+
+                                    AccountOperationResult.Loading
+                                }
+
+                                is PayWingsResponse.Result.ResendDelayedVerificationEmailRepeatedly -> {
+                                    coroutinesStorage.supervisedIoScope.launch {
+                                        delay(EMAIL_VERIFICATION_STATUS_DELAY_IN_MILLS)
+                                        checkEmailVerificationStatus()
+                                    }
+
+                                    AccountOperationResult.Loading
+                                }
+                            }
                         }
 
-                        is PayWingsResponse.Result.ReceivedNewAccessToken -> {
-                            userSessionRepository.setNewAccessToken(
-                                accessToken = it.accessToken,
-                                expirationTime = it.accessTokenExpirationTime
-                            )
+                        is PayWingsResponse.Error -> {
+                            when (it) {
+                                is PayWingsResponse.Error.OnChangeUnverifiedEmail -> {
+                                    AccountOperationResult.Error(
+                                        text = it.errorText
+                                    )
+                                }
 
-                            val kycStatusToSave =
-                                tachiRepository.getKycStatus(header, it.accessToken).getOrThrow()
-                                    ?: KycStatus.NotInitialized
+                                is PayWingsResponse.Error.OnCheckEmailVerification -> {
+                                    AccountOperationResult.Error(
+                                        text = it.errorText
+                                    )
+                                }
 
-                            userSessionRepository.setKycStatus(kycStatusToSave)
+                                is PayWingsResponse.Error.OnGetNewAccessToken -> {
+                                    AccountOperationResult.Error(
+                                        text = it.errorText
+                                    )
+                                }
 
-                            AccountOperationResult.Executed
+                                is PayWingsResponse.Error.OnGetUserData -> {
+                                    AccountOperationResult.Executed  // is handled in UserInteractor
+                                }
+
+                                is PayWingsResponse.Error.OnSendNewVerificationEmail -> {
+                                    AccountOperationResult.Error(
+                                        text = it.errorText
+                                    )
+                                }
+
+                                is PayWingsResponse.Error.OnSignInWithPhoneNumberVerifyOtp -> {
+                                    AccountOperationResult.Error(
+                                        text = it.errorText
+                                    )
+                                }
+
+                                is PayWingsResponse.Error.OnRegisterUser -> {
+                                    AccountOperationResult.Error(
+                                        text = it.errorText
+                                    )
+                                }
+
+                                is PayWingsResponse.Error.OnSignWithPhoneNumberRequestOtp -> {
+                                    AccountOperationResult.Error(
+                                        text = it.errorText
+                                    )
+                                }
+
+                                is PayWingsResponse.Error.OnVerificationByOtpFailed -> {
+                                    AccountOperationResult.Error(
+                                        text = Text.StringRes(id = 0)
+                                    )
+                                    TODO("Add String Res Message")
+                                }
+                            }
                         }
 
-                        is PayWingsResponse.Result.ReceivedUserData -> {
-                            AccountOperationResult.Executed // is handled in UserInteractor
+                        is PayWingsResponse.Loading -> {
+                            AccountOperationResult.Loading
                         }
 
-                        is PayWingsResponse.Result.ResendDelayedOtpRepeatedly -> {
-                            delay(OTP_VERIFICATION_STATUS_DELAY_IN_MILLS)
-                            requestOtpCode(
-                                phoneNumber = cache[PHONE_NUMBER] as String
-                            )
-
-                            AccountOperationResult.Executed
-
-                            // TODO launch delay in separate coroutine
-                        }
-
-                        is PayWingsResponse.Result.ResendDelayedVerificationEmailRepeatedly -> {
-                            delay(EMAIL_VERIFICATION_STATUS_DELAY_IN_MILLS)
-                            checkEmailVerificationStatus()
-
-                            AccountOperationResult.Executed
-
-                            // TODO launch delay in separate coroutine
-                        }
+                        else -> { AccountOperationResult.Executed }
                     }
-                }
-
-                is PayWingsResponse.Error -> {
-                    when (it) {
-                        is PayWingsResponse.Error.OnChangeUnverifiedEmail -> {
-                            AccountOperationResult.Error(
-                                text = Text.SimpleText(text = it.errorMessage)
+                } catch (throwable: Throwable) {
+                    if (throwable is RestException) {
+                        AccountOperationResult.Error(
+                            text = Text.SimpleText(
+                                text = throwable.parseToError()
                             )
-                        }
-
-                        is PayWingsResponse.Error.OnCheckEmailVerification -> {
-                            AccountOperationResult.Error(
-                                text = Text.SimpleText(text = it.errorMessage)
-                            )
-                        }
-
-                        is PayWingsResponse.Error.OnGetNewAccessToken -> {
-                            AccountOperationResult.Error(
-                                text = Text.SimpleText(text = it.errorMessage)
-                            )
-                        }
-
-                        is PayWingsResponse.Error.OnGetUserData -> {
-                            AccountOperationResult.Executed  // is handled in UserInteractor
-                        }
-
-                        is PayWingsResponse.Error.OnSendNewVerificationEmail -> {
-                            AccountOperationResult.Error(
-                                text = Text.SimpleText(text = it.errorMessage)
-                            )
-                        }
-
-                        is PayWingsResponse.Error.OnSignInWithPhoneNumberVerifyOtp -> {
-                            AccountOperationResult.Error(
-                                text = Text.SimpleText(text = it.errorMessage)
-                            )
-                        }
-
-                        is PayWingsResponse.Error.OnRegisterUser -> {
-                            AccountOperationResult.Error(
-                                text = Text.SimpleText(text = it.errorMessage)
-                            )
-                        }
-
-                        is PayWingsResponse.Error.OnSignWithPhoneNumberRequestOtp -> {
-                            AccountOperationResult.Error(
-                                text = Text.SimpleText(text = it.errorMessage)
-                            )
-                        }
-
-                        is PayWingsResponse.Error.OnVerificationByOtpFailed -> {
-                            AccountOperationResult.Error(
-                                text = Text.StringRes(id = 0)
-                            )
-                            TODO("Add String Res Message")
-                        }
+                        )
                     }
-                }
 
-                else -> { AccountOperationResult.Executed }
-            }
-        }.catch { throwable ->
-            with(throwable) {
-                if (this !is RestException) {
                     AccountOperationResult.Error(
                         text = Text.StringRes(
                             id = R.string.cant_fetch_data
                         )
-                    ).also { emit(it) }
-
-                    return@with
-                }
-
-                AccountOperationResult.Error(
-                    text = Text.SimpleText(
-                        text = parseToError()
                     )
-                ).also { emit(it) }
-            }
-        }.flowOn(Dispatchers.IO)
-        .filterIsInstance()
+                }
+            }.filter {
+                it !is AccountOperationResult.Executed
+            }.shareIn(
+                coroutinesStorage.supervisedIoScope,
+                SharingStarted.WhileSubscribed(),
+                SHARED_FLOW_REPLAY_COUNT
+            )
 
     override suspend fun checkKycVerificationStatus() {
         val (accessToken, accessTokenExpirationTime, refreshToken) =
@@ -272,5 +272,7 @@ class AccountInteractorImpl @Inject constructor(
 
         const val EMAIL_VERIFICATION_STATUS_DELAY_IN_MILLS = 5_000L
         const val OTP_VERIFICATION_STATUS_DELAY_IN_MILLS = 300L
+
+        const val SHARED_FLOW_REPLAY_COUNT = 1
     }
 }

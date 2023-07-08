@@ -25,20 +25,19 @@ class MainViewModel @Inject constructor(
 
     init {
         with(accountInteractor) {
-            viewModelScope.launch {
-                checkKycVerificationStatus()
-            }
-
-            resultFlow.onEach {
-                println("This is checkpoint: error - $it")
-                dialogState = DialogAlertState(
-                    title = it.text,
-                    message = it.text,
-                    dismissAvailable = true,
-                    onPositive = {
-                        dialogState = null
-                    }
-                )
+            resultFlow.onStart {
+                viewModelScope.launch {
+                    checkKycVerificationStatus()
+                }
+            }.onEach {
+//                dialogState = DialogAlertState(
+//                    title = it.text,
+//                    message = it.text,
+//                    dismissAvailable = true,
+//                    onPositive = {
+//                        dialogState = null
+//                    }
+//                )
             }.launchIn(viewModelScope)
         }
     }
