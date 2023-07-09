@@ -12,6 +12,8 @@ import jp.co.soramitsu.oauth.common.interactors.account.api.AccountInteractor
 import jp.co.soramitsu.oauth.common.navigation.flow.registration.api.RegistrationFlow
 import jp.co.soramitsu.oauth.core.engines.timer.Timer
 import jp.co.soramitsu.oauth.base.extension.format
+import jp.co.soramitsu.oauth.common.navigation.flow.registration.api.RegistrationDestination
+import jp.co.soramitsu.oauth.common.navigation.flow.verification.api.VerificationDestination
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
@@ -31,6 +33,23 @@ class VerifyEmailViewModel @Inject constructor(
         private set
 
     init {
+        registrationFlow.args[RegistrationDestination.EmailConfirmation::class.java.name]
+            .apply {
+                if (this == null)
+                    return@apply
+
+                state = state.copy(
+                    email = getString(
+                        RegistrationDestination.EmailConfirmation.EMAIL_KEY,
+                        ""
+                    ),
+                    autoSentEmail = getBoolean(
+                        RegistrationDestination.EmailConfirmation.AUTO_EMAIL_BEEN_SENT_KEY,
+                        false
+                    )
+                )
+            }
+
         with(accountInteractor) {
             viewModelScope.launch {
                 checkEmailVerificationStatus()

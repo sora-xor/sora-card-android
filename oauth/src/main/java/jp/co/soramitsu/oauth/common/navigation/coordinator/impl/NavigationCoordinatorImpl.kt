@@ -1,5 +1,6 @@
 package jp.co.soramitsu.oauth.common.navigation.coordinator.impl
 
+import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.core.datasources.tachi.api.models.KycStatus
 import jp.co.soramitsu.oauth.common.navigation.flow.login.api.LoginDestination
 import jp.co.soramitsu.oauth.common.navigation.coordinator.api.NavigationCoordinator
@@ -22,6 +23,7 @@ import javax.inject.Inject
 class NavigationCoordinatorImpl @Inject constructor(
     payWingsRepository: PayWingsRepository,
     userSessionRepository: UserSessionRepository,
+    inMemoryRepo: InMemoryRepo,
     private val loginFlow: LoginFlow,
     private val registrationFlow: RegistrationFlow,
     private val verificationFlow: VerificationFlow,
@@ -35,9 +37,11 @@ class NavigationCoordinatorImpl @Inject constructor(
                         /* DO NOTHING */
                     }
                     KycStatus.Started -> {
-                        verificationFlow.onStart(
-                            destination = VerificationDestination.Start
-                        )
+                        val destination = if (inMemoryRepo.userAvailableXorAmount < 100)
+                            VerificationDestination.NotEnoughXor else
+                                VerificationDestination.GetPrepared
+
+                        verificationFlow.onStart(destination = destination)
                     }
                     KycStatus.Failed -> {
                         verificationFlow.onStart(

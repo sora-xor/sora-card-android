@@ -15,6 +15,7 @@ import jp.co.soramitsu.oauth.common.navigation.flow.login.api.LoginFlow
 import jp.co.soramitsu.oauth.core.engines.timer.Timer
 import jp.co.soramitsu.oauth.base.extension.format
 import jp.co.soramitsu.oauth.base.extension.formatForAuth
+import jp.co.soramitsu.oauth.common.navigation.flow.login.api.LoginDestination
 import jp.co.soramitsu.oauth.theme.views.ButtonState
 import jp.co.soramitsu.ui_core.component.input.InputTextState
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
@@ -33,11 +34,9 @@ class VerifyPhoneNumberViewModel @Inject constructor(
     private val accountInteractor: AccountInteractor
 ) : BaseViewModel() {
 
-    private var phoneNumber: String = ""
-    private var otpLength: Int = Int.MAX_VALUE
-
     var state by mutableStateOf(
         VerifyPhoneNumberState(
+            otpLength = Int.MAX_VALUE,
             inputTextState = InputTextState(
                 label = if (inMemoryRepo.environment == SoraCardEnvironmentType.TEST) {
                     "Use 123456 in this field"
@@ -54,6 +53,18 @@ class VerifyPhoneNumberViewModel @Inject constructor(
         private set
 
     init {
+        with(loginFlow.args[LoginDestination.EnterOtp::class.java.name]) {
+            if (this == null)
+                return@with
+
+            state = state.copy(
+                otpLength = getInt(
+                    LoginDestination.EnterOtp.OTP_LENGTH_KEY,
+                    Int.MAX_VALUE
+                )
+            )
+        }
+
         _toolbarState.value = SoramitsuToolbarState(
             type = SoramitsuToolbarType.Small(),
             basic = BasicToolbarState(
@@ -107,11 +118,11 @@ class VerifyPhoneNumberViewModel @Inject constructor(
     }
 
     fun onCodeChanged(value: TextFieldValue) {
-        if (value.text.length > otpLength) {
+        if (value.text.length > state.otpLength) {
             return
         }
 
-        if (value.text.length == otpLength && value.text != state.inputTextState.value.text) {
+        if (value.text.length == state.otpLength && value.text != state.inputTextState.value.text) {
             viewModelScope.launch {
                 loading(true)
                 delay(LOADING_DELAY)
@@ -132,9 +143,7 @@ class VerifyPhoneNumberViewModel @Inject constructor(
         viewModelScope.launch {
             loading(true)
             delay(LOADING_DELAY)
-            accountInteractor.requestOtpCode(
-                phoneNumber = phoneNumber.formatForAuth()
-            )
+            accountInteractor.resendOtpCode()
         }
     }
 

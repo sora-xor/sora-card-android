@@ -1,5 +1,6 @@
 package jp.co.soramitsu.oauth.feature.verification.cardissuance
 
+import android.os.Bundle
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -196,6 +197,9 @@ private fun PreviewCardIssuanceScreen() {
                 }
             },
             verificationFlow = object : VerificationFlow {
+                override val args: Map<String, Bundle>
+                    get() = TODO("Not yet implemented")
+
                 override fun onStart(destination: VerificationDestination) {
                     TODO("Not yet implemented")
                 }

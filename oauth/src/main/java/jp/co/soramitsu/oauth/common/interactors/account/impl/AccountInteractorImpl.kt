@@ -232,6 +232,12 @@ class AccountInteractorImpl @Inject constructor(
         }
     }
 
+    override suspend fun resendOtpCode() {
+        requestOtpCode(
+            phoneNumber = cache[PHONE_NUMBER] as String
+        )
+    }
+
     override suspend fun verifyOtpCode(otpCode: String) {
         payWingsRepository.verifyPhoneNumberWithOtp(otpCode)
     }

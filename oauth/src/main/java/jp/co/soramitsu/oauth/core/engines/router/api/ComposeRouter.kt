@@ -2,10 +2,11 @@ package jp.co.soramitsu.oauth.core.engines.router.api
 
 import androidx.compose.runtime.State
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.flow.StateFlow
 
 interface ComposeRouter {
 
-    val startDestination: State<SoraCardDestinations>
+    val startDestination: StateFlow<SoraCardDestinations>
 
     val navController: NavHostController
 

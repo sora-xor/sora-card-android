@@ -11,8 +11,6 @@ import jp.co.soramitsu.oauth.theme.views.VerifyUserData
 
 @Composable
 fun EnterEmailScreen(
-    firstName: String?,
-    lastName: String?,
     viewModel: EnterEmailViewModel = hiltViewModel()
 ) {
     Screen(

@@ -9,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.common.interactors.account.api.AccountInteractor
+import jp.co.soramitsu.oauth.common.navigation.flow.registration.api.RegistrationDestination
 import jp.co.soramitsu.oauth.common.navigation.flow.registration.api.RegistrationFlow
 import jp.co.soramitsu.oauth.theme.views.ButtonState
 import jp.co.soramitsu.ui_core.component.input.InputTextState
@@ -28,6 +29,8 @@ class EnterEmailViewModel @Inject constructor(
 
     var state by mutableStateOf(
         EnterEmailState(
+            firstName = "",
+            lastName = "",
             inputTextState = InputTextState(
                 label = R.string.enter_email_input_field_label,
                 descriptionText = R.string.common_no_spam,
@@ -40,10 +43,24 @@ class EnterEmailViewModel @Inject constructor(
     )
         private set
 
-    private var firstName: String = ""
-    private var lastName: String = ""
-
     init {
+        registrationFlow.args[RegistrationDestination.EnterEmail::class.java.name]
+            .apply {
+                if (this == null)
+                    return@apply
+
+                state = state.copy(
+                    firstName = getString(
+                        RegistrationDestination.EnterEmail.FIRST_NAME_KEY,
+                        ""
+                    ),
+                    lastName = getString(
+                        RegistrationDestination.EnterEmail.LAST_NAME_KEY,
+                        ""
+                    )
+                )
+            }
+
         _toolbarState.value = SoramitsuToolbarState(
             type = SoramitsuToolbarType.Small(),
             basic = BasicToolbarState(
@@ -82,8 +99,8 @@ class EnterEmailViewModel @Inject constructor(
         viewModelScope.launch {
             loading(true)
             accountInteractor.registerUser(
-                firstName = firstName,
-                lastName = lastName,
+                firstName = state.firstName,
+                lastName = state.lastName,
                 email = state.inputTextState.value.text,
             )
         }

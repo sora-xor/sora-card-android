@@ -7,7 +7,8 @@ import jp.co.soramitsu.oauth.theme.views.Text
 data class VerificationRejectedScreenState(
     private val screenStatus: ScreenStatus,
     val kycAttemptsCount: Int,
-    val kycAttemptCostInEuros: Double
+    val kycAttemptCostInEuros: Double,
+    val additionalInfo: String
 ) {
 
     val descriptionText: Text =

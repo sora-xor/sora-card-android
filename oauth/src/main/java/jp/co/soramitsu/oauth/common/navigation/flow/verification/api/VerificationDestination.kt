@@ -1,22 +1,52 @@
 package jp.co.soramitsu.oauth.common.navigation.flow.verification.api
 
-import android.hardware.SensorAdditionalInfo
+import jp.co.soramitsu.oauth.core.engines.router.api.SoraCardDestinations
 
 
-sealed interface VerificationDestination {
+sealed interface VerificationDestination: SoraCardDestinations {
 
-    object Start: VerificationDestination
+    object GetPrepared: VerificationDestination {
+        override val route: String = "GET_PREPARED"
+    }
 
-    object VerificationInProgress: VerificationDestination
+    object NotEnoughXor: VerificationDestination {
+        override val route: String = "NOT_ENOUGH_XOR"
+    }
 
-    object VerificationSuccessful: VerificationDestination
+    object VerificationInProgress: VerificationDestination {
+        override val route: String = "VERIFICATION_IN_PROGRESS"
+    }
+
+    object VerificationSuccessful: VerificationDestination {
+        override val route: String = "VERIFICATION_SUCCESSFUL"
+    }
 
     class VerificationRejected(
         val additionalInfo: String?
-    ): VerificationDestination
+    ): VerificationDestination {
+        override val route: String = "VERIFICATION_REJECTED"
+
+        companion object: SoraCardDestinations {
+            override val route: String = "VERIFICATION_FAILED"
+
+            const val ADDITIONAL_INFO_KEY = "ADDITIONAL_INFO_KEY"
+        }
+    }
 
     class VerificationFailed(
         val additionalInfo: String?
-    ): VerificationDestination
+    ): VerificationDestination {
+        override val route: String = "VERIFICATION_FAILED"
+
+        companion object: SoraCardDestinations {
+            override val route: String = "VERIFICATION_FAILED"
+
+            const val ADDITIONAL_INFO_KEY = "ADDITIONAL_INFO_KEY"
+        }
+    }
+
+    object GetMoreXor: VerificationDestination {
+        override val route: String = "GET_MORE_XOR"
+    }
 
 }

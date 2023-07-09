@@ -1,5 +1,6 @@
 package jp.co.soramitsu.oauth.feature.verification.rejected
 
+import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Box
@@ -36,19 +37,18 @@ import jp.co.soramitsu.ui_core.resources.Dimens
 import jp.co.soramitsu.ui_core.theme.customColors
 import jp.co.soramitsu.ui_core.theme.customTypography
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
 
 @Composable
 fun VerificationRejectedScreen(
-    viewModel: VerificationRejectedViewModel = hiltViewModel(),
-    additionalDescription: String? = null
+    viewModel: VerificationRejectedViewModel = hiltViewModel()
 ) {
     Screen(
         viewModel = viewModel
     ) { scrollState ->
         VerificationRejectedContent(
             scrollState = scrollState,
-            additionalDescription = additionalDescription,
             viewModel = viewModel,
         )
     }
@@ -57,7 +57,6 @@ fun VerificationRejectedScreen(
 @Composable
 private fun VerificationRejectedContent(
     scrollState: ScrollState,
-    additionalDescription: String?,
     viewModel: VerificationRejectedViewModel
 ) {
     val state = viewModel.verificationRejectedScreenState
@@ -74,12 +73,12 @@ private fun VerificationRejectedContent(
             color = MaterialTheme.customColors.fgPrimary
         )
 
-        if (additionalDescription != null)
+        if (state.additionalInfo.isNotBlank())
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = Dimens.x3),
-                text = additionalDescription,
+                text = state.additionalInfo,
                 style = MaterialTheme.customTypography.paragraphM,
                 color = MaterialTheme.customColors.fgPrimary
             )
@@ -147,7 +146,7 @@ private fun PreviewApplicationRejected() {
     VerificationRejectedScreen(
         viewModel = VerificationRejectedViewModel(
             userInteractor = object : UserInteractor {
-                override val resultFlow: Flow<UserOperationResult>
+                override val resultFlow: StateFlow<UserOperationResult>
                     get() = TODO("Not yet implemented")
 
                 override suspend fun getUserData() {
@@ -176,6 +175,9 @@ private fun PreviewApplicationRejected() {
                 }
             },
             verificationFlow = object : VerificationFlow {
+                override val args: Map<String, Bundle>
+                    get() = TODO("Not yet implemented")
+
                 override fun onStart(destination: VerificationDestination) {
                     TODO("Not yet implemented")
                 }

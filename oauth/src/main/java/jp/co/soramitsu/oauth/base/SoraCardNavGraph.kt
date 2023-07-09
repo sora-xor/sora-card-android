@@ -17,6 +17,9 @@ import jp.co.soramitsu.oauth.base.navigation.animatedComposable
 import jp.co.soramitsu.oauth.base.navigation.path
 import jp.co.soramitsu.oauth.base.navigation.requireArguments
 import jp.co.soramitsu.oauth.base.navigation.requireString
+import jp.co.soramitsu.oauth.common.navigation.flow.login.api.LoginDestination
+import jp.co.soramitsu.oauth.common.navigation.flow.registration.api.RegistrationDestination
+import jp.co.soramitsu.oauth.common.navigation.flow.verification.api.VerificationDestination
 import jp.co.soramitsu.oauth.core.engines.router.api.SoraCardDestinations
 import jp.co.soramitsu.oauth.feature.login.terms.TermsAndConditionsScreen
 import jp.co.soramitsu.oauth.feature.login.web.WebPageScreen
@@ -39,111 +42,60 @@ internal fun SoraCardNavGraph(
     navHostController: NavHostController,
     startDestination: SoraCardDestinations,
 ) {
-    val isGraphVisible = remember {
+    println("This is checkpoint: SoraCardNavGraph recompose - ${startDestination.route}")
+
+    val isGraphVisible = remember(startDestination) {
         startDestination !== SoraCardDestinations.Loading
     }
 
-    val navGraph = remember {
+    val navGraph = remember(startDestination) {
+        println("This is checkpoint: navGraph remember recompose - ${startDestination.route}")
+
         movableContentOf {
+            println("This is checkpoint: navGraph movableContentOf recompose - ${startDestination.route}")
+
             AnimatedNavHost(
                 navController = navHostController,
-                startDestination = startDestination.route
+                startDestination = SoraCardDestinations.Loading.route
             ) {
                 animatedComposable(
-                    route = SoraCardDestinations.TermsAndConditions.route
+                    route = LoginDestination.TermsAndConditions.route
                 ) {
                     TermsAndConditionsScreen()
                 }
 
                 animatedComposable(
-                    route = SoraCardDestinations.EnterPhone.route
+                    route = LoginDestination.EnterPhone.route
                 ) {
                     EnterPhoneNumberScreen()
                 }
 
                 animatedComposable(
-                    route = SoraCardDestinations.EnterOtp.template,
-                    arguments = listOf(
-                        navArgument(
-                            Argument.PHONE_NUMBER.arg
-                        ) {
-                            type = NavType.StringType
-                            defaultValue = "+1234567890"
-                        },
-                        navArgument(
-                            name = "/{otpLength}"
-                        ) {
-                            type = NavType.IntType
-                            defaultValue = 6
-                        }
-                    )
-                ) { backStackEntry ->
-                    VerifyPhoneNumberScreen(
-                        phoneNumber = backStackEntry.arguments
-                            ?.getString("/{phoneNumber}"),
-                        otpLength = backStackEntry.arguments
-                            ?.getInt("/{otpLength}"),
-                    )
+                    route = LoginDestination.EnterOtp.route
+                ) {
+                    VerifyPhoneNumberScreen()
                 }
 
                 animatedComposable(
-                    route = SoraCardDestinations.EnterFirstAndLastName.route
+                    route = RegistrationDestination.EnterFirstAndLastName.route
                 ) {
                     RegisterUserScreen()
                 }
 
                 animatedComposable(
-                    route = SoraCardDestinations.EnterEmail.template,
-                    arguments = listOf(
-                        navArgument(
-                            name = "/{firstName}"
-                        ) {
-                            type = NavType.StringType
-                            defaultValue = "John"
-                        },
-                        navArgument(
-                            name = "/{lastName}"
-                        ) {
-                            type = NavType.StringType
-                            defaultValue = "Doe"
-                        }
-                    )
-                ) { backStackEntry ->
-                    EnterEmailScreen(
-                        firstName = backStackEntry.requireArguments()
-                            .getString("/{firstName}"),
-                        lastName = backStackEntry.requireArguments()
-                            .getString("/{lastName}")
-                    )
+                    route = RegistrationDestination.EnterEmail.route,
+                ) {
+                    EnterEmailScreen()
                 }
 
                 animatedComposable(
-                    route = SoraCardDestinations.SendVerificationEmail.template,
-                    arguments = listOf(
-                        navArgument(
-                            name = "/{email}"
-                        ) {
-                            type = NavType.StringType
-                            defaultValue = "johndoe@email.com"
-                        },
-                        navArgument(
-                            name = "/{autoEmailBeenSent}"
-                        ) {
-                            type = NavType.BoolType
-                            defaultValue = false
-                        },
-                    )
-                ) { backStackEntry ->
-                    VerifyEmailScreen(
-                        email = backStackEntry.requireArguments()
-                            .requireString("/{email}"),
-                        autoEmailSent = backStackEntry.requireArguments()
-                            .getBoolean("/{autoEmailBeenSent}")
-                    )
+                    route = RegistrationDestination.EmailConfirmation.route
+                ) {
+                    VerifyEmailScreen()
                 }
 
                 animatedComposable(
-                    route = SoraCardDestinations.GetPrepared.route
+                    route = VerificationDestination.GetPrepared.route
                 ) {
                     GetPreparedScreen()
                 }
@@ -162,69 +114,48 @@ internal fun SoraCardNavGraph(
 //                }
 
                 animatedComposable(
-                    route = SoraCardDestinations.VerificationFailed.template,
-                    arguments = listOf(
-                        navArgument(
-                            name = "/{additionalInfo}"
-                        ) {
-                            type = NavType.StringType
-                            defaultValue = ""
-                        },
-                    )
-                ) {backStackEntry ->
-                    VerificationFailedScreen(
-                        additionalDescription = backStackEntry.requireArguments()
-                            .getString("/{additionalInfo}")
-                    )
+                    route = VerificationDestination.VerificationFailed.route
+                ) {
+                    VerificationFailedScreen()
                 }
 
                 animatedComposable(
-                    route = SoraCardDestinations.VerificationRejected.template,
-                    arguments = listOf(
-                        navArgument(
-                            name = "additionalInfo"
-                        ) {
-                            type = NavType.StringType
-                            defaultValue = ""
-                        },
-                    )
-                ) {backStackEntry ->
-                    VerificationRejectedScreen(
-                        additionalDescription = backStackEntry.requireArguments()
-                            .getString("/{additionalInfo}")
-                    )
+                    route = VerificationDestination.VerificationRejected.route
+                ) {
+                    VerificationRejectedScreen()
                 }
 
                 animatedComposable(
-                    route = SoraCardDestinations.VerificationInProgress.route
+                    route = VerificationDestination.VerificationInProgress.route
                 ) {
                     VerificationInProgressScreen()
                 }
 
                 animatedComposable(
-                    route = SoraCardDestinations.VerificationSuccessful.route
+                    route = VerificationDestination.VerificationSuccessful.route
                 ) {
                     VerificationSuccessfulScreen()
                 }
 
                 animatedComposable(
-                    route = SoraCardDestinations.NotEnoughXor.route
+                    route = VerificationDestination.NotEnoughXor.route
                 ) {
                     CardIssuanceScreen()
                 }
 
                 dialog(
-                    route = SoraCardDestinations.GetMoreXor.route
+                    route = VerificationDestination.GetMoreXor.route
                 ) {
                     ChooseXorPurchaseMethodDialog()
                 }
             }
+
+
+            println("This is checkpoint: navHostController.graph - ${navHostController.graph.nodes}")
         }
     }
 
-    if (isGraphVisible) {
-        navGraph.invoke()
-    }
+    navGraph.invoke()
 }
 
 @Preview
@@ -233,7 +164,7 @@ internal fun SoraCardNavGraph(
 private fun PreviewSoraCardNavGraph() {
     SoraCardNavGraph(
         navHostController = rememberAnimatedNavController(),
-        startDestination = SoraCardDestinations.TermsAndConditions
+        startDestination = LoginDestination.TermsAndConditions
     )
 }
 

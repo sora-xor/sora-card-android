@@ -30,8 +30,7 @@ import jp.co.soramitsu.ui_core.theme.customTypography
 
 @Composable
 fun VerificationFailedScreen(
-    viewModel: VerificationFailedViewModel = hiltViewModel(),
-    additionalDescription: String? = null
+    viewModel: VerificationFailedViewModel = hiltViewModel()
 ) {
     BackHandler {
         viewModel.onClose()
@@ -42,7 +41,7 @@ fun VerificationFailedScreen(
     ) { scrollState ->
         VerificationFailedContent(
             scrollState = scrollState,
-            additionalDescription = additionalDescription,
+            additionalDescription = viewModel.additionalInfo,
             onClose = viewModel::onClose
         )
     }
@@ -51,7 +50,7 @@ fun VerificationFailedScreen(
 @Composable
 private fun VerificationFailedContent(
     scrollState: ScrollState,
-    additionalDescription: String?,
+    additionalDescription: String,
     onClose: () -> Unit,
 ) {
     Column(
@@ -67,7 +66,7 @@ private fun VerificationFailedContent(
             color = MaterialTheme.customColors.fgPrimary
         )
 
-        additionalDescription?.let {
+        if (additionalDescription.isNotBlank()) {
             Text(
                 modifier = Modifier
                     .fillMaxWidth()

@@ -10,6 +10,7 @@ import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.theme.views.ScreenStatus
 import jp.co.soramitsu.oauth.common.interactors.prices.api.PriceInteractor
 import jp.co.soramitsu.oauth.common.interactors.user.api.UserInteractor
+import jp.co.soramitsu.oauth.common.navigation.flow.verification.api.VerificationDestination
 import jp.co.soramitsu.oauth.common.navigation.flow.verification.api.VerificationFlow
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
@@ -28,12 +29,26 @@ class VerificationRejectedViewModel @Inject constructor(
         VerificationRejectedScreenState(
             screenStatus = ScreenStatus.ERROR,
             kycAttemptsCount = 0,
-            kycAttemptCostInEuros = (-1).toDouble()
+            kycAttemptCostInEuros = (-1).toDouble(),
+            additionalInfo = ""
         )
     )
         private set
 
     init {
+        verificationFlow.args[VerificationDestination.VerificationRejected::class.java.name]
+            .apply {
+                if (this == null)
+                    return@apply
+
+                verificationRejectedScreenState = verificationRejectedScreenState.copy(
+                    additionalInfo = getString(
+                        VerificationDestination.VerificationRejected.ADDITIONAL_INFO_KEY,
+                        ""
+                    )
+                )
+            }
+
         _toolbarState.value = SoramitsuToolbarState(
             type = SoramitsuToolbarType.Small(),
             basic = BasicToolbarState(

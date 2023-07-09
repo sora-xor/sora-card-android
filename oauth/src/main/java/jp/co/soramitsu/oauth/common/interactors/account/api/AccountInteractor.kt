@@ -10,6 +10,8 @@ interface AccountInteractor {
 
     suspend fun requestOtpCode(phoneNumber: String)
 
+    suspend fun resendOtpCode()
+
     suspend fun verifyOtpCode(otpCode: String)
 
     suspend fun registerUser(

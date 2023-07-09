@@ -26,8 +26,6 @@ import jp.co.soramitsu.ui_core.theme.customTypography
 
 @Composable
 fun VerifyEmailScreen(
-    email: String,
-    autoEmailSent: Boolean,
     viewModel: VerifyEmailViewModel = hiltViewModel(),
 ) {
     Screen(
@@ -45,7 +43,7 @@ fun VerifyEmailScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = Dimens.x8),
-                text = stringResource(R.string.verify_email_description, email),
+                text = stringResource(R.string.verify_email_description, state.email),
                 style = MaterialTheme.customTypography.paragraphM,
                 color = MaterialTheme.customColors.fgPrimary,
                 textAlign = TextAlign.Center

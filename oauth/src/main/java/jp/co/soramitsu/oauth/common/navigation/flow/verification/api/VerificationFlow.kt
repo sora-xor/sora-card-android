@@ -1,9 +1,12 @@
 package jp.co.soramitsu.oauth.common.navigation.flow.verification.api
 
+import android.os.Bundle
 import com.paywings.onboarding.kyc.android.sdk.data.model.KycUserData
 import com.paywings.onboarding.kyc.android.sdk.data.model.UserCredentials
 
 interface VerificationFlow {
+
+    val args: Map<String, Bundle>
 
     fun onStart(destination: VerificationDestination)
 

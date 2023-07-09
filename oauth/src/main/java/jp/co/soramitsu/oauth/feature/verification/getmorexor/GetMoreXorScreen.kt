@@ -1,5 +1,6 @@
 package jp.co.soramitsu.oauth.feature.verification.getmorexor
 
+import android.os.Bundle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -31,6 +32,9 @@ private fun PreviewChooseXorPurchaseMethodDialog() {
     ChooseXorPurchaseMethodDialog(
         getMoreXorViewModel = GetMoreXorViewModel(
             verificationFlow = object : VerificationFlow {
+                override val args: Map<String, Bundle>
+                    get() = TODO("Not yet implemented")
+
                 override fun onStart(destination: VerificationDestination) {
                     TODO("Not yet implemented")
                 }

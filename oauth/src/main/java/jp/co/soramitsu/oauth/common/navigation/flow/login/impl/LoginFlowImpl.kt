@@ -1,8 +1,11 @@
 package jp.co.soramitsu.oauth.common.navigation.flow.login.impl
 
+import android.os.Bundle
+import androidx.core.os.bundleOf
 import jp.co.soramitsu.oauth.core.engines.activityresult.api.SoraCardResult
 import jp.co.soramitsu.oauth.common.navigation.flow.login.api.LoginDestination
 import jp.co.soramitsu.oauth.common.navigation.flow.login.api.LoginFlow
+import jp.co.soramitsu.oauth.common.navigation.flow.registration.api.RegistrationDestination
 import jp.co.soramitsu.oauth.core.engines.activityresult.api.ActivityResult
 import jp.co.soramitsu.oauth.core.engines.router.api.ComposeRouter
 import jp.co.soramitsu.oauth.core.engines.router.api.SoraCardDestinations
@@ -13,18 +16,25 @@ class LoginFlowImpl @Inject constructor(
     private val activityResult: ActivityResult
 ): LoginFlow {
 
+    private val _args = mutableMapOf<String, Bundle>()
+
+    override val args: Map<String, Bundle> = _args
+
     override fun onStart(destination: LoginDestination) =
-        when (destination) {
+        when(destination) {
             is LoginDestination.TermsAndConditions ->
-                composeRouter.setNewStartDestination(SoraCardDestinations.TermsAndConditions)
+                composeRouter.setNewStartDestination(destination)
             is LoginDestination.EnterPhone ->
-                composeRouter.setNewStartDestination(SoraCardDestinations.EnterPhone)
-            is LoginDestination.EnterOtp ->
-                composeRouter.setNewStartDestination(
-                    SoraCardDestinations.EnterOtp(
-                        otpLength = destination.otpLength
+                composeRouter.setNewStartDestination(destination)
+            is LoginDestination.EnterOtp -> {
+                _args[destination::class.java.name] = bundleOf().apply {
+                    putInt(
+                        LoginDestination.EnterOtp.OTP_LENGTH_KEY,
+                        destination.otpLength
                     )
-                )
+                }
+                composeRouter.setNewStartDestination(destination)
+            }
         }.run { composeRouter.clearBackStack() }
 
     override fun onBack() {
@@ -44,6 +54,6 @@ class LoginFlowImpl @Inject constructor(
     }
 
     override fun onAcceptTermsAndConditions() {
-        composeRouter.navigateTo(SoraCardDestinations.EnterPhone)
+        composeRouter.navigateTo(LoginDestination.EnterPhone)
     }
 }
