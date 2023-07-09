@@ -38,7 +38,7 @@ class RegistrationFlowImpl @Inject constructor(
                 }
                 composeRouter.setNewStartDestination(destination)
             }
-        }.run { composeRouter.clearBackStack() }
+        }
 
     override fun onBack() {
         composeRouter.popBack()

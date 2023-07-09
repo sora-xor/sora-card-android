@@ -27,7 +27,7 @@ sealed interface VerificationDestination: SoraCardDestinations {
         override val route: String = "VERIFICATION_REJECTED"
 
         companion object: SoraCardDestinations {
-            override val route: String = "VERIFICATION_FAILED"
+            override val route: String = "VERIFICATION_REJECTED"
 
             const val ADDITIONAL_INFO_KEY = "ADDITIONAL_INFO_KEY"
         }

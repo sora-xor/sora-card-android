@@ -27,6 +27,12 @@ interface ActivityRetainedEnginesBinderModule {
     fun bindActivityResult(
         activityResultImpl: ActivityResultImpl
     ): ActivityResult
+
+    @Binds
+    @ActivityRetainedScoped
+    fun bindComposeRouter(
+        composeRouterImpl: ComposeRouterImpl
+    ): ComposeRouter
 }
 
 @Module
@@ -50,11 +56,5 @@ interface SingletonEnginesBinderModule {
     fun bindRestClient(
         restClientImpl: RestClientImpl
     ): RestClient
-
-    @Binds
-    @Singleton
-    fun bindComposeRouter(
-        composeRouterImpl: ComposeRouterImpl
-    ): ComposeRouter
 
 }

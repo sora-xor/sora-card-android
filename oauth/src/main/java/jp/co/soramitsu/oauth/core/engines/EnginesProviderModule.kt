@@ -16,7 +16,9 @@ import com.google.accompanist.navigation.animation.AnimatedComposeNavigator
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 import dagger.hilt.components.SingletonComponent
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
@@ -92,8 +94,15 @@ class EnginesProviderModule {
             }
         }
 
+}
+
+@Module
+@InstallIn(ActivityRetainedComponent::class)
+@OptIn(ExperimentalAnimationApi::class)
+class EnginesActivityRetainedProviderModule {
+
     @Provides
-    @Singleton
+    @ActivityRetainedScoped
     fun provideNavHostController(
         @ApplicationContext context: Context
     ): NavHostController =
@@ -104,8 +113,7 @@ class EnginesProviderModule {
         }
 
     @Provides
-    @Singleton
+    @ActivityRetainedScoped
     fun provideTimer() =
         Timer()
-
 }

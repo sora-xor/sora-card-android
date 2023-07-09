@@ -48,7 +48,7 @@ class VerificationFlowImpl @Inject constructor(
                 composeRouter.setNewStartDestination(destination)
             }
             else -> composeRouter.setNewStartDestination(destination)
-        }.run { composeRouter.clearBackStack() }
+        }
 
     override fun onBack() {
         composeRouter.popBack()
@@ -81,9 +81,7 @@ class VerificationFlowImpl @Inject constructor(
     }
 
     override fun onTryAgain() {
-        if (inMemoryRepo.userAvailableXorAmount < 100)
-            composeRouter.setNewStartDestination(VerificationDestination.NotEnoughXor) else
-                composeRouter.setNewStartDestination(VerificationDestination.GetPrepared)
+        composeRouter.setNewStartDestination(VerificationDestination.GetPrepared)
     }
 
     override fun onOpenSupport() {

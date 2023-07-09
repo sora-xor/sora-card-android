@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -33,11 +31,10 @@ import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardContractData
 import jp.co.soramitsu.oauth.base.sdk.toPayWingsType
 import jp.co.soramitsu.oauth.common.navigation.coordinator.api.NavigationCoordinator
 import jp.co.soramitsu.oauth.core.engines.activityresult.api.ActivityResult
+import jp.co.soramitsu.oauth.core.engines.activityresult.api.SoraCardResult
 import jp.co.soramitsu.oauth.core.engines.router.api.ComposeRouter
 import jp.co.soramitsu.oauth.core.engines.router.api.SoraCardDestinations
 import jp.co.soramitsu.oauth.theme.AuthSdkTheme
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -63,16 +60,8 @@ class CardActivity : AppCompatActivity(R.layout.card_activity) {
         super.onCreate(savedInstanceState)
         setContent {
             AuthSdkTheme {
-                val startDestination = composeRouter.startDestination.collectAsState()
-
-                LaunchedEffect(Unit) {
-                    composeRouter.startDestination.onEach {
-                        println("This is checkpoint: composeRouter.startDestination - $it")
-                    }.launchIn(this)
-                }
-
                 Box(modifier = Modifier.fillMaxSize()) {
-                    val isLoading = remember(startDestination.value) {
+                    val isLoading = remember(composeRouter.startDestination.value) {
                         derivedStateOf {
                             composeRouter.startDestination.value === SoraCardDestinations.Loading
                         }
@@ -88,7 +77,7 @@ class CardActivity : AppCompatActivity(R.layout.card_activity) {
 
                     SoraCardNavGraph(
                         navHostController = composeRouter.navController,
-                        startDestination = startDestination.value,
+                        startDestination = composeRouter.startDestination.value,
                     )
                 }
             }
@@ -165,5 +154,11 @@ class CardActivity : AppCompatActivity(R.layout.card_activity) {
                 data.domain
             )
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        activityResult.setResult(SoraCardResult.Canceled)
+        finish()
     }
 }
