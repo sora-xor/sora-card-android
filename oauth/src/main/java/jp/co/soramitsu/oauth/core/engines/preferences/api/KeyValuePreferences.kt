@@ -11,9 +11,13 @@ interface KeyValuePreferences {
 
     suspend fun getString(field: String): String
 
+    suspend fun putLong(field: String, value: Long)
+
     suspend fun getLong(field: String, defaultValue: Long): Long
 
-    suspend fun putLong(field: String, value: Long)
+    suspend fun putBoolean(field: String, value: Boolean)
+
+    suspend fun getBoolean(field: String, defaultValue: Boolean): Boolean
 
     suspend fun clear(field: String)
 

@@ -18,6 +18,7 @@ class UserSessionRepositoryImpl @Inject constructor(
         const val REFRESH_TOKEN_KEY = "REFRESH_TOKEN_KEY"
         const val KYC_STATUS_KEY = "KYC_STATUS_KEY"
         const val ADDITIONAL_VERIFICATION_INFO_KEY = "ADDITIONAL_VERIFICATION_INFO_KEY"
+        const val IS_FIRST_TIME_USAGE_KEY = "IS_FIRST_TIME_USAGE_KEY"
     }
     override val kycStatusFlow: Flow<KycStatus> =
         preferences.dataFlow.map {
@@ -43,6 +44,13 @@ class UserSessionRepositoryImpl @Inject constructor(
     override suspend fun setKycStatus(status: KycStatus) =
         preferences.putString(KYC_STATUS_KEY, status.name)
 
+    override suspend fun setKycFailureDescription(description: String) =
+        preferences.putString(ADDITIONAL_VERIFICATION_INFO_KEY, description)
+
+    override suspend fun setFirstTimeUsage(isTrue: Boolean) {
+        preferences.putBoolean(IS_FIRST_TIME_USAGE_KEY, isTrue)
+    }
+
     override suspend fun getAccessToken(): String =
         preferences.getString(ACCESS_TOKEN_KEY)
 
@@ -51,4 +59,7 @@ class UserSessionRepositoryImpl @Inject constructor(
 
     override suspend fun getRefreshToken(): String =
         preferences.getString(REFRESH_TOKEN_KEY)
+
+    override suspend fun isFirstTimeUsage(): Boolean =
+        preferences.getBoolean(IS_FIRST_TIME_USAGE_KEY, true)
 }

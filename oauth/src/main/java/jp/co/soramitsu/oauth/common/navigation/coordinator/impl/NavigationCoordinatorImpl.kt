@@ -12,18 +12,22 @@ import jp.co.soramitsu.oauth.common.navigation.flow.verification.api.Verificatio
 import jp.co.soramitsu.oauth.core.datasources.paywings.api.PayWingsRepository
 import jp.co.soramitsu.oauth.core.datasources.paywings.api.PayWingsResponse
 import jp.co.soramitsu.oauth.core.datasources.session.api.UserSessionRepository
+import jp.co.soramitsu.oauth.core.engines.coroutines.api.CoroutinesStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class NavigationCoordinatorImpl @Inject constructor(
     payWingsRepository: PayWingsRepository,
     userSessionRepository: UserSessionRepository,
     inMemoryRepo: InMemoryRepo,
+    coroutinesStorage: CoroutinesStorage,
     private val loginFlow: LoginFlow,
     private val registrationFlow: RegistrationFlow,
     private val verificationFlow: VerificationFlow,
@@ -88,9 +92,15 @@ class NavigationCoordinatorImpl @Inject constructor(
                 is PayWingsResponse.NavigationIncentive -> {
                     when(payWingsResponse) {
                         is PayWingsResponse.NavigationIncentive.OnUserSignInRequiredScreen -> {
-                            loginFlow.onStart(
-                                destination = LoginDestination.EnterPhone
-                            )
+                            coroutinesStorage.unsupervisedUiScope.launch {
+                                val isFirstTimeUsage = withContext(coroutinesStorage.dispatcherIo) {
+                                    userSessionRepository.isFirstTimeUsage()
+                                }
+
+                                if (isFirstTimeUsage)
+                                    loginFlow.onStart(destination = LoginDestination.TermsAndConditions) else
+                                        loginFlow.onStart(destination = LoginDestination.EnterPhone)
+                            }
                         }
                         is PayWingsResponse.NavigationIncentive.OnVerificationOtpBeenSent -> {
                             loginFlow.onStart(

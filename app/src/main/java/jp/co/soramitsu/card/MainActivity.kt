@@ -74,7 +74,7 @@ class MainActivity : ComponentActivity() {
                     )
                 },
                 client = buildClient(),
-                userAvailableXorAmount = 1.9
+                userAvailableXorAmount = 120.0
             )
         )
     }
@@ -89,7 +89,7 @@ class MainActivity : ComponentActivity() {
                 soraCardInfo = null,
                 kycCredentials = SoraCardKycCredentials("", "", ""),
                 client = buildClient(),
-                userAvailableXorAmount = 1.9
+                userAvailableXorAmount = 120.0
             )
         )
     }

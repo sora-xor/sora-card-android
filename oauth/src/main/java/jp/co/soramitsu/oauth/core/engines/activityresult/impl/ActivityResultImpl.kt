@@ -5,34 +5,22 @@ import android.content.Intent
 import android.os.Looper
 import androidx.activity.result.ActivityResultLauncher
 import com.paywings.onboarding.kyc.android.sdk.data.model.KycContractData
-import com.paywings.onboarding.kyc.android.sdk.data.model.KycCredentials
-import com.paywings.onboarding.kyc.android.sdk.data.model.KycSettings
-import com.paywings.onboarding.kyc.android.sdk.data.model.KycUserData
-import com.paywings.onboarding.kyc.android.sdk.data.model.UserCredentials
-import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants
 import jp.co.soramitsu.oauth.core.engines.activityresult.api.SoraCardResult
 import jp.co.soramitsu.oauth.core.engines.activityresult.api.ActivityResult
 import java.lang.ref.WeakReference
-import java.util.UUID
 import javax.inject.Inject
 
 class ActivityResultImpl @Inject constructor(): ActivityResult {
 
-    private var kycContractWeakRef: WeakReference<ActivityResultLauncher<KycContractData>>? = null
-        get() = if (!Looper.getMainLooper().isCurrentThread)
-            throw IllegalAccessError(NOT_MAIN_THREAD_ACCESS) else
-            field
+    private var kycContractRef: ActivityResultLauncher<KycContractData>? = null
 
     override fun setKycContract(launcher: ActivityResultLauncher<KycContractData>) {
-        if (!Looper.getMainLooper().isCurrentThread)
-            throw IllegalAccessError(NOT_MAIN_THREAD_ACCESS)
-
-        kycContractWeakRef = WeakReference(launcher)
+        kycContractRef = launcher
     }
 
     override fun launchKycContract(kycContractData: KycContractData): Boolean {
-        kycContractWeakRef?.get()?.launch(kycContractData)
+        kycContractRef?.launch(kycContractData)
             ?: return false
         return true
     }

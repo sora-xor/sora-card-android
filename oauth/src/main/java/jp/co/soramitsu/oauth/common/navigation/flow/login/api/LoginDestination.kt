@@ -8,6 +8,13 @@ sealed interface LoginDestination: SoraCardDestinations {
         override val route: String = "TERMS_AND_CONDITIONS"
     }
 
+    object WebPage: LoginDestination {
+        override val route: String = "WebPage"
+
+        const val TITLE_STRING_RES_KEY = "TITLE_STRING_RES_KEY"
+        const val URL_KEY = "URL_KEY"
+    }
+
     object EnterPhone: LoginDestination {
         override val route: String = "ENTER_PHONE"
     }

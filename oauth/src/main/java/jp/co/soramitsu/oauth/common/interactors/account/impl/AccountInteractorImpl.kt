@@ -66,9 +66,12 @@ class AccountInteractorImpl @Inject constructor(
 
                                         val kycStatusToSave =
                                             tachiRepository.getKycStatus(header, it.accessToken).getOrThrow()
-                                                ?: KycStatus.NotInitialized
+                                                ?: KycStatus.Started
 
-                                        userSessionRepository.setKycStatus(kycStatusToSave)
+                                        userSessionRepository.apply {
+                                            setKycStatus(kycStatusToSave)
+                                            setFirstTimeUsage(true)
+                                        }
                                     }
 
                                     AccountOperationResult.Executed
@@ -83,9 +86,12 @@ class AccountInteractorImpl @Inject constructor(
 
                                         val kycStatusToSave =
                                             tachiRepository.getKycStatus(header, it.accessToken).getOrThrow()
-                                                ?: KycStatus.NotInitialized
+                                                ?: KycStatus.Started
 
-                                        userSessionRepository.setKycStatus(kycStatusToSave)
+                                        userSessionRepository.apply {
+                                            setKycStatus(kycStatusToSave)
+                                            setFirstTimeUsage(true)
+                                        }
                                     }
 
                                     AccountOperationResult.Executed
@@ -221,7 +227,7 @@ class AccountInteractorImpl @Inject constructor(
 
         val kycStatusToSave =
             tachiRepository.getKycStatus(header, accessToken).getOrThrow()
-                ?: KycStatus.NotInitialized
+                ?: KycStatus.Started
 
         userSessionRepository.setKycStatus(kycStatusToSave)
     }

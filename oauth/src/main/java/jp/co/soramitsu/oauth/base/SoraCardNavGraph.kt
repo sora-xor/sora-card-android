@@ -19,6 +19,7 @@ import jp.co.soramitsu.oauth.core.engines.router.api.SoraCardDestinations
 import jp.co.soramitsu.oauth.feature.login.terms.TermsAndConditionsScreen
 import jp.co.soramitsu.oauth.feature.login.enterphone.EnterPhoneNumberScreen
 import jp.co.soramitsu.oauth.feature.login.enterotp.VerifyPhoneNumberScreen
+import jp.co.soramitsu.oauth.feature.login.web.WebPageScreen
 import jp.co.soramitsu.oauth.feature.registration.enternames.RegisterUserScreen
 import jp.co.soramitsu.oauth.feature.registration.enteremail.EnterEmailScreen
 import jp.co.soramitsu.oauth.feature.registration.sendverificationemail.VerifyEmailScreen
@@ -87,18 +88,11 @@ internal fun SoraCardNavGraph(
                 GetPreparedScreen()
             }
 
-//                animatedComposable(
-//                    route = Destination.WEB_PAGE.route
-//                        .plus(Argument.TITLE.path())
-//                        .plus(Argument.URL.path())
-//                ) { backStackEntry ->
-//                    WebPageScreen(
-//                        title = backStackEntry.requireArguments()
-//                            .requireString(Argument.TITLE.arg),
-//                        webUrl = backStackEntry.requireArguments()
-//                            .requireString(Argument.URL.arg)
-//                    )
-//                }
+            animatedComposable(
+                route = LoginDestination.WebPage.route
+            ) {
+                WebPageScreen()
+            }
 
             animatedComposable(
                 route = VerificationDestination.VerificationFailed.route

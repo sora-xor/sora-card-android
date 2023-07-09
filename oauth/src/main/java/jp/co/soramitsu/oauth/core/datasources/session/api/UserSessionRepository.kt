@@ -22,9 +22,19 @@ interface UserSessionRepository {
         status: KycStatus
     )
 
+    suspend fun setKycFailureDescription(
+        description: String
+    )
+
+    suspend fun setFirstTimeUsage(
+        isTrue: Boolean
+    )
+
     suspend fun getAccessToken(): String
 
     suspend fun getAccessTokenExpirationTime(): Long
 
     suspend fun getRefreshToken(): String
+
+    suspend fun isFirstTimeUsage(): Boolean
 }

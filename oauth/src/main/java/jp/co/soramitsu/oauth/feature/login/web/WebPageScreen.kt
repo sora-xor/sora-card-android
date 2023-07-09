@@ -28,14 +28,8 @@ import jp.co.soramitsu.ui_core.theme.customColors
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun WebPageScreen(
-    title: String,
-    webUrl: String,
     viewModel: WebPageViewModel = hiltViewModel()
 ) {
-    LaunchedEffect(Unit) {
-        viewModel.setArgs(title, webUrl)
-    }
-
     Screen(
         viewModel = viewModel
     ) {
@@ -56,12 +50,12 @@ fun WebPageScreen(
                             }
                         }
                         settings.javaScriptEnabled = true
-                        loadUrl(WebUrl.valueOf(webUrl).url)
+                        loadUrl(state.url)
                     }
                 }
             )
 
-            if (state.value.loading) {
+            if (state.loading) {
                 ProgressDialog()
             }
         }

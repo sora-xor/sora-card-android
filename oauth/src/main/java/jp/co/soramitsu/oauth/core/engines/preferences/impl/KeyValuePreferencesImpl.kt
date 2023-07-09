@@ -2,6 +2,7 @@ package jp.co.soramitsu.oauth.core.engines.preferences.impl
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -29,16 +30,27 @@ class KeyValuePreferencesImpl @Inject constructor(
             it[stringPreferencesKey(field)] ?: ""
         }.first()
 
-    override suspend fun getLong(field: String, defaultValue: Long): Long =
-        dataStore.data.map {
-            it[longPreferencesKey(field)] ?: defaultValue
-        }.first()
-
     override suspend fun putLong(field: String, value: Long) {
         dataStore.edit {
             it[longPreferencesKey(field)] = value
         }
     }
+
+    override suspend fun getLong(field: String, defaultValue: Long): Long =
+        dataStore.data.map {
+            it[longPreferencesKey(field)] ?: defaultValue
+        }.first()
+
+    override suspend fun putBoolean(field: String, value: Boolean) {
+        dataStore.edit {
+            it[booleanPreferencesKey(field)] = value
+        }
+    }
+
+    override suspend fun getBoolean(field: String, defaultValue: Boolean): Boolean =
+        dataStore.data.map {
+            it[booleanPreferencesKey(field)] ?: defaultValue
+        }.first()
 
     override suspend fun clear(field: String) {
         dataStore.edit {
