@@ -6,9 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.BaseViewModel
+import jp.co.soramitsu.oauth.base.DisposableViewModel
 import jp.co.soramitsu.oauth.common.interactors.account.api.AccountInteractor
-import jp.co.soramitsu.oauth.common.navigation.flow.login.api.LoginDestination
 import jp.co.soramitsu.oauth.common.navigation.flow.verification.api.VerificationDestination
 import jp.co.soramitsu.oauth.common.navigation.flow.verification.api.VerificationFlow
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
@@ -24,7 +23,7 @@ import javax.inject.Inject
 class VerificationFailedViewModel @Inject constructor(
     private val verificationFlow: VerificationFlow,
     private val accountInteractor: AccountInteractor
-) : BaseViewModel() {
+) : DisposableViewModel() {
 
     var additionalInfo by mutableStateOf("")
         private set

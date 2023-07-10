@@ -6,14 +6,12 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.BaseViewModel
-import jp.co.soramitsu.oauth.theme.views.state.DialogAlertState
+import jp.co.soramitsu.oauth.base.DisposableViewModel
 import jp.co.soramitsu.oauth.common.interactors.account.api.AccountInteractor
 import jp.co.soramitsu.oauth.common.navigation.flow.registration.api.RegistrationFlow
 import jp.co.soramitsu.oauth.core.engines.timer.Timer
 import jp.co.soramitsu.oauth.base.extension.format
 import jp.co.soramitsu.oauth.common.navigation.flow.registration.api.RegistrationDestination
-import jp.co.soramitsu.oauth.common.navigation.flow.verification.api.VerificationDestination
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
@@ -28,7 +26,7 @@ class VerifyEmailViewModel @Inject constructor(
     private val timer: Timer,
     private val accountInteractor: AccountInteractor,
     private val registrationFlow: RegistrationFlow
-) : BaseViewModel() {
+) : DisposableViewModel() {
 
     var state by mutableStateOf(VerifyEmailState())
         private set

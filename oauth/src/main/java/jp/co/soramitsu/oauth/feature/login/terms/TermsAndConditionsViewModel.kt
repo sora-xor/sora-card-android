@@ -2,7 +2,7 @@ package jp.co.soramitsu.oauth.feature.login.terms
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.BaseViewModel
+import jp.co.soramitsu.oauth.base.DisposableViewModel
 import jp.co.soramitsu.oauth.common.navigation.flow.login.api.LoginFlow
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
@@ -12,7 +12,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TermsAndConditionsViewModel @Inject constructor(
     private val loginFlow: LoginFlow
-) : BaseViewModel() {
+) : DisposableViewModel() {
 
     init {
         _toolbarState.value = SoramitsuToolbarState(

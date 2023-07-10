@@ -201,8 +201,6 @@ class AccountInteractorImpl @Inject constructor(
                         )
                     )
                 }
-            }.filter {
-                it !is AccountOperationResult.Executed
             }.shareIn(
                 coroutinesStorage.supervisedIoScope,
                 SharingStarted.WhileSubscribed(),

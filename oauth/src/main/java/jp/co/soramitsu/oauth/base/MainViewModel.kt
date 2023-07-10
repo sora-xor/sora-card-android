@@ -3,14 +3,15 @@ package jp.co.soramitsu.oauth.base
 import androidx.lifecycle.viewModelScope
 import com.paywings.onboarding.kyc.android.sdk.util.PayWingsOnboardingKycResult
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
-import jp.co.soramitsu.oauth.theme.views.state.DialogAlertState
 import jp.co.soramitsu.oauth.common.interactors.account.api.AccountInteractor
+import jp.co.soramitsu.oauth.common.interactors.account.api.AccountOperationResult
 import jp.co.soramitsu.oauth.core.datasources.session.api.UserSessionRepository
 import jp.co.soramitsu.oauth.core.datasources.tachi.api.models.KycStatus
+import jp.co.soramitsu.oauth.theme.views.obtainStringAsAny
+import jp.co.soramitsu.oauth.theme.views.state.DialogAlertState
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -21,23 +22,34 @@ class MainViewModel @Inject constructor(
     private val accountInteractor: AccountInteractor,
     private val userSessionRepository: UserSessionRepository,
     val inMemoryRepo: InMemoryRepo
-) : BaseViewModel() {
+) : DisposableViewModel() {
+
+    private var disposableJob: Job? = null
 
     init {
         with(accountInteractor) {
-            resultFlow.onStart {
+            disposableJob = resultFlow.onStart {
                 viewModelScope.launch {
                     checkKycVerificationStatus()
                 }
-            }.onEach {
-//                dialogState = DialogAlertState(
-//                    title = it.text,
-//                    message = it.text,
-//                    dismissAvailable = true,
-//                    onPositive = {
-//                        dialogState = null
-//                    }
-//                )
+            }.onEach { result ->
+                when(result) {
+                    is AccountOperationResult.Executed -> {
+                        /* DO NOTHING */
+                    }
+                    is AccountOperationResult.Loading -> {
+                        /* DO NOTHING */
+                    }
+                    is AccountOperationResult.Error -> {
+                        dialogState = DialogAlertState(
+                            message = result.text.obtainStringAsAny(),
+                            dismissAvailable = true,
+                            onPositive = {
+                                dialogState = null
+                            }
+                        )
+                    }
+                }
             }.launchIn(viewModelScope)
         }
     }
@@ -51,4 +63,9 @@ class MainViewModel @Inject constructor(
                 userSessionRepository.setKycStatus(KycStatus.Failed)
             }
         }
+
+    override fun onCleared() {
+        super.onCleared()
+        disposableJob?.cancel()
+    }
 }

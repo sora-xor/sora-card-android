@@ -32,4 +32,10 @@ fun Text.retrieveString(): String = when(this) {
     is Text.SimpleText -> text
 }
 
+fun Text.obtainStringAsAny(): Any? = when(this) {
+    is Text.SimpleText -> text
+    is Text.StringRes -> id
+    is Text.StringResWithArgs -> null
+}
+
 

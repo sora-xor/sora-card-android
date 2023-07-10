@@ -7,7 +7,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.BaseViewModel
+import jp.co.soramitsu.oauth.base.DisposableViewModel
 import jp.co.soramitsu.oauth.common.interactors.account.api.AccountInteractor
 import jp.co.soramitsu.oauth.common.navigation.flow.registration.api.RegistrationFlow
 import jp.co.soramitsu.oauth.theme.views.ButtonState
@@ -22,7 +22,7 @@ import javax.inject.Inject
 class RegisterUserViewModel @Inject constructor(
     private val accountInteractor: AccountInteractor,
     private val registrationFlow: RegistrationFlow
-) : BaseViewModel() {
+) : DisposableViewModel() {
 
     var state by mutableStateOf(
         RegisterUserState(

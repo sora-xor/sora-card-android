@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.BaseViewModel
+import jp.co.soramitsu.oauth.base.DisposableViewModel
 import jp.co.soramitsu.oauth.common.interactors.account.api.AccountInteractor
 import jp.co.soramitsu.oauth.common.interactors.user.api.UserInteractor
 import jp.co.soramitsu.oauth.common.interactors.user.api.UserOperationResult
@@ -26,7 +26,7 @@ class GetPreparedViewModel @Inject constructor(
     private val userInteractor: UserInteractor,
     private val verificationFlow: VerificationFlow,
     private val accountInteractor: AccountInteractor
-) : BaseViewModel() {
+) : DisposableViewModel() {
 
     var state by mutableStateOf(GetPreparedState())
 

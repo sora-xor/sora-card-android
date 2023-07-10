@@ -7,11 +7,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import jp.co.soramitsu.oauth.theme.views.state.DialogAlertState
-import jp.co.soramitsu.oauth.core.engines.rest.api.RestException
 import jp.co.soramitsu.ui_core.component.toolbar.Action
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
 
-open class BaseViewModel : ViewModel() {
+open class DisposableViewModel : ViewModel() {
 
     protected val _toolbarState = MutableLiveData<SoramitsuToolbarState>()
     val toolbarState: LiveData<SoramitsuToolbarState> = _toolbarState
@@ -24,4 +23,8 @@ open class BaseViewModel : ViewModel() {
     open fun onToolbarNavigation() = Unit
 
     open fun onToolbarMenuItemSelected(action: Action) = Unit
+
+    open fun onStart() = Unit
+
+    open fun onStop() = Unit
 }

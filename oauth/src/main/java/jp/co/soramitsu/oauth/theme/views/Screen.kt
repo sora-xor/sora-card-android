@@ -10,13 +10,18 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
-import jp.co.soramitsu.oauth.base.BaseViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
+import jp.co.soramitsu.oauth.base.DisposableViewModel
 import jp.co.soramitsu.ui_core.component.toolbar.Action
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbar
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
@@ -25,7 +30,8 @@ import jp.co.soramitsu.ui_core.theme.customColors
 @Composable
 fun Screen(
     modifier: Modifier = Modifier,
-    viewModel: BaseViewModel,
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
+    viewModel: DisposableViewModel,
     backgroundColor: Color = MaterialTheme.customColors.bgSurface,
     content: @Composable (scrollState: ScrollState) -> Unit,
 ) {
@@ -49,8 +55,25 @@ fun Screen(
         }
     ) { padding ->
         Box(
-            modifier = Modifier.fillMaxSize().padding(padding)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
         ) {
+            DisposableEffect(lifecycleOwner) {
+                val observer = LifecycleEventObserver { _, event ->
+                    if (event == Lifecycle.Event.ON_RESUME) {
+                        viewModel.onStart()
+                    } else if (event == Lifecycle.Event.ON_PAUSE) {
+                        viewModel.onStop()
+                    }
+                }
+
+                lifecycleOwner.lifecycle.addObserver(observer)
+
+                onDispose {
+                    lifecycleOwner.lifecycle.removeObserver(observer)
+                }
+            }
             content(scrollState)
         }
 

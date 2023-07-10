@@ -6,9 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.BaseViewModel
+import jp.co.soramitsu.oauth.base.DisposableViewModel
 import jp.co.soramitsu.oauth.common.interactors.account.api.AccountInteractor
-import jp.co.soramitsu.oauth.common.interactors.account.impl.AccountInteractorImpl
 import jp.co.soramitsu.oauth.theme.views.ScreenStatus
 import jp.co.soramitsu.oauth.common.interactors.prices.api.PriceInteractor
 import jp.co.soramitsu.oauth.common.interactors.user.api.UserInteractor
@@ -29,7 +28,7 @@ class VerificationRejectedViewModel @Inject constructor(
     private val priceInteractor: PriceInteractor,
     private val verificationFlow: VerificationFlow,
     private val accountInteractor: AccountInteractor
-) : BaseViewModel() {
+) : DisposableViewModel() {
 
     var verificationRejectedScreenState by mutableStateOf(
         VerificationRejectedScreenState(
