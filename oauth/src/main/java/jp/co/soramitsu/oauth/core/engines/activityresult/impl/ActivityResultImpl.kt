@@ -11,6 +11,7 @@ import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants
 import jp.co.soramitsu.oauth.core.engines.activityresult.api.SoraCardResult
 import jp.co.soramitsu.oauth.core.engines.activityresult.api.ActivityResult
 import java.lang.ref.WeakReference
+import java.util.Locale
 import javax.inject.Inject
 
 class ActivityResultImpl @Inject constructor(): ActivityResult {
@@ -27,20 +28,30 @@ class ActivityResultImpl @Inject constructor(): ActivityResult {
         return true
     }
 
-    private var activityWeakRef: WeakReference<Activity>? = null
-        get() = if (!Looper.getMainLooper().isCurrentThread)
-            throw IllegalAccessError(NOT_MAIN_THREAD_ACCESS) else
-                field
+    private var activityRef: Activity? = null
 
     override fun setActivity(activity: Activity) {
-        if (!Looper.getMainLooper().isCurrentThread)
-            throw IllegalAccessError(NOT_MAIN_THREAD_ACCESS)
+        activityRef = activity
+    }
 
-        activityWeakRef = WeakReference(activity)
+    override fun removeActivity() {
+        activityRef = null
+    }
+
+    override fun setLocale(locale: Locale) {
+        Locale.setDefault(locale)
+
+        activityRef?.run {
+            val configuration = baseContext.resources.configuration
+            configuration.setLocale(locale)
+            configuration.setLayoutDirection(locale)
+
+            baseContext.createConfigurationContext(configuration)
+        }
     }
 
     override fun setResult(soraCardResult: SoraCardResult): Boolean {
-        activityWeakRef?.get()?.apply {
+        activityRef?.apply {
             setResult(
                 Activity.RESULT_OK,
                 Intent().apply {
@@ -53,9 +64,9 @@ class ActivityResultImpl @Inject constructor(): ActivityResult {
     }
 
     override fun startOutwardsApp(appPackage: String, link: String): Boolean {
-        activityWeakRef?.get()?.isAppAvailableCompat(appPackage) ?: return false
+        activityRef?.isAppAvailableCompat(appPackage) ?: return false
 
-        activityWeakRef?.get()?.startActivity(
+        activityRef?.startActivity(
             Intent(
                 Intent.ACTION_VIEW,
                 Uri.parse(link)
@@ -63,11 +74,6 @@ class ActivityResultImpl @Inject constructor(): ActivityResult {
         ) ?: return false
 
         return true
-    }
-
-    private companion object {
-        const val NOT_MAIN_THREAD_ACCESS =
-            "Access to WeakRef<Activity> is allowed only from one thread for safe memory leaklessness"
     }
 
 }

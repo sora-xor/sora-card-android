@@ -11,7 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.dialog
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import jp.co.soramitsu.oauth.base.navigation.animatedComposable
+import jp.co.soramitsu.oauth.base.extension.animatedComposable
 import jp.co.soramitsu.oauth.common.navigation.flow.login.api.LoginDestination
 import jp.co.soramitsu.oauth.common.navigation.flow.registration.api.RegistrationDestination
 import jp.co.soramitsu.oauth.common.navigation.flow.verification.api.VerificationDestination
@@ -43,6 +43,7 @@ internal fun SoraCardNavGraph(
 
     if (isGraphVisible) {
         AnimatedNavHost(
+            modifier = Modifier.fillMaxSize(),
             navController = navHostController,
             startDestination = startDestination.route
         ) {

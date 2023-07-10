@@ -70,7 +70,7 @@ class RegisterUserViewModel @Inject constructor(
     }
 
     fun onLastNameChanged(value: TextFieldValue) {
-        state = state.copy(lastNameState = state.firstNameState.copy(value = value))
+        state = state.copy(lastNameState = state.lastNameState.copy(value = value))
         checkConfirmButtonEnabled()
     }
 

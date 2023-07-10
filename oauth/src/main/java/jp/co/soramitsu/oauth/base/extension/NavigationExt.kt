@@ -1,4 +1,4 @@
-package jp.co.soramitsu.oauth.base.navigation
+package jp.co.soramitsu.oauth.base.extension
 
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalAnimationApi

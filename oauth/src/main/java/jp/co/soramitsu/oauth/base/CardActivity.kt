@@ -1,6 +1,5 @@
 package jp.co.soramitsu.oauth.base
 
-import android.content.Context
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -21,7 +20,6 @@ import com.paywings.onboarding.kyc.android.sdk.PayWingsOnboardingKycContract
 import dagger.hilt.android.AndroidEntryPoint
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.extension.getParcelableCompat
-import jp.co.soramitsu.oauth.base.resources.ContextManager
 import jp.co.soramitsu.oauth.base.sdk.Mode
 import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants.BUNDLE_EXTRA_SORA_CARD_CONTRACT_DATA
 import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants.EXTRA_SORA_CARD_CONTRACT_DATA
@@ -51,10 +49,6 @@ class CardActivity : AppCompatActivity(R.layout.card_activity) {
 
     @Inject
     lateinit var activityResult: ActivityResult
-
-    override fun attachBaseContext(base: Context) {
-        super.attachBaseContext(ContextManager.setBaseContext(base))
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -111,7 +105,7 @@ class CardActivity : AppCompatActivity(R.layout.card_activity) {
         )
 
         contractData?.let { data ->
-            ContextManager.setLocale(data.locale)
+            activityResult.setLocale(data.locale)
 
             viewModel.inMemoryRepo.endpointUrl = data.kycCredentials.endpointUrl
             viewModel.inMemoryRepo.username = data.kycCredentials.username
@@ -137,7 +131,7 @@ class CardActivity : AppCompatActivity(R.layout.card_activity) {
         )
 
         contractData?.let { data ->
-            ContextManager.setLocale(data.locale)
+            activityResult.setLocale(data.locale)
             viewModel.inMemoryRepo.endpointUrl = data.kycCredentials.endpointUrl
             viewModel.inMemoryRepo.username = data.kycCredentials.username
             viewModel.inMemoryRepo.password = data.kycCredentials.password
@@ -160,5 +154,10 @@ class CardActivity : AppCompatActivity(R.layout.card_activity) {
         super.onBackPressed()
         activityResult.setResult(SoraCardResult.Canceled)
         finish()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        activityResult.removeActivity()
     }
 }
