@@ -52,7 +52,7 @@ class GetPreparedViewModel @Inject constructor(
             basic = BasicToolbarState(
                 title = R.string.get_prepared_title,
                 visibility = true,
-                actionLabel = "LogOut", // TODO change to string res
+                actionLabel = R.string.log_out,
                 navIcon = R.drawable.ic_cross
             ),
         )

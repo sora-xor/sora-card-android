@@ -24,7 +24,7 @@ class VerificationInProgressViewModel @Inject constructor(
             basic = BasicToolbarState(
                 title = R.string.kyc_result_verification_in_progress,
                 visibility = true,
-                actionLabel = "LogOut", // TODO change to string res
+                actionLabel = R.string.log_out,
                 navIcon = R.drawable.ic_cross
             ),
         )

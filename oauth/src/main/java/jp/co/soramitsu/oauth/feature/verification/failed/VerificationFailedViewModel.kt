@@ -43,7 +43,7 @@ class VerificationFailedViewModel @Inject constructor(
             basic = BasicToolbarState(
                 title = R.string.verification_failed_title,
                 visibility = true,
-                actionLabel = "LogOut", // TODO change to string res
+                actionLabel = R.string.log_out,
                 navIcon = R.drawable.ic_cross
             ),
         )
