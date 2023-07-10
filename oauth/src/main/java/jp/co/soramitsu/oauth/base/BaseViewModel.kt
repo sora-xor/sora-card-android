@@ -24,18 +24,4 @@ open class BaseViewModel : ViewModel() {
     open fun onToolbarNavigation() = Unit
 
     open fun onToolbarMenuItemSelected(action: Action) = Unit
-
-    private fun onError(throwable: Throwable) {
-        if (throwable is RestException) {
-            // TODO implement error handling
-        }
-    }
-
-    suspend fun tryCatch(block: suspend () -> Unit) {
-        try {
-            block.invoke()
-        } catch (t: Throwable) {
-            onError(t)
-        }
-    }
 }

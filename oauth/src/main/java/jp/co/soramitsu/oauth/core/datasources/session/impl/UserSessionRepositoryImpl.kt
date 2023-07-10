@@ -62,4 +62,7 @@ class UserSessionRepositoryImpl @Inject constructor(
 
     override suspend fun isFirstTimeUsage(): Boolean =
         preferences.getBoolean(IS_FIRST_TIME_USAGE_KEY, true)
+
+    override suspend fun cleanData() =
+        preferences.clearAll()
 }

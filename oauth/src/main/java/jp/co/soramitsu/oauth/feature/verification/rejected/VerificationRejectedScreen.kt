@@ -20,6 +20,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.paywings.onboarding.kyc.android.sdk.data.model.KycUserData
 import com.paywings.onboarding.kyc.android.sdk.data.model.UserCredentials
+import jp.co.soramitsu.oauth.common.interactors.account.api.AccountInteractor
+import jp.co.soramitsu.oauth.common.interactors.account.api.AccountOperationResult
 import jp.co.soramitsu.oauth.theme.views.Screen
 import jp.co.soramitsu.oauth.theme.views.retrieveString
 import jp.co.soramitsu.oauth.common.interactors.prices.api.PriceInteractor
@@ -29,6 +31,7 @@ import jp.co.soramitsu.oauth.common.interactors.user.api.UserInteractor
 import jp.co.soramitsu.oauth.common.interactors.user.api.UserOperationResult
 import jp.co.soramitsu.oauth.common.navigation.flow.verification.api.VerificationDestination
 import jp.co.soramitsu.oauth.common.navigation.flow.verification.api.VerificationFlow
+import jp.co.soramitsu.oauth.core.engines.router.api.SoraCardDestinations
 import jp.co.soramitsu.ui_core.component.button.FilledButton
 import jp.co.soramitsu.ui_core.component.button.TonalButton
 import jp.co.soramitsu.ui_core.component.button.properties.Order
@@ -37,6 +40,7 @@ import jp.co.soramitsu.ui_core.resources.Dimens
 import jp.co.soramitsu.ui_core.theme.customColors
 import jp.co.soramitsu.ui_core.theme.customTypography
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
 
@@ -175,7 +179,7 @@ private fun PreviewApplicationRejected() {
                 }
             },
             verificationFlow = object : VerificationFlow {
-                override val args: Map<String, Bundle>
+                override val argsFlow: SharedFlow<Pair<SoraCardDestinations, Bundle>>
                     get() = TODO("Not yet implemented")
 
                 override fun onStart(destination: VerificationDestination) {
@@ -202,6 +206,10 @@ private fun PreviewApplicationRejected() {
                     TODO("Not yet implemented")
                 }
 
+                override fun onLogout() {
+                    TODO("Not yet implemented")
+                }
+
                 override fun onOpenSupport() {
                     TODO("Not yet implemented")
                 }
@@ -223,6 +231,50 @@ private fun PreviewApplicationRejected() {
                 }
 
                 override fun onPayIssuance() {
+                    TODO("Not yet implemented")
+                }
+            },
+            accountInteractor = object : AccountInteractor {
+                override val resultFlow: SharedFlow<AccountOperationResult>
+                    get() = TODO("Not yet implemented")
+
+                override suspend fun checkKycVerificationStatus() {
+                    TODO("Not yet implemented")
+                }
+
+                override suspend fun requestOtpCode(phoneNumber: String) {
+                    TODO("Not yet implemented")
+                }
+
+                override suspend fun resendOtpCode() {
+                    TODO("Not yet implemented")
+                }
+
+                override suspend fun verifyOtpCode(otpCode: String) {
+                    TODO("Not yet implemented")
+                }
+
+                override suspend fun registerUser(
+                    firstName: String,
+                    lastName: String,
+                    email: String
+                ) {
+                    TODO("Not yet implemented")
+                }
+
+                override suspend fun checkEmailVerificationStatus() {
+                    TODO("Not yet implemented")
+                }
+
+                override suspend fun requestNewVerificationEmail() {
+                    TODO("Not yet implemented")
+                }
+
+                override suspend fun changeUnverifiedEmail(newEmail: String) {
+                    TODO("Not yet implemented")
+                }
+
+                override suspend fun logOut() {
                     TODO("Not yet implemented")
                 }
             }

@@ -8,6 +8,7 @@ import jp.co.soramitsu.oauth.common.interactors.prices.api.EuroLiquiditySufficie
 import jp.co.soramitsu.oauth.common.interactors.prices.api.XorLiquiditySufficiency
 import jp.co.soramitsu.oauth.core.datasources.session.api.UserSessionRepository
 import java.util.StringJoiner
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class PriceInteractorImpl @Inject constructor(
@@ -25,7 +26,14 @@ class PriceInteractorImpl @Inject constructor(
     }
 
     override suspend fun calculateXorLiquiditySufficiency(): Result<XorLiquiditySufficiency> {
-        val accessToken = userSessionRepository.getAccessToken()
+        val (accessToken, accessTokenExpirationTime) = userSessionRepository.run {
+            getAccessToken() to getAccessTokenExpirationTime()
+        }
+
+        if (accessToken.isBlank() ||
+            accessTokenExpirationTime <= TimeUnit.MILLISECONDS
+                .toSeconds(System.currentTimeMillis()))
+            return Result.failure(RuntimeException(ACCESS_TOKEN_EXPIRED))
 
         return tachiRepository.getCurrentXorEuroPrice(header, accessToken)
             .map {
@@ -41,7 +49,14 @@ class PriceInteractorImpl @Inject constructor(
 
 
     override suspend fun calculateEuroLiquiditySufficiency(): Result<EuroLiquiditySufficiency> {
-        val accessToken = userSessionRepository.getAccessToken()
+        val (accessToken, accessTokenExpirationTime) = userSessionRepository.run {
+            getAccessToken() to getAccessTokenExpirationTime()
+        }
+
+        if (accessToken.isBlank() ||
+            accessTokenExpirationTime <= TimeUnit.MILLISECONDS
+                .toSeconds(System.currentTimeMillis()))
+            return Result.failure(RuntimeException(ACCESS_TOKEN_EXPIRED))
 
         return tachiRepository.getCurrentXorEuroPrice(header, accessToken)
             .map {
@@ -63,5 +78,8 @@ class PriceInteractorImpl @Inject constructor(
 
     private companion object {
         const val HEADER_DELIMITER = "/"
+
+        const val ACCESS_TOKEN_EXPIRED =
+            "Access token has been expired, be sure to retrieve new one before proceeding"
     }
 }

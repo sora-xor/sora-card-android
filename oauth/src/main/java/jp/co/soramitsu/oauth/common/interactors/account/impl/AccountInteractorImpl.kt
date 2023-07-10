@@ -271,7 +271,8 @@ class AccountInteractorImpl @Inject constructor(
     }
 
     override suspend fun logOut() {
-        // TODO add implementation
+        userSessionRepository.cleanData()
+        cache.clear()
     }
 
     private companion object {

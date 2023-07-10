@@ -2,9 +2,11 @@ package jp.co.soramitsu.oauth.core.engines.activityresult.impl
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Looper
 import androidx.activity.result.ActivityResultLauncher
 import com.paywings.onboarding.kyc.android.sdk.data.model.KycContractData
+import jp.co.soramitsu.oauth.base.extension.isAppAvailableCompat
 import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants
 import jp.co.soramitsu.oauth.core.engines.activityresult.api.SoraCardResult
 import jp.co.soramitsu.oauth.core.engines.activityresult.api.ActivityResult
@@ -47,6 +49,19 @@ class ActivityResultImpl @Inject constructor(): ActivityResult {
             )
             finish()
         } ?: return false
+        return true
+    }
+
+    override fun startOutwardsApp(appPackage: String, link: String): Boolean {
+        activityWeakRef?.get()?.isAppAvailableCompat(appPackage) ?: return false
+
+        activityWeakRef?.get()?.startActivity(
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse(link)
+            )
+        ) ?: return false
+
         return true
     }
 

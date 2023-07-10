@@ -14,6 +14,9 @@ import jp.co.soramitsu.oauth.common.navigation.flow.verification.api.Verificatio
 import jp.co.soramitsu.oauth.core.engines.activityresult.api.ActivityResult
 import jp.co.soramitsu.oauth.core.engines.router.api.ComposeRouter
 import jp.co.soramitsu.oauth.core.engines.router.api.SoraCardDestinations
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import java.util.UUID
 import javax.inject.Inject
 
@@ -23,28 +26,36 @@ class VerificationFlowImpl @Inject constructor(
     private val inMemoryRepo: InMemoryRepo
 ): VerificationFlow {
 
-    private val _args = mutableMapOf<String, Bundle>()
+    private val _argsFlow = MutableSharedFlow<Pair<SoraCardDestinations, Bundle>>(
+        replay = 1,
+        extraBufferCapacity = 0,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
 
-    override val args: Map<String, Bundle> = _args
+    override val argsFlow: SharedFlow<Pair<SoraCardDestinations, Bundle>> = _argsFlow
 
     override fun onStart(destination: VerificationDestination) =
         when (destination) {
             is VerificationDestination.VerificationRejected -> {
-                _args[VerificationDestination.VerificationRejected::class.java.name] = Bundle().apply {
-                    putString(
-                        VerificationDestination.VerificationRejected.ADDITIONAL_INFO_KEY,
-                        destination.additionalInfo
-                    )
-                }
+                _argsFlow.tryEmit(
+                    value = destination to Bundle().apply {
+                        putString(
+                            VerificationDestination.VerificationRejected.ADDITIONAL_INFO_KEY,
+                            destination.additionalInfo
+                        )
+                    }
+                )
                 composeRouter.setNewStartDestination(destination)
             }
             is VerificationDestination.VerificationFailed -> {
-                _args[VerificationDestination.VerificationFailed::class.java.name] = Bundle().apply {
-                    putString(
-                        VerificationDestination.VerificationRejected.ADDITIONAL_INFO_KEY,
-                        destination.additionalInfo
-                    )
-                }
+                _argsFlow.tryEmit(
+                    value = destination to Bundle().apply {
+                        putString(
+                            VerificationDestination.VerificationFailed.ADDITIONAL_INFO_KEY,
+                            destination.additionalInfo
+                        )
+                    }
+                )
                 composeRouter.setNewStartDestination(destination)
             }
             else -> composeRouter.setNewStartDestination(destination)
@@ -84,8 +95,20 @@ class VerificationFlowImpl @Inject constructor(
         composeRouter.setNewStartDestination(VerificationDestination.GetPrepared)
     }
 
+    override fun onLogout() {
+        activityResult.setResult(SoraCardResult.Canceled)
+    }
+
     override fun onOpenSupport() {
-        // TODO open webView
+        val result = activityResult.startOutwardsApp(
+            appPackage = "org.telegram.messenger",
+            link = "tg://resolve?domain=SORAhappiness"
+        )
+
+        if (!result) activityResult.startOutwardsApp(
+            appPackage = "org.telegram.messenger",
+            link = "https://t.me/SORAhappiness"
+        )
     }
 
     override fun onGetMoreXor() {
@@ -105,6 +128,6 @@ class VerificationFlowImpl @Inject constructor(
     }
 
     override fun onPayIssuance() {
-        TODO("Not yet implemented")
+        // Will be implemented in Phase 3
     }
 }

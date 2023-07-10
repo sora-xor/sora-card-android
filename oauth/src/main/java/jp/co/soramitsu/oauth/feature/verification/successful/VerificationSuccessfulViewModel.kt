@@ -21,9 +21,14 @@ class VerificationSuccessfulViewModel @Inject constructor(
             basic = BasicToolbarState(
                 title = R.string.verification_successful_title,
                 visibility = true,
-                navIcon = null,
+                navIcon = R.drawable.ic_cross
             ),
         )
+    }
+
+    override fun onToolbarNavigation() {
+        super.onToolbarNavigation()
+        verificationFlow.onExit()
     }
 
     fun onClose() {

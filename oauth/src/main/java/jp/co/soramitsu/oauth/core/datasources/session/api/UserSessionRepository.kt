@@ -37,4 +37,6 @@ interface UserSessionRepository {
     suspend fun getRefreshToken(): String
 
     suspend fun isFirstTimeUsage(): Boolean
+
+    suspend fun cleanData()
 }

@@ -16,6 +16,7 @@ import jp.co.soramitsu.ui_core.component.input.InputTextState
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -26,6 +27,8 @@ class EnterEmailViewModel @Inject constructor(
     private val accountInteractor: AccountInteractor,
     private val registrationFlow: RegistrationFlow
 ) : BaseViewModel() {
+
+    private var isUnverifiedEmailChanged = false
 
     var state by mutableStateOf(
         EnterEmailState(
@@ -44,22 +47,23 @@ class EnterEmailViewModel @Inject constructor(
         private set
 
     init {
-        registrationFlow.args[RegistrationDestination.EnterEmail::class.java.name]
-            .apply {
-                if (this == null)
-                    return@apply
-
-                state = state.copy(
-                    firstName = getString(
-                        RegistrationDestination.EnterEmail.FIRST_NAME_KEY,
-                        ""
-                    ),
-                    lastName = getString(
-                        RegistrationDestination.EnterEmail.LAST_NAME_KEY,
-                        ""
-                    )
+        registrationFlow.argsFlow.filter { (destination, _) ->
+            destination is RegistrationDestination.EnterEmail
+        }.onEach { (_, bundle) ->
+            state = state.copy(
+                firstName = bundle.getString(
+                    RegistrationDestination.EnterEmail.FIRST_NAME_KEY, ""
+                ),
+                lastName = bundle.getString(
+                    RegistrationDestination.EnterEmail.LAST_NAME_KEY, ""
+                )
+            ).also {
+                isUnverifiedEmailChanged = bundle.getBoolean(
+                    RegistrationDestination.EnterEmail.IS_UNVERIFIED_EMAIL_CHANGED_KEY,
+                    false
                 )
             }
+        }.launchIn(viewModelScope)
 
         _toolbarState.value = SoramitsuToolbarState(
             type = SoramitsuToolbarType.Small(),
@@ -98,11 +102,16 @@ class EnterEmailViewModel @Inject constructor(
     fun onRegisterUser() {
         viewModelScope.launch {
             loading(true)
-            accountInteractor.registerUser(
-                firstName = state.firstName,
-                lastName = state.lastName,
-                email = state.inputTextState.value.text,
-            )
+            if (isUnverifiedEmailChanged)
+                accountInteractor.changeUnverifiedEmail(
+                    newEmail = state.inputTextState.value.text,
+                )
+            else
+                accountInteractor.registerUser(
+                    firstName = state.firstName,
+                    lastName = state.lastName,
+                    email = state.inputTextState.value.text,
+                )
         }
     }
 

@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import java.util.StringJoiner
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class UserInteractorImpl @Inject constructor(
@@ -51,7 +52,7 @@ class UserInteractorImpl @Inject constructor(
                             if (payWingsResponse is PayWingsResponse.Result.ReceivedUserData) {
                                 val (accessToken, refreshToken) = userSessionRepository.run {
                                     getAccessToken() to getRefreshToken()
-                                }
+                                } // TODO check if refresh token is used even if accessToken is expired
 
 
                                 val kycReferenceNumber = tachiRepository.getReferenceNumber(
@@ -115,15 +116,27 @@ class UserInteractorImpl @Inject constructor(
             )
 
     override suspend fun getUserData() {
-        userSessionRepository.getAccessToken().run {
-            payWingsRepository.getUserData(
-                accessToken = this
-            )
+        val (accessToken, accessTokenExpirationTime) = userSessionRepository.run {
+            getAccessToken() to getAccessTokenExpirationTime()
         }
+
+        if (accessToken.isBlank() ||
+            accessTokenExpirationTime <= TimeUnit.MILLISECONDS
+                .toSeconds(System.currentTimeMillis()))
+            throw RuntimeException(ACCESS_TOKEN_EXPIRED)
+
+        payWingsRepository.getUserData(accessToken = accessToken)
     }
 
     override suspend fun calculateFreeKycAttemptsLeft(): Result<Int> {
-        val accessToken = userSessionRepository.getAccessToken()
+        val (accessToken, accessTokenExpirationTime) = userSessionRepository.run {
+            getAccessToken() to getAccessTokenExpirationTime()
+        }
+
+        if (accessToken.isBlank() ||
+            accessTokenExpirationTime <= TimeUnit.MILLISECONDS
+                .toSeconds(System.currentTimeMillis()))
+            return Result.failure(RuntimeException(ACCESS_TOKEN_EXPIRED))
 
         return tachiRepository.getFreeKycAttemptsInfo(header, accessToken)
             .map { it.total - it.completed }
@@ -131,5 +144,8 @@ class UserInteractorImpl @Inject constructor(
 
     private companion object {
         const val HEADER_DELIMITER = "/"
+
+        const val ACCESS_TOKEN_EXPIRED =
+            "Access token has been expired, be sure to retrieve new one before proceeding"
     }
 }

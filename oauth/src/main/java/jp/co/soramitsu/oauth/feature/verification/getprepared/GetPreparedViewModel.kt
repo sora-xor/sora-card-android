@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
+import jp.co.soramitsu.oauth.common.interactors.account.api.AccountInteractor
 import jp.co.soramitsu.oauth.common.interactors.user.api.UserInteractor
 import jp.co.soramitsu.oauth.common.interactors.user.api.UserOperationResult
 import jp.co.soramitsu.oauth.common.navigation.flow.verification.api.VerificationFlow
@@ -23,7 +24,8 @@ import javax.inject.Inject
 @HiltViewModel
 class GetPreparedViewModel @Inject constructor(
     private val userInteractor: UserInteractor,
-    private val verificationFlow: VerificationFlow
+    private val verificationFlow: VerificationFlow,
+    private val accountInteractor: AccountInteractor
 ) : BaseViewModel() {
 
     var state by mutableStateOf(GetPreparedState())
@@ -50,7 +52,8 @@ class GetPreparedViewModel @Inject constructor(
             basic = BasicToolbarState(
                 title = R.string.get_prepared_title,
                 visibility = true,
-                navIcon = R.drawable.ic_toolbar_back,
+                actionLabel = "LogOut", // TODO change to string res
+                navIcon = R.drawable.ic_cross
             ),
         )
 
@@ -80,11 +83,19 @@ class GetPreparedViewModel @Inject constructor(
         )
     }
 
+    override fun onToolbarAction() {
+        super.onToolbarAction()
+
+        viewModelScope.launch {
+            accountInteractor.logOut()
+        }.invokeOnCompletion { verificationFlow.onLogout() }
+    }
+
     override fun onToolbarNavigation() {
-        verificationFlow.onBack()
+        verificationFlow.onExit()
     }
 
     fun onConfirm() = viewModelScope.launch {
-        userInteractor.getUserData()
+        userInteractor.getUserData() // TODO handle error
     }
 }

@@ -10,6 +10,8 @@ import jp.co.soramitsu.oauth.theme.views.SelectableDialog
 import jp.co.soramitsu.oauth.theme.views.retrieveString
 import jp.co.soramitsu.oauth.common.navigation.flow.verification.api.VerificationDestination
 import jp.co.soramitsu.oauth.common.navigation.flow.verification.api.VerificationFlow
+import jp.co.soramitsu.oauth.core.engines.router.api.SoraCardDestinations
+import kotlinx.coroutines.flow.SharedFlow
 
 @Composable
 fun ChooseXorPurchaseMethodDialog(
@@ -32,7 +34,7 @@ private fun PreviewChooseXorPurchaseMethodDialog() {
     ChooseXorPurchaseMethodDialog(
         getMoreXorViewModel = GetMoreXorViewModel(
             verificationFlow = object : VerificationFlow {
-                override val args: Map<String, Bundle>
+                override val argsFlow: SharedFlow<Pair<SoraCardDestinations, Bundle>>
                     get() = TODO("Not yet implemented")
 
                 override fun onStart(destination: VerificationDestination) {
@@ -56,6 +58,10 @@ private fun PreviewChooseXorPurchaseMethodDialog() {
                 }
 
                 override fun onTryAgain() {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onLogout() {
                     TODO("Not yet implemented")
                 }
 

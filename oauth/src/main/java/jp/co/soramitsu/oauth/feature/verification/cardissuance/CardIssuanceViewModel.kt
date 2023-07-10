@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
+import jp.co.soramitsu.oauth.common.interactors.account.api.AccountInteractor
 import jp.co.soramitsu.oauth.theme.views.ScreenStatus
 import jp.co.soramitsu.oauth.common.interactors.prices.api.PriceInteractor
 import jp.co.soramitsu.oauth.common.navigation.flow.verification.api.VerificationFlow
@@ -20,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CardIssuanceViewModel @Inject constructor(
     private val priceInteractor: PriceInteractor,
-    private val verificationFlow: VerificationFlow
+    private val verificationFlow: VerificationFlow,
+    private val accountInteractor: AccountInteractor
 ): BaseViewModel() {
 
     var cardIssuanceScreenState by mutableStateOf(
@@ -40,6 +42,7 @@ class CardIssuanceViewModel @Inject constructor(
             basic = BasicToolbarState(
                 title = R.string.card_issuance_screen_title,
                 visibility = true,
+                actionLabel = "LogOut", // TODO change to string res
                 navIcon = R.drawable.ic_cross
             ),
         )
@@ -70,6 +73,14 @@ class CardIssuanceViewModel @Inject constructor(
                 )
             }
         }
+
+    override fun onToolbarAction() {
+        super.onToolbarAction()
+
+        viewModelScope.launch {
+            accountInteractor.logOut()
+        }.invokeOnCompletion { verificationFlow.onLogout() }
+    }
 
     override fun onToolbarNavigation() {
         super.onToolbarNavigation()

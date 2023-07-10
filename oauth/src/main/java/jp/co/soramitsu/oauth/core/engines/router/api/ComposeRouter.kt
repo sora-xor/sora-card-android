@@ -13,5 +13,5 @@ interface ComposeRouter {
 
     fun navigateTo(destination: SoraCardDestinations)
 
-    fun popBack()
+    fun popBack(): Boolean
 }

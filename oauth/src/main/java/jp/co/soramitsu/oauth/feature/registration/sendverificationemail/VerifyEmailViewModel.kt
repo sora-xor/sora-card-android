@@ -17,6 +17,7 @@ import jp.co.soramitsu.oauth.common.navigation.flow.verification.api.Verificatio
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -33,49 +34,34 @@ class VerifyEmailViewModel @Inject constructor(
         private set
 
     init {
-        registrationFlow.args[RegistrationDestination.EmailConfirmation::class.java.name]
-            .apply {
-                if (this == null)
-                    return@apply
-
-                state = state.copy(
-                    email = getString(
-                        RegistrationDestination.EmailConfirmation.EMAIL_KEY,
-                        ""
-                    ),
-                    autoSentEmail = getBoolean(
-                        RegistrationDestination.EmailConfirmation.AUTO_EMAIL_BEEN_SENT_KEY,
-                        false
-                    )
+        registrationFlow.argsFlow.filter { (destination, _) ->
+            destination is RegistrationDestination.EmailConfirmation
+        }.onEach { (_, bundle) ->
+            state = state.copy(
+                email = bundle.getString(
+                    RegistrationDestination.EmailConfirmation.EMAIL_KEY,
+                    ""
+                ),
+                autoSentEmail = bundle.getBoolean(
+                    RegistrationDestination.EmailConfirmation.AUTO_EMAIL_BEEN_SENT_KEY,
+                    false
                 )
-            }
-
-        with(accountInteractor) {
-            viewModelScope.launch {
-                checkEmailVerificationStatus()
-            }
-
-            resultFlow.onEach {
-//                loading(false)
-//                dialogState = DialogAlertState(
-//                    title = it.text,
-//                    message = it.text,
-//                    dismissAvailable = true,
-//                    onPositive = {
-//                        dialogState = null
-//                    }
-//                )
-            }.launchIn(viewModelScope)
-        }
+            )
+        }.launchIn(viewModelScope)
 
         _toolbarState.value = SoramitsuToolbarState(
             type = SoramitsuToolbarType.Small(),
             basic = BasicToolbarState(
                 title = R.string.verify_email_title,
                 visibility = true,
-                navIcon = R.drawable.ic_toolbar_back,
+                actionLabel = "LogOut", // TODO change to string res
+                navIcon = R.drawable.ic_cross,
             ),
         )
+
+        viewModelScope.launch {
+            accountInteractor.checkEmailVerificationStatus()
+        }
 
         state = state.copy(
             resendLinkButtonState = state.resendLinkButtonState.copy(
@@ -114,6 +100,14 @@ class VerifyEmailViewModel @Inject constructor(
         timer.start()
     }
 
+    override fun onToolbarAction() {
+        super.onToolbarAction()
+
+        viewModelScope.launch {
+            accountInteractor.logOut()
+        }.invokeOnCompletion { registrationFlow.onLogout() }
+    }
+
     override fun onToolbarNavigation() {
         registrationFlow.onExit()
     }
@@ -126,11 +120,7 @@ class VerifyEmailViewModel @Inject constructor(
     }
 
     fun onChangeEmail() {
-        // TODO change!!!
-        registrationFlow.onEnterEmail(
-            firstName = "",
-            lastName = ""
-        )
+        registrationFlow.onChangeEmail()
     }
 
     private fun loading(loading: Boolean) {

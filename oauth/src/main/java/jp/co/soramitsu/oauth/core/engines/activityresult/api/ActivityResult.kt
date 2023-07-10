@@ -3,8 +3,6 @@ package jp.co.soramitsu.oauth.core.engines.activityresult.api
 import android.app.Activity
 import androidx.activity.result.ActivityResultLauncher
 import com.paywings.onboarding.kyc.android.sdk.data.model.KycContractData
-import com.paywings.onboarding.kyc.android.sdk.data.model.KycUserData
-import com.paywings.onboarding.kyc.android.sdk.data.model.UserCredentials
 
 interface ActivityResult {
 
@@ -15,5 +13,7 @@ interface ActivityResult {
     fun setActivity(activity: Activity)
 
     fun setResult(soraCardResult: SoraCardResult): Boolean
+
+    fun startOutwardsApp(appPackage: String, link: String): Boolean
 
 }

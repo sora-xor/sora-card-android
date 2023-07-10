@@ -25,7 +25,7 @@ class ComposeRouterImpl @Inject constructor(
         navHostController.navigate(destination.route)
     }
 
-    override fun popBack() {
-        navHostController.popBackStack()
+    override fun popBack(): Boolean {
+        return navHostController.popBackStack()
     }
 }

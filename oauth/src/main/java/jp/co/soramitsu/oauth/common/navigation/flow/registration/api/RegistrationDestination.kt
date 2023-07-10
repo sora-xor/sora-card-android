@@ -8,18 +8,12 @@ sealed interface RegistrationDestination: SoraCardDestinations {
         override val route: String = "ENTER_FIRST_AND_LAST_NAME"
     }
 
-    class EnterEmail(
-        val firstName: String,
-        val lastName: String
-    ): RegistrationDestination {
+    object EnterEmail: RegistrationDestination {
         override val route: String = "ENTER_EMAIL"
 
-        companion object: SoraCardDestinations {
-            override val route: String = "ENTER_EMAIL"
-
-            const val FIRST_NAME_KEY = "FIRST_NAME_KEY"
-            const val LAST_NAME_KEY = "LAST_NAME_KEY"
-        }
+        const val IS_UNVERIFIED_EMAIL_CHANGED_KEY = "IS_UNVERIFIED_EMAIL_CHANGED_KEY"
+        const val FIRST_NAME_KEY = "FIRST_NAME_KEY"
+        const val LAST_NAME_KEY = "LAST_NAME_KEY"
     }
 
     class EmailConfirmation(

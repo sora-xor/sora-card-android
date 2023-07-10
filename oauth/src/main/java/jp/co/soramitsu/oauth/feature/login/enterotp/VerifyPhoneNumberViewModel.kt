@@ -14,7 +14,6 @@ import jp.co.soramitsu.oauth.common.interactors.account.api.AccountInteractor
 import jp.co.soramitsu.oauth.common.navigation.flow.login.api.LoginFlow
 import jp.co.soramitsu.oauth.core.engines.timer.Timer
 import jp.co.soramitsu.oauth.base.extension.format
-import jp.co.soramitsu.oauth.base.extension.formatForAuth
 import jp.co.soramitsu.oauth.common.navigation.flow.login.api.LoginDestination
 import jp.co.soramitsu.oauth.theme.views.ButtonState
 import jp.co.soramitsu.ui_core.component.input.InputTextState
@@ -22,6 +21,8 @@ import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -53,17 +54,16 @@ class VerifyPhoneNumberViewModel @Inject constructor(
         private set
 
     init {
-        with(loginFlow.args[LoginDestination.EnterOtp::class.java.name]) {
-            if (this == null)
-                return@with
-
+        loginFlow.argsFlow.filter { (destination, _) ->
+            destination is LoginDestination.EnterOtp
+        }.onEach { (_, bundle) ->
             state = state.copy(
-                otpLength = getInt(
+                otpLength = bundle.getInt(
                     LoginDestination.EnterOtp.OTP_LENGTH_KEY,
                     Int.MAX_VALUE
                 )
             )
-        }
+        }.launchIn(viewModelScope)
 
         _toolbarState.value = SoramitsuToolbarState(
             type = SoramitsuToolbarType.Small(),
