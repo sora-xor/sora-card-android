@@ -110,10 +110,13 @@ class CardActivity : AppCompatActivity(R.layout.card_activity) {
             viewModel.inMemoryRepo.endpointUrl = data.kycCredentials.endpointUrl
             viewModel.inMemoryRepo.username = data.kycCredentials.username
             viewModel.inMemoryRepo.password = data.kycCredentials.password
-            viewModel.inMemoryRepo.soraCardInfo = data.soraCardInfo
             viewModel.inMemoryRepo.mode = Mode.REGISTRATION
             viewModel.inMemoryRepo.environment = data.environment
             viewModel.inMemoryRepo.client = data.client
+            viewModel.inMemoryRepo.userAvailableXorAmount = data.userAvailableXorAmount
+            viewModel.inMemoryRepo.areAttemptsPaidSuccessfully = data.areAttemptsPaidSuccessfully
+            viewModel.inMemoryRepo.isEnoughXorAvailable = data.isEnoughXorAvailable
+            viewModel.inMemoryRepo.isIssuancePaid = data.isIssuancePaid
 
             PayWingsOAuthClient.init(
                 applicationContext,
@@ -135,11 +138,14 @@ class CardActivity : AppCompatActivity(R.layout.card_activity) {
             viewModel.inMemoryRepo.endpointUrl = data.kycCredentials.endpointUrl
             viewModel.inMemoryRepo.username = data.kycCredentials.username
             viewModel.inMemoryRepo.password = data.kycCredentials.password
-            viewModel.inMemoryRepo.soraCardInfo = data.soraCardInfo
             viewModel.inMemoryRepo.mode = Mode.SIGN_IN
             viewModel.inMemoryRepo.environment = data.environment
             viewModel.inMemoryRepo.client = data.client
             viewModel.inMemoryRepo.userAvailableXorAmount = data.userAvailableXorAmount
+            viewModel.inMemoryRepo.userAvailableXorAmount = data.userAvailableXorAmount
+            viewModel.inMemoryRepo.areAttemptsPaidSuccessfully = data.areAttemptsPaidSuccessfully
+            viewModel.inMemoryRepo.isEnoughXorAvailable = data.isEnoughXorAvailable
+            viewModel.inMemoryRepo.isIssuancePaid = data.isIssuancePaid
 
             PayWingsOAuthClient.init(
                 applicationContext,

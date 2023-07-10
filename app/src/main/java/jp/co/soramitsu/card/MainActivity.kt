@@ -66,15 +66,11 @@ class MainActivity : ComponentActivity() {
                     password = BuildConfig.SORA_CARD_KYC_PASSWORD,
                 ),
                 environment = SoraCardEnvironmentType.TEST,
-                soraCardInfo = kycStatus?.let {
-                    SoraCardInfo(
-                        accessToken = "",
-                        refreshToken = "",
-                        accessTokenExpirationTime = 0L,
-                    )
-                },
                 client = buildClient(),
-                userAvailableXorAmount = 120.0
+                userAvailableXorAmount = 120.0,
+                areAttemptsPaidSuccessfully = true,
+                isEnoughXorAvailable = true,
+                isIssuancePaid = true
             )
         )
     }
@@ -86,10 +82,12 @@ class MainActivity : ComponentActivity() {
                 apiKey = BuildConfig.SORA_CARD_API_KEY,
                 domain = BuildConfig.SORA_CARD_DOMAIN,
                 environment = SoraCardEnvironmentType.TEST,
-                soraCardInfo = null,
                 kycCredentials = SoraCardKycCredentials("", "", ""),
                 client = buildClient(),
-                userAvailableXorAmount = 120.0
+                userAvailableXorAmount = 120.0,
+                areAttemptsPaidSuccessfully = true,
+                isEnoughXorAvailable = true,
+                isIssuancePaid = true
             )
         )
     }
