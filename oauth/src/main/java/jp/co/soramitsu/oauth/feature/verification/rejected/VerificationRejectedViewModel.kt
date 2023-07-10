@@ -35,7 +35,8 @@ class VerificationRejectedViewModel @Inject constructor(
             screenStatus = ScreenStatus.ERROR,
             kycAttemptsCount = 0,
             kycAttemptCostInEuros = (-1).toDouble(),
-            additionalInfo = ""
+            additionalInfo = "",
+            isFreeAttemptsLeft = false
         )
     )
         private set
@@ -88,7 +89,8 @@ class VerificationRejectedViewModel @Inject constructor(
                 verificationRejectedScreenState = verificationRejectedScreenState.copy(
                     screenStatus = ScreenStatus.READY_TO_RENDER,
                     kycAttemptsCount = kycAttemptsLeft,
-                    kycAttemptCostInEuros = kycAttemptPrice
+                    kycAttemptCostInEuros = kycAttemptPrice,
+                    isFreeAttemptsLeft = kycAttemptsLeft > 0
                 )
             }.onFailure {
                 it.printStackTrace()

@@ -8,7 +8,8 @@ data class VerificationRejectedScreenState(
     private val screenStatus: ScreenStatus,
     val kycAttemptsCount: Int,
     val kycAttemptCostInEuros: Double,
-    val additionalInfo: String
+    val additionalInfo: String,
+    val isFreeAttemptsLeft: Boolean
 ) {
 
     val descriptionText: Text =
@@ -17,7 +18,7 @@ data class VerificationRejectedScreenState(
     val imageRes: Int =
         R.drawable.ic_verification_rejected
 
-    val shouldKycAttemptsLeftTextBeShown: Boolean = screenStatus === ScreenStatus.READY_TO_RENDER
+    val shouldKycAttemptsLeftTextBeShown: Boolean = true // Will be available latter
 
     val kycAttemptsLeftText: Text
         get() {
@@ -30,7 +31,7 @@ data class VerificationRejectedScreenState(
             )
         }
 
-    val shouldKycAttemptsDisclaimerTextBeShown: Boolean = screenStatus === ScreenStatus.READY_TO_RENDER
+    val shouldKycAttemptsDisclaimerTextBeShown: Boolean = false // Will be available latter
 
     val kycAttemptsDisclaimerText: Text =
         Text.StringResWithArgs(
@@ -38,15 +39,16 @@ data class VerificationRejectedScreenState(
             payload = arrayOf(kycAttemptCostInEuros.toString())
         )
 
-    val shouldTryAgainButtonBeShown: Boolean = screenStatus === ScreenStatus.READY_TO_RENDER
+    val shouldTryAgainButtonBeShown: Boolean = isFreeAttemptsLeft
 
     val tryAgainText: Text
         get() {
-            if (kycAttemptsCount <= 0)
-                return Text.StringResWithArgs(
-                    id = R.string.verification_rejected_screen_try_again_for_euros,
-                    payload = arrayOf(kycAttemptCostInEuros.toString())
-                )
+            /* Will be available latter */
+//            if (kycAttemptsCount <= 0)
+//                return Text.StringResWithArgs(
+//                    id = R.string.verification_rejected_screen_try_again_for_euros,
+//                    payload = arrayOf(kycAttemptCostInEuros.toString())
+//                )
 
             return Text.StringRes(id = R.string.verification_rejected_screen_try_again_for_free)
         }

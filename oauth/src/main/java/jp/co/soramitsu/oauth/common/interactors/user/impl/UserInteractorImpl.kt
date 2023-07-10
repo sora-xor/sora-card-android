@@ -139,11 +139,13 @@ class UserInteractorImpl @Inject constructor(
             return Result.failure(RuntimeException(ACCESS_TOKEN_EXPIRED))
 
         return tachiRepository.getFreeKycAttemptsInfo(header, accessToken)
-            .map { it.total - it.completed }
+            .map { TOTAL_ALLOWED_KYC_ATTEMPTS - it.rejected }
     }
 
     private companion object {
         const val HEADER_DELIMITER = "/"
+
+        const val TOTAL_ALLOWED_KYC_ATTEMPTS = 2
 
         const val ACCESS_TOKEN_EXPIRED =
             "Access token has been expired, be sure to retrieve new one before proceeding"
