@@ -87,11 +87,12 @@
   <string name="verification_rejected_title">Demande rejetée</string>
   <string name="verification_successful_description">Votre vérification KYC a été validée et nous préparons déjà votre carte pour vous l\'envoyer!</string>
   <string name="verification_successful_title">Demande approuvée</string>
-  <string name="verify_email_description">Suivez le lien magique envoyé à %s</string>
+  <string name="verify_email_description">Suivez le lien magique envoyé à \n%s\nL\'e-mail peut prendre plusieurs minutes pour arriver. Pensez à vérifier votre dossier Spam si vous n\'avez toujours pas reçu l\'e-mail après 5 minutes.</string>
   <string name="verify_email_resend">Renvoyer dans %s</string>
   <string name="verify_email_title">Vérifiez votre e-mail</string>
   <string name="verify_phone_number_code_input_field_label">Code SMS</string>
   <string name="verify_phone_number_description">Entrez le code qui a été envoyé au %s</string>
+  <string name="verify_phone_number_otp_not_valid">OTP is not valid</string>
   <string name="verify_phone_number_send_code">Envoyer le code</string>
   <string name="verify_phone_number_title">Vérifiez votre numéro de téléphone</string>
 </resources>
