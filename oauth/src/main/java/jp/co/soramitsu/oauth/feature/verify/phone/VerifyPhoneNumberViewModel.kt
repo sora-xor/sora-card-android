@@ -13,13 +13,8 @@ import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
-import jp.co.soramitsu.oauth.base.sdk.Mode
 import jp.co.soramitsu.oauth.base.sdk.SoraCardEnvironmentType
-import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardError
-import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
-import jp.co.soramitsu.oauth.base.state.DialogAlertState
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
-import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.oauth.feature.verify.Timer
@@ -40,8 +35,7 @@ class VerifyPhoneNumberViewModel @Inject constructor(
     private val mainRouter: MainRouter,
     private val userSessionRepository: UserSessionRepository,
     private val timer: Timer,
-    private val setActivityResult: SetActivityResult,
-    private val inMemoryRepo: InMemoryRepo,
+    inMemoryRepo: InMemoryRepo,
     private val pwoAuthClientProxy: PWOAuthClientProxy,
 ) : BaseViewModel() {
 
@@ -138,36 +132,12 @@ class VerifyPhoneNumberViewModel @Inject constructor(
 
         override fun onShowEmailConfirmationScreen(email: String, autoEmailSent: Boolean) {
             loading(false)
-            if (inMemoryRepo.mode != Mode.REGISTRATION) {
-                dialogState = DialogAlertState(
-                    title = null,
-                    message = R.string.common_user_not_found,
-                    dismissAvailable = false,
-                    onPositive = {
-                        dialogState = null
-                        finishWithError(SoraCardError.USER_NOT_FOUND)
-                    }
-                )
-            } else {
-                mainRouter.openVerifyEmail(email, autoEmailSent)
-            }
+            mainRouter.openVerifyEmail(email, autoEmailSent)
         }
 
         override fun onShowRegistrationScreen() {
             loading(false)
-            if (inMemoryRepo.mode != Mode.REGISTRATION) {
-                dialogState = DialogAlertState(
-                    title = null,
-                    message = R.string.common_user_not_found,
-                    dismissAvailable = false,
-                    onPositive = {
-                        dialogState = null
-                        finishWithError(SoraCardError.USER_NOT_FOUND)
-                    }
-                )
-            } else {
-                mainRouter.openRegisterUser()
-            }
+            mainRouter.openRegisterUser()
         }
 
         override fun onSignInSuccessful(
@@ -194,10 +164,6 @@ class VerifyPhoneNumberViewModel @Inject constructor(
                 )
             )
         }
-    }
-
-    private fun finishWithError(error: SoraCardError) {
-        setActivityResult.setResult(SoraCardResult.Failure(error = error))
     }
 
     private suspend fun signInUser(
