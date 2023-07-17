@@ -66,7 +66,6 @@ class VerifyPhoneNumberViewModelTest {
             mainRouter,
             userSessionRepository,
             timer,
-            setActivityResult,
             inMemoryRepo,
             pwoAuthClientProxy,
         )

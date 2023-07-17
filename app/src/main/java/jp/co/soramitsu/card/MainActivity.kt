@@ -10,11 +10,9 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import jp.co.soramitsu.oauth.base.sdk.SoraCardEnvironmentType
-import jp.co.soramitsu.oauth.base.sdk.SoraCardInfo
 import jp.co.soramitsu.oauth.base.sdk.SoraCardKycCredentials
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardContract
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardContractData
-import jp.co.soramitsu.oauth.base.sdk.signin.SoraCardSignInContract
 import jp.co.soramitsu.oauth.common.model.KycStatus
 import jp.co.soramitsu.oauth.theme.AuthSdkTheme
 import jp.co.soramitsu.ui_core.component.button.FilledButton
@@ -28,10 +26,6 @@ class MainActivity : ComponentActivity() {
         SoraCardContract()
     ) {}
 
-    private var signInLauncher = registerForActivityResult(
-        SoraCardSignInContract()
-    ) {}
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -40,9 +34,6 @@ class MainActivity : ComponentActivity() {
                     Column(modifier = Modifier.fillMaxSize()) {
                         Button(onClick = { startRegistrationFlow(kycStatus = null) }) {
                             Text("registration")
-                        }
-                        Button(onClick = { startSignInFlow() }) {
-                            Text("login")
                         }
 
                         FilledButton(size = Size.Large, order = Order.SECONDARY, text = "text") {
@@ -66,23 +57,6 @@ class MainActivity : ComponentActivity() {
                     password = BuildConfig.SORA_CARD_KYC_PASSWORD,
                 ),
                 environment = SoraCardEnvironmentType.TEST,
-                client = buildClient(),
-                userAvailableXorAmount = 19999.9,
-                isEnoughXorAvailable = true,
-                areAttemptsPaidSuccessfully = true,
-                isIssuancePaid = false
-            )
-        )
-    }
-
-    private fun startSignInFlow() {
-        signInLauncher.launch(
-            SoraCardContractData(
-                locale = Locale.ENGLISH,
-                apiKey = BuildConfig.SORA_CARD_API_KEY,
-                domain = BuildConfig.SORA_CARD_DOMAIN,
-                environment = SoraCardEnvironmentType.TEST,
-                kycCredentials = SoraCardKycCredentials("", "", ""),
                 client = buildClient(),
                 userAvailableXorAmount = 19999.9,
                 isEnoughXorAvailable = true,
