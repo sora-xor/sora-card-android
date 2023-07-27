@@ -28,8 +28,8 @@ plugins {
 val composeCompilerVersion by extra("1.4.6")
 val uiCoreVersion by extra("0.0.70")
 val hiltVersion by extra("2.45")
-val pwOauthSdkVersion by extra("1.2.3")
-val pwKycSdkVersion by extra("4.4.0")
+val pwOauthSdkVersion by extra("1.3.1")
+val pwKycSdkVersion by extra("4.5.0")
 val dataStoreVersion by extra("1.0.0")
 val ktorVersion by extra("2.3.1")
 
@@ -42,17 +42,15 @@ android {
         targetSdk = 33
         multiDexEnabled = true
 
+        buildConfigField("String","SORA_API_BASE_URL_PROD",maybeWrapQuotes(secret("SORA_BACKEND_RELEASE")!!))
+        buildConfigField("String","SORA_API_BASE_URL_TEST",maybeWrapQuotes(secret("SORA_BACKEND_DEBUG")!!))
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-            buildConfigField(
-                "String",
-                "API_BASE_URL",
-                maybeWrapQuotes(secret("SORA_BACKEND_RELEASE")!!)
-            )
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -60,11 +58,6 @@ android {
         }
         debug {
             isMinifyEnabled = false
-            buildConfigField(
-                "String",
-                "API_BASE_URL",
-                maybeWrapQuotes(secret("SORA_BACKEND_DEBUG")!!)
-            )
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -151,7 +144,7 @@ kapt {
     correctErrorTypes = true
 }
 
-val currentVersion by extra("0.1.10")
+val currentVersion by extra("0.1.11")
 publishing {
     publications {
         register<MavenPublication>("release") {

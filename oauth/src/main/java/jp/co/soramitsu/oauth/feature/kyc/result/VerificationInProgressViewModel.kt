@@ -29,7 +29,7 @@ class VerificationInProgressViewModel @Inject constructor(
                 title = R.string.kyc_result_verification_in_progress,
                 visibility = true,
                 navIcon = R.drawable.ic_cross,
-                actionLabel = R.string.log_out
+                actionLabel = R.string.log_out,
             ),
         )
     }
