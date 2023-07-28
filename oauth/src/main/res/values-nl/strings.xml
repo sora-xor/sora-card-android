@@ -10,6 +10,7 @@
   <string name="card_issuance_screen_paid_card_title">€%s issuance fee</string>
   <string name="card_issuance_screen_title">Card issuance</string>
   <string name="change_email_title">Wijzig uw e-mailadres</string>
+  <string name="common_back">Back</string>
   <string name="common_cancel">Annuleren</string>
   <string name="common_change_email">Probeer een ander e-mailadres</string>
   <string name="common_close">Sluiten</string>

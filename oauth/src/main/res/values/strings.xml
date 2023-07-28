@@ -10,6 +10,7 @@
   <string name="card_issuance_screen_paid_card_title">€%s issuance fee</string>
   <string name="card_issuance_screen_title">Card issuance</string>
   <string name="change_email_title">Change your email</string>
+  <string name="common_back">Back</string>
   <string name="common_cancel">Cancel</string>
   <string name="common_change_email">Use another email</string>
   <string name="common_close">Close</string>
@@ -26,7 +27,7 @@
   <string name="common_user_not_found">No mobile number found, please recheck it and try again.</string>
   <string name="details_already_have_card">I already have a card</string>
   <string name="details_already_used_free_try">You already used your free try</string>
-  <string name="details_description">Get a Euro IBAN account and Mastercard Debit Card accessible within your SORA Wallet</string>
+  <string name="details_description">Get a Euro IBAN account and debit card accessible within your SORA Wallet</string>
   <string name="details_enough_xor_desription">You have enough XOR</string>
   <string name="details_get_more_xor">Get more XOR</string>
   <string name="details_issue_card">Issue card for free</string>

@@ -10,6 +10,7 @@
   <string name="card_issuance_screen_paid_card_title">€%s issuance fee</string>
   <string name="card_issuance_screen_title">Card issuance</string>
   <string name="change_email_title">Change your email</string>
+  <string name="common_back">Back</string>
   <string name="common_cancel">Cancel</string>
   <string name="common_change_email">Use another email</string>
   <string name="common_close">Close</string>
