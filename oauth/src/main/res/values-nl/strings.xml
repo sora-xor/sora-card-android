@@ -27,7 +27,7 @@
   <string name="common_user_not_found">Geen mobiel nummer gevonden, controleer het opnieuw en probeer het opnieuw.</string>
   <string name="details_already_have_card">Ik heb al een kaart</string>
   <string name="details_already_used_free_try">Je hebt je gratis poging reeds gebruikt</string>
-  <string name="details_description">Krijg een Euro IBAN-account en Mastercard-betaalpas die toegankelijk zijn in uw SORA-portemonnee</string>
+  <string name="details_description">Krijg een Euro IBAN-rekening en betaalpas die toegankelijk zijn in uw SORA Wallet</string>
   <string name="details_enough_xor_desription">Je hebt genoeg XOR</string>
   <string name="details_get_more_xor">Verkrijg meer XOR</string>
   <string name="details_issue_card">Kaart gratis uitreiken</string>

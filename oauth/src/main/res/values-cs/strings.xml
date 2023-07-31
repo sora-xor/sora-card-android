@@ -27,7 +27,7 @@
   <string name="common_user_not_found">Nebylo nalezeno žádné číslo mobilního telefonu, zkontrolujte ho znovu a zkuste to znovu.</string>
   <string name="details_already_have_card">I already have a card</string>
   <string name="details_already_used_free_try">You already used your free try</string>
-  <string name="details_description">Získejte účet v eurech IBAN a debetní kartu Mastercard přístupné ve vaší peněžence SORA</string>
+  <string name="details_description">Získejte účet v eurech IBAN a debetní kartu dostupné ve vaší peněžence SORA</string>
   <string name="details_enough_xor_desription">You have enough XOR</string>
   <string name="details_get_more_xor">Get more XOR</string>
   <string name="details_issue_card">Issue card for free</string>
