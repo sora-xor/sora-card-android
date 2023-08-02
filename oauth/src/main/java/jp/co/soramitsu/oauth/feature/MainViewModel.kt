@@ -3,6 +3,7 @@ package jp.co.soramitsu.oauth.feature
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
 import com.paywings.oauth.android.sdk.service.callback.GetUserDataCallback
@@ -10,6 +11,7 @@ import com.paywings.onboarding.kyc.android.sdk.data.model.KycUserData
 import com.paywings.onboarding.kyc.android.sdk.data.model.UserCredentials
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.soramitsu.oauth.base.BaseViewModel
+import jp.co.soramitsu.oauth.base.SingleLiveEvent
 import jp.co.soramitsu.oauth.base.navigation.Destination
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
@@ -40,6 +42,9 @@ class MainViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(MainScreenState())
     val state: StateFlow<MainScreenState?> = _state.asStateFlow()
+
+    private val _toast = SingleLiveEvent<Pair<String, String>>()
+    val toast: LiveData<Pair<String, String>> = _toast
 
     var uiState by mutableStateOf(MainScreenUiState())
         private set
@@ -190,8 +195,8 @@ class MainViewModel @Inject constructor(
             kycRepository.getKycLastFinalStatus(accessToken).onSuccess { kycResponse ->
                 if (kycResponse != null
                     && (kycResponse == SoraCardCommonVerification.Rejected ||
-                        kycResponse == SoraCardCommonVerification.Pending ||
-                        kycResponse == SoraCardCommonVerification.Successful)
+                            kycResponse == SoraCardCommonVerification.Pending ||
+                            kycResponse == SoraCardCommonVerification.Successful)
                 ) {
                     showKycStatusScreen(kycResponse)
                 } else {
@@ -199,14 +204,7 @@ class MainViewModel @Inject constructor(
                 }
             }
                 .onFailure {
-                    dialogState = DialogAlertState(
-                        title = "Network Error",
-                        message = it.localizedMessage,
-                        dismissAvailable = true,
-                        onPositive = {
-                            dialogState = null
-                        }
-                    )
+                    _toast.value = "Network 01 Error" to it.localizedMessage.orEmpty()
                 }
         }
     }
@@ -214,14 +212,7 @@ class MainViewModel @Inject constructor(
     private suspend fun checkKycRequirementsFulfilled(accessToken: String) {
         kycRepository.hasFreeKycAttempt(accessToken)
             .onFailure {
-                dialogState = DialogAlertState(
-                    title = "Network Error",
-                    message = it.localizedMessage,
-                    dismissAvailable = true,
-                    onPositive = {
-                        dialogState = null
-                    }
-                )
+                _toast.value = "Network 02 Error" to it.localizedMessage.orEmpty()
             }
             .onSuccess { hasFreeAttempt ->
                 if (inMemoryRepo.isEnoughXorAvailable) {
@@ -248,6 +239,9 @@ class MainViewModel @Inject constructor(
                         showKycStatusScreen(it, statusDescription)
                     }
                 }
+                    .onFailure {
+                        _toast.value = "Network 03 Error" to it.localizedMessage.orEmpty()
+                    }
                 showLoading(false)
             }
         }
