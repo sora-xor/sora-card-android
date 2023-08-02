@@ -14,7 +14,6 @@ import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.sdk.SoraCardEnvironmentType
-import jp.co.soramitsu.oauth.base.state.DialogAlertState
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
@@ -121,14 +120,12 @@ class VerifyPhoneNumberViewModel @Inject constructor(
     private val verifyOtpCallback = object : SignInWithPhoneNumberVerifyOtpCallback {
         override fun onError(error: OAuthErrorCode, errorMessage: String?) {
             loading(false)
-            getErrorMessage(error)?.let { descriptionText ->
-                state = state.copy(
-                    inputTextState = state.inputTextState.copy(
-                        error = true,
-                        descriptionText = descriptionText
-                    )
+            state = state.copy(
+                inputTextState = state.inputTextState.copy(
+                    error = true,
+                    descriptionText = error.description
                 )
-            }
+            )
         }
 
         override fun onShowEmailConfirmationScreen(email: String, autoEmailSent: Boolean) {
@@ -146,37 +143,14 @@ class VerifyPhoneNumberViewModel @Inject constructor(
             accessToken: String,
             accessTokenExpirationTime: Long
         ) {
-            dialogState = DialogAlertState(
-                title = "onSignInSuccessful",
-                message = accessToken.take(10)
-                        + " ex=${inMemoryRepo.isEnoughXorAvailable}"
-                        + " au=${authCallback==null}"
-                        + " env=${inMemoryRepo.environment.name}"
-                        + " su=${inMemoryRepo.soraBackEndUrl}",
-                dismissAvailable = false,
-                onPositive = {
-                    viewModelScope.launch {
-                        runCatching {
-                            signInUser(refreshToken, accessToken, accessTokenExpirationTime)
-                        }
-                        authCallback?.onOAuthSucceed(accessToken)
-                    }
-                    dialogState = null
-                }
-            )
+            viewModelScope.launch {
+                signInUser(refreshToken, accessToken, accessTokenExpirationTime)
+                authCallback?.onOAuthSucceed(accessToken)
+            }
         }
 
         override fun onUserSignInRequired() {
-            dialogState = DialogAlertState(
-                title = "onUserSignInRequired",
-                message = "onUserSignInRequired",
-                dismissAvailable = false,
-                onPositive = {
-                    resendOtp()
-                    dialogState = null
-                }
-            )
-//            resendOtp()
+            resendOtp()
         }
 
         override fun onVerificationFailed() {
@@ -205,14 +179,12 @@ class VerifyPhoneNumberViewModel @Inject constructor(
     private val requestOtpCallback = object : SignInWithPhoneNumberRequestOtpCallback {
         override fun onError(error: OAuthErrorCode, errorMessage: String?) {
             loading(false)
-            getErrorMessage(error)?.let { descriptionText ->
-                state = state.copy(
-                    inputTextState = state.inputTextState.copy(
-                        error = true,
-                        descriptionText = descriptionText
-                    )
+            state = state.copy(
+                inputTextState = state.inputTextState.copy(
+                    error = true,
+                    descriptionText = error.description
                 )
-            }
+            )
         }
 
         override fun onShowOtpInputScreen(otpLength: Int) {
@@ -220,17 +192,6 @@ class VerifyPhoneNumberViewModel @Inject constructor(
             startOtpResendTimer()
         }
     }
-
-    private fun getErrorMessage(errorCode: OAuthErrorCode): String {
-        return errorCode.description
-    }
-//    private fun getErrorMessage(errorCode: OAuthErrorCode): String? {
-//        return when (errorCode) {
-//            OAuthErrorCode.NO_INTERNET -> "Check your internet connection"
-//            OAuthErrorCode.USER_IS_SUSPENDED -> "Phone number is suspended"
-//            else -> null
-//        }
-//    }
 
     fun onCodeChanged(value: TextFieldValue) {
         if (value.text.length > otpLength) {

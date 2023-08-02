@@ -141,7 +141,7 @@ kapt {
     correctErrorTypes = true
 }
 
-val currentVersion by extra("0.1.22")
+val currentVersion by extra("0.1.23")
 publishing {
     publications {
         register<MavenPublication>("release") {
