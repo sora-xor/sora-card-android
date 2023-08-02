@@ -198,22 +198,44 @@ class MainViewModel @Inject constructor(
                     checkKycRequirementsFulfilled(accessToken)
                 }
             }
+                .onFailure {
+                    dialogState = DialogAlertState(
+                        title = accessToken,
+                        message = it.localizedMessage,
+                        dismissAvailable = true,
+                        onPositive = {
+                            dialogState = null
+                        }
+                    )
+                }
         }
     }
 
     private suspend fun checkKycRequirementsFulfilled(accessToken: String) {
-        val hasFreeAttempt = kycRepository.hasFreeKycAttempt(accessToken).getOrDefault(false)
-        if (inMemoryRepo.isEnoughXorAvailable) {
-            if (hasFreeAttempt) {
-                mainRouter.openGetPrepared()
-            } else {
-                showKycStatusScreen(SoraCardCommonVerification.Rejected)
+        kycRepository.hasFreeKycAttempt(accessToken)
+            .onFailure {
+                dialogState = DialogAlertState(
+                    title = accessToken,
+                    message = it.localizedMessage,
+                    dismissAvailable = true,
+                    onPositive = {
+                        dialogState = null
+                    }
+                )
             }
-        } else {
-            kycRequirementsUnfulfilledFlow.start(
-                fromDestination = CompatibilityDestination(Destination.ENTER_PHONE_NUMBER.route)
-            )
-        }
+            .onSuccess { hasFreeAttempt ->
+                if (inMemoryRepo.isEnoughXorAvailable) {
+                    if (hasFreeAttempt) {
+                        mainRouter.openGetPrepared()
+                    } else {
+                        showKycStatusScreen(SoraCardCommonVerification.Rejected)
+                    }
+                } else {
+                    kycRequirementsUnfulfilledFlow.start(
+                        fromDestination = CompatibilityDestination(Destination.ENTER_PHONE_NUMBER.route)
+                    )
+                }
+            }
     }
 
     fun checkKycStatus(statusDescription: String? = null) {
