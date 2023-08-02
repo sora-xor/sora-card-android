@@ -42,9 +42,6 @@ android {
         targetSdk = 33
         multiDexEnabled = true
 
-        buildConfigField("String","SORA_API_BASE_URL_PROD",maybeWrapQuotes(secret("SORA_BACKEND_RELEASE")!!))
-        buildConfigField("String","SORA_API_BASE_URL_TEST",maybeWrapQuotes(secret("SORA_BACKEND_DEBUG")!!))
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -144,7 +141,7 @@ kapt {
     correctErrorTypes = true
 }
 
-val currentVersion by extra("0.1.21")
+val currentVersion by extra("0.1.22")
 publishing {
     publications {
         register<MavenPublication>("release") {

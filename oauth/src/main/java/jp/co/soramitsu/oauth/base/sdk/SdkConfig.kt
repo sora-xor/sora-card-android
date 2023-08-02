@@ -14,6 +14,8 @@ class InMemoryRepo @Inject constructor() {
     var client: String = BuildConfig.LIBRARY_PACKAGE_NAME
     var userAvailableXorAmount: Double = 0.toDouble()
 
+    var soraBackEndUrl = ""
+
     val euroLiquidityThreshold = 100
     val euroCardIssuancePrice = 20
 

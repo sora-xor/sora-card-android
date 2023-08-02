@@ -14,6 +14,7 @@ data class SoraCardContractData(
     val domain: String,
     val kycCredentials: SoraCardKycCredentials,
     val environment: SoraCardEnvironmentType,
+    val soraBackEndUrl: String,
     val client: String,
     val userAvailableXorAmount: Double,
     val areAttemptsPaidSuccessfully: Boolean,
