@@ -200,7 +200,7 @@ class MainViewModel @Inject constructor(
             }
                 .onFailure {
                     dialogState = DialogAlertState(
-                        title = accessToken,
+                        title = "Network Error",
                         message = it.localizedMessage,
                         dismissAvailable = true,
                         onPositive = {
@@ -215,7 +215,7 @@ class MainViewModel @Inject constructor(
         kycRepository.hasFreeKycAttempt(accessToken)
             .onFailure {
                 dialogState = DialogAlertState(
-                    title = accessToken,
+                    title = "Network Error",
                     message = it.localizedMessage,
                     dismissAvailable = true,
                     onPositive = {

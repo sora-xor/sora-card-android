@@ -25,7 +25,7 @@ class SoraCardNetworkClient(
     timeout: Long = 10000,
     logging: Boolean = false,
     provider: SoraCardClientProvider,
-    inMemoryRepo: InMemoryRepo,
+    private val inMemoryRepo: InMemoryRepo,
 ) {
 
     @OptIn(ExperimentalSerializationApi::class)
@@ -36,8 +36,6 @@ class SoraCardNetworkClient(
         explicitNulls = false
     }
 
-    private val baseUrl = inMemoryRepo.soraBackEndUrl
-
     private val httpClient: HttpClient = provider.provide(logging, timeout, json)
 
     private val header: String by lazy {
@@ -46,7 +44,7 @@ class SoraCardNetworkClient(
 
     suspend fun post(bearerToken: String?, url: String, body: Any): HttpResponse =
         wrapInExceptionHandler {
-            httpClient.post(baseUrl + url) {
+            httpClient.post(inMemoryRepo.soraBackEndUrl + url) {
                 contentType(ContentType.Application.Json)
                 accept(ContentType.Application.Json)
                 bearerToken?.let { bearerAuth(it) }
@@ -58,7 +56,7 @@ class SoraCardNetworkClient(
 
     suspend fun get(bearerToken: String?, url: String): HttpResponse =
         wrapInExceptionHandler {
-            return httpClient.get(baseUrl + url) {
+            httpClient.get(inMemoryRepo.soraBackEndUrl + url) {
                 bearerToken?.let { bearerAuth(it) }
                 userAgent(header)
                 accept(ContentType.Application.Json)

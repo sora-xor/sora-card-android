@@ -3,10 +3,10 @@ package jp.co.soramitsu.oauth.common.di
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dagger.hilt.android.components.ActivityRetainedComponent
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.common.data.CurrentActivityRetrieverImpl
-import javax.inject.Singleton
 import jp.co.soramitsu.oauth.common.data.KycRepositoryImpl
 import jp.co.soramitsu.oauth.common.data.PriceInteractorImpl
 import jp.co.soramitsu.oauth.common.domain.CurrentActivityRetriever
@@ -18,26 +18,26 @@ import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.oauth.network.SoraCardNetworkClient
 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(ActivityRetainedComponent::class)
 class CommonModule {
 
-    @Singleton
+    @ActivityRetainedScoped
     @Provides
     fun providePWOAuthClientProxy(): PWOAuthClientProxy = PWOAuthClientProxyImpl()
 
-    @Singleton
+    @ActivityRetainedScoped
     @Provides
     fun provideKycRepository(
         apiClient: SoraCardNetworkClient
     ): KycRepository = KycRepositoryImpl(apiClient)
 
     @Provides
-    @Singleton
+    @ActivityRetainedScoped
     fun provideCurrentActivityRetriever(): CurrentActivityRetriever =
         CurrentActivityRetrieverImpl()
 
     @Provides
-    @Singleton
+    @ActivityRetainedScoped
     fun providePriceInteractor(
         userSessionRepository: UserSessionRepository,
         inMemoryRepo: InMemoryRepo,

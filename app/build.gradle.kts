@@ -97,7 +97,7 @@ dependencies {
     implementation( "com.google.dagger:hilt-android:2.45")
     "kapt"("com.google.dagger:hilt-compiler:2.45")
 
-    implementation("jp.co.soramitsu:ui-core:0.0.73")
+    implementation("jp.co.soramitsu:ui-core:0.0.75")
 }
 
 kapt {

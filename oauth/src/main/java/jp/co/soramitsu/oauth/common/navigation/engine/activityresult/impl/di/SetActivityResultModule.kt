@@ -3,19 +3,17 @@ package jp.co.soramitsu.oauth.common.navigation.engine.activityresult.impl.di
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import jp.co.soramitsu.oauth.common.domain.CurrentActivityRetriever
+import dagger.hilt.android.components.ActivityRetainedComponent
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
-import jp.co.soramitsu.oauth.common.data.CurrentActivityRetrieverImpl
 import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.impl.SetActivityResultImpl
-import javax.inject.Singleton
 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(ActivityRetainedComponent::class)
 interface SetActivityResultModule {
 
     @Binds
-    @Singleton
+    @ActivityRetainedScoped
     fun bindSetActivityResult(setActivityResultImpl: SetActivityResultImpl): SetActivityResult
 
 }
