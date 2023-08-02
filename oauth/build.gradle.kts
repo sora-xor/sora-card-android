@@ -26,7 +26,7 @@ plugins {
 }
 
 val composeCompilerVersion by extra("1.4.6")
-val uiCoreVersion by extra("0.0.74")
+val uiCoreVersion by extra("0.0.75")
 val hiltVersion by extra("2.45")
 val pwOauthSdkVersion by extra("1.3.1")
 val pwKycSdkVersion by extra("4.5.0")
