@@ -72,6 +72,7 @@ class CardActivity : AppCompatActivity(R.layout.card_activity) {
             vm.inMemoryRepo.username = data.kycCredentials.username
             vm.inMemoryRepo.password = data.kycCredentials.password
             vm.inMemoryRepo.environment = data.environment
+            vm.inMemoryRepo.soraBackEndUrl = data.soraBackEndUrl
             vm.inMemoryRepo.client = data.client
             vm.inMemoryRepo.userAvailableXorAmount = data.userAvailableXorAmount
             vm.inMemoryRepo.areAttemptsPaidSuccessfully = data.areAttemptsPaidSuccessfully

@@ -9,7 +9,6 @@ import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
 import com.paywings.oauth.android.sdk.service.callback.SignInWithPhoneNumberRequestOtpCallback
 import com.paywings.oauth.android.sdk.service.callback.SignInWithPhoneNumberVerifyOtpCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jp.co.soramitsu.oauth.BuildConfig
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
@@ -150,11 +149,10 @@ class VerifyPhoneNumberViewModel @Inject constructor(
             dialogState = DialogAlertState(
                 title = "onSignInSuccessful",
                 message = accessToken.take(10)
-                        + "ex=${inMemoryRepo.isEnoughXorAvailable}"
+                        + " ex=${inMemoryRepo.isEnoughXorAvailable}"
                         + " au=${authCallback==null}"
-                        + "env=${inMemoryRepo.environment.name}"
-                        + "bt=${BuildConfig.SORA_API_BASE_URL_TEST}"
-                        + "bp=${BuildConfig.SORA_API_BASE_URL_PROD}",
+                        + " env=${inMemoryRepo.environment.name}"
+                        + " su=${inMemoryRepo.soraBackEndUrl}",
                 dismissAvailable = false,
                 onPositive = {
                     viewModelScope.launch {

@@ -61,7 +61,8 @@ class MainActivity : ComponentActivity() {
                 userAvailableXorAmount = 19999.9,
                 isEnoughXorAvailable = true,
                 areAttemptsPaidSuccessfully = true,
-                isIssuancePaid = false
+                isIssuancePaid = false,
+                soraBackEndUrl = BuildConfig.SORA_API_BASE_URL,
             )
         )
     }

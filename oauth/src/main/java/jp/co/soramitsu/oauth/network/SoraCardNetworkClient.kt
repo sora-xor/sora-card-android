@@ -16,9 +16,7 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.http.userAgent
-import jp.co.soramitsu.oauth.BuildConfig
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
-import jp.co.soramitsu.oauth.base.sdk.SoraCardEnvironmentType
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
@@ -38,10 +36,7 @@ class SoraCardNetworkClient(
         explicitNulls = false
     }
 
-    private val baseUrl = if (inMemoryRepo.environment == SoraCardEnvironmentType.PRODUCTION)
-        BuildConfig.SORA_API_BASE_URL_PROD
-    else
-        BuildConfig.SORA_API_BASE_URL_TEST
+    private val baseUrl = inMemoryRepo.soraBackEndUrl
 
     private val httpClient: HttpClient = provider.provide(logging, timeout, json)
 
