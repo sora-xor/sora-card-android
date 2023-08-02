@@ -161,7 +161,16 @@ class VerifyPhoneNumberViewModel @Inject constructor(
         }
 
         override fun onUserSignInRequired() {
-            resendOtp()
+            dialogState = DialogAlertState(
+                title = "onUserSignInRequired",
+                message = "onUserSignInRequired",
+                dismissAvailable = false,
+                onPositive = {
+                    resendOtp()
+                    dialogState = null
+                }
+            )
+//            resendOtp()
         }
 
         override fun onVerificationFailed() {
