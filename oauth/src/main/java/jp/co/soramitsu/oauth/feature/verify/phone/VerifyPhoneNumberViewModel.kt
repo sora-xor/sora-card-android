@@ -148,11 +148,13 @@ class VerifyPhoneNumberViewModel @Inject constructor(
         ) {
             dialogState = DialogAlertState(
                 title = "onSignInSuccessful",
-                message = accessToken,
+                message = accessToken.take(10) + "ex=${inMemoryRepo.isEnoughXorAvailable}" + " au=${authCallback==null}",
                 dismissAvailable = false,
                 onPositive = {
                     viewModelScope.launch {
-                        signInUser(refreshToken, accessToken, accessTokenExpirationTime)
+                        runCatching {
+                            signInUser(refreshToken, accessToken, accessTokenExpirationTime)
+                        }
                         authCallback?.onOAuthSucceed(accessToken)
                     }
                     dialogState = null
