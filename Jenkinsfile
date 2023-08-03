@@ -1,17 +1,21 @@
-@Library('jenkins-library' ) _
+@Library('jenkins-library@feature/DOPS-2648') _
 
-// Job properties
-def jobParams = [
-  booleanParam(defaultValue: false, description: 'push to the dev profile', name: 'prDeployment'),
+def extraBuildEnv = [
+  "testkey1": "123",
+  "testkey2": "123"
 ]
-
-def pipeline = new org.android.AppPipeline(steps: this,
-    sonar: true,
-    sonarProjectName: 'sora-card-android',
-    sonarProjectKey: 'jp.co.soramitsu:sora-card-android',
-    testCmd: ':oauth:test',
-    jobParams: jobParams,
-    appPushNoti: true,
-    dockerImage: 'build-tools/android-build-box-jdk11:latest'
+new org.soramitsu.mainLibrary().call(
+  agentLabel: "android",
+  skipSonar: true,
+  skipDojo: true,
+  agentImage: "android-build-box-jdk11:latest",
+  nexusCredentials: "bot-soramitsu-rw",
+  buildCommand: './gradlew :oauth:build',
+  testCommand: './gradlew :oauth:test',
+  publishCommand: './gradlew publish',
+  // pushTags: ['PR-69': 'pr-69'],
+  publishLibrary: true,
+  skipDockerImage: true,
+  dojoProductType: "sora-card-android",
+  extraBuildEnv: extraBuildEnv
 )
-pipeline.runPipeline('sora')
