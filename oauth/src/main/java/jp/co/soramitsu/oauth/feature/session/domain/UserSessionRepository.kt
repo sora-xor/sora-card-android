@@ -11,8 +11,10 @@ interface UserSessionRepository {
     suspend fun signInUser(
         refreshToken: String,
         accessToken: String,
-        expirationTime: Long
+        expirationTime: Long,
     )
+
+    suspend fun getUser(): Triple<String, String, Long>
 
     suspend fun setNewAccessToken(
         accessToken: String,

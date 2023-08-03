@@ -193,6 +193,10 @@ private fun PreviewCardIssuanceScreen() {
                 TODO("Not yet implemented")
             }
 
+            override suspend fun getUser(): Triple<String, String, Long> {
+                TODO("Not yet implemented")
+            }
+
             override suspend fun getAccessToken(): String {
                 TODO("Not yet implemented")
             }

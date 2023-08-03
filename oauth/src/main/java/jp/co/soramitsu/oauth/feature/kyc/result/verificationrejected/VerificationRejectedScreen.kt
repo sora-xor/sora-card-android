@@ -254,6 +254,10 @@ private fun PreviewApplicationRejected() {
                     TODO("Not yet implemented")
                 }
 
+                override suspend fun getUser(): Triple<String, String, Long> {
+                    TODO("Not yet implemented")
+                }
+
                 override suspend fun signInUser(
                     refreshToken: String,
                     accessToken: String,
