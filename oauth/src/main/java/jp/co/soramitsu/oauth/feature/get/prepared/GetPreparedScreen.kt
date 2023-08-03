@@ -23,9 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import jp.co.soramitsu.oauth.R
@@ -86,13 +83,8 @@ private fun GetPreparedScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(Dimens.x2),
-                text = AnnotatedString(
-                    stringResource(R.string.get_prepared_alert, state.attemptCost),
-                    spanStyles = listOf(
-                        AnnotatedString.Range(SpanStyle(fontWeight = FontWeight.Bold), 0, 10),
-                        AnnotatedString.Range(SpanStyle(fontWeight = FontWeight.Bold), 24, 39),
-                    )
-                ), style = MaterialTheme.customTypography.paragraphM,
+                text = stringResource(R.string.get_prepared_alert, state.attemptCost),
+                style = MaterialTheme.customTypography.paragraphM,
                 color = MaterialTheme.customColors.accentTertiary
             )
         }

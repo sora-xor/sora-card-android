@@ -31,7 +31,7 @@ class EnterPhoneNumberViewModel @Inject constructor(
     private val pwoAuthClientProxy: PWOAuthClientProxy,
 ) : BaseViewModel() {
 
-    private companion object {
+    companion object {
         const val PHONE_NUMBER_LENGTH = 15
     }
 
