@@ -44,12 +44,12 @@ class CardIssuanceViewModel @Inject constructor(
 
     init {
         _toolbarState.value = SoramitsuToolbarState(
-            type = SoramitsuToolbarType.Medium(),
+            type = SoramitsuToolbarType.Small(),
             basic = BasicToolbarState(
-                title = R.string.card_issuance_screen_title,
+                title = "",
                 visibility = true,
                 navIcon = R.drawable.ic_cross,
-                actionLabel = R.string.log_out
+                actionLabel = R.string.log_out,
             ),
         )
 
