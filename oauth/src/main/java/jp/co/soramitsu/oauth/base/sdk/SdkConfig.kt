@@ -1,10 +1,10 @@
 package jp.co.soramitsu.oauth.base.sdk
 
-import dagger.hilt.android.scopes.ActivityRetainedScoped
 import jp.co.soramitsu.oauth.BuildConfig
 import javax.inject.Inject
+import javax.inject.Singleton
 
-@ActivityRetainedScoped
+@Singleton
 class InMemoryRepo @Inject constructor() {
 
     var endpointUrl: String = ""
