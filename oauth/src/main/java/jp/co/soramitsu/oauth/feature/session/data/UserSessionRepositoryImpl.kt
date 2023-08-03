@@ -28,11 +28,19 @@ class UserSessionRepositoryImpl @Inject constructor(
     override suspend fun signInUser(
         refreshToken: String,
         accessToken: String,
-        expirationTime: Long
+        expirationTime: Long,
     ) {
         dataStore.putString(REFRESH_TOKEN_KEY, refreshToken)
         dataStore.putString(ACCESS_TOKEN_KEY, accessToken)
         dataStore.putLong(ACCESS_TOKEN_EXPIRATION_TIME_KEY, expirationTime)
+    }
+
+    override suspend fun getUser(): Triple<String, String, Long> {
+        return Triple(
+            first = getRefreshToken(),
+            second = getAccessToken(),
+            third = getAccessTokenExpirationTime(),
+        )
     }
 
     override suspend fun setNewAccessToken(accessToken: String, expirationTime: Long) {

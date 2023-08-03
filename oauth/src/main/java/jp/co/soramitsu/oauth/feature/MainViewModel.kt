@@ -51,6 +51,8 @@ class MainViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            val data = userSessionRepository.getUser()
+            if (data.first.isEmpty() || data.second.isEmpty()) return@launch
             showLoading(loading = true)
 
             checkAccessTokenValidity { accessToken, accessTokenExpirationTime ->

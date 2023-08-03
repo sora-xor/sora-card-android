@@ -63,6 +63,7 @@ class MainViewModelTest {
         coEvery { userSessionRepository.getAccessToken() } returns "accessToken"
         coEvery { userSessionRepository.getAccessTokenExpirationTime() } returns System.currentTimeMillis() + 300000
         coEvery { userSessionRepository.setNewAccessToken(any(), any()) } returns Unit
+        coEvery { userSessionRepository.getUser() } returns Triple("refresh", "access", 0)
         coEvery { kycRequirementsUnfulfilledFlow.start(any()) } returns Unit
         every { mainRouter.openGetPrepared() } returns Unit
         every { mainRouter.openVerificationFailed(any()) } returns Unit
