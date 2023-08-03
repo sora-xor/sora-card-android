@@ -43,8 +43,8 @@ class MainViewModel @Inject constructor(
     private val _state = MutableStateFlow(MainScreenState())
     val state: StateFlow<MainScreenState?> = _state.asStateFlow()
 
-    private val _toast = SingleLiveEvent<Pair<String, String>>()
-    val toast: LiveData<Pair<String, String>> = _toast
+    private val _toast = SingleLiveEvent<String>()
+    val toast: LiveData<String> = _toast
 
     var uiState by mutableStateOf(MainScreenUiState())
         private set
@@ -204,7 +204,7 @@ class MainViewModel @Inject constructor(
                 }
             }
                 .onFailure {
-                    _toast.value = "Network 01 Error" to it.localizedMessage.orEmpty()
+                    _toast.value = it.localizedMessage.orEmpty()
                 }
         }
     }
@@ -212,7 +212,7 @@ class MainViewModel @Inject constructor(
     private suspend fun checkKycRequirementsFulfilled(accessToken: String) {
         kycRepository.hasFreeKycAttempt(accessToken)
             .onFailure {
-                _toast.value = "Network 02 Error" to it.localizedMessage.orEmpty()
+                _toast.value = it.localizedMessage.orEmpty()
             }
             .onSuccess { hasFreeAttempt ->
                 if (inMemoryRepo.isEnoughXorAvailable) {
@@ -240,7 +240,7 @@ class MainViewModel @Inject constructor(
                     }
                 }
                     .onFailure {
-                        _toast.value = "Network 03 Error" to it.localizedMessage.orEmpty()
+                        _toast.value = it.localizedMessage.orEmpty()
                     }
                 showLoading(false)
             }

@@ -77,7 +77,7 @@ internal class MainFragment : BaseFragment() {
 
         viewModel.toast.observe(viewLifecycleOwner) {
             context?.let { cnt ->
-                Toast.makeText(cnt, "${it.first} : ${it.second}", Toast.LENGTH_LONG).show()
+                Toast.makeText(cnt, it, Toast.LENGTH_LONG).show()
             }
         }
 
