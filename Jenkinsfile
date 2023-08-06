@@ -25,7 +25,7 @@ new org.soramitsu.mainLibrary().call(
   skipDojo: true,
   agentImage: "android-build-box-jdk11:latest",
   nexusCredentials: "bot-soramitsu-rw",
-  buildCommand: './gradlew :oauth:test',
+  buildCommand: './gradlew :oauth:test --debug',
   testCommand: './gradlew :oauth:build',
   publishCommand: './gradlew publish',
   // pushTags: ['PR-69': 'pr-69'],
