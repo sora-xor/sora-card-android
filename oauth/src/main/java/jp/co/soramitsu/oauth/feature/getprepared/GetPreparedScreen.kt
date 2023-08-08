@@ -1,5 +1,6 @@
-package jp.co.soramitsu.oauth.feature.get.prepared
+package jp.co.soramitsu.oauth.feature.getprepared
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -28,8 +29,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.feature.OAuthCallback
-import jp.co.soramitsu.oauth.feature.get.prepared.model.GetPreparedState
-import jp.co.soramitsu.oauth.feature.get.prepared.model.Step
 import jp.co.soramitsu.ui_core.component.button.FilledButton
 import jp.co.soramitsu.ui_core.component.button.properties.Order
 import jp.co.soramitsu.ui_core.component.button.properties.Size
@@ -45,6 +44,10 @@ fun GetPreparedScreen(
 ) {
     LaunchedEffect(Unit) {
         viewModel.setArgs(authCallback)
+    }
+
+    BackHandler {
+        viewModel.onToolbarNavigation()
     }
 
     Screen(
