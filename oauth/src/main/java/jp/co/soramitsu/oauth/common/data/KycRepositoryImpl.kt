@@ -8,6 +8,7 @@ import jp.co.soramitsu.oauth.common.model.GetReferenceNumberResponse
 import jp.co.soramitsu.oauth.common.model.KycAttemptsDto
 import jp.co.soramitsu.oauth.common.model.KycResponse
 import jp.co.soramitsu.oauth.common.model.KycStatus
+import jp.co.soramitsu.oauth.common.model.IbanAccountResponseWrapper
 import jp.co.soramitsu.oauth.common.model.VerificationStatus
 import jp.co.soramitsu.oauth.common.model.XorEuroPrice
 import jp.co.soramitsu.oauth.network.NetworkRequest
@@ -116,6 +117,15 @@ class KycRepositoryImpl(
             apiClient.get(
                 accessToken,
                 NetworkRequest.GET_CURRENT_XOR_EURO_PRICE.url
+            ).body()
+        }
+    }
+
+    override suspend fun getUserIbanAccount(accessToken: String): Result<IbanAccountResponseWrapper> {
+        return kotlin.runCatching {
+            apiClient.get(
+                accessToken,
+                NetworkRequest.GET_IBAN_DESC.url
             ).body()
         }
     }

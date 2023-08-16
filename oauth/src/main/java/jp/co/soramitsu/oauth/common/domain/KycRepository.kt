@@ -2,6 +2,7 @@ package jp.co.soramitsu.oauth.common.domain
 
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.common.model.KycAttemptsDto
+import jp.co.soramitsu.oauth.common.model.IbanAccountResponseWrapper
 import jp.co.soramitsu.oauth.common.model.XorEuroPrice
 
 interface KycRepository {
@@ -19,4 +20,6 @@ interface KycRepository {
     suspend fun getFreeKycAttemptsInfo(accessToken: String): Result<KycAttemptsDto>
 
     suspend fun getCurrentXorEuroPrice(accessToken: String): Result<XorEuroPrice>
+
+    suspend fun getUserIbanAccount(accessToken: String): Result<IbanAccountResponseWrapper>
 }
