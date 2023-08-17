@@ -28,6 +28,7 @@ import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PriceInteractor
 import jp.co.soramitsu.oauth.common.model.EuroLiquiditySufficiency
+import jp.co.soramitsu.oauth.common.model.IbanAccountResponseWrapper
 import jp.co.soramitsu.oauth.common.model.KycAttemptsDto
 import jp.co.soramitsu.oauth.common.model.XorEuroPrice
 import jp.co.soramitsu.oauth.common.model.XorLiquiditySufficiency
@@ -316,6 +317,10 @@ private fun PreviewApplicationRejected() {
                 }
 
                 override suspend fun getCurrentXorEuroPrice(accessToken: String): Result<XorEuroPrice> {
+                    TODO("Not yet implemented")
+                }
+
+                override suspend fun getUserIbanAccount(accessToken: String): Result<IbanAccountResponseWrapper> {
                     TODO("Not yet implemented")
                 }
             },
