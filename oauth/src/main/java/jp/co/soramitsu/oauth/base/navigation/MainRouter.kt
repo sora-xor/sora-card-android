@@ -55,7 +55,7 @@ class MainRouterImpl : MainRouter {
         const val APP_TELEGRAM = "org.telegram.messenger"
         const val APP_TELEGRAM_X = "org.thunderdog.challegram"
 
-        const val SUPPORT_CHAT_ID = "SORAhappiness"
+        const val SUPPORT_CHAT_ID = "soracardofficial"
         const val SUPPORT_CHAT_LINK = "https://t.me/$SUPPORT_CHAT_ID"
     }
 
