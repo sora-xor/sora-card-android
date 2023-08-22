@@ -251,6 +251,14 @@ private fun PreviewApplicationRejected() {
                     TODO("Not yet implemented")
                 }
 
+                override suspend fun getKycStatus(): SoraCardCommonVerification? {
+                    TODO("Not yet implemented")
+                }
+
+                override suspend fun setKycStatus(status: SoraCardCommonVerification) {
+                    TODO("Not yet implemented")
+                }
+
                 override suspend fun getAccessTokenExpirationTime(): Long {
                     TODO("Not yet implemented")
                 }
@@ -268,10 +276,6 @@ private fun PreviewApplicationRejected() {
                 }
 
                 override suspend fun setNewAccessToken(accessToken: String, expirationTime: Long) {
-                    TODO("Not yet implemented")
-                }
-
-                override suspend fun setRefreshToken(refreshToken: String) {
                     TODO("Not yet implemented")
                 }
 
@@ -304,7 +308,7 @@ private fun PreviewApplicationRejected() {
                     TODO("Not yet implemented")
                 }
 
-                override suspend fun getKycLastFinalStatus(accessToken: String): Result<SoraCardCommonVerification?> {
+                override suspend fun getKycLastFinalStatus(accessToken: String, baseUrl: String?): Result<SoraCardCommonVerification> {
                     TODO("Not yet implemented")
                 }
 
@@ -317,10 +321,6 @@ private fun PreviewApplicationRejected() {
                 }
 
                 override suspend fun getCurrentXorEuroPrice(accessToken: String): Result<XorEuroPrice> {
-                    TODO("Not yet implemented")
-                }
-
-                override suspend fun getUserIbanAccount(accessToken: String): Result<IbanAccountResponseWrapper> {
                     TODO("Not yet implemented")
                 }
             },

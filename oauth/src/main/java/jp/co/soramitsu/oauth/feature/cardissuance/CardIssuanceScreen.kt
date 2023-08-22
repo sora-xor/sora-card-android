@@ -20,6 +20,7 @@ import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.BalanceIndicator
 import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.base.compose.retrieveString
+import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.common.domain.PriceInteractor
 import jp.co.soramitsu.oauth.common.model.EuroLiquiditySufficiency
@@ -197,6 +198,14 @@ private fun PreviewCardIssuanceScreen() {
                 TODO("Not yet implemented")
             }
 
+            override suspend fun getKycStatus(): SoraCardCommonVerification? {
+                TODO("Not yet implemented")
+            }
+
+            override suspend fun setKycStatus(status: SoraCardCommonVerification) {
+                TODO("Not yet implemented")
+            }
+
             override suspend fun getAccessToken(): String {
                 TODO("Not yet implemented")
             }
@@ -214,10 +223,6 @@ private fun PreviewCardIssuanceScreen() {
             }
 
             override suspend fun setNewAccessToken(accessToken: String, expirationTime: Long) {
-                TODO("Not yet implemented")
-            }
-
-            override suspend fun setRefreshToken(refreshToken: String) {
                 TODO("Not yet implemented")
             }
 
