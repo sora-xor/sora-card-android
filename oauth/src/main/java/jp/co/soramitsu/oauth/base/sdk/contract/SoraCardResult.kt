@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 enum class SoraCardCommonVerification {
-    Failed, Rejected, Pending, Successful
+    Failed, Rejected, Pending, Successful, NotFound
 }
 
 @Parcelize
@@ -20,7 +20,7 @@ sealed class SoraCardResult : Parcelable {
 
     @Parcelize
     data class Failure(
-        val status: SoraCardCommonVerification? = null,
+        val status: SoraCardCommonVerification,
         val error: SoraCardError? = null
     ) : SoraCardResult()
 

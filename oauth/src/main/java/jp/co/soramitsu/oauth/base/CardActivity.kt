@@ -71,7 +71,7 @@ class CardActivity : AppCompatActivity(R.layout.card_activity) {
             vm.inMemoryRepo.endpointUrl = data.kycCredentials.endpointUrl
             vm.inMemoryRepo.username = data.kycCredentials.username
             vm.inMemoryRepo.password = data.kycCredentials.password
-            vm.inMemoryRepo.environment = data.environment
+            vm.inMemoryRepo.environment = data.basic.environment
             vm.inMemoryRepo.soraBackEndUrl = data.soraBackEndUrl
             vm.inMemoryRepo.client = data.client
             vm.inMemoryRepo.userAvailableXorAmount = data.userAvailableXorAmount
@@ -81,9 +81,9 @@ class CardActivity : AppCompatActivity(R.layout.card_activity) {
 
             pwoAuthClientProxy.init(
                 applicationContext,
-                data.environment,
-                data.apiKey,
-                data.domain,
+                data.basic.environment,
+                data.basic.apiKey,
+                data.basic.domain,
             )
         }
     }

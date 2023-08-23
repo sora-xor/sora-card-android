@@ -54,9 +54,9 @@ class SoraCardNetworkClient(
                 .body()
         }
 
-    suspend fun get(bearerToken: String?, url: String): HttpResponse =
+    suspend fun get(bearerToken: String?, url: String, baseUrl: String? = null): HttpResponse =
         wrapInExceptionHandler {
-            httpClient.get(inMemoryRepo.soraBackEndUrl + url) {
+            httpClient.get((baseUrl ?: inMemoryRepo.soraBackEndUrl) + url) {
                 bearerToken?.let { bearerAuth(it) }
                 userAgent(header)
                 accept(ContentType.Application.Json)

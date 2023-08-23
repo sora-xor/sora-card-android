@@ -13,13 +13,11 @@ interface KycRepository {
         email: String?
     ): Result<String>
 
-    suspend fun getKycLastFinalStatus(accessToken: String): Result<SoraCardCommonVerification?>
+    suspend fun getKycLastFinalStatus(accessToken: String, baseUrl: String? = null): Result<SoraCardCommonVerification>
 
     suspend fun hasFreeKycAttempt(accessToken: String): Result<Boolean>
 
     suspend fun getFreeKycAttemptsInfo(accessToken: String): Result<KycAttemptsDto>
 
     suspend fun getCurrentXorEuroPrice(accessToken: String): Result<XorEuroPrice>
-
-    suspend fun getUserIbanAccount(accessToken: String): Result<IbanAccountResponseWrapper>
 }

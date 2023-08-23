@@ -1,10 +1,10 @@
 package jp.co.soramitsu.oauth.common.domain
 
 import android.content.Context
+import com.paywings.oauth.android.sdk.data.model.GetNewAccessTokenResult
 import com.paywings.oauth.android.sdk.initializer.PayWingsOAuthClient
 import com.paywings.oauth.android.sdk.service.callback.ChangeUnverifiedEmailCallback
 import com.paywings.oauth.android.sdk.service.callback.CheckEmailVerifiedCallback
-import com.paywings.oauth.android.sdk.service.callback.GetNewAccessTokenCallback
 import com.paywings.oauth.android.sdk.service.callback.GetUserDataCallback
 import com.paywings.oauth.android.sdk.service.callback.RegisterUserCallback
 import com.paywings.oauth.android.sdk.service.callback.SendNewVerificationEmailCallback
@@ -30,10 +30,13 @@ interface PWOAuthClientProxy {
 
     suspend fun getUserData(accessToken: String, callback: GetUserDataCallback)
 
-    suspend fun getNewAccessToken(refreshToken: String, callback: GetNewAccessTokenCallback)
+    suspend fun getNewAccessToken(refreshToken: String): GetNewAccessTokenResult
 }
 
 internal class PWOAuthClientProxyImpl() : PWOAuthClientProxy {
+
+    @Volatile
+    private var initialized = false
 
     override fun init(
         context: Context,
@@ -41,7 +44,14 @@ internal class PWOAuthClientProxyImpl() : PWOAuthClientProxy {
         key: String,
         domain: String
     ) {
-        PayWingsOAuthClient.init(context, type.toPayWingsType(), key, domain)
+        if (initialized.not()) {
+            synchronized(this) {
+                if (initialized.not()) {
+                    PayWingsOAuthClient.init(context, type.toPayWingsType(), key, domain)
+                    initialized = true
+                }
+            }
+        }
     }
 
     override suspend fun signInWithPhoneNumberVerifyOtp(
@@ -100,11 +110,8 @@ internal class PWOAuthClientProxyImpl() : PWOAuthClientProxy {
 
     override suspend fun getNewAccessToken(
         refreshToken: String,
-        callback: GetNewAccessTokenCallback
-    ) {
+    ): GetNewAccessTokenResult =
         PayWingsOAuthClient.instance.getNewAccessToken(
             refreshToken,
-            callback,
         )
-    }
 }

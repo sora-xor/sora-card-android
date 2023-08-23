@@ -14,6 +14,7 @@ import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
+import jp.co.soramitsu.oauth.common.model.AccessTokenResponse
 import jp.co.soramitsu.oauth.common.navigation.flow.api.NavigationFlow
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -48,6 +49,9 @@ class MainViewModelTest {
     private lateinit var mainRouter: MainRouter
 
     @MockK
+    private lateinit var tokenValidator: AccessTokenValidator
+
+    @MockK
     private lateinit var kycRequirementsUnfulfilledFlow: NavigationFlow
 
     @MockK
@@ -78,6 +82,7 @@ class MainViewModelTest {
             inMemoryRepo,
             pwoAuthClientProxy,
             kycRequirementsUnfulfilledFlow,
+            tokenValidator,
         )
     }
 
@@ -86,6 +91,7 @@ class MainViewModelTest {
         every { inMemoryRepo.isEnoughXorAvailable } returns true
         coEvery { kycRepository.hasFreeKycAttempt("accessToken") } returns Result.success(true)
         coEvery { userSessionRepository.getRefreshToken() } returns "refreshToken"
+        coEvery { tokenValidator.checkAccessTokenValidity() } returns AccessTokenResponse.Token("token", 1000)
         val slot = slot<GetUserDataCallback>()
         coEvery { pwoAuthClientProxy.getUserData(any(), capture(slot)) } answers {
             slot.captured.onUserData("", "", "", "", false, "")
