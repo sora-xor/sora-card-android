@@ -52,9 +52,6 @@ class VerificationSuccessfulViewModel @Inject constructor(
         viewModelScope.launch {
             setActivityResult.setResult(
                 soraCardResult = SoraCardResult.Success(
-                    accessToken = userSessionRepository.getAccessToken(),
-                    accessTokenExpirationTime = userSessionRepository.getAccessTokenExpirationTime(),
-                    refreshToken = userSessionRepository.getRefreshToken(),
                     status = SoraCardCommonVerification.Successful,
                 )
             )

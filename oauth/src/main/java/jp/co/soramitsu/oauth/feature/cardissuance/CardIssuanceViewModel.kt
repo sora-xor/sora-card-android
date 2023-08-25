@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.compose.ScreenStatus
+import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.common.domain.PriceInteractor
 import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
@@ -92,8 +93,7 @@ class CardIssuanceViewModel @Inject constructor(
     }
 
     override fun onToolbarNavigation() {
-        super.onToolbarNavigation()
-        kycRequirementsUnfulfilledFlow.exit()
+        setActivityResult.setResult(SoraCardResult.Success(status = SoraCardCommonVerification.NotFound))
     }
 
     fun onGetXorClick() {
