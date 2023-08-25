@@ -19,7 +19,6 @@ import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
-import org.mockito.kotlin.given
 import org.mockito.kotlin.verify
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -57,18 +56,11 @@ class VerificationSuccessfulViewModelTest {
 
     @Test
     fun `call onClose EXPECT finish kyc`() = runTest {
-        given(userSessionRepository.getAccessToken()).willReturn("accessToken")
-        given(userSessionRepository.getAccessTokenExpirationTime()).willReturn(Long.MAX_VALUE)
-        given(userSessionRepository.getRefreshToken()).willReturn("refreshToken")
-
         viewModel.onClose()
         advanceUntilIdle()
 
         verify(setActivityResult).setResult(
             SoraCardResult.Success(
-                accessToken = "accessToken",
-                accessTokenExpirationTime = Long.MAX_VALUE,
-                refreshToken = "refreshToken",
                 SoraCardCommonVerification.Successful,
             )
         )

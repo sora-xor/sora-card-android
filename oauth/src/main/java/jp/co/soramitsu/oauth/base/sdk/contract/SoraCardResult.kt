@@ -12,9 +12,6 @@ sealed class SoraCardResult : Parcelable {
 
     @Parcelize
     data class Success(
-        val accessToken: String,
-        val accessTokenExpirationTime: Long,
-        val refreshToken: String,
         val status: SoraCardCommonVerification,
     ) : SoraCardResult()
 

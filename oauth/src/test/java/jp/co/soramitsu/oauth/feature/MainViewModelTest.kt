@@ -6,6 +6,8 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
+import io.mockk.just
+import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
@@ -69,8 +71,11 @@ class MainViewModelTest {
         coEvery { userSessionRepository.setNewAccessToken(any(), any()) } returns Unit
         coEvery { userSessionRepository.getUser() } returns Triple("refresh", "access", 0)
         coEvery { kycRequirementsUnfulfilledFlow.start(any()) } returns Unit
+        coEvery { kycRepository.getKycLastFinalStatus(any(), any()) } returns Result.success(SoraCardCommonVerification.Successful)
         every { mainRouter.openGetPrepared() } returns Unit
         every { mainRouter.openVerificationFailed(any()) } returns Unit
+        every { mainRouter.openVerificationSuccessful() } just runs
+        coEvery { tokenValidator.checkAccessTokenValidity() } returns AccessTokenResponse.Token("", 123)
     }
 
     private fun setupViewModel(status: SoraCardCommonVerification) {

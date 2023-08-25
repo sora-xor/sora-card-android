@@ -50,14 +50,8 @@ class VerificationInProgressViewModel @Inject constructor(
     override fun onToolbarNavigation() {
         super.onToolbarNavigation()
         viewModelScope.launch {
-            val accessToken = userSessionRepository.getAccessToken()
-            val accessTokenExpirationTime = userSessionRepository.getAccessTokenExpirationTime()
-            val refreshToken = userSessionRepository.getRefreshToken()
             setActivityResult.setResult(
                 SoraCardResult.Success(
-                    accessToken = accessToken,
-                    accessTokenExpirationTime = accessTokenExpirationTime,
-                    refreshToken = refreshToken,
                     status = SoraCardCommonVerification.Pending,
                 )
             )

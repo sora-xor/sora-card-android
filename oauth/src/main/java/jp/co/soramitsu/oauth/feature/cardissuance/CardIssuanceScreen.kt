@@ -1,5 +1,6 @@
 package jp.co.soramitsu.oauth.feature.cardissuance
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -42,6 +43,9 @@ import jp.co.soramitsu.ui_core.theme.customTypography
 fun CardIssuanceScreen(
     viewModel: CardIssuanceViewModel = hiltViewModel()
 ) {
+    BackHandler {
+        viewModel.onToolbarNavigation()
+    }
     Screen(
         viewModel = viewModel
     ) { scrollState ->
