@@ -16,7 +16,6 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.http.userAgent
-import jp.co.soramitsu.oauth.BuildConfig
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerializationException
@@ -26,7 +25,7 @@ class SoraCardNetworkClient(
     timeout: Long = 10000,
     logging: Boolean = false,
     provider: SoraCardClientProvider,
-    inMemoryRepo: InMemoryRepo,
+    private val inMemoryRepo: InMemoryRepo,
 ) {
 
     @OptIn(ExperimentalSerializationApi::class)
@@ -44,26 +43,26 @@ class SoraCardNetworkClient(
     }
 
     suspend fun post(bearerToken: String?, url: String, body: Any): HttpResponse =
-            wrapInExceptionHandler {
-                httpClient.post(BuildConfig.API_BASE_URL + url) {
-                    contentType(ContentType.Application.Json)
-                    accept(ContentType.Application.Json)
-                    bearerToken?.let { bearerAuth(it) }
-                    userAgent(header)
-                    setBody(body)
-                }
-                    .body()
+        wrapInExceptionHandler {
+            httpClient.post(inMemoryRepo.soraBackEndUrl + url) {
+                contentType(ContentType.Application.Json)
+                accept(ContentType.Application.Json)
+                bearerToken?.let { bearerAuth(it) }
+                userAgent(header)
+                setBody(body)
             }
+                .body()
+        }
 
-    suspend fun get(bearerToken: String?, url: String): HttpResponse =
-            wrapInExceptionHandler {
-                return httpClient.get(BuildConfig.API_BASE_URL + url) {
-                    bearerToken?.let { bearerAuth(it) }
-                    userAgent(header)
-                    accept(ContentType.Application.Json)
-                }
-                    .body()
+    suspend fun get(bearerToken: String?, url: String, baseUrl: String? = null): HttpResponse =
+        wrapInExceptionHandler {
+            httpClient.get((baseUrl ?: inMemoryRepo.soraBackEndUrl) + url) {
+                bearerToken?.let { bearerAuth(it) }
+                userAgent(header)
+                accept(ContentType.Application.Json)
             }
+                .body()
+        }
 
     @Throws(SoraCardNetworkException::class)
     private inline fun <reified Type : Any> wrapInExceptionHandler(block: () -> Type): Type {

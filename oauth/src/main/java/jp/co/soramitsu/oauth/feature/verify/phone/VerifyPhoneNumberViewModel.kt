@@ -13,13 +13,8 @@ import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
-import jp.co.soramitsu.oauth.base.sdk.Mode
 import jp.co.soramitsu.oauth.base.sdk.SoraCardEnvironmentType
-import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardError
-import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
-import jp.co.soramitsu.oauth.base.state.DialogAlertState
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
-import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.oauth.feature.verify.Timer
@@ -40,8 +35,7 @@ class VerifyPhoneNumberViewModel @Inject constructor(
     private val mainRouter: MainRouter,
     private val userSessionRepository: UserSessionRepository,
     private val timer: Timer,
-    private val setActivityResult: SetActivityResult,
-    private val inMemoryRepo: InMemoryRepo,
+    inMemoryRepo: InMemoryRepo,
     private val pwoAuthClientProxy: PWOAuthClientProxy,
 ) : BaseViewModel() {
 
@@ -126,48 +120,22 @@ class VerifyPhoneNumberViewModel @Inject constructor(
     private val verifyOtpCallback = object : SignInWithPhoneNumberVerifyOtpCallback {
         override fun onError(error: OAuthErrorCode, errorMessage: String?) {
             loading(false)
-            getErrorMessage(error)?.let { descriptionText ->
-                state = state.copy(
-                    inputTextState = state.inputTextState.copy(
-                        error = true,
-                        descriptionText = descriptionText
-                    )
+            state = state.copy(
+                inputTextState = state.inputTextState.copy(
+                    error = true,
+                    descriptionText = error.description
                 )
-            }
+            )
         }
 
         override fun onShowEmailConfirmationScreen(email: String, autoEmailSent: Boolean) {
             loading(false)
-            if (inMemoryRepo.mode != Mode.REGISTRATION) {
-                dialogState = DialogAlertState(
-                    title = null,
-                    message = R.string.common_user_not_found,
-                    dismissAvailable = false,
-                    onPositive = {
-                        dialogState = null
-                        finishWithError(SoraCardError.USER_NOT_FOUND)
-                    }
-                )
-            } else {
-                mainRouter.openVerifyEmail(email, autoEmailSent)
-            }
+            mainRouter.openVerifyEmail(email, autoEmailSent)
         }
 
         override fun onShowRegistrationScreen() {
             loading(false)
-            if (inMemoryRepo.mode != Mode.REGISTRATION) {
-                dialogState = DialogAlertState(
-                    title = null,
-                    message = R.string.common_user_not_found,
-                    dismissAvailable = false,
-                    onPositive = {
-                        dialogState = null
-                        finishWithError(SoraCardError.USER_NOT_FOUND)
-                    }
-                )
-            } else {
-                mainRouter.openRegisterUser()
-            }
+            mainRouter.openRegisterUser()
         }
 
         override fun onSignInSuccessful(
@@ -196,10 +164,6 @@ class VerifyPhoneNumberViewModel @Inject constructor(
         }
     }
 
-    private fun finishWithError(error: SoraCardError) {
-        setActivityResult.setResult(SoraCardResult.Failure(error = error))
-    }
-
     private suspend fun signInUser(
         refreshToken: String,
         accessToken: String,
@@ -215,27 +179,17 @@ class VerifyPhoneNumberViewModel @Inject constructor(
     private val requestOtpCallback = object : SignInWithPhoneNumberRequestOtpCallback {
         override fun onError(error: OAuthErrorCode, errorMessage: String?) {
             loading(false)
-            getErrorMessage(error)?.let { descriptionText ->
-                state = state.copy(
-                    inputTextState = state.inputTextState.copy(
-                        error = true,
-                        descriptionText = descriptionText
-                    )
+            state = state.copy(
+                inputTextState = state.inputTextState.copy(
+                    error = true,
+                    descriptionText = error.description
                 )
-            }
+            )
         }
 
         override fun onShowOtpInputScreen(otpLength: Int) {
             loading(false)
             startOtpResendTimer()
-        }
-    }
-
-    private fun getErrorMessage(errorCode: OAuthErrorCode): String? {
-        return when (errorCode) {
-            OAuthErrorCode.NO_INTERNET -> "Check your internet connection"
-            OAuthErrorCode.USER_IS_SUSPENDED -> "Phone number is suspended"
-            else -> null
         }
     }
 

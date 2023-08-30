@@ -1,5 +1,6 @@
 package jp.co.soramitsu.oauth.feature.cardissuance
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,12 +13,15 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.BalanceIndicator
 import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.base.compose.retrieveString
+import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.common.domain.PriceInteractor
 import jp.co.soramitsu.oauth.common.model.EuroLiquiditySufficiency
@@ -39,22 +43,33 @@ import jp.co.soramitsu.ui_core.theme.customTypography
 fun CardIssuanceScreen(
     viewModel: CardIssuanceViewModel = hiltViewModel()
 ) {
+    BackHandler {
+        viewModel.onToolbarNavigation()
+    }
     Screen(
         viewModel = viewModel
     ) { scrollState ->
-        if (viewModel.cardIssuanceScreenState.isScreenLoading) {
-            Box(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center),
-                    color = MaterialTheme.customColors.fgPrimary
-                )
-            }
-        } else {
-            Column(
-                modifier = Modifier.verticalScroll(scrollState)
-            ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(scrollState)
+        ) {
+            Text(
+                text = stringResource(id = R.string.card_issuance_screen_title),
+                style = MaterialTheme.customTypography.headline1,
+                color = MaterialTheme.customColors.fgPrimary,
+                modifier = Modifier.padding(start = Dimens.x2),
+            )
+            if (viewModel.cardIssuanceScreenState.isScreenLoading) {
+                Box(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center),
+                        color = MaterialTheme.customColors.fgPrimary
+                    )
+                }
+            } else {
                 FreeCardIssuance(viewModel)
                 /* Will be available latter */
                 //InlineTextDivider()
@@ -183,6 +198,18 @@ private fun PreviewCardIssuanceScreen() {
                 TODO("Not yet implemented")
             }
 
+            override suspend fun getUser(): Triple<String, String, Long> {
+                TODO("Not yet implemented")
+            }
+
+            override suspend fun getKycStatus(): SoraCardCommonVerification? {
+                TODO("Not yet implemented")
+            }
+
+            override suspend fun setKycStatus(status: SoraCardCommonVerification) {
+                TODO("Not yet implemented")
+            }
+
             override suspend fun getAccessToken(): String {
                 TODO("Not yet implemented")
             }
@@ -200,10 +227,6 @@ private fun PreviewCardIssuanceScreen() {
             }
 
             override suspend fun setNewAccessToken(accessToken: String, expirationTime: Long) {
-                TODO("Not yet implemented")
-            }
-
-            override suspend fun setRefreshToken(refreshToken: String) {
                 TODO("Not yet implemented")
             }
 

@@ -3,6 +3,7 @@ package jp.co.soramitsu.oauth.feature
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
@@ -72,6 +73,12 @@ internal class MainFragment : BaseFragment() {
                 Intent().putExtra(SoraCardConstants.EXTRA_SORA_CARD_RESULT, result)
             )
             requireActivity().finish()
+        }
+
+        viewModel.toast.observe(viewLifecycleOwner) {
+            context?.let { cnt ->
+                Toast.makeText(cnt, it, Toast.LENGTH_LONG).show()
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {

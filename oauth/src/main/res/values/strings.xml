@@ -9,7 +9,14 @@
   <string name="card_issuance_screen_paid_card_pay_euro">Pay €%s issuance fee</string>
   <string name="card_issuance_screen_paid_card_title">€%s issuance fee</string>
   <string name="card_issuance_screen_title">Card issuance</string>
+  <string name="cardhub_coming_soon">Card management is coming soon</string>
+  <string name="cardhub_exchange">Exchange</string>
+  <string name="cardhub_freeze">Freeze</string>
+  <string name="cardhub_iban_title">IBAN account details</string>
+  <string name="cardhub_top_up">Top up</string>
+  <string name="cardhub_transfer">Transfer</string>
   <string name="change_email_title">Change your email</string>
+  <string name="common_back">Back</string>
   <string name="common_cancel">Cancel</string>
   <string name="common_change_email">Use another email</string>
   <string name="common_close">Close</string>
@@ -26,7 +33,7 @@
   <string name="common_user_not_found">No mobile number found, please recheck it and try again.</string>
   <string name="details_already_have_card">I already have a card</string>
   <string name="details_already_used_free_try">You already used your free try</string>
-  <string name="details_description">Get a Euro IBAN account and Mastercard Debit Card accessible within your SORA Wallet</string>
+  <string name="details_description">Get a Euro IBAN account and debit card accessible within your SORA Wallet</string>
   <string name="details_enough_xor_desription">You have enough XOR</string>
   <string name="details_get_more_xor">Get more XOR</string>
   <string name="details_issue_card">Issue card for free</string>
@@ -36,16 +43,17 @@
   <string name="enter_email_title">Enter your email</string>
   <string name="enter_phone_number_description">You will receive\na verification code via SMS</string>
   <string name="enter_phone_number_phone_input_field_label">Phone Number</string>
+  <string name="entry_card_info">Card info</string>
   <string name="get_more_xor_dialog_buy_option">Buy XOR with EUR</string>
   <string name="get_more_xor_dialog_deposit_option">Deposit XOR</string>
   <string name="get_more_xor_dialog_description">You can swap for XOR or buy with Euro</string>
   <string name="get_more_xor_dialog_swap_option">Swap crypto for XOR</string>
-  <string name="get_prepared_alert">ATTENTION: You have only 2 free attempts to pass the KYC process. Every other attempt after that will cost €3.8. Paid attempts will be available after the next update of the app.</string>
+  <string name="get_prepared_alert">ATTENTION: You have only 4 free attempts to pass the KYC process. Every other attempt after that will cost €3.8. Paid attempts will be available after the next update of the app.</string>
   <string name="get_prepared_need">To complete the KYC you will need to:</string>
   <string name="get_prepared_ok_title">OK, I am ready</string>
   <string name="get_prepared_personal_info_description">Fill in the form with your name and address</string>
   <string name="get_prepared_personal_info_title">Submit your personal info</string>
-  <string name="get_prepared_proof_address_description">An official document (utility bill, bank statement, government statement or correspondence) that contains your full name and address, and that is no older then 3 months</string>
+  <string name="get_prepared_proof_address_description">An official document (utility bill, bank statement, government statement or correspondence) that contains your full name and address, and that is no older then 3 months.\n\nNote: Statements from neobanks like Revolut and N26 are currently not seen as valid proof of address.</string>
   <string name="get_prepared_proof_address_title">Submit a photo of proof of address</string>
   <string name="get_prepared_submit_id_photo_description">Passport, Driver License, ID card or Residence Permit</string>
   <string name="get_prepared_submit_id_photo_title">Submit a photo of your ID document</string>
@@ -87,11 +95,12 @@
   <string name="verification_rejected_title">Verification rejected</string>
   <string name="verification_successful_description">Your KYC verification is successful and we are already preparing to send you the SORA card!</string>
   <string name="verification_successful_title">Application approved</string>
-  <string name="verify_email_description">Follow the magic link that has been sent\nto %s</string>
+  <string name="verify_email_description">Follow the magic link that has been sent\nto %s \nThe email might take several minutes to arrive. Please verify your spam folder if you haven\'t received the email after 5 minutes.</string>
   <string name="verify_email_resend">RE-SEND IN %s</string>
   <string name="verify_email_title">Verify your email</string>
   <string name="verify_phone_number_code_input_field_label">SMS code</string>
   <string name="verify_phone_number_description">Enter SMS code that has been sent to\n%s</string>
+  <string name="verify_phone_number_otp_not_valid">OTP is not valid</string>
   <string name="verify_phone_number_send_code">SEND CODE</string>
   <string name="verify_phone_number_title">Verify your phone number</string>
 </resources>

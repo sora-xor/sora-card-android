@@ -26,10 +26,10 @@ plugins {
 }
 
 val composeCompilerVersion by extra("1.4.6")
-val uiCoreVersion by extra("0.0.67")
+val uiCoreVersion by extra("0.1.0")
 val hiltVersion by extra("2.45")
-val pwOauthSdkVersion by extra("1.2.3")
-val pwKycSdkVersion by extra("4.4.0")
+val pwOauthSdkVersion by extra("1.3.1")
+val pwKycSdkVersion by extra("4.5.0")
 val dataStoreVersion by extra("1.0.0")
 val ktorVersion by extra("2.3.1")
 
@@ -48,11 +48,6 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            buildConfigField(
-                "String",
-                "API_BASE_URL",
-                maybeWrapQuotes(secret("SORA_BACKEND_RELEASE")!!)
-            )
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -60,11 +55,6 @@ android {
         }
         debug {
             isMinifyEnabled = false
-            buildConfigField(
-                "String",
-                "API_BASE_URL",
-                maybeWrapQuotes(secret("SORA_BACKEND_DEBUG")!!)
-            )
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -104,6 +94,7 @@ dependencies {
     implementation("androidx.compose.material:material:1.4.3")
     implementation("androidx.compose.ui:ui-tooling-preview:1.4.3")
     implementation("androidx.compose.runtime:runtime-livedata:1.4.3")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.1")
     debugImplementation("androidx.compose.ui:ui-tooling:1.4.3")
 
     implementation("jp.co.soramitsu:ui-core:$uiCoreVersion")

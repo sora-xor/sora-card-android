@@ -11,7 +11,7 @@ import jp.co.soramitsu.oauth.common.navigation.flow.api.destinations.KycRequirem
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.cardissuance.CardIssuanceScreen
 import jp.co.soramitsu.oauth.feature.change.email.ChangeEmailScreen
-import jp.co.soramitsu.oauth.feature.get.prepared.GetPreparedScreen
+import jp.co.soramitsu.oauth.feature.getprepared.GetPreparedScreen
 import jp.co.soramitsu.oauth.feature.getmorexor.ChooseXorPurchaseMethodDialog
 import jp.co.soramitsu.oauth.feature.kyc.result.VerificationFailedScreen
 import jp.co.soramitsu.oauth.feature.kyc.result.VerificationInProgressScreen

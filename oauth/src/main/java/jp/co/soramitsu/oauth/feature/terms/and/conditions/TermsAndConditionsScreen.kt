@@ -16,9 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import jp.co.soramitsu.oauth.R
@@ -69,12 +66,8 @@ fun TermsAndConditionsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(Dimens.x2),
-                    text = AnnotatedString(
-                        stringResource(R.string.terms_and_conditions_sora_community_alert),
-                        spanStyles = listOf(
-                            AnnotatedString.Range(SpanStyle(fontWeight = FontWeight.Bold), 0, 57)
-                        )
-                    ), style = MaterialTheme.customTypography.paragraphM,
+                    text = stringResource(R.string.terms_and_conditions_sora_community_alert),
+                    style = MaterialTheme.customTypography.paragraphM,
                     color = MaterialTheme.customColors.accentTertiary
                 )
             }

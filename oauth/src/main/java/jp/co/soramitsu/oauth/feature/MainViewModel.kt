@@ -3,6 +3,7 @@ package jp.co.soramitsu.oauth.feature
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
 import com.paywings.oauth.android.sdk.service.callback.GetUserDataCallback
@@ -10,6 +11,7 @@ import com.paywings.onboarding.kyc.android.sdk.data.model.KycUserData
 import com.paywings.onboarding.kyc.android.sdk.data.model.UserCredentials
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.soramitsu.oauth.base.BaseViewModel
+import jp.co.soramitsu.oauth.base.SingleLiveEvent
 import jp.co.soramitsu.oauth.base.navigation.Destination
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
@@ -17,6 +19,7 @@ import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.state.DialogAlertState
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
+import jp.co.soramitsu.oauth.common.model.AccessTokenResponse
 import jp.co.soramitsu.oauth.common.navigation.flow.api.KycRequirementsUnfulfilledFlow
 import jp.co.soramitsu.oauth.common.navigation.flow.api.NavigationFlow
 import jp.co.soramitsu.oauth.common.navigation.flow.api.destinations.CompatibilityDestination
@@ -25,7 +28,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -36,21 +38,25 @@ class MainViewModel @Inject constructor(
     val inMemoryRepo: InMemoryRepo,
     private val pwoAuthClientProxy: PWOAuthClientProxy,
     @KycRequirementsUnfulfilledFlow private val kycRequirementsUnfulfilledFlow: NavigationFlow,
+    private val tokenValidator: AccessTokenValidator,
 ) : BaseViewModel() {
 
     private val _state = MutableStateFlow(MainScreenState())
     val state: StateFlow<MainScreenState?> = _state.asStateFlow()
+
+    private val _toast = SingleLiveEvent<String>()
+    val toast: LiveData<String> = _toast
 
     var uiState by mutableStateOf(MainScreenUiState())
         private set
 
     init {
         viewModelScope.launch {
+            val data = userSessionRepository.getUser()
+            if (data.first.isEmpty() || data.second.isEmpty()) return@launch
             showLoading(loading = true)
 
-            checkAccessTokenValidity { accessToken, accessTokenExpirationTime ->
-                updateAccessToken(accessToken, accessTokenExpirationTime)
-
+            checkAccessTokenValidity { accessToken ->
                 onAuthSucceed(accessToken)
                 showLoading(false)
             }
@@ -107,8 +113,7 @@ class MainViewModel @Inject constructor(
     fun getUserData() {
         viewModelScope.launch {
             showLoading(true)
-            checkAccessTokenValidity { accessToken, accessTokenExpirationTime ->
-                updateAccessToken(accessToken, accessTokenExpirationTime)
+            checkAccessTokenValidity { accessToken ->
                 val refreshToken = userSessionRepository.getRefreshToken()
                 _state.value = _state.value.copy(
                     userCredentials = UserCredentials(
@@ -131,35 +136,23 @@ class MainViewModel @Inject constructor(
     }
 
     private suspend fun checkAccessTokenValidity(
-        onNewToken: suspend (accessToken: String, accessTokenExpirationTime: Long) -> Unit
+        onNewToken: suspend (accessToken: String) -> Unit
     ) {
-        val accessToken = userSessionRepository.getAccessToken()
-        val accessTokenExpirationTime = userSessionRepository.getAccessTokenExpirationTime()
-        val accessTokenExpired =
-            accessTokenExpirationTime < TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())
+        when (val validity = tokenValidator.checkAccessTokenValidity()) {
+            is AccessTokenResponse.AuthError -> {
+                onError(validity.code)
+            }
 
-        if (accessToken.isBlank() || accessTokenExpired) {
-            getNewAccessToken(onNewToken)
-        } else {
-            onNewToken(accessToken, accessTokenExpirationTime)
+            AccessTokenResponse.SignInRequired -> {
+                onUserSignInRequired()
+            }
+
+            is AccessTokenResponse.Token -> {
+                onNewToken(validity.token)
+            }
+
+            null -> {}
         }
-    }
-
-    private suspend fun getNewAccessToken(
-        onNewToken: suspend (accessToken: String, accessTokenExpirationTime: Long) -> Unit
-    ) {
-        val refreshToken = userSessionRepository.getRefreshToken()
-
-        pwoAuthClientProxy.getNewAccessToken(
-            refreshToken = refreshToken,
-            callback = RefreshTokenCallbackWrapper(
-                onNewAccessToken = { accessToken, accessTokenExpirationTime ->
-                    viewModelScope.launch { onNewToken(accessToken, accessTokenExpirationTime) }
-                },
-                onError = this@MainViewModel::onError,
-                onUserSignInRequired = this@MainViewModel::onUserSignInRequired
-            ).getNewAccessTokenCallback,
-        )
     }
 
     private fun onError(error: OAuthErrorCode) {
@@ -177,10 +170,6 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private suspend fun updateAccessToken(accessToken: String, accessTokenExpirationTime: Long) {
-        userSessionRepository.setNewAccessToken(accessToken, accessTokenExpirationTime)
-    }
-
     private fun navigateToSignIn() {
         mainRouter.openEnterPhoneNumber()
     }
@@ -188,44 +177,51 @@ class MainViewModel @Inject constructor(
     fun onAuthSucceed(accessToken: String) {
         viewModelScope.launch {
             kycRepository.getKycLastFinalStatus(accessToken).onSuccess { kycResponse ->
-                if (kycResponse != null
-                    && (kycResponse == SoraCardCommonVerification.Rejected ||
-                        kycResponse == SoraCardCommonVerification.Pending ||
-                        kycResponse == SoraCardCommonVerification.Successful)
+                if (kycResponse == SoraCardCommonVerification.Rejected ||
+                    kycResponse == SoraCardCommonVerification.Pending ||
+                    kycResponse == SoraCardCommonVerification.Successful
                 ) {
                     showKycStatusScreen(kycResponse)
                 } else {
                     checkKycRequirementsFulfilled(accessToken)
                 }
             }
+                .onFailure {
+                    _toast.value = it.localizedMessage.orEmpty()
+                }
         }
     }
 
     private suspend fun checkKycRequirementsFulfilled(accessToken: String) {
-        val hasFreeAttempt = kycRepository.hasFreeKycAttempt(accessToken).getOrDefault(false)
-        if (inMemoryRepo.isEnoughXorAvailable) {
-            if (hasFreeAttempt) {
-                mainRouter.openGetPrepared()
-            } else {
-                showKycStatusScreen(SoraCardCommonVerification.Rejected)
+        kycRepository.hasFreeKycAttempt(accessToken)
+            .onFailure {
+                _toast.value = it.localizedMessage.orEmpty()
             }
-        } else {
-            kycRequirementsUnfulfilledFlow.start(
-                fromDestination = CompatibilityDestination(Destination.ENTER_PHONE_NUMBER.route)
-            )
-        }
+            .onSuccess { hasFreeAttempt ->
+                if (inMemoryRepo.isEnoughXorAvailable) {
+                    if (hasFreeAttempt) {
+                        mainRouter.openGetPrepared()
+                    } else {
+                        showKycStatusScreen(SoraCardCommonVerification.Rejected)
+                    }
+                } else {
+                    kycRequirementsUnfulfilledFlow.start(
+                        fromDestination = CompatibilityDestination(Destination.ENTER_PHONE_NUMBER.route)
+                    )
+                }
+            }
     }
 
     fun checkKycStatus(statusDescription: String? = null) {
         viewModelScope.launch {
             showLoading(true)
-            checkAccessTokenValidity { accessToken, accessTokenExpirationTime ->
-                updateAccessToken(accessToken, accessTokenExpirationTime)
+            checkAccessTokenValidity { accessToken ->
                 kycRepository.getKycLastFinalStatus(accessToken).onSuccess { status ->
-                    status?.let {
-                        showKycStatusScreen(it, statusDescription)
-                    }
+                    showKycStatusScreen(status, statusDescription)
                 }
+                    .onFailure {
+                        _toast.value = it.localizedMessage.orEmpty()
+                    }
                 showLoading(false)
             }
         }

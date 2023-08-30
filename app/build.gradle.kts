@@ -35,16 +35,33 @@ android {
         multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        buildConfigField("String", "SORA_CARD_API_KEY", maybeWrapQuotes(secret("SORA_CARD_API_KEY")!!))
-        buildConfigField("String", "SORA_CARD_DOMAIN", maybeWrapQuotes(secret("SORA_CARD_DOMAIN")!!))
-        buildConfigField("String", "SORA_CARD_KYC_ENDPOINT_URL", maybeWrapQuotes(secret("SORA_CARD_KYC_ENDPOINT_URL")!!))
-        buildConfigField("String", "SORA_CARD_KYC_USERNAME", maybeWrapQuotes(secret("SORA_CARD_KYC_USERNAME")!!))
-        buildConfigField("String", "SORA_CARD_KYC_PASSWORD", maybeWrapQuotes(secret("SORA_CARD_KYC_PASSWORD")!!))
     }
 
     buildTypes {
         release {
+            buildConfigField("String", "SORA_CARD_API_KEY", maybeWrapQuotes(secret("SORA_CARD_API_KEY_PROD")!!))
+            buildConfigField("String", "SORA_CARD_DOMAIN", maybeWrapQuotes(secret("SORA_CARD_DOMAIN_PROD")!!))
+            buildConfigField("String", "SORA_CARD_KYC_ENDPOINT_URL", maybeWrapQuotes(secret("SORA_CARD_KYC_ENDPOINT_URL_PROD")!!))
+            buildConfigField("String", "SORA_CARD_KYC_USERNAME", maybeWrapQuotes(secret("SORA_CARD_KYC_USERNAME_PROD")!!))
+            buildConfigField("String", "SORA_CARD_KYC_PASSWORD", maybeWrapQuotes(secret("SORA_CARD_KYC_PASSWORD_PROD")!!))
+
+            buildConfigField("String","SORA_API_BASE_URL",maybeWrapQuotes(secret("SORA_BACKEND_RELEASE")!!))
+
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+        debug {
+            buildConfigField("String", "SORA_CARD_API_KEY", maybeWrapQuotes(secret("SORA_CARD_API_KEY_TEST")!!))
+            buildConfigField("String", "SORA_CARD_DOMAIN", maybeWrapQuotes(secret("SORA_CARD_DOMAIN_TEST")!!))
+            buildConfigField("String", "SORA_CARD_KYC_ENDPOINT_URL", maybeWrapQuotes(secret("SORA_CARD_KYC_ENDPOINT_URL_TEST")!!))
+            buildConfigField("String", "SORA_CARD_KYC_USERNAME", maybeWrapQuotes(secret("SORA_CARD_KYC_USERNAME_TEST")!!))
+            buildConfigField("String", "SORA_CARD_KYC_PASSWORD", maybeWrapQuotes(secret("SORA_CARD_KYC_PASSWORD_TEST")!!))
+
+            buildConfigField("String","SORA_API_BASE_URL",maybeWrapQuotes(secret("SORA_BACKEND_DEBUG")!!))
+
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -80,7 +97,7 @@ dependencies {
     implementation( "com.google.dagger:hilt-android:2.45")
     "kapt"("com.google.dagger:hilt-compiler:2.45")
 
-    implementation("jp.co.soramitsu:ui-core:0.0.68")
+    implementation("jp.co.soramitsu:ui-core:0.1.0")
 }
 
 kapt {

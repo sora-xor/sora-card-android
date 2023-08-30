@@ -26,9 +26,21 @@ class VerificationSuccessfulViewModel @Inject constructor(
             basic = BasicToolbarState(
                 title = R.string.verification_successful_title,
                 visibility = true,
-                navIcon = R.drawable.ic_cross
+                navIcon = R.drawable.ic_cross,
+                actionLabel = R.string.log_out,
             ),
         )
+    }
+
+    override fun onToolbarAction() {
+        super.onToolbarAction()
+        runCatching {
+            viewModelScope.launch {
+                userSessionRepository.logOutUser()
+            }.invokeOnCompletion {
+                setActivityResult.setResult(SoraCardResult.Logout)
+            }
+        }
     }
 
     override fun onToolbarNavigation() {
@@ -40,9 +52,6 @@ class VerificationSuccessfulViewModel @Inject constructor(
         viewModelScope.launch {
             setActivityResult.setResult(
                 soraCardResult = SoraCardResult.Success(
-                    accessToken = userSessionRepository.getAccessToken(),
-                    accessTokenExpirationTime = userSessionRepository.getAccessTokenExpirationTime(),
-                    refreshToken = userSessionRepository.getRefreshToken(),
                     status = SoraCardCommonVerification.Successful,
                 )
             )

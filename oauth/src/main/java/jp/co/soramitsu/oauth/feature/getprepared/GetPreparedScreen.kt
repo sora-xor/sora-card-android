@@ -1,5 +1,6 @@
-package jp.co.soramitsu.oauth.feature.get.prepared
+package jp.co.soramitsu.oauth.feature.getprepared
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,16 +24,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.feature.OAuthCallback
-import jp.co.soramitsu.oauth.feature.get.prepared.model.GetPreparedState
-import jp.co.soramitsu.oauth.feature.get.prepared.model.Step
 import jp.co.soramitsu.ui_core.component.button.FilledButton
 import jp.co.soramitsu.ui_core.component.button.properties.Order
 import jp.co.soramitsu.ui_core.component.button.properties.Size
@@ -50,13 +47,17 @@ fun GetPreparedScreen(
         viewModel.setArgs(authCallback)
     }
 
+    BackHandler {
+        viewModel.onToolbarNavigation()
+    }
+
     Screen(
         viewModel = viewModel
     ) { scrollState ->
-        val state = viewModel.state
+        val state = viewModel.state.collectAsStateWithLifecycle()
         GetPreparedScreenContent(
             scrollState,
-            state,
+            state.value,
             onConfirm = viewModel::onConfirm
         )
     }
@@ -86,13 +87,8 @@ private fun GetPreparedScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(Dimens.x2),
-                text = AnnotatedString(
-                    stringResource(R.string.get_prepared_alert, state.attemptCost),
-                    spanStyles = listOf(
-                        AnnotatedString.Range(SpanStyle(fontWeight = FontWeight.Bold), 0, 10),
-                        AnnotatedString.Range(SpanStyle(fontWeight = FontWeight.Bold), 24, 39),
-                    )
-                ), style = MaterialTheme.customTypography.paragraphM,
+                text = stringResource(R.string.get_prepared_alert, state.attemptCost),
+                style = MaterialTheme.customTypography.paragraphM,
                 color = MaterialTheme.customColors.accentTertiary
             )
         }
