@@ -14,6 +14,8 @@ import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,8 +25,8 @@ class GetPreparedViewModel @Inject constructor(
     private val userSessionRepository: UserSessionRepository,
 ) : BaseViewModel() {
 
-    var state by mutableStateOf(GetPreparedState())
-        private set
+    private val _state = MutableStateFlow(GetPreparedState())
+    val state = _state.asStateFlow()
 
     private var authCallback: OAuthCallback? = null
 
@@ -39,7 +41,7 @@ class GetPreparedViewModel @Inject constructor(
             ),
         )
 
-        state = GetPreparedState(
+        _state.value = GetPreparedState(
             steps = listOf(
                 Step(
                     index = 1,

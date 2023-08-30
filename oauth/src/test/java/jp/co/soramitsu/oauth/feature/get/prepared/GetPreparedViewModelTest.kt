@@ -59,7 +59,7 @@ class GetPreparedViewModelTest {
 
     @Test
     fun `init EXPECT set steps`() {
-        assertEquals(TestData.STEPS, viewModel.state.steps)
+        assertEquals(TestData.STEPS, viewModel.state.value.steps)
     }
 
     @Test
