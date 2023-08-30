@@ -24,7 +24,7 @@ plugins {
 
 android {
     namespace = "jp.co.soramitsu.card"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "jp.co.soramitsu.card"
@@ -91,8 +91,8 @@ dependencies {
     implementation(project(":oauth"))
     implementation("com.google.android.material:material:1.9.0")
     implementation("androidx.activity:activity-compose:1.7.2")
-    implementation("androidx.compose.material:material:1.4.3")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.4.3")
+    implementation("androidx.compose.material:material:1.5.0")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.5.0")
 
     implementation( "com.google.dagger:hilt-android:2.45")
     "kapt"("com.google.dagger:hilt-compiler:2.45")
