@@ -8,7 +8,6 @@ import jp.co.soramitsu.oauth.common.model.GetReferenceNumberResponse
 import jp.co.soramitsu.oauth.common.model.KycAttemptsDto
 import jp.co.soramitsu.oauth.common.model.KycResponse
 import jp.co.soramitsu.oauth.common.model.KycStatus
-import jp.co.soramitsu.oauth.common.model.IbanAccountResponseWrapper
 import jp.co.soramitsu.oauth.common.model.VerificationStatus
 import jp.co.soramitsu.oauth.common.model.XorEuroPrice
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
@@ -103,13 +102,8 @@ class KycRepositoryImpl(
         }
     }
 
-    override suspend fun hasFreeKycAttempt(accessToken: String): Result<Boolean> {
-        return runCatching {
-            apiClient.get(accessToken, NetworkRequest.GET_KYC_FREE_ATTEMPT_INFO.url)
-                .body<KycAttemptsDto>()
-                .freeAttemptAvailable
-        }
-    }
+    override suspend fun hasFreeKycAttempt(accessToken: String): Result<Boolean> =
+        getFreeKycAttemptsInfo(accessToken).map { it.freeAttemptAvailable }
 
     override suspend fun getFreeKycAttemptsInfo(accessToken: String): Result<KycAttemptsDto> {
         return runCatching {

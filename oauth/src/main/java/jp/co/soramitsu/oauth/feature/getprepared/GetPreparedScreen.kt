@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.feature.OAuthCallback
@@ -53,10 +54,10 @@ fun GetPreparedScreen(
     Screen(
         viewModel = viewModel
     ) { scrollState ->
-        val state = viewModel.state
+        val state = viewModel.state.collectAsStateWithLifecycle()
         GetPreparedScreenContent(
             scrollState,
-            state,
+            state.value,
             onConfirm = viewModel::onConfirm
         )
     }

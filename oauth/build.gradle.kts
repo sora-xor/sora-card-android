@@ -94,6 +94,7 @@ dependencies {
     implementation("androidx.compose.material:material:1.4.3")
     implementation("androidx.compose.ui:ui-tooling-preview:1.4.3")
     implementation("androidx.compose.runtime:runtime-livedata:1.4.3")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.1")
     debugImplementation("androidx.compose.ui:ui-tooling:1.4.3")
 
     implementation("jp.co.soramitsu:ui-core:$uiCoreVersion")
@@ -141,7 +142,7 @@ kapt {
     correctErrorTypes = true
 }
 
-val currentVersion by extra("0.1.33")
+val currentVersion by extra("0.1.34")
 publishing {
     publications {
         register<MavenPublication>("release") {

@@ -9,6 +9,12 @@
   <string name="card_issuance_screen_paid_card_pay_euro">Trả phí phát hành €%s</string>
   <string name="card_issuance_screen_paid_card_title">€%s phí phát hành</string>
   <string name="card_issuance_screen_title">Phát hành thẻ</string>
+  <string name="cardhub_coming_soon">Quản lý thẻ sắp ra mắt</string>
+  <string name="cardhub_exchange">Giao dịch</string>
+  <string name="cardhub_freeze">Đông lạnh</string>
+  <string name="cardhub_iban_title">Chi tiết tài khoản IBAN</string>
+  <string name="cardhub_top_up">Nạp tiền</string>
+  <string name="cardhub_transfer">Chuyển</string>
   <string name="change_email_title">Thay đổi email của bạn</string>
   <string name="common_back">Trở lại</string>
   <string name="common_cancel">Hủy</string>
@@ -37,11 +43,12 @@
   <string name="enter_email_title">Nhập email của bạn</string>
   <string name="enter_phone_number_description">Bạn sẽ nhận được\nmã xác minh qua SMS</string>
   <string name="enter_phone_number_phone_input_field_label">Số điện thoại</string>
+  <string name="entry_card_info">Thông tin thẻ</string>
   <string name="get_more_xor_dialog_buy_option">Mua XOR bằng EUR</string>
   <string name="get_more_xor_dialog_deposit_option">Nạp XOR</string>
   <string name="get_more_xor_dialog_description">Bạn có thể đổi lấy XOR hoặc mua bằng Euro</string>
   <string name="get_more_xor_dialog_swap_option">Hoán đổi tiền điện tử lấy XOR</string>
-  <string name="get_prepared_alert">CHÚ Ý: Bạn chỉ có 2 lần thử miễn phí để vượt qua quy trình KYC. Mọi nỗ lực khác sau đó sẽ có giá € 3,8. Các lần thử trả phí sẽ có sẵn sau bản cập nhật tiếp theo của ứng dụng.</string>
+  <string name="get_prepared_alert">CHÚ Ý: Bạn chỉ có 4 lần thử miễn phí để vượt qua quy trình KYC. Mọi nỗ lực khác sau đó sẽ có giá € 3,8. Các lần thử trả phí sẽ có sẵn sau bản cập nhật tiếp theo của ứng dụng.</string>
   <string name="get_prepared_need">Để hoàn tất KYC, bạn sẽ cần:</string>
   <string name="get_prepared_ok_title">OK, tôi đã sẵn sàng</string>
   <string name="get_prepared_personal_info_description">Điền vào biểu mẫu với tên và địa chỉ của bạn</string>
@@ -88,7 +95,7 @@
   <string name="verification_rejected_title">Xác minh bị từ chối</string>
   <string name="verification_successful_description">Xác minh KYC của bạn đã thành công và chúng tôi đã chuẩn bị gửi cho bạn thẻ SORA!</string>
   <string name="verification_successful_title">Đơn đăng ký được chấp thuận</string>
-  <string name="verify_email_description">Theo liên kết kỳ diệu đã được gửi\ntới %s</string>
+  <string name="verify_email_description">Đi theo liên kết ma thuật đã được gửi \n tới %s \n Có thể mất vài phút để email đến nơi. Vui lòng kiểm thư mục thư rác nếu bạn không nhận được email sau 5 phút.</string>
   <string name="verify_email_resend">GỬI LẠI VÀO %s</string>
   <string name="verify_email_title">Xác minh email của bạn</string>
   <string name="verify_phone_number_code_input_field_label">Mã SMS</string>

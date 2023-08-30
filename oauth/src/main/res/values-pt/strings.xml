@@ -9,6 +9,12 @@
   <string name="card_issuance_screen_paid_card_pay_euro">Pagar €%s de taxa de emissão</string>
   <string name="card_issuance_screen_paid_card_title">€%s taxa de emissão</string>
   <string name="card_issuance_screen_title">Emissão de cartão</string>
+  <string name="cardhub_coming_soon">Card management is coming soon</string>
+  <string name="cardhub_exchange">Exchange</string>
+  <string name="cardhub_freeze">Freeze</string>
+  <string name="cardhub_iban_title">IBAN account details</string>
+  <string name="cardhub_top_up">Top up</string>
+  <string name="cardhub_transfer">Transfer</string>
   <string name="change_email_title">Alterar seu e-mail</string>
   <string name="common_back">Back</string>
   <string name="common_cancel">Cancelar</string>
@@ -37,11 +43,12 @@
   <string name="enter_email_title">Introduza o seu e-mail</string>
   <string name="enter_phone_number_description">Receberá um código de verificação por SMS</string>
   <string name="enter_phone_number_phone_input_field_label">Número de telefone</string>
+  <string name="entry_card_info">Card info</string>
   <string name="get_more_xor_dialog_buy_option">Comprar XOR com EUR</string>
   <string name="get_more_xor_dialog_deposit_option">Depósito XOR</string>
   <string name="get_more_xor_dialog_description">Pode trocar por XOR ou comprar com euros</string>
   <string name="get_more_xor_dialog_swap_option">Troque crypto por XOR</string>
-  <string name="get_prepared_alert">ATENÇÃO: Tem apenas 2 tentativas gratuitas para passar o processo KYC. Todas as outras tentativas depois disso custarão 3,8 euros. As tentativas pagas estarão disponíveis após a próxima atualização da aplicação.</string>
+  <string name="get_prepared_alert">ATENÇÃO: Tem apenas 4 tentativas gratuitas para passar o processo KYC. Todas as outras tentativas depois disso custarão 3,8 euros. As tentativas pagas estarão disponíveis após a próxima atualização da aplicação.</string>
   <string name="get_prepared_need">Para completar o KYC, é necessário</string>
   <string name="get_prepared_ok_title">OK, estou pronto</string>
   <string name="get_prepared_personal_info_description">Preencher o formulário com o seu nome e endereço</string>
