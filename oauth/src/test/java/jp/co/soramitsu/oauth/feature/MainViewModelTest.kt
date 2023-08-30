@@ -6,6 +6,8 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
+import io.mockk.just
+import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
@@ -14,6 +16,7 @@ import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
+import jp.co.soramitsu.oauth.common.model.AccessTokenResponse
 import jp.co.soramitsu.oauth.common.navigation.flow.api.NavigationFlow
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -48,6 +51,9 @@ class MainViewModelTest {
     private lateinit var mainRouter: MainRouter
 
     @MockK
+    private lateinit var tokenValidator: AccessTokenValidator
+
+    @MockK
     private lateinit var kycRequirementsUnfulfilledFlow: NavigationFlow
 
     @MockK
@@ -63,9 +69,13 @@ class MainViewModelTest {
         coEvery { userSessionRepository.getAccessToken() } returns "accessToken"
         coEvery { userSessionRepository.getAccessTokenExpirationTime() } returns System.currentTimeMillis() + 300000
         coEvery { userSessionRepository.setNewAccessToken(any(), any()) } returns Unit
+        coEvery { userSessionRepository.getUser() } returns Triple("refresh", "access", 0)
         coEvery { kycRequirementsUnfulfilledFlow.start(any()) } returns Unit
+        coEvery { kycRepository.getKycLastFinalStatus(any(), any()) } returns Result.success(SoraCardCommonVerification.Successful)
         every { mainRouter.openGetPrepared() } returns Unit
         every { mainRouter.openVerificationFailed(any()) } returns Unit
+        every { mainRouter.openVerificationSuccessful() } just runs
+        coEvery { tokenValidator.checkAccessTokenValidity() } returns AccessTokenResponse.Token("", 123)
     }
 
     private fun setupViewModel(status: SoraCardCommonVerification) {
@@ -77,6 +87,7 @@ class MainViewModelTest {
             inMemoryRepo,
             pwoAuthClientProxy,
             kycRequirementsUnfulfilledFlow,
+            tokenValidator,
         )
     }
 
@@ -85,6 +96,7 @@ class MainViewModelTest {
         every { inMemoryRepo.isEnoughXorAvailable } returns true
         coEvery { kycRepository.hasFreeKycAttempt("accessToken") } returns Result.success(true)
         coEvery { userSessionRepository.getRefreshToken() } returns "refreshToken"
+        coEvery { tokenValidator.checkAccessTokenValidity() } returns AccessTokenResponse.Token("token", 1000)
         val slot = slot<GetUserDataCallback>()
         coEvery { pwoAuthClientProxy.getUserData(any(), capture(slot)) } answers {
             slot.captured.onUserData("", "", "", "", false, "")

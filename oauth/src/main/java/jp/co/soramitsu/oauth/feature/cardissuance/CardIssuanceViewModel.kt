@@ -8,9 +8,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.compose.ScreenStatus
-import jp.co.soramitsu.oauth.base.sdk.contract.OutwardsScreen
+import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
-import jp.co.soramitsu.oauth.common.domain.CurrentActivityRetriever
 import jp.co.soramitsu.oauth.common.domain.PriceInteractor
 import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.common.navigation.flow.api.KycRequirementsUnfulfilledFlow
@@ -44,12 +43,12 @@ class CardIssuanceViewModel @Inject constructor(
 
     init {
         _toolbarState.value = SoramitsuToolbarState(
-            type = SoramitsuToolbarType.Medium(),
+            type = SoramitsuToolbarType.Small(),
             basic = BasicToolbarState(
-                title = R.string.card_issuance_screen_title,
+                title = "",
                 visibility = true,
                 navIcon = R.drawable.ic_cross,
-                actionLabel = R.string.log_out
+                actionLabel = R.string.log_out,
             ),
         )
 
@@ -94,8 +93,7 @@ class CardIssuanceViewModel @Inject constructor(
     }
 
     override fun onToolbarNavigation() {
-        super.onToolbarNavigation()
-        kycRequirementsUnfulfilledFlow.exit()
+        setActivityResult.setResult(SoraCardResult.Success(status = SoraCardCommonVerification.NotFound))
     }
 
     fun onGetXorClick() {

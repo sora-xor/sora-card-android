@@ -29,7 +29,7 @@ class VerificationInProgressViewModel @Inject constructor(
                 title = R.string.kyc_result_verification_in_progress,
                 visibility = true,
                 navIcon = R.drawable.ic_cross,
-                actionLabel = R.string.log_out
+                actionLabel = R.string.log_out,
             ),
         )
     }
@@ -50,14 +50,8 @@ class VerificationInProgressViewModel @Inject constructor(
     override fun onToolbarNavigation() {
         super.onToolbarNavigation()
         viewModelScope.launch {
-            val accessToken = userSessionRepository.getAccessToken()
-            val accessTokenExpirationTime = userSessionRepository.getAccessTokenExpirationTime()
-            val refreshToken = userSessionRepository.getRefreshToken()
             setActivityResult.setResult(
                 SoraCardResult.Success(
-                    accessToken = accessToken,
-                    accessTokenExpirationTime = accessTokenExpirationTime,
-                    refreshToken = refreshToken,
                     status = SoraCardCommonVerification.Pending,
                 )
             )

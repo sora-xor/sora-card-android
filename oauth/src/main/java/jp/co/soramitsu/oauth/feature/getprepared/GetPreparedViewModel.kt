@@ -1,27 +1,32 @@
-package jp.co.soramitsu.oauth.feature.get.prepared
+package jp.co.soramitsu.oauth.feature.getprepared
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
-import jp.co.soramitsu.oauth.base.navigation.MainRouter
+import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
+import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.feature.OAuthCallback
-import jp.co.soramitsu.oauth.feature.get.prepared.model.GetPreparedState
-import jp.co.soramitsu.oauth.feature.get.prepared.model.Step
+import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class GetPreparedViewModel @Inject constructor(
-    private val mainRouter: MainRouter
+    private val setActivityResult: SetActivityResult,
+    private val userSessionRepository: UserSessionRepository,
 ) : BaseViewModel() {
 
-    var state by mutableStateOf(GetPreparedState())
-        private set
+    private val _state = MutableStateFlow(GetPreparedState())
+    val state = _state.asStateFlow()
 
     private var authCallback: OAuthCallback? = null
 
@@ -32,10 +37,11 @@ class GetPreparedViewModel @Inject constructor(
                 title = R.string.get_prepared_title,
                 visibility = true,
                 navIcon = R.drawable.ic_toolbar_back,
+                actionLabel = R.string.log_out,
             ),
         )
 
-        state = GetPreparedState(
+        _state.value = GetPreparedState(
             steps = listOf(
                 Step(
                     index = 1,
@@ -61,6 +67,17 @@ class GetPreparedViewModel @Inject constructor(
         )
     }
 
+    override fun onToolbarAction() {
+        super.onToolbarAction()
+        runCatching {
+            viewModelScope.launch {
+                userSessionRepository.logOutUser()
+            }.invokeOnCompletion {
+                setActivityResult.setResult(SoraCardResult.Logout)
+            }
+        }
+    }
+
     fun setArgs(authCallback: OAuthCallback) {
         this.authCallback = authCallback
     }
@@ -70,6 +87,6 @@ class GetPreparedViewModel @Inject constructor(
     }
 
     override fun onToolbarNavigation() {
-        mainRouter.back()
+        setActivityResult.setResult(SoraCardResult.Canceled)
     }
 }

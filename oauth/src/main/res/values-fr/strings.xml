@@ -9,7 +9,14 @@
   <string name="card_issuance_screen_paid_card_pay_euro">Payer avec frais d\'émission de %s€</string>
   <string name="card_issuance_screen_paid_card_title">Frais d\'émission de %s€</string>
   <string name="card_issuance_screen_title">Émission de la carte</string>
+  <string name="cardhub_coming_soon">Gestion de la carte bientôt disponible</string>
+  <string name="cardhub_exchange">Échanger</string>
+  <string name="cardhub_freeze">Geler</string>
+  <string name="cardhub_iban_title">Détails de l\'IBAN</string>
+  <string name="cardhub_top_up">Recharger</string>
+  <string name="cardhub_transfer">Transférer</string>
   <string name="change_email_title">Changer votre e-mail</string>
+  <string name="common_back">Retour</string>
   <string name="common_cancel">Annuler</string>
   <string name="common_change_email">Utilisez un autre e-mail</string>
   <string name="common_close">Fermer</string>
@@ -26,7 +33,7 @@
   <string name="common_user_not_found">Aucun numéro de portable trouvé, veuillez le revérifier et réessayer.</string>
   <string name="details_already_have_card">J\'ai déjà une carte</string>
   <string name="details_already_used_free_try">Vous avez déjà utilisé votre essai gratuit</string>
-  <string name="details_description">Obtenez un IBAN en compte Euros ainsi qu\'un carte de débit Mastercard connectés à votre portefeuille SORA</string>
+  <string name="details_description">Obtenez un IBAN en compte Euros ainsi qu\'un carte de débit connectés à votre portefeuille SORA</string>
   <string name="details_enough_xor_desription">Vous avez assez de XOR</string>
   <string name="details_get_more_xor">Obtenir plus de XOR</string>
   <string name="details_issue_card">Recevoir la carte gratuitement</string>
@@ -36,11 +43,12 @@
   <string name="enter_email_title">Entrez votre e-mail</string>
   <string name="enter_phone_number_description">Vous allez recevoir un code de vérification par SMS</string>
   <string name="enter_phone_number_phone_input_field_label">Numéro de téléphone</string>
+  <string name="entry_card_info">Informations de la carte</string>
   <string name="get_more_xor_dialog_buy_option">Acheter du XOR avec des EUR</string>
   <string name="get_more_xor_dialog_deposit_option">Déposer du XOR</string>
   <string name="get_more_xor_dialog_description">Vous pouvez échanger vers du XOR ou en acheter avec des Euros</string>
   <string name="get_more_xor_dialog_swap_option">Échanger de la crypto pour du XOR</string>
-  <string name="get_prepared_alert">ATTENTION: Seulement 2 essais gratuits sont fournis pour passer la procédure de KYC. Après ces deux essais, tout autre essai coûtera 3,8€. Les essais payants seront disponibles après la prochaine mise à jour de l\'application.</string>
+  <string name="get_prepared_alert">ATTENTION: Seulement 4 essais gratuits sont fournis pour passer la procédure de KYC. Après ces deux essais, tout autre essai coûtera 3,8€. Les essais payants seront disponibles après la prochaine mise à jour de l\'application.</string>
   <string name="get_prepared_need">Pour compléter la procédure de KYC vous aurez besoin de:</string>
   <string name="get_prepared_ok_title">OK, je suis prêt(e)</string>
   <string name="get_prepared_personal_info_description">Remplissez le formulaire avec votre nom et adresse</string>
@@ -87,11 +95,12 @@
   <string name="verification_rejected_title">Demande rejetée</string>
   <string name="verification_successful_description">Votre vérification KYC a été validée et nous préparons déjà votre carte pour vous l\'envoyer!</string>
   <string name="verification_successful_title">Demande approuvée</string>
-  <string name="verify_email_description">Suivez le lien magique envoyé à %s</string>
+  <string name="verify_email_description">Suivez le lien magique envoyé à \n%s\nL\'e-mail peut prendre plusieurs minutes pour arriver. Pensez à vérifier votre dossier Spam si vous n\'avez toujours pas reçu l\'e-mail après 5 minutes.</string>
   <string name="verify_email_resend">Renvoyer dans %s</string>
   <string name="verify_email_title">Vérifiez votre e-mail</string>
   <string name="verify_phone_number_code_input_field_label">Code SMS</string>
   <string name="verify_phone_number_description">Entrez le code qui a été envoyé au %s</string>
+  <string name="verify_phone_number_otp_not_valid">OTP invalide</string>
   <string name="verify_phone_number_send_code">Envoyer le code</string>
   <string name="verify_phone_number_title">Vérifiez votre numéro de téléphone</string>
 </resources>

@@ -26,16 +26,16 @@ plugins {
 }
 
 val composeCompilerVersion by extra("1.4.6")
-val uiCoreVersion by extra("0.0.67")
+val uiCoreVersion by extra("0.1.0")
 val hiltVersion by extra("2.45")
-val pwOauthSdkVersion by extra("1.2.3")
-val pwKycSdkVersion by extra("4.4.0")
+val pwOauthSdkVersion by extra("1.3.1")
+val pwKycSdkVersion by extra("4.5.0")
 val dataStoreVersion by extra("1.0.0")
 val ktorVersion by extra("2.3.1")
 
 android {
     namespace = "jp.co.soramitsu.oauth"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 24
@@ -48,11 +48,6 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            buildConfigField(
-                "String",
-                "API_BASE_URL",
-                maybeWrapQuotes(secret("SORA_BACKEND_RELEASE")!!)
-            )
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -60,11 +55,6 @@ android {
         }
         debug {
             isMinifyEnabled = false
-            buildConfigField(
-                "String",
-                "API_BASE_URL",
-                maybeWrapQuotes(secret("SORA_BACKEND_DEBUG")!!)
-            )
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -100,11 +90,12 @@ dependencies {
     implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.fragment:fragment-ktx:1.5.7")
 
-    implementation("androidx.compose.ui:ui:1.4.3")
-    implementation("androidx.compose.material:material:1.4.3")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.4.3")
-    implementation("androidx.compose.runtime:runtime-livedata:1.4.3")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.4.3")
+    implementation("androidx.compose.ui:ui:1.5.0")
+    implementation("androidx.compose.material:material:1.5.0")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.5.0")
+    implementation("androidx.compose.runtime:runtime-livedata:1.5.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.1")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.5.0")
 
     implementation("jp.co.soramitsu:ui-core:$uiCoreVersion")
 
@@ -112,7 +103,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
 
     implementation("androidx.navigation:navigation-compose:2.5.3")
-    implementation("com.google.accompanist:accompanist-navigation-animation:0.30.1")
+    implementation("com.google.accompanist:accompanist-navigation-animation:0.32.0")
 
     implementation( "com.google.dagger:hilt-android:$hiltVersion")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
@@ -151,7 +142,7 @@ kapt {
     correctErrorTypes = true
 }
 
-val currentVersion by extra("0.2.1")
+val currentVersion by extra("0.2.2")
 publishing {
     publications {
         register<MavenPublication>("release") {

@@ -1,8 +1,5 @@
 package jp.co.soramitsu.oauth.feature.kyc.result.verificationrejected
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.soramitsu.oauth.R
@@ -18,6 +15,8 @@ import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,15 +29,15 @@ class VerificationRejectedViewModel @Inject constructor(
     private val priceInteractor: PriceInteractor
 ) : BaseViewModel() {
 
-    var verificationRejectedScreenState by mutableStateOf(
+    private val _verificationRejectedScreenState = MutableStateFlow(
         VerificationRejectedScreenState(
             screenStatus = ScreenStatus.ERROR,
-            kycAttemptsCount = 0,
+            kycFreeAttemptsCount = 0,
             isFreeAttemptsLeft = false,
             kycAttemptCostInEuros = (-1).toDouble()
         )
     )
-        private set
+    val verificationRejectedScreenState = _verificationRejectedScreenState.asStateFlow()
 
     init {
         _toolbarState.value = SoramitsuToolbarState(
@@ -56,7 +55,7 @@ class VerificationRejectedViewModel @Inject constructor(
 
     private fun fetchKycAttemptInfo() {
         viewModelScope.launch {
-            kotlin.runCatching {
+            runCatching {
                 val token = userSessionRepository.getAccessToken()
 
                 val (actualKycAttemptsLeft, isKycAttemptsLeft) = kycRepository.getFreeKycAttemptsInfo(token)
@@ -64,14 +63,14 @@ class VerificationRejectedViewModel @Inject constructor(
 
                 val kycAttemptPrice = priceInteractor.calculateKycAttemptPrice().getOrThrow()
 
-                verificationRejectedScreenState = verificationRejectedScreenState.copy(
+                _verificationRejectedScreenState.value = _verificationRejectedScreenState.value.copy(
                     screenStatus = ScreenStatus.READY_TO_RENDER,
-                    kycAttemptsCount = actualKycAttemptsLeft,
+                    kycFreeAttemptsCount = actualKycAttemptsLeft,
                     kycAttemptCostInEuros = kycAttemptPrice,
                     isFreeAttemptsLeft = isKycAttemptsLeft,
                 )
             }.onFailure {
-                verificationRejectedScreenState = verificationRejectedScreenState.copy(
+                _verificationRejectedScreenState.value = _verificationRejectedScreenState.value.copy(
                     screenStatus = ScreenStatus.ERROR
                 )
             }
@@ -94,14 +93,8 @@ class VerificationRejectedViewModel @Inject constructor(
     override fun onToolbarNavigation() {
         super.onToolbarNavigation()
         viewModelScope.launch {
-            val accessToken = userSessionRepository.getAccessToken()
-            val accessTokenExpirationTime = userSessionRepository.getAccessTokenExpirationTime()
-            val refreshToken = userSessionRepository.getRefreshToken()
             setActivityResult.setResult(
                 SoraCardResult.Success(
-                    accessToken = accessToken,
-                    accessTokenExpirationTime = accessTokenExpirationTime,
-                    refreshToken = refreshToken,
                     status = SoraCardCommonVerification.Rejected,
                 )
             )
@@ -109,7 +102,7 @@ class VerificationRejectedViewModel @Inject constructor(
     }
 
     fun onTryAgain() {
-        if (verificationRejectedScreenState.isFreeAttemptsLeft) {
+        if (_verificationRejectedScreenState.value.isFreeAttemptsLeft) {
             mainRouter.openGetPrepared()
         }
 
@@ -122,6 +115,6 @@ class VerificationRejectedViewModel @Inject constructor(
     }
 
     private companion object {
-        const val TOTAL_AVAILABLE_ATTEMPTS = 2
+        const val TOTAL_AVAILABLE_ATTEMPTS = 4
     }
 }

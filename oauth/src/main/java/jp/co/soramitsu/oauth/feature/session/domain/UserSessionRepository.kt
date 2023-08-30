@@ -1,5 +1,7 @@
 package jp.co.soramitsu.oauth.feature.session.domain
 
+import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
+
 interface UserSessionRepository {
 
     suspend fun getRefreshToken(): String
@@ -11,16 +13,14 @@ interface UserSessionRepository {
     suspend fun signInUser(
         refreshToken: String,
         accessToken: String,
-        expirationTime: Long
+        expirationTime: Long,
     )
+
+    suspend fun getUser(): Triple<String, String, Long>
 
     suspend fun setNewAccessToken(
         accessToken: String,
         expirationTime: Long
-    )
-
-    suspend fun setRefreshToken(
-        refreshToken: String
     )
 
     suspend fun setUserId(userId: String?)
@@ -32,4 +32,7 @@ interface UserSessionRepository {
     suspend fun getPersonId(): String
 
     suspend fun logOutUser()
+
+    suspend fun setKycStatus(status: SoraCardCommonVerification)
+    suspend fun getKycStatus(): SoraCardCommonVerification?
 }

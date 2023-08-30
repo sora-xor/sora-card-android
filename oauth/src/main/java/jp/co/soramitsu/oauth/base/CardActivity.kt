@@ -13,11 +13,8 @@ import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.extension.getParcelableCompat
 import jp.co.soramitsu.oauth.base.resources.ContextManager
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
-import jp.co.soramitsu.oauth.base.sdk.Mode
 import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants.BUNDLE_EXTRA_SORA_CARD_CONTRACT_DATA
 import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants.EXTRA_SORA_CARD_CONTRACT_DATA
-import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants.SIGN_IN_BUNDLE_EXTRA
-import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants.SIGN_IN_DATA
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardContractData
 import jp.co.soramitsu.oauth.common.domain.CurrentActivityRetriever
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
@@ -54,9 +51,6 @@ class CardActivity : AppCompatActivity(R.layout.card_activity) {
         intent.getBundleExtra(BUNDLE_EXTRA_SORA_CARD_CONTRACT_DATA)
             ?.let(::setUpRegistrationFlow)
 
-        intent.getBundleExtra(SIGN_IN_BUNDLE_EXTRA)
-            ?.let(::setUpSignInFlow)
-
         if (savedInstanceState == null) {
             supportFragmentManager.commit {
                 setReorderingAllowed(true)
@@ -77,35 +71,8 @@ class CardActivity : AppCompatActivity(R.layout.card_activity) {
             vm.inMemoryRepo.endpointUrl = data.kycCredentials.endpointUrl
             vm.inMemoryRepo.username = data.kycCredentials.username
             vm.inMemoryRepo.password = data.kycCredentials.password
-            vm.inMemoryRepo.mode = Mode.REGISTRATION
-            vm.inMemoryRepo.environment = data.environment
-            vm.inMemoryRepo.client = data.client
-            vm.inMemoryRepo.areAttemptsPaidSuccessfully = data.areAttemptsPaidSuccessfully
-            vm.inMemoryRepo.isEnoughXorAvailable = data.isEnoughXorAvailable
-            vm.inMemoryRepo.isIssuancePaid = data.isIssuancePaid
-
-            pwoAuthClientProxy.init(
-                applicationContext,
-                data.environment,
-                data.apiKey,
-                data.domain,
-            )
-        }
-    }
-
-    private fun setUpSignInFlow(bundle: Bundle) {
-        val contractData = bundle.getParcelableCompat(
-            SIGN_IN_DATA,
-            SoraCardContractData::class.java
-        )
-
-        contractData?.let { data ->
-            ContextManager.setLocale(data.locale)
-            vm.inMemoryRepo.endpointUrl = data.kycCredentials.endpointUrl
-            vm.inMemoryRepo.username = data.kycCredentials.username
-            vm.inMemoryRepo.password = data.kycCredentials.password
-            vm.inMemoryRepo.mode = Mode.SIGN_IN
-            vm.inMemoryRepo.environment = data.environment
+            vm.inMemoryRepo.environment = data.basic.environment
+            vm.inMemoryRepo.soraBackEndUrl = data.soraBackEndUrl
             vm.inMemoryRepo.client = data.client
             vm.inMemoryRepo.userAvailableXorAmount = data.userAvailableXorAmount
             vm.inMemoryRepo.areAttemptsPaidSuccessfully = data.areAttemptsPaidSuccessfully
@@ -114,9 +81,9 @@ class CardActivity : AppCompatActivity(R.layout.card_activity) {
 
             pwoAuthClientProxy.init(
                 applicationContext,
-                data.environment,
-                data.apiKey,
-                data.domain,
+                data.basic.environment,
+                data.basic.apiKey,
+                data.basic.domain,
             )
         }
     }

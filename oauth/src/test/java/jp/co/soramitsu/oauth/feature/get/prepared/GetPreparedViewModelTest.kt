@@ -1,23 +1,24 @@
 package jp.co.soramitsu.oauth.feature.get.prepared
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.junit4.MockKRule
+import io.mockk.verify
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
+import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.feature.OAuthCallback
+import jp.co.soramitsu.oauth.feature.getprepared.GetPreparedViewModel
+import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
-import org.mockito.kotlin.verify
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@RunWith(MockitoJUnitRunner::class)
 class GetPreparedViewModelTest {
 
     @Rule
@@ -27,18 +28,27 @@ class GetPreparedViewModelTest {
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-    @Mock
-    private lateinit var mainRouter: MainRouter
+    @get:Rule
+    val mockkRule = MockKRule(this)
 
-    @Mock
+    @MockK
+    private lateinit var userSessionRepository: UserSessionRepository
+
+    @MockK
+    private lateinit var setActivityResult: SetActivityResult
+
+    @MockK
     private lateinit var authCallback: OAuthCallback
 
     private lateinit var viewModel: GetPreparedViewModel
 
     @Before
     fun setUp() {
+        every { setActivityResult.setResult(any()) } returns Unit
+        every { authCallback.onStartKyc() } returns Unit
         viewModel = GetPreparedViewModel(
-            mainRouter
+            setActivityResult,
+            userSessionRepository,
         )
     }
 
@@ -49,21 +59,19 @@ class GetPreparedViewModelTest {
 
     @Test
     fun `init EXPECT set steps`() {
-        assertEquals(TestData.STEPS, viewModel.state.steps)
+        assertEquals(TestData.STEPS, viewModel.state.value.steps)
     }
 
     @Test
     fun `on confirm EXPECT start kyc`() {
         viewModel.setArgs(authCallback)
         viewModel.onConfirm()
-
-        verify(authCallback).onStartKyc()
+        verify { authCallback.onStartKyc() }
     }
 
     @Test
     fun `back EXPECT navigate back`() {
         viewModel.onToolbarNavigation()
-
-        verify(mainRouter).back()
+        verify { setActivityResult.setResult(any()) }
     }
 }
