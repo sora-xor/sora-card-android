@@ -59,7 +59,7 @@ class VerificationRejectedViewModel @Inject constructor(
                 val token = userSessionRepository.getAccessToken()
 
                 val (actualKycAttemptsLeft, isKycAttemptsLeft) = kycRepository.getFreeKycAttemptsInfo(token)
-                    .getOrThrow().run { TOTAL_AVAILABLE_ATTEMPTS - rejected to freeAttemptAvailable }
+                    .getOrThrow().run { freeAttemptsCount to freeAttemptAvailable }
 
                 val kycAttemptPrice = priceInteractor.calculateKycAttemptPrice().getOrThrow()
 
@@ -112,9 +112,5 @@ class VerificationRejectedViewModel @Inject constructor(
 
     fun openTelegramSupport() {
         mainRouter.openSupportChat()
-    }
-
-    private companion object {
-        const val TOTAL_AVAILABLE_ATTEMPTS = 4
     }
 }
