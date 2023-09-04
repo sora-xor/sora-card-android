@@ -8,5 +8,6 @@ data class KycAttemptsDto(
     @SerialName("total") val total: Int,
     @SerialName("completed") val completed: Int,
     @SerialName("rejected") val rejected: Int,
-    @SerialName("free_attempt") val freeAttemptAvailable: Boolean
+    @SerialName("free_attempt") val freeAttemptAvailable: Boolean,
+    @SerialName("free_attempts") val freeAttemptsCount: Int,
 )
