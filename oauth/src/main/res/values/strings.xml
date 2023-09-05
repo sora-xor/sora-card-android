@@ -48,7 +48,6 @@
   <string name="get_more_xor_dialog_deposit_option">Deposit XOR</string>
   <string name="get_more_xor_dialog_description">You can swap for XOR or buy with Euro</string>
   <string name="get_more_xor_dialog_swap_option">Swap crypto for XOR</string>
-  <string name="get_prepared_alert">ATTENTION: You have only 4 free attempts to pass the KYC process. Every other attempt after that will cost €3.8. Paid attempts will be available after the next update of the app.</string>
   <string name="get_prepared_alert_dynamic">ATTENTION: You have only %s free attempts to pass the KYC process. Every other attempt after that will cost €3.8. Paid attempts will be available after the next update of the app.</string>
   <string name="get_prepared_need">To complete the KYC you will need to:</string>
   <string name="get_prepared_ok_title">OK, I am ready</string>

@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
@@ -115,8 +116,8 @@ internal class MainFragment : BaseFragment() {
                 startDestination = Destination.TERMS_AND_CONDITIONS,
                 authCallback = authCallback,
             )
-
-            if (viewModel.uiState.loading) {
+            val loading = viewModel.uiState.collectAsStateWithLifecycle()
+            if (loading.value.loading) {
                 ProgressDialog()
             }
         }

@@ -87,7 +87,7 @@ private fun GetPreparedScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(Dimens.x2),
-                text = stringResource(R.string.get_prepared_alert, state.attemptCost),
+                text = stringResource(R.string.get_prepared_alert_dynamic, state.totalFreeAttemptsCount),
                 style = MaterialTheme.customTypography.paragraphM,
                 color = MaterialTheme.customColors.accentTertiary
             )
@@ -186,6 +186,7 @@ private fun PreviewGetPreparedScreen() {
     GetPreparedScreenContent(
         scrollState = rememberScrollState(),
         state = GetPreparedState(
+            totalFreeAttemptsCount = "4",
             steps = listOf(
                 Step(
                     index = 1,
