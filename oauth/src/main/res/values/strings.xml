@@ -48,12 +48,13 @@
   <string name="get_more_xor_dialog_deposit_option">Deposit XOR</string>
   <string name="get_more_xor_dialog_description">You can swap for XOR or buy with Euro</string>
   <string name="get_more_xor_dialog_swap_option">Swap crypto for XOR</string>
-  <string name="get_prepared_alert">ATTENTION: You have only 4 free attempts to pass the KYC process. Every other attempt after that will cost €3.8. Paid attempts will be available after the next update of the app.</string>
+  <string name="get_prepared_alert_dynamic">ATTENTION: You have only %s free attempts to pass the KYC process. Every other attempt after that will cost €3.8. Paid attempts will be available after the next update of the app.</string>
   <string name="get_prepared_need">To complete the KYC you will need to:</string>
   <string name="get_prepared_ok_title">OK, I am ready</string>
   <string name="get_prepared_personal_info_description">Fill in the form with your name and address</string>
   <string name="get_prepared_personal_info_title">Submit your personal info</string>
-  <string name="get_prepared_proof_address_description">An official document (utility bill, bank statement, government statement or correspondence) that contains your full name and address, and that is no older then 3 months.\n\nNote: Statements from neobanks like Revolut and N26 are currently not seen as valid proof of address.</string>
+  <string name="get_prepared_proof_address_description">An official document (utility bill, bank statement, government statement or correspondence) that contains your full name and address, and that is no older then 3 months.</string>
+  <string name="get_prepared_proof_address_note">Note: Statements from neobanks like Revolut and N26 are currently not seen as valid proof of address.</string>
   <string name="get_prepared_proof_address_title">Submit a photo of proof of address</string>
   <string name="get_prepared_submit_id_photo_description">Passport, Driver License, ID card or Residence Permit</string>
   <string name="get_prepared_submit_id_photo_title">Submit a photo of your ID document</string>

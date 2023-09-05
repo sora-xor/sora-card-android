@@ -1,8 +1,5 @@
 package jp.co.soramitsu.oauth.feature
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
@@ -10,6 +7,7 @@ import com.paywings.oauth.android.sdk.service.callback.GetUserDataCallback
 import com.paywings.onboarding.kyc.android.sdk.data.model.KycUserData
 import com.paywings.onboarding.kyc.android.sdk.data.model.UserCredentials
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.SingleLiveEvent
 import jp.co.soramitsu.oauth.base.navigation.Destination
@@ -24,11 +22,11 @@ import jp.co.soramitsu.oauth.common.navigation.flow.api.KycRequirementsUnfulfill
 import jp.co.soramitsu.oauth.common.navigation.flow.api.NavigationFlow
 import jp.co.soramitsu.oauth.common.navigation.flow.api.destinations.CompatibilityDestination
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -47,8 +45,8 @@ class MainViewModel @Inject constructor(
     private val _toast = SingleLiveEvent<String>()
     val toast: LiveData<String> = _toast
 
-    var uiState by mutableStateOf(MainScreenUiState())
-        private set
+    private val _uiState = MutableStateFlow(MainScreenUiState())
+    val uiState = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -105,6 +103,10 @@ class MainViewModel @Inject constructor(
                             referenceNumber = it,
                         )
                     }
+                        .onFailure {
+                            _toast.value =
+                                it.localizedMessage ?: "Error occurred while get-reference-number"
+                        }
                 }
             }
         }
@@ -132,7 +134,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun showLoading(loading: Boolean) {
-        uiState = uiState.copy(loading = loading)
+        _uiState.value = _uiState.value.copy(loading = loading)
     }
 
     private suspend fun checkAccessTokenValidity(
@@ -231,23 +233,25 @@ class MainViewModel @Inject constructor(
         kycResponse: SoraCardCommonVerification,
         statusDescription: String? = null
     ) {
-        when {
-            (kycResponse == SoraCardCommonVerification.Pending) -> {
-                mainRouter.openVerificationInProgress()
-            }
+        viewModelScope.launch(Dispatchers.Main) {
+            when {
+                (kycResponse == SoraCardCommonVerification.Pending) -> {
+                    mainRouter.openVerificationInProgress()
+                }
 
-            (kycResponse == SoraCardCommonVerification.Successful) -> {
-                mainRouter.openVerificationSuccessful()
-            }
+                (kycResponse == SoraCardCommonVerification.Successful) -> {
+                    mainRouter.openVerificationSuccessful()
+                }
 
-            kycResponse == SoraCardCommonVerification.Failed -> {
-                mainRouter.openVerificationFailed(additionalDescription = statusDescription)
-            }
+                kycResponse == SoraCardCommonVerification.Failed -> {
+                    mainRouter.openVerificationFailed(additionalDescription = statusDescription)
+                }
 
-            kycResponse == SoraCardCommonVerification.Rejected -> {
-                mainRouter.openVerificationRejected(
-                    additionalDescription = statusDescription
-                )
+                kycResponse == SoraCardCommonVerification.Rejected -> {
+                    mainRouter.openVerificationRejected(
+                        additionalDescription = statusDescription
+                    )
+                }
             }
         }
     }

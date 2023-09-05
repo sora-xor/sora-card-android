@@ -26,8 +26,8 @@ plugins {
 }
 
 val composeCompilerVersion by extra("1.4.6")
-val uiCoreVersion by extra("0.1.0")
-val hiltVersion by extra("2.45")
+val uiCoreVersion by extra("0.1.2")
+val hiltVersion by extra("2.47")
 val pwOauthSdkVersion by extra("1.3.1")
 val pwKycSdkVersion by extra("4.5.0")
 val dataStoreVersion by extra("1.0.0")
@@ -88,7 +88,7 @@ android {
 dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.core:core-ktx:1.10.1")
-    implementation("androidx.fragment:fragment-ktx:1.5.7")
+    implementation("androidx.fragment:fragment-ktx:1.6.1")
 
     implementation("androidx.compose.ui:ui:1.5.0")
     implementation("androidx.compose.material:material:1.5.0")
@@ -102,8 +102,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
 
-    implementation("androidx.navigation:navigation-compose:2.5.3")
-    implementation("com.google.accompanist:accompanist-navigation-animation:0.32.0")
+    implementation("androidx.navigation:navigation-compose:2.7.1")
 
     implementation( "com.google.dagger:hilt-android:$hiltVersion")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
@@ -128,9 +127,8 @@ dependencies {
     implementation("io.ktor:ktor-client-logging:$ktorVersion")
     api("io.ktor:ktor-client-okhttp:$ktorVersion")
 
-    debugImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
     debugImplementation("junit:junit:4.13.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
     implementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-inline:5.2.0")
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
@@ -142,7 +140,7 @@ kapt {
     correctErrorTypes = true
 }
 
-val currentVersion by extra("0.2.3")
+val currentVersion by extra("0.2.4")
 publishing {
     publications {
         register<MavenPublication>("release") {

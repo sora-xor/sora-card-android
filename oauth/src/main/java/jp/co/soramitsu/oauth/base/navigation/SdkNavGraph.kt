@@ -4,15 +4,15 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.dialog
 import androidx.navigation.navArgument
-import com.google.accompanist.navigation.animation.AnimatedNavHost
 import jp.co.soramitsu.oauth.common.navigation.flow.api.destinations.KycRequirementsUnfulfilledDestination
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.cardissuance.CardIssuanceScreen
 import jp.co.soramitsu.oauth.feature.change.email.ChangeEmailScreen
-import jp.co.soramitsu.oauth.feature.getprepared.GetPreparedScreen
 import jp.co.soramitsu.oauth.feature.getmorexor.ChooseXorPurchaseMethodDialog
+import jp.co.soramitsu.oauth.feature.getprepared.GetPreparedScreen
 import jp.co.soramitsu.oauth.feature.kyc.result.VerificationFailedScreen
 import jp.co.soramitsu.oauth.feature.kyc.result.VerificationInProgressScreen
 import jp.co.soramitsu.oauth.feature.kyc.result.VerificationSuccessfulScreen
@@ -32,7 +32,7 @@ internal fun SdkNavGraph(
     startDestination: Destination,
     authCallback: OAuthCallback,
 ) {
-    AnimatedNavHost(navHostController, startDestination = startDestination.route) {
+    NavHost(navHostController, startDestination = startDestination.route) {
         animatedComposable(Destination.TERMS_AND_CONDITIONS.route) {
             TermsAndConditionsScreen()
         }

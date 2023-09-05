@@ -94,8 +94,8 @@ dependencies {
     implementation("androidx.compose.material:material:1.5.0")
     debugImplementation("androidx.compose.ui:ui-tooling:1.5.0")
 
-    implementation( "com.google.dagger:hilt-android:2.45")
-    "kapt"("com.google.dagger:hilt-compiler:2.45")
+    implementation( "com.google.dagger:hilt-android:2.47")
+    "kapt"("com.google.dagger:hilt-compiler:2.47")
 
     implementation("jp.co.soramitsu:ui-core:0.1.0")
 }
