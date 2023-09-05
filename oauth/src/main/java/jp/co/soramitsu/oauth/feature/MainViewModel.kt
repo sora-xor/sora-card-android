@@ -7,6 +7,7 @@ import com.paywings.oauth.android.sdk.service.callback.GetUserDataCallback
 import com.paywings.onboarding.kyc.android.sdk.data.model.KycUserData
 import com.paywings.onboarding.kyc.android.sdk.data.model.UserCredentials
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.SingleLiveEvent
 import jp.co.soramitsu.oauth.base.navigation.Destination
@@ -21,11 +22,11 @@ import jp.co.soramitsu.oauth.common.navigation.flow.api.KycRequirementsUnfulfill
 import jp.co.soramitsu.oauth.common.navigation.flow.api.NavigationFlow
 import jp.co.soramitsu.oauth.common.navigation.flow.api.destinations.CompatibilityDestination
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -232,23 +233,25 @@ class MainViewModel @Inject constructor(
         kycResponse: SoraCardCommonVerification,
         statusDescription: String? = null
     ) {
-        when {
-            (kycResponse == SoraCardCommonVerification.Pending) -> {
-                mainRouter.openVerificationInProgress()
-            }
+        viewModelScope.launch(Dispatchers.Main) {
+            when {
+                (kycResponse == SoraCardCommonVerification.Pending) -> {
+                    mainRouter.openVerificationInProgress()
+                }
 
-            (kycResponse == SoraCardCommonVerification.Successful) -> {
-                mainRouter.openVerificationSuccessful()
-            }
+                (kycResponse == SoraCardCommonVerification.Successful) -> {
+                    mainRouter.openVerificationSuccessful()
+                }
 
-            kycResponse == SoraCardCommonVerification.Failed -> {
-                mainRouter.openVerificationFailed(additionalDescription = statusDescription)
-            }
+                kycResponse == SoraCardCommonVerification.Failed -> {
+                    mainRouter.openVerificationFailed(additionalDescription = statusDescription)
+                }
 
-            kycResponse == SoraCardCommonVerification.Rejected -> {
-                mainRouter.openVerificationRejected(
-                    additionalDescription = statusDescription
-                )
+                kycResponse == SoraCardCommonVerification.Rejected -> {
+                    mainRouter.openVerificationRejected(
+                        additionalDescription = statusDescription
+                    )
+                }
             }
         }
     }
