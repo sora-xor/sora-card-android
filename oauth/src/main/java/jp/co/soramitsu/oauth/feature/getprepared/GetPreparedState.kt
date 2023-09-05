@@ -12,5 +12,5 @@ data class GetPreparedState(
 data class Step(
     val index: Int,
     @StringRes val title: Int,
-    @StringRes val description: Int
+    val description: List<Int>,
 )

@@ -49,11 +49,13 @@
   <string name="get_more_xor_dialog_description">Vous pouvez échanger vers du XOR ou en acheter avec des Euros</string>
   <string name="get_more_xor_dialog_swap_option">Échanger de la crypto pour du XOR</string>
   <string name="get_prepared_alert">ATTENTION: Seulement 4 essais gratuits sont fournis pour passer la procédure de KYC. Après ces deux essais, tout autre essai coûtera 3,8€. Les essais payants seront disponibles après la prochaine mise à jour de l\'application.</string>
+  <string name="get_prepared_alert_dynamic">ATTENTION: Seulement 4 essais gratuits sont fournis pour passer la procédure de KYC. Après ces deux essais, tout autre essai coûtera 3,8€. Les essais payants seront disponibles après la prochaine mise à jour de l\'application.</string>
   <string name="get_prepared_need">Pour compléter la procédure de KYC vous aurez besoin de:</string>
   <string name="get_prepared_ok_title">OK, je suis prêt(e)</string>
   <string name="get_prepared_personal_info_description">Remplissez le formulaire avec votre nom et adresse</string>
   <string name="get_prepared_personal_info_title">Soumettez vos informations personnelles</string>
-  <string name="get_prepared_proof_address_description">Un document officiel (facture d\'électricité, bancaire, gouvernemental) contenant votre nom/prénom officiel et adresse, datant de moins de 3 mois</string>
+  <string name="get_prepared_proof_address_description">Un document officiel (facture de services publics, relevé bancaire, relevé gouvernemental ou correspondance) contenant votre nom complet et votre adresse et datant de moins de 3 mois.</string>
+  <string name="get_prepared_proof_address_note">Remarque : les relevés de néobanques comme Revolut et N26 ne sont actuellement pas considérés comme un justificatif de domicile valide.</string>
   <string name="get_prepared_proof_address_title">Soumettre une photo de votre preuve d\'adresse</string>
   <string name="get_prepared_submit_id_photo_description">Passeport, permis de conduire, pièce d\'identité, permis de résidence</string>
   <string name="get_prepared_submit_id_photo_title">Soumettez une photo de votre document d\'identité</string>

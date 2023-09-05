@@ -49,11 +49,13 @@
   <string name="get_more_xor_dialog_description">Bạn có thể đổi lấy XOR hoặc mua bằng Euro</string>
   <string name="get_more_xor_dialog_swap_option">Hoán đổi tiền điện tử lấy XOR</string>
   <string name="get_prepared_alert">CHÚ Ý: Bạn chỉ có 4 lần thử miễn phí để vượt qua quy trình KYC. Mọi nỗ lực khác sau đó sẽ có giá € 3,8. Các lần thử trả phí sẽ có sẵn sau bản cập nhật tiếp theo của ứng dụng.</string>
+  <string name="get_prepared_alert_dynamic">CHÚ Ý: Bạn chỉ có 4 lần thử miễn phí để vượt qua quy trình KYC. Mọi nỗ lực khác sau đó sẽ có giá € 3,8. Các lần thử trả phí sẽ có sẵn sau bản cập nhật tiếp theo của ứng dụng.</string>
   <string name="get_prepared_need">Để hoàn tất KYC, bạn sẽ cần:</string>
   <string name="get_prepared_ok_title">OK, tôi đã sẵn sàng</string>
   <string name="get_prepared_personal_info_description">Điền vào biểu mẫu với tên và địa chỉ của bạn</string>
   <string name="get_prepared_personal_info_title">Gửi thông tin cá nhân của bạn</string>
-  <string name="get_prepared_proof_address_description">Một tài liệu chính thức (hóa đơn tiện ích, bảng sao kê ngân hàng, bảng sao kê của chính phủ hoặc thư từ) có chứa tên đầy đủ và địa chỉ của bạn, và không cũ hơn 3 tháng</string>
+  <string name="get_prepared_proof_address_description">Một tài liệu chính thức (hóa đơn tiện ích, bảng sao kê ngân hàng, bảng sao kê của chính phủ hoặc thư từ) có chứa tên đầy đủ và địa chỉ của bạn, và không cũ hơn 3 tháng.</string>
+  <string name="get_prepared_proof_address_note">Lưu ý: Các báo cáo từ các neobank như Revolut và N26 hiện không được coi là bằng chứng địa chỉ hợp lệ.</string>
   <string name="get_prepared_proof_address_title">Gửi ảnh giấy tờ chứng minh địa chỉ</string>
   <string name="get_prepared_submit_id_photo_description">Hộ chiếu, Giấy phép lái xe, Chứng minh nhân dân hoặc Giấy phép cư trú</string>
   <string name="get_prepared_submit_id_photo_title">Gửi ảnh giấy tờ tùy thân của bạn</string>
