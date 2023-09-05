@@ -87,7 +87,7 @@ private fun GetPreparedScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(Dimens.x2),
-                text = stringResource(R.string.get_prepared_alert, state.attemptCost),
+                text = stringResource(R.string.get_prepared_alert_dynamic, state.totalFreeAttemptsCount),
                 style = MaterialTheme.customTypography.paragraphM,
                 color = MaterialTheme.customColors.accentTertiary
             )
@@ -171,7 +171,7 @@ private fun Step(step: Step) {
 
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = stringResource(step.description),
+                text = step.description.map { stringResource(id = it) }.joinToString("\n\n"),
                 style = MaterialTheme.customTypography.paragraphS,
                 color = MaterialTheme.customColors.fgSecondary
             )
@@ -186,26 +186,27 @@ private fun PreviewGetPreparedScreen() {
     GetPreparedScreenContent(
         scrollState = rememberScrollState(),
         state = GetPreparedState(
+            totalFreeAttemptsCount = "4",
             steps = listOf(
                 Step(
                     index = 1,
                     title = R.string.get_prepared_submit_id_photo_title,
-                    description = R.string.get_prepared_submit_id_photo_description
+                    description = listOf(R.string.get_prepared_submit_id_photo_description),
                 ),
                 Step(
                     index = 2,
                     title = R.string.get_prepared_take_selfie_title,
-                    description = R.string.get_prepared_take_selfie_description
+                    description = listOf(R.string.get_prepared_take_selfie_description),
                 ),
                 Step(
                     index = 3,
                     title = R.string.get_prepared_proof_address_title,
-                    description = R.string.get_prepared_proof_address_description
+                    description = listOf(R.string.get_prepared_proof_address_description, R.string.get_prepared_proof_address_note),
                 ),
                 Step(
                     index = 4,
                     title = R.string.get_prepared_personal_info_title,
-                    description = R.string.get_prepared_personal_info_description
+                    description = listOf(R.string.get_prepared_personal_info_description),
                 ),
             )
         ),

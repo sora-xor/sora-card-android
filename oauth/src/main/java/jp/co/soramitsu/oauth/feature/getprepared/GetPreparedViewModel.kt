@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
+import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
@@ -23,9 +24,10 @@ import javax.inject.Inject
 class GetPreparedViewModel @Inject constructor(
     private val setActivityResult: SetActivityResult,
     private val userSessionRepository: UserSessionRepository,
+    private val kycRepository: KycRepository,
 ) : BaseViewModel() {
 
-    private val _state = MutableStateFlow(GetPreparedState())
+    private val _state = MutableStateFlow(GetPreparedState(totalFreeAttemptsCount = ""))
     val state = _state.asStateFlow()
 
     private var authCallback: OAuthCallback? = null
@@ -42,29 +44,39 @@ class GetPreparedViewModel @Inject constructor(
         )
 
         _state.value = GetPreparedState(
+            totalFreeAttemptsCount = ".",
             steps = listOf(
                 Step(
                     index = 1,
                     title = R.string.get_prepared_submit_id_photo_title,
-                    description = R.string.get_prepared_submit_id_photo_description
+                    description = listOf(R.string.get_prepared_submit_id_photo_description),
                 ),
                 Step(
                     index = 2,
                     title = R.string.get_prepared_take_selfie_title,
-                    description = R.string.get_prepared_take_selfie_description
+                    description = listOf(R.string.get_prepared_take_selfie_description),
                 ),
                 Step(
                     index = 3,
                     title = R.string.get_prepared_proof_address_title,
-                    description = R.string.get_prepared_proof_address_description
+                    description = listOf(R.string.get_prepared_proof_address_description, R.string.get_prepared_proof_address_note),
                 ),
                 Step(
                     index = 4,
                     title = R.string.get_prepared_personal_info_title,
-                    description = R.string.get_prepared_personal_info_description
+                    description = listOf(R.string.get_prepared_personal_info_description),
                 ),
             )
         )
+        viewModelScope.launch {
+            val token = userSessionRepository.getAccessToken()
+            kycRepository.getFreeKycAttemptsInfo(token)
+                .onSuccess {
+                    _state.value = _state.value.copy(
+                        totalFreeAttemptsCount = it.totalFreeAttemptsCount.toString(),
+                    )
+                }
+        }
     }
 
     override fun onToolbarAction() {
