@@ -71,6 +71,7 @@ class VerificationRejectedViewModelTest {
             rejected = 1,
             freeAttemptAvailable = true,
             freeAttemptsCount = 2,
+            totalFreeAttemptsCount = 4,
         ).apply { kycCountAttemptsAvailable = this }
 
         KycAttemptsDto(
@@ -79,6 +80,7 @@ class VerificationRejectedViewModelTest {
             rejected = 1,
             freeAttemptAvailable = false,
             freeAttemptsCount = 3,
+            totalFreeAttemptsCount = 4,
         ).apply { kycCountAttemptsUnavailable = this }
 
         XorEuroPrice(

@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
+import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
@@ -23,9 +24,10 @@ import javax.inject.Inject
 class GetPreparedViewModel @Inject constructor(
     private val setActivityResult: SetActivityResult,
     private val userSessionRepository: UserSessionRepository,
+    private val kycRepository: KycRepository,
 ) : BaseViewModel() {
 
-    private val _state = MutableStateFlow(GetPreparedState())
+    private val _state = MutableStateFlow(GetPreparedState(totalFreeAttemptsCount = ""))
     val state = _state.asStateFlow()
 
     private var authCallback: OAuthCallback? = null
@@ -42,6 +44,7 @@ class GetPreparedViewModel @Inject constructor(
         )
 
         _state.value = GetPreparedState(
+            totalFreeAttemptsCount = ".",
             steps = listOf(
                 Step(
                     index = 1,
@@ -65,6 +68,15 @@ class GetPreparedViewModel @Inject constructor(
                 ),
             )
         )
+        viewModelScope.launch {
+            val token = userSessionRepository.getAccessToken()
+            kycRepository.getFreeKycAttemptsInfo(token)
+                .onSuccess {
+                    _state.value = _state.value.copy(
+                        totalFreeAttemptsCount = it.totalFreeAttemptsCount.toString(),
+                    )
+                }
+        }
     }
 
     override fun onToolbarAction() {

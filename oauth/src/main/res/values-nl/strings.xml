@@ -48,8 +48,7 @@
   <string name="get_more_xor_dialog_deposit_option">XOR storten</string>
   <string name="get_more_xor_dialog_description">U kunt ruilen voor XOR of kopen met Euro</string>
   <string name="get_more_xor_dialog_swap_option">Ruil crypto voor XOR</string>
-  <string name="get_prepared_alert">LET OP:\nJe hebt slechts 4 gratis poging om het KYC-proces te doorlopen. Elke andere poging kost je €3,8. Om je kansen op succes te maximaliseren, volg je deze eenvoudige richtlijnen:</string>
-  <string name="get_prepared_alert_dynamic">LET OP:\nJe hebt slechts 4 gratis poging om het KYC-proces te doorlopen. Elke andere poging kost je €3,8. Om je kansen op succes te maximaliseren, volg je deze eenvoudige richtlijnen:</string>
+  <string name="get_prepared_alert_dynamic">LET OP:\nJe hebt slechts %s gratis poging om het KYC-proces te doorlopen. Elke andere poging kost je €3,8. Om je kansen op succes te maximaliseren, volg je deze eenvoudige richtlijnen:</string>
   <string name="get_prepared_need">Om de KYC te voltooien, dient u:</string>
   <string name="get_prepared_ok_title">OK, ik ben klaar</string>
   <string name="get_prepared_personal_info_description">Vul het formulier in met uw naam en adres</string>

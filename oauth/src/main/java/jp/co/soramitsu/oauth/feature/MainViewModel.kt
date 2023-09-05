@@ -1,8 +1,5 @@
 package jp.co.soramitsu.oauth.feature
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
@@ -47,8 +44,8 @@ class MainViewModel @Inject constructor(
     private val _toast = SingleLiveEvent<String>()
     val toast: LiveData<String> = _toast
 
-    var uiState by mutableStateOf(MainScreenUiState())
-        private set
+    private val _uiState = MutableStateFlow(MainScreenUiState())
+    val uiState = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -105,6 +102,10 @@ class MainViewModel @Inject constructor(
                             referenceNumber = it,
                         )
                     }
+                        .onFailure {
+                            _toast.value =
+                                it.localizedMessage ?: "Error occurred while get-reference-number"
+                        }
                 }
             }
         }
@@ -132,7 +133,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun showLoading(loading: Boolean) {
-        uiState = uiState.copy(loading = loading)
+        _uiState.value = _uiState.value.copy(loading = loading)
     }
 
     private suspend fun checkAccessTokenValidity(

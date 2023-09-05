@@ -48,8 +48,7 @@
   <string name="get_more_xor_dialog_deposit_option">Депозит XOR</string>
   <string name="get_more_xor_dialog_description">Вы можете обменять на XOR или купить за евро</string>
   <string name="get_more_xor_dialog_swap_option">Обменять криптовалюту на XOR</string>
-  <string name="get_prepared_alert">ВНИМАНИЕ: У вас имеется 4 бесплатные попытки пройти процедуру KYC. Каждая последующая попытка после этого будет стоить €3.8. Оплачиваемые попытки станут доступны после следующего обновления приложения.</string>
-  <string name="get_prepared_alert_dynamic">ВНИМАНИЕ: У вас имеется 4 бесплатные попытки пройти процедуру KYC. Каждая последующая попытка после этого будет стоить €3.8. Оплачиваемые попытки станут доступны после следующего обновления приложения.</string>
+  <string name="get_prepared_alert_dynamic">ВНИМАНИЕ: У вас имеется %s бесплатные попытки пройти процедуру KYC. Каждая последующая попытка после этого будет стоить €3.8. Оплачиваемые попытки станут доступны после следующего обновления приложения.</string>
   <string name="get_prepared_need">Для завершения KYC вам необходимо:</string>
   <string name="get_prepared_ok_title">Хорошо, я готов</string>
   <string name="get_prepared_personal_info_description">Заполните форму, указав свое имя и адрес</string>

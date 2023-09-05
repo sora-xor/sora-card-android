@@ -103,7 +103,7 @@ class KycRepositoryImpl(
     }
 
     override suspend fun hasFreeKycAttempt(accessToken: String): Result<Boolean> =
-        getFreeKycAttemptsInfo(accessToken).map { it.freeAttemptAvailable }
+        getFreeKycAttemptsInfo(accessToken).map { it.freeAttemptsCount != 0 }
 
     override suspend fun getFreeKycAttemptsInfo(accessToken: String): Result<KycAttemptsDto> {
         return runCatching {

@@ -7,6 +7,7 @@ import io.mockk.junit4.MockKRule
 import io.mockk.verify
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
+import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.getprepared.GetPreparedViewModel
@@ -40,6 +41,9 @@ class GetPreparedViewModelTest {
     @MockK
     private lateinit var authCallback: OAuthCallback
 
+    @MockK
+    private lateinit var kyc: KycRepository
+
     private lateinit var viewModel: GetPreparedViewModel
 
     @Before
@@ -49,6 +53,7 @@ class GetPreparedViewModelTest {
         viewModel = GetPreparedViewModel(
             setActivityResult,
             userSessionRepository,
+            kyc,
         )
     }
 
