@@ -1,8 +1,5 @@
 package jp.co.soramitsu.oauth.feature.verify.phone
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.viewModelScope
 import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
@@ -21,6 +18,8 @@ import jp.co.soramitsu.ui_core.component.input.InputTextState
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,10 +31,11 @@ class EnterPhoneNumberViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     companion object {
-        const val PHONE_NUMBER_LENGTH = 15
+        const val PHONE_NUMBER_LENGTH_MAX = 16
+        const val PHONE_NUMBER_LENGTH_MIN = 8
     }
 
-    var state by mutableStateOf(
+    private val _state = MutableStateFlow(
         EnterPhoneNumberState(
             inputTextState = InputTextState(
                 label = if (inMemoryRepo.environment == SoraCardEnvironmentType.TEST) {
@@ -51,14 +51,14 @@ class EnterPhoneNumberViewModel @Inject constructor(
             ),
         )
     )
-        private set
+    val state = _state.asStateFlow()
 
     private val requestOtpCallback = object : SignInWithPhoneNumberRequestOtpCallback {
         override fun onError(error: OAuthErrorCode, errorMessage: String?) {
             loading(false)
             getErrorMessage(error)?.let { descriptionText ->
-                state = state.copy(
-                    inputTextState = state.inputTextState.copy(
+                _state.value = _state.value.copy(
+                    inputTextState = _state.value.inputTextState.copy(
                         error = true,
                         descriptionText = descriptionText
                     )
@@ -79,7 +79,7 @@ class EnterPhoneNumberViewModel @Inject constructor(
 
         override fun onShowOtpInputScreen(otpLength: Int) {
             loading(false)
-            mainRouter.openVerifyPhoneNumber(state.inputTextState.value.text, otpLength)
+            mainRouter.openVerifyPhoneNumber(_state.value.inputTextState.value.text, otpLength)
         }
     }
 
@@ -95,19 +95,19 @@ class EnterPhoneNumberViewModel @Inject constructor(
     }
 
     fun onPhoneChanged(value: TextFieldValue) {
-        if (value.text.length > PHONE_NUMBER_LENGTH) {
+        if (value.text.length > PHONE_NUMBER_LENGTH_MAX) {
             return
         }
 
         val numbers = value.copy(text = value.text.filter { it.isDigit() })
 
-        state = state.copy(
-            inputTextState = state.inputTextState.copy(
+        _state.value = _state.value.copy(
+            inputTextState = _state.value.inputTextState.copy(
                 value = numbers,
                 error = false,
                 descriptionText = R.string.common_no_spam,
             ),
-            buttonState = state.buttonState.copy(enabled = numbers.text.isNotEmpty())
+            buttonState = _state.value.buttonState.copy(enabled = numbers.text.isNotEmpty() && numbers.text.length >= PHONE_NUMBER_LENGTH_MIN)
         )
     }
 
@@ -115,15 +115,15 @@ class EnterPhoneNumberViewModel @Inject constructor(
         viewModelScope.launch {
             loading(true)
             pwoAuthClientProxy.signInWithPhoneNumberRequestOtp(
-                phoneNumber = state.inputTextState.value.text.formatForAuth(),
+                phoneNumber = _state.value.inputTextState.value.text.formatForAuth(),
                 callback = requestOtpCallback,
             )
         }
     }
 
     private fun loading(loading: Boolean) {
-        state = state.copy(
-            buttonState = state.buttonState.copy(loading = loading)
+        _state.value = _state.value.copy(
+            buttonState = _state.value.buttonState.copy(loading = loading)
         )
     }
 
