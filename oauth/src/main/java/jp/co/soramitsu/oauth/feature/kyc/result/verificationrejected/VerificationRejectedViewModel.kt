@@ -59,7 +59,7 @@ class VerificationRejectedViewModel @Inject constructor(
                 val token = userSessionRepository.getAccessToken()
 
                 val (actualKycAttemptsLeft, isKycAttemptsLeft) = kycRepository.getFreeKycAttemptsInfo(token)
-                    .getOrThrow().run { freeAttemptsCount to (freeAttemptsCount != 0) }
+                    .getOrThrow().run { freeAttemptsCount to freeAttemptAvailable }
 
                 val kycAttemptPrice = priceInteractor.calculateKycAttemptPrice().getOrThrow()
 
