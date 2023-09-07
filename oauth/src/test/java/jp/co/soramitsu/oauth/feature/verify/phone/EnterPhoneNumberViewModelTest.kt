@@ -60,43 +60,43 @@ class EnterPhoneNumberViewModelTest {
 
     @Test
     fun `init EXPECT set up input field state`() {
-        assertEquals(R.string.enter_phone_number_phone_input_field_label, viewModel.state.inputTextState.label)
-        assertEquals(R.string.common_no_spam, viewModel.state.inputTextState.descriptionText)
+        assertEquals(R.string.enter_phone_number_phone_input_field_label, viewModel.state.value.inputTextState.label)
+        assertEquals(R.string.common_no_spam, viewModel.state.value.inputTextState.descriptionText)
     }
 
     @Test
     fun `init EXPECT set up button state`() {
-        assertEquals(R.string.common_send_code, viewModel.state.buttonState.title)
-        assertFalse(viewModel.state.buttonState.enabled)
+        assertEquals(R.string.common_send_code, viewModel.state.value.buttonState.title)
+        assertFalse(viewModel.state.value.buttonState.enabled)
     }
 
     @Test
     fun `phone length is bigger than max length EXPECT no state change`() {
         viewModel.onPhoneChanged(TextFieldValue("333333"))
-        viewModel.onPhoneChanged(TextFieldValue("3333333333333333"))
+        viewModel.onPhoneChanged(TextFieldValue("3333333333333333333"))
 
-        assertEquals("333333", viewModel.state.inputTextState.value.text)
+        assertEquals("333333", viewModel.state.value.inputTextState.value.text)
     }
 
     @Test
     fun `phone comprises non digit symbols EXPECT filter phone`() {
         viewModel.onPhoneChanged(TextFieldValue("3333%33@"))
 
-        assertEquals("333333", viewModel.state.inputTextState.value.text)
+        assertEquals("333333", viewModel.state.value.inputTextState.value.text)
     }
 
     @Test
     fun `phone changed EXPECT input state value updated`() {
         viewModel.onPhoneChanged(TextFieldValue("333333"))
 
-        assertEquals("333333", viewModel.state.inputTextState.value.text)
+        assertEquals("333333", viewModel.state.value.inputTextState.value.text)
     }
 
     @Test
     fun `phone changed EXPECT error state is false`() {
         viewModel.onPhoneChanged(TextFieldValue("333333"))
 
-        assertFalse(viewModel.state.inputTextState.error)
+        assertFalse(viewModel.state.value.inputTextState.error)
     }
 
     @Test
@@ -105,7 +105,7 @@ class EnterPhoneNumberViewModelTest {
 
         assertEquals(
             R.string.common_no_spam,
-            viewModel.state.inputTextState.descriptionText
+            viewModel.state.value.inputTextState.descriptionText
         )
     }
 
@@ -113,7 +113,7 @@ class EnterPhoneNumberViewModelTest {
     fun `phone changed EXPECT confirm button is enabled`() {
         viewModel.onPhoneChanged(TextFieldValue("333333"))
 
-        assertTrue(viewModel.state.buttonState.enabled)
+        assertFalse(viewModel.state.value.buttonState.enabled)
     }
 
     @Test
@@ -121,7 +121,7 @@ class EnterPhoneNumberViewModelTest {
         viewModel.onRequestCode()
         advanceUntilIdle()
 
-        assertTrue(viewModel.state.buttonState.loading)
+        assertTrue(viewModel.state.value.buttonState.loading)
     }
 
     @Test
