@@ -24,6 +24,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.capitalize
+import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -75,19 +78,26 @@ private fun GetPreparedScreenContent(
             .verticalScroll(scrollState)
             .padding(start = Dimens.x3, end = Dimens.x3, top = Dimens.x1, bottom = Dimens.x5),
     ) {
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = Dimens.x4)
                 .clip(RoundedCornerShape(MaterialTheme.borderRadius.s))
-                .background(MaterialTheme.customColors.accentTertiaryContainer),
-            contentAlignment = Alignment.Center
+                .background(MaterialTheme.customColors.accentTertiaryContainer)
+                .padding(Dimens.x2),
         ) {
             Text(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(Dimens.x2),
-                text = stringResource(R.string.get_prepared_alert_dynamic, state.totalFreeAttemptsCount),
+                    .fillMaxWidth(),
+                text = "%s:".format(stringResource(R.string.card_attention_text).uppercase()),
+                style = MaterialTheme.customTypography.paragraphMBold,
+                color = MaterialTheme.customColors.accentTertiary,
+            )
+            Spacer(modifier = Modifier.size(Dimens.x1))
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                text = stringResource(R.string.get_prepared_alert, state.totalFreeAttemptsCount, state.attemptCost),
                 style = MaterialTheme.customTypography.paragraphM,
                 color = MaterialTheme.customColors.accentTertiary
             )
@@ -187,6 +197,7 @@ private fun PreviewGetPreparedScreen() {
         scrollState = rememberScrollState(),
         state = GetPreparedState(
             totalFreeAttemptsCount = "4",
+            attemptCost = "3.80",
             steps = listOf(
                 Step(
                     index = 1,

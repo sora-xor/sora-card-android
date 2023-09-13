@@ -1,11 +1,10 @@
 package jp.co.soramitsu.oauth.feature.getmorexor
 
-import io.mockk.InternalPlatformDsl.toArray
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.Text
 import jp.co.soramitsu.oauth.feature.getmorexor.state.ChooseXorPurchaseMethodState
 import jp.co.soramitsu.oauth.feature.getmorexor.state.XorPurchaseMethod
-import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -25,29 +24,12 @@ class ChooseXorPurchaseMethodStateTest {
 
     @Test
     fun `init EXPECT string res are correct`() {
-        Assert.assertEquals(
-            state.titleText,
-            Text.StringRes(R.string.details_get_more_xor)
-        )
-
-        Assert.assertEquals(
-            state.descriptionText,
-            Text.StringRes(R.string.get_more_xor_dialog_description)
-        )
-
-        Assert.assertArrayEquals(
-            state.methodsTextList.toTypedArray(),
-            arrayOf(
-                Text.StringRes(R.string.get_more_xor_dialog_deposit_option),
-                Text.StringRes(R.string.get_more_xor_dialog_swap_option),
-                Text.StringRes(R.string.get_more_xor_dialog_buy_option)
-            )
-        )
-
-        Assert.assertEquals(
-            state.cancelText,
-            Text.StringRes(R.string.common_cancel)
-        )
+        assertEquals(R.string.details_get_more_xor, (state.titleText as Text.StringRes).id)
+        assertEquals(R.string.get_more_xor_dialog_description, (state.descriptionText as Text.StringRes).id)
+        assertEquals(R.string.get_more_xor_dialog_deposit_option, (state.methodsTextList[0] as Text.StringRes).id)
+        assertEquals(R.string.get_more_xor_dialog_swap_option, (state.methodsTextList[1] as Text.StringRes).id)
+        assertEquals(R.string.get_more_xor_dialog_buy_option, (state.methodsTextList[2] as Text.StringRes).id)
+        assertEquals(R.string.common_cancel, (state.cancelText as Text.StringRes).id)
     }
 
 }

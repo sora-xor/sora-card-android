@@ -5,6 +5,8 @@ import jp.co.soramitsu.oauth.base.compose.ScreenStatus
 import jp.co.soramitsu.oauth.base.compose.Text
 import jp.co.soramitsu.oauth.feature.kyc.result.verificationrejected.VerificationRejectedScreenState
 import org.junit.Assert
+import org.junit.Assert.assertArrayEquals
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -40,40 +42,19 @@ class VerificationRejectedScreenStateTest {
             kycFreeAttemptsCount = 0,
             kycAttemptCostInEuros = 1.0
         )
-
-        Assert.assertEquals(
-            Text.StringRes(
-                id = R.string.verification_rejected_screen_attempts_used
-            ),
-            state.kycAttemptsLeftText
-        )
-
-        println(state.tryAgainText)
-
-        Assert.assertEquals(
-            Text.StringResWithArgs(
-                id = R.string.verification_rejected_screen_try_again_for_euros,
-                payload = arrayOf(1.0.toString())
-            ),
-            state.tryAgainText
-        )
+        assertEquals(R.string.verification_rejected_screen_attempts_used, (state.kycAttemptsLeftText as Text.StringRes).id)
+        (state.tryAgainText as Text.StringResWithArgs).let {
+            assertEquals(R.string.verification_rejected_screen_try_again_for_euros, it.id)
+            assertArrayEquals(arrayOf(1.0.toString()), it.payload)
+        }
 
         state = state.copy(kycFreeAttemptsCount = -1)
 
-        Assert.assertEquals(
-            Text.StringRes(
-                id = R.string.verification_rejected_screen_attempts_used
-            ),
-            state.kycAttemptsLeftText
-        )
-
-        Assert.assertEquals(
-            Text.StringResWithArgs(
-                id = R.string.verification_rejected_screen_try_again_for_euros,
-                payload = arrayOf(1.0.toDouble().toString())
-            ),
-            state.tryAgainText
-        )
+        assertEquals(R.string.verification_rejected_screen_attempts_used, (state.kycAttemptsLeftText as Text.StringRes).id)
+        (state.tryAgainText as Text.StringResWithArgs).let {
+            assertEquals(R.string.verification_rejected_screen_try_again_for_euros, it.id)
+            assertArrayEquals(arrayOf(1.0.toString()), it.payload)
+        }
     }
 
     @Test
@@ -83,18 +64,11 @@ class VerificationRejectedScreenStateTest {
             kycFreeAttemptsCount = 3,
             kycAttemptCostInEuros = 1.0
         )
-
-        Assert.assertEquals(
-            Text.StringResWithArgs(
-                id = R.string.verification_rejected_screen_attempts_left,
-                payload = arrayOf(3.toString())
-            ),
-            state.kycAttemptsLeftText
-        )
-
-        Assert.assertEquals(
-            Text.StringRes(id = R.string.verification_rejected_screen_try_again_for_free),
-            state.tryAgainText
-        )
+        (state.kycAttemptsLeftText as Text.StringPluralWithArgs).let {
+            assertEquals(3, it.amount)
+            assertArrayEquals(arrayOf(3), it.payload)
+            assertEquals(R.plurals.verification_rejected_screen_attempts_left, it.id)
+        }
+        assertEquals(R.string.verification_rejected_screen_try_again_for_free, (state.tryAgainText as Text.StringRes).id)
     }
 }

@@ -4,7 +4,8 @@ import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.ScreenStatus
 import jp.co.soramitsu.oauth.base.compose.Text
 import jp.co.soramitsu.oauth.feature.cardissuance.state.FreeCardIssuanceState
-import org.junit.Assert
+import org.junit.Assert.assertArrayEquals
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -27,80 +28,51 @@ class FreeCardIssuanceStateTest {
 
     @Test
     fun `init EXPECT title and description set up`() {
-        Assert.assertEquals(
-            Text.StringRes(R.string.card_issuance_screen_free_card_title),
-            state.titleText
+        assertEquals(
+            R.string.card_issuance_screen_free_card_title,
+            (state.titleText as Text.StringRes).id
         )
-
-        Assert.assertEquals(
-            Text.StringResWithArgs(
-                id = R.string.card_issuance_screen_free_card_description,
-                payload = arrayOf(100.toString())
-            ),
-            state.descriptionText
-        )
+        (state.descriptionText as Text.StringResWithArgs).let {
+            assertEquals(R.string.card_issuance_screen_free_card_description, it.id)
+            assertArrayEquals(arrayOf(100.toString()), it.payload)
+        }
     }
 
     @Test
     fun `set state to ready to render EXPECT data is set correct`() {
         val state = state.copy(screenStatus = ScreenStatus.READY_TO_RENDER)
-
-        Assert.assertEquals(
-            Text.StringResWithArgs(
-                id = R.string.details_need_xor_desription,
-                payload = arrayOf(
+        (state.xorSufficiencyText as Text.StringResWithArgs).let {
+            assertEquals(R.string.details_need_xor_desription, it.id)
+            assertArrayEquals(
+                arrayOf(
                     String.format("%.2f", .0f),
+                    String.format("%.2f", .0f),
+                ), it.payload
+            )
+        }
+
+        assertEquals(1f, state.xorSufficiencyPercentage)
+        assertEquals(true, state.isGetInsufficientXorButtonEnabled)
+        (state.getInsufficientXorText as Text.StringResWithArgs).let {
+            assertEquals(R.string.card_issuance_screen_free_card_get_xor, it.id)
+            assertArrayEquals(
+                arrayOf(
                     String.format("%.2f", .0f)
-                )
-            ),
-            state.xorSufficiencyText
-        )
-
-        Assert.assertEquals(
-            1f,
-            state.xorSufficiencyPercentage
-        )
-
-        Assert.assertEquals(
-            true,
-            state.isGetInsufficientXorButtonEnabled
-        )
-
-        Assert.assertEquals(
-            Text.StringResWithArgs(
-                id = R.string.card_issuance_screen_free_card_get_xor,
-                payload = arrayOf(
-                    String.format("%.2f", .0f)
-                )
-            ),
-            state.getInsufficientXorText
-        )
+                ), it.payload
+            )
+        }
     }
 
     @Test
     fun `set state to loading EXPECT data is not pasted`() {
         val state = state.copy(screenStatus = ScreenStatus.LOADING)
+        assertEquals(R.string.cant_fetch_data, (state.xorSufficiencyText as Text.StringRes).id)
 
-        Assert.assertEquals(
-            Text.StringRes(id = R.string.cant_fetch_data),
-            state.xorSufficiencyText
-        )
-
-        Assert.assertEquals(
-            0f,
-            state.xorSufficiencyPercentage
-        )
-
-        Assert.assertEquals(
-            false,
-            state.isGetInsufficientXorButtonEnabled
-        )
-
-        Assert.assertEquals(
-            Text.StringRes(
-                id = R.string.card_issuance_screen_free_card_get_xor
-            ),
-            state.getInsufficientXorText
+        assertEquals(0f, state.xorSufficiencyPercentage)
+        assertEquals(false, state.isGetInsufficientXorButtonEnabled)
+        assertEquals(
+            R.string.card_issuance_screen_free_card_get_xor,
+            (state.getInsufficientXorText as Text.StringRes).id
         )
     }
 }

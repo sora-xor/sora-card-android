@@ -16,9 +16,10 @@ data class VerificationRejectedScreenState(
             if (kycFreeAttemptsCount <= 0)
                 return Text.StringRes(id = R.string.verification_rejected_screen_attempts_used)
 
-            return Text.StringResWithArgs(
-                id = R.string.verification_rejected_screen_attempts_left,
-                payload = arrayOf(kycFreeAttemptsCount.toString())
+            return Text.StringPluralWithArgs(
+                id = R.plurals.verification_rejected_screen_attempts_left,
+                amount = kycFreeAttemptsCount,
+                payload = arrayOf(kycFreeAttemptsCount),
             )
         }
 

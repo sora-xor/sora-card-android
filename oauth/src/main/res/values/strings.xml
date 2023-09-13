@@ -2,6 +2,7 @@
 <resources>
   <string name="cant_fetch_data">Can\'t fetch data</string>
   <string name="cant_fetch_refresh">Can\'t fetch data, tap to refresh.</string>
+  <string name="card_attention_text">Attention</string>
   <string name="card_issuance_screen_free_card_description">To issue a card for FREE: \nHold, stake or provide liquidity for at least €%s worth of XOR in your SORA account</string>
   <string name="card_issuance_screen_free_card_get_xor">Get %s XOR</string>
   <string name="card_issuance_screen_free_card_title">Free card issuance</string>
@@ -48,7 +49,7 @@
   <string name="get_more_xor_dialog_deposit_option">Deposit XOR</string>
   <string name="get_more_xor_dialog_description">You can swap for XOR or buy with Euro</string>
   <string name="get_more_xor_dialog_swap_option">Swap crypto for XOR</string>
-  <string name="get_prepared_alert_dynamic">ATTENTION: You have only %s free attempts to pass the KYC process. Every other attempt after that will cost €3.8. Paid attempts will be available after the next update of the app.</string>
+  <string name="get_prepared_alert" formatted="false">You have only %s free attempts to pass the KYC process. Every other attempt after that will cost €%s. Paid attempts will be available after the next update of the app.</string>
   <string name="get_prepared_need">To complete the KYC you will need to:</string>
   <string name="get_prepared_ok_title">OK, I am ready</string>
   <string name="get_prepared_personal_info_description">Fill in the form with your name and address</string>
@@ -86,7 +87,10 @@
   <string name="verification_failed_description">The KYC was terminated or it failed otherwise.</string>
   <string name="verification_failed_title">Verification failed</string>
   <string name="verification_rejected_description">Your application has been rejected.</string>
-  <string name="verification_rejected_screen_attempts_left">You have %s more free KYC attempt.</string>
+  <plurals name="verification_rejected_screen_attempts_left">
+    <item quantity="one">You have %d more free KYC attempt</item>
+    <item quantity="other">You have %d more free KYC attempts</item>
+  </plurals>
   <string name="verification_rejected_screen_attempts_price_disclaimer">Every other attempt will cost you €%s</string>
   <string name="verification_rejected_screen_attempts_used">You have used your free KYC attempts.</string>
   <string name="verification_rejected_screen_support_telegram">Telegram support</string>
