@@ -5,7 +5,8 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.20" apply false
     id("org.jetbrains.kotlin.android") version "1.8.20" apply false
     id("com.google.dagger.hilt.android") version "2.45" apply false
-    id("org.sonarqube") version "4.3.1.3277" apply false
+    id("org.sonarqube") version "4.3.1.3277"
+    id("jacoco")
 }
 
 tasks.register("clean", Delete::class) {

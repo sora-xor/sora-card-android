@@ -23,6 +23,8 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("maven-publish")
     kotlin("plugin.serialization")
+    id("org.sonarqube")
+    id("jacoco")
 }
 
 val composeCompilerVersion by extra("1.4.6")
@@ -72,7 +74,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
-    } 
+    }
     kotlinOptions {
         jvmTarget = "1.8"
     }
