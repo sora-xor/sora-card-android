@@ -42,3 +42,15 @@ tasks.register("ktlintFormat", JavaExec::class) {
     mainClass.set("com.pinterest.ktlint.Main")
     args = listOf("-F", "$project.rootDir/**/src/main/**/*.kt", "--android")
 }
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
+}
+
+test.finalizedBy jacocoTestReport
+
+tasks.named('sonarqube').configure {
+    dependsOn test
+}
