@@ -51,3 +51,8 @@ sonarqube {
         )
     }
 }
+
+jacoco {
+    toolVersion = "0.8.8"
+    reportsDir = file("$buildDir/reports/")
+}
