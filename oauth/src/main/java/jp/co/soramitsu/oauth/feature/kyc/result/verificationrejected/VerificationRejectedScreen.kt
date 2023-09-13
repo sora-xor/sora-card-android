@@ -144,14 +144,14 @@ private fun VerificationRejectedContent(
 }
 
 @Composable
-@Preview
+@Preview(locale = "en")
 private fun PreviewApplicationRejected1() {
     VerificationRejectedContent(
         scrollState = rememberScrollState(),
         additionalDescription = "description",
         state = VerificationRejectedScreenState(
             screenStatus = ScreenStatus.READY_TO_RENDER,
-            kycFreeAttemptsCount = 89,
+            kycFreeAttemptsCount = 5,
             isFreeAttemptsLeft = true,
             kycAttemptCostInEuros = 23.3,
         ),

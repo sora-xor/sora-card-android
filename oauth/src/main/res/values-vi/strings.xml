@@ -2,6 +2,7 @@
 <resources>
   <string name="cant_fetch_data">Không thể tìm nạp dữ liệu</string>
   <string name="cant_fetch_refresh">Không thể tìm nạp dữ liệu, nhấn để làm mới.</string>
+  <string name="card_attention_text">Chú ý</string>
   <string name="card_issuance_screen_free_card_description">Để phát hành thẻ MIỄN PHÍ: \nGiữ, stake hoặc cung cấp thanh khoản cho XOR trị giá ít nhất €%s trong tài khoản SORA của bạn</string>
   <string name="card_issuance_screen_free_card_get_xor">Nhận %s XOR</string>
   <string name="card_issuance_screen_free_card_title">Miễn phí phát hành thẻ</string>
@@ -48,7 +49,7 @@
   <string name="get_more_xor_dialog_deposit_option">Nạp XOR</string>
   <string name="get_more_xor_dialog_description">Bạn có thể đổi lấy XOR hoặc mua bằng Euro</string>
   <string name="get_more_xor_dialog_swap_option">Hoán đổi tiền điện tử lấy XOR</string>
-  <string name="get_prepared_alert_dynamic">CHÚ Ý: Bạn chỉ có %s lần thử miễn phí để vượt qua quy trình KYC. Mọi nỗ lực khác sau đó sẽ có giá € 3,8. Các lần thử trả phí sẽ có sẵn sau bản cập nhật tiếp theo của ứng dụng.</string>
+  <string name="get_prepared_alert" formatted="false">Bạn chỉ có %s lần thử miễn phí để vượt qua quy trình KYC. Mọi lần thử khác sau đó sẽ có giá € %s . Các nỗ lực trả phí sẽ khả dụng sau lần cập nhật tiếp theo của ứng dụng.</string>
   <string name="get_prepared_need">Để hoàn tất KYC, bạn sẽ cần:</string>
   <string name="get_prepared_ok_title">OK, tôi đã sẵn sàng</string>
   <string name="get_prepared_personal_info_description">Điền vào biểu mẫu với tên và địa chỉ của bạn</string>
@@ -86,7 +87,9 @@
   <string name="verification_failed_description">KYC đã bị chấm dứt hoặc không thành công.</string>
   <string name="verification_failed_title">Xác minh không thành công</string>
   <string name="verification_rejected_description">Đơn đăng ký của bạn đã bị từ chối.</string>
-  <string name="verification_rejected_screen_attempts_left">Bạn có thêm %s lần thử KYC miễn phí.</string>
+  <plurals name="verification_rejected_screen_attempts_left">
+    <item quantity="other">Bạn còn %d lần thử KYC miễn phí nữa</item>
+  </plurals>
   <string name="verification_rejected_screen_attempts_price_disclaimer">Mọi nỗ lực khác sẽ khiến bạn mất €%s</string>
   <string name="verification_rejected_screen_attempts_used">Bạn đã sử dụng các lần thử KYC miễn phí của mình.</string>
   <string name="verification_rejected_screen_support_telegram">Hỗ trợ Telegram</string>

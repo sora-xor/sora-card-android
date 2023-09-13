@@ -2,6 +2,7 @@
 <resources>
   <string name="cant_fetch_data">No se pueden obtener datos</string>
   <string name="cant_fetch_refresh">No se pueden obtener datos, pulse para actualizar.</string>
+  <string name="card_attention_text">Atención</string>
   <string name="card_issuance_screen_free_card_description">Para emitir una tarjeta GRATIS:\n Mantenga, haga staking o proporcione liquidez por al menos € %s por valor de XOR en su cuenta SORA</string>
   <string name="card_issuance_screen_free_card_get_xor">Comprar %s XOR</string>
   <string name="card_issuance_screen_free_card_title">Emisión gratuita de la tarjeta</string>
@@ -48,7 +49,7 @@
   <string name="get_more_xor_dialog_deposit_option">Depositar XOR</string>
   <string name="get_more_xor_dialog_description">Puedes cambiar por XOR o comprar con euros</string>
   <string name="get_more_xor_dialog_swap_option">Cambiar cripto por XOR</string>
-  <string name="get_prepared_alert_dynamic">ATENCIÓN: Sólo dispone de %s intentos gratuitos para pasar el proceso de KYC. Cualquier otro intento posterior tendrá un coste de 3.8 €. Los intentos con pago estarán disponibles después de la próxima actualización de la App.</string>
+  <string name="get_prepared_alert" formatted="false">Solo tienes %s intentos gratuitos para pasar el proceso KYC. Cualquier otro intento posterior costará € %s . Los intentos pagos estarán disponibles después de la próxima actualización de la aplicación.</string>
   <string name="get_prepared_need">Para completar el KYC necesitarás:</string>
   <string name="get_prepared_ok_title">De acuerdo, estoy listo</string>
   <string name="get_prepared_personal_info_description">Rellena el formulario con tu nombre y dirección</string>
@@ -86,7 +87,10 @@
   <string name="verification_failed_description">El KYC ha terminado o ha fallado</string>
   <string name="verification_failed_title">La verificación falló</string>
   <string name="verification_rejected_description">Su solicitud ha fallado. Para leer más acerca de la razón del error, por favor lea la siguiente descripción adicional.</string>
-  <string name="verification_rejected_screen_attempts_left">Tienes %s más intento de KYC gratis.</string>
+  <plurals name="verification_rejected_screen_attempts_left">
+    <item quantity="one">Tienes %d intento más de KYC gratuito</item>
+    <item quantity="other">Tienes %d intentos más de KYC gratuitos</item>
+  </plurals>
   <string name="verification_rejected_screen_attempts_price_disclaimer">Cualquier otro intento tendrá un coste de €%s</string>
   <string name="verification_rejected_screen_attempts_used">Ya ha utilizado sus intentos gratuitos</string>
   <string name="verification_rejected_screen_support_telegram">Soporte en Telegram</string>

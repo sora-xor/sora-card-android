@@ -9,6 +9,7 @@ import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.common.domain.KycRepository
+import jp.co.soramitsu.oauth.common.domain.PriceInteractor
 import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
@@ -25,9 +26,10 @@ class GetPreparedViewModel @Inject constructor(
     private val setActivityResult: SetActivityResult,
     private val userSessionRepository: UserSessionRepository,
     private val kycRepository: KycRepository,
+    private val priceInteractor: PriceInteractor,
 ) : BaseViewModel() {
 
-    private val _state = MutableStateFlow(GetPreparedState(totalFreeAttemptsCount = ""))
+    private val _state = MutableStateFlow(GetPreparedState(totalFreeAttemptsCount = "", attemptCost = ""))
     val state = _state.asStateFlow()
 
     private var authCallback: OAuthCallback? = null
@@ -45,6 +47,7 @@ class GetPreparedViewModel @Inject constructor(
 
         _state.value = GetPreparedState(
             totalFreeAttemptsCount = ".",
+            attemptCost = ".",
             steps = listOf(
                 Step(
                     index = 1,
@@ -74,6 +77,12 @@ class GetPreparedViewModel @Inject constructor(
                 .onSuccess {
                     _state.value = _state.value.copy(
                         totalFreeAttemptsCount = it.totalFreeAttemptsCount.toString(),
+                    )
+                }
+            priceInteractor.calculateKycAttemptPrice()
+                .onSuccess {
+                    _state.value = _state.value.copy(
+                        attemptCost = it.toString(),
                     )
                 }
         }

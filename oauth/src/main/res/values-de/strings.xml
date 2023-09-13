@@ -2,6 +2,7 @@
 <resources>
   <string name="cant_fetch_data">Daten können nicht abgerufen werden</string>
   <string name="cant_fetch_refresh">Daten können nicht abgerufen werden, tippen Sie, um zu aktualisieren.</string>
+  <string name="card_attention_text">Aufmerksamkeit</string>
   <string name="card_issuance_screen_free_card_description">Um eine Karte kostenlos auszustellen: \nHalten, staken oder stellen Sie Liquidität für XOR im Wert von mindestens €%s auf Ihrem SORA Konto bereit</string>
   <string name="card_issuance_screen_free_card_get_xor">Erhalte %s XOR</string>
   <string name="card_issuance_screen_free_card_title">Kostenlose Kartenausgabe</string>
@@ -48,7 +49,7 @@
   <string name="get_more_xor_dialog_deposit_option">XOR einzahlen</string>
   <string name="get_more_xor_dialog_description">Sie können gegen XOR tauschen oder mit Euro kaufen</string>
   <string name="get_more_xor_dialog_swap_option">Tausche Krypto gegen XOR</string>
-  <string name="get_prepared_alert_dynamic">ACHTUNG: Sie haben nur %s kostenlose Versuche, den Identitätsverifizierungs-Prozess zu bestehen. Jeder weitere Versuch danach kostet 3,8 €. Bezahlte Versuche werden nach dem nächsten Update der App verfügbar sein.</string>
+  <string name="get_prepared_alert" formatted="false">Sie haben nur %s freie Versuche, den KYC-Prozess zu bestehen. Jeder weitere Versuch kostet danach €%s. Bezahlte Versuche werden nach dem nächsten Update der App verfügbar sein.</string>
   <string name="get_prepared_need">Um die Identitätsverifizierung abzuschließen, müssen Sie Folgendes tun:</string>
   <string name="get_prepared_ok_title">OK, ich bin bereit</string>
   <string name="get_prepared_personal_info_description">Füllen Sie das Formular mit Ihrem Namen und Ihrer Adresse aus</string>
@@ -86,7 +87,10 @@
   <string name="verification_failed_description">Die Identitätsverifizierung wurde abgebrochen oder er ist anderweitig gescheitert.</string>
   <string name="verification_failed_title">Verifizierung fehlgeschlagen</string>
   <string name="verification_rejected_description">Ihr Antrag wurde abgelehnt.</string>
-  <string name="verification_rejected_screen_attempts_left">Sie haben %s weitere freie Identitätsverifizierungs-Versuche.</string>
+  <plurals name="verification_rejected_screen_attempts_left">
+    <item quantity="one">Sie haben noch %d kostenlosen KYC-Versuch</item>
+    <item quantity="other">Sie haben noch %d kostenlose KYC-Versuche</item>
+  </plurals>
   <string name="verification_rejected_screen_attempts_price_disclaimer">Jeder weitere Versuch wird Sie €%s kosten.</string>
   <string name="verification_rejected_screen_attempts_used">Sie haben Ihre kostenlosen Identitätsverifizierungs-Versuche genutzt.</string>
   <string name="verification_rejected_screen_support_telegram">Telegramm-Support</string>

@@ -9,6 +9,8 @@ import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.ScreenStatus
+import org.junit.Assert.assertArrayEquals
+import org.junit.Assert.assertEquals
 
 @RunWith(MockitoJUnitRunner::class)
 class PaidCardIssuanceStateTest {
@@ -25,57 +27,28 @@ class PaidCardIssuanceStateTest {
 
     @Test
     fun `init EXPECT description is set up`() {
-        Assert.assertEquals(
-            Text.StringRes(
-                id = R.string.card_issuance_screen_paid_card_description
-            ),
-            state.descriptionText
-        )
+        assertEquals(R.string.card_issuance_screen_paid_card_description, (state.descriptionText as Text.StringRes).id)
     }
 
     @Test
     fun `set state to ready to render EXPECT data is set correctly`() {
         val state = state.copy(screenStatus = ScreenStatus.READY_TO_RENDER)
-
-        Assert.assertEquals(
-            Text.StringResWithArgs(
-                id = R.string.card_issuance_screen_paid_card_title,
-                payload = arrayOf(0.toString())
-            ),
-            state.titleText
-        )
-
-        Assert.assertEquals(
-            true,
-            state.isPayIssuanceAmountButtonEnabled
-        )
-
-        Assert.assertEquals(
-            Text.StringResWithArgs(
-                id = R.string.card_issuance_screen_paid_card_pay_euro,
-                payload = arrayOf(0.toString())
-            ),
-            state.payIssuanceAmountText
-        )
+        (state.titleText as Text.StringResWithArgs).let {
+            assertEquals(R.string.card_issuance_screen_paid_card_title, it.id)
+            assertArrayEquals(arrayOf(0.toString()), it.payload)
+        }
+        assertEquals(true, state.isPayIssuanceAmountButtonEnabled)
+        (state.payIssuanceAmountText as Text.StringResWithArgs).let {
+            assertEquals(R.string.card_issuance_screen_paid_card_pay_euro, it.id)
+            assertArrayEquals(arrayOf(0.toString()), it.payload)
+        }
     }
 
     @Test
     fun `set state to loading EXPECT data is not pasted`() {
         val state = state.copy(screenStatus = ScreenStatus.LOADING)
-
-        Assert.assertEquals(
-            Text.StringRes(id = R.string.cant_fetch_data),
-            state.titleText
-        )
-
-        Assert.assertEquals(
-            false,
-            state.isPayIssuanceAmountButtonEnabled
-        )
-
-        Assert.assertEquals(
-            Text.StringRes(id = R.string.cant_fetch_data),
-            state.payIssuanceAmountText
-        )
+        assertEquals(R.string.cant_fetch_data, (state.titleText as Text.StringRes).id)
+        assertEquals(false, state.isPayIssuanceAmountButtonEnabled)
+        assertEquals(R.string.cant_fetch_data, (state.payIssuanceAmountText as Text.StringRes).id)
     }
 }
