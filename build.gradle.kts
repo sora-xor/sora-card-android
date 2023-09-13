@@ -43,14 +43,11 @@ tasks.register("ktlintFormat", JavaExec::class) {
     args = listOf("-F", "$project.rootDir/**/src/main/**/*.kt", "--android")
 }
 
-jacocoTestReport {
-    reports {
-        xml.enabled true
+sonarqube {
+    properties {
+        property(
+            "sonar.coverage.jacoco.xmlReportPaths",
+            "${project.projectDir}/build/reports/testCoverage/*.xml"
+        )
     }
-}
-
-test.finalizedBy jacocoTestReport
-
-tasks.named('sonarqube').configure {
-    dependsOn test
 }
