@@ -45,7 +45,7 @@ android {
         multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        enableUnitTestCoverage true
+        enableUnitTestCoverage = true
     }
 
     buildTypes {
@@ -87,15 +87,6 @@ android {
         kotlinCompilerExtensionVersion = composeCompilerVersion
     }
 
-    dependencies {
-        classpath "org.jacoco:org.jacoco.core:0.8.8"
-    }
-
-    subprojects {
-        afterEvaluate { project ->
-            project.apply from: '../jacoco.gradle'
-        }
-    }
 }
 
 dependencies {
