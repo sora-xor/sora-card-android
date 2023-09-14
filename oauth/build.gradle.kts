@@ -207,3 +207,11 @@ jacocotestreport {
         xml.destination "${project.projectDir}/build/reports/testCoverage/jacocotestreport.xml"
     }
 }
+
+sonarqube {
+    properties {
+        property "sonar.java.coverageplugin", "jacoco"
+        property("sonar.coverage.jacoco.xmlReportPaths", "${project.projectDir}/build/reports/testCoverage/jacocotestreport.xml"
+        )
+    }
+}

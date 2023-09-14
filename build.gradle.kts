@@ -42,16 +42,3 @@ tasks.register("ktlintFormat", JavaExec::class) {
     mainClass.set("com.pinterest.ktlint.Main")
     args = listOf("-F", "$project.rootDir/**/src/main/**/*.kt", "--android")
 }
-
-sonarqube {
-    properties {
-        property "sonar.java.coverageplugin", "jacoco"
-        property("sonar.coverage.jacoco.xmlReportPaths", "${project.projectDir}/build/reports/testCoverage/jacocotestreport.xml"
-        )
-    }
-}
-
-jacoco {
-    toolVersion = "0.8.8"
-    reportsDir = file("$buildDir/reports/")
-}
