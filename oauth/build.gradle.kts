@@ -1,5 +1,8 @@
 import java.util.Properties
 import java.io.FileInputStream
+import org.sonarsource.kotlin.buildsrc.tasks.CreateKotlinRuleStubsTask
+import org.sonarsource.kotlin.buildsrc.tasks.CreateKotlinGradleRuleStubsTask
+import org.sonarsource.kotlin.buildsrc.tasks.FetchRuleMetadata
 
 fun secret(name: String): String? {
     val fileProperties = File(rootProject.projectDir.absolutePath, "local.properties")
@@ -130,6 +133,16 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-client-logging:$ktorVersion")
     api("io.ktor:ktor-client-okhttp:$ktorVersion")
+
+    // sonarqube
+    implementation(libs.sonar.analyzer.commons)
+    implementation(libs.sonar.xml.parsing)
+    implementation(libs.sonar.regex.parsing)
+    implementation(libs.sonar.performance.measure)
+    implementation(libs.kotlin.compiler.embeddable)
+    implementation(libs.staxmate)
+    implementation(libs.gson)
+    implementation(libs.sonar.analyzer.commons.recognizers)
 
     debugImplementation("junit:junit:4.13.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
