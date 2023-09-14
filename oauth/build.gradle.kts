@@ -172,10 +172,7 @@ publishing {
     }
 }
 
-tasks.withType<Test> {
-	useJUnitPlatform()
-	finalizedBy(tasks.jacocoTestReport)
-}
+
 
 jacoco {
 	toolVersion = "0.8.8"
@@ -197,21 +194,4 @@ tasks.withType<JacocoReport> {
 			}
 		}))
 	}
-}
-
-tasks.jacocoTestReport {
-    reports {
-        xml {
-            enabled true
-        }
-        xml.destination "${project.projectDir}/build/reports/testCoverage/jacocotestreport.xml"
-    }
-}
-
-sonarqube {
-    properties {
-        property "sonar.java.coverageplugin", "jacoco"
-        property("sonar.coverage.jacoco.xmlReportPaths", "${project.projectDir}/build/reports/testCoverage/jacocotestreport.xml"
-        )
-    }
 }
