@@ -45,6 +45,7 @@ android {
         multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        enableUnitTestCoverage true
     }
 
     buildTypes {
@@ -84,6 +85,16 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion = composeCompilerVersion
+    }
+
+    dependencies {
+        classpath "org.jacoco:org.jacoco.core:0.8.8"
+    }
+
+    subprojects {
+        afterEvaluate { project ->
+            project.apply from: '../jacoco.gradle'
+        }
     }
 }
 
@@ -170,28 +181,4 @@ publishing {
             url = uri("${project.buildDir}/scnrepo")
         }
     }
-}
-
-
-
-jacoco {
-	toolVersion = "0.8.8"
-	reportsDirectory.set(layout.buildDirectory.dir("$buildDir/reports/"))
-//	reportsDirectory.set(layout.projectDirectory.dir("$buildDir/reports/"))
-}
-
-tasks.withType<JacocoReport> {
-	reports {
-		xml.required.set(true)
-		csv.required.set(true)
-		html.required.set(true)
-	}
-
-	afterEvaluate {
-		classDirectories.setFrom(files(classDirectories.files.map {
-			fileTree(it).apply {
-				exclude( "**/JacocoApplication**")
-			}
-		}))
-	}
 }
