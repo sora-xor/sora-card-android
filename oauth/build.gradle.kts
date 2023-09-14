@@ -199,7 +199,7 @@ tasks.withType<JacocoReport> {
 	}
 }
 
-jacocotestreport {
+tasks.jacocoTestReport {
     reports {
         xml {
             enabled true
