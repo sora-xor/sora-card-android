@@ -25,7 +25,6 @@ plugins {
     kotlin("plugin.serialization")
     id("org.sonarqube")
     id("jacoco")
-    id("application")
 }
 
 val composeCompilerVersion by extra("1.4.6")
