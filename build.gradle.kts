@@ -45,9 +45,8 @@ tasks.register("ktlintFormat", JavaExec::class) {
 
 sonarqube {
     properties {
-        property(
-            "sonar.coverage.jacoco.xmlReportPaths",
-            "${project.projectDir}/build/reports/testCoverage/*.xml"
+        property "sonar.java.coverageplugin", "jacoco"
+        property("sonar.coverage.jacoco.xmlReportPaths", "${project.projectDir}/build/reports/testCoverage/jacocotestreport.xml"
         )
     }
 }
