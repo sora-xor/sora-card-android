@@ -42,3 +42,25 @@ tasks.register("ktlintFormat", JavaExec::class) {
     mainClass.set("com.pinterest.ktlint.Main")
     args = listOf("-F", "$project.rootDir/**/src/main/**/*.kt", "--android")
 }
+
+sonarqube {
+    properties {
+        property(
+            "sonar.coverage.jacoco.xmlReportPaths",
+            "$buildDir/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
+        )
+    }
+}
+
+tasks.jacocoTestReport {
+    sourceSets(sourceSets.main.get())
+    executionData(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        xml.outputLocation.set(File("$buildDir/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"))
+        html.outputLocation.set(layout.buildDirectory.dir("$buildDir/reports/jacoco"))
+    }
+
+}
