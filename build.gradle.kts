@@ -43,58 +43,21 @@ tasks.register("ktlintFormat", JavaExec::class) {
     args = listOf("-F", "$project.rootDir/**/src/main/**/*.kt", "--android")
 }
 
-subprojects {
-    apply plugin: 'org.sonarqube'
-    apply plugin: 'jacoco'
-
-    task testCoverage(type: JacocoReport) {
-        reports {
-            xml.enabled true
-            html.enabled true
-        }
-
-        def excludes = [
-                '**/R.class',
-                '**/R$*.class',
-                '**/BuildConfig.*',
-                '**/Manifest*.*',
-                '**/*Test*.*',
-                'android/**/*.*',
-                'androidx/**/*.*',
-                '**/*$ViewInjector*.*',
-                '**/*Dagger*.*',
-                '**/*MembersInjector*.*',
-                '**/*_Factory.*',
-                '**/*_Provide*Factory*.*',
-                '**/*_ViewBinding*.*',
-                '**/AutoValue_*.*',
-                '**/R2.class',
-                '**/R2$*.class',
-                '**/*Directions$*',
-                '**/*Directions.*',
-                '**/*Binding.*'
-        ]
-
+sonarqube {
+    properties {
+        property(
+            "sonar.coverage.jacoco.xmlReportPaths",
+            "${project.projectDir}/build/reports/testCoverage/*.xml"
+        )
     }
+}
 
-    test {
-        useJUnitPlatform()
-        failFast = true
-        testLogging {
-            events "passed", "skipped", "failed"
-        }
-        reports {
-            junitXml.enabled = true
-        }
-        finalizedBy testCoverage
-    }
+jacoco {
+    toolVersion = "0.8.8"
+    reportsDir = file("$buildDir/reports/")
+}
 
-    jacoco {
-        toolVersion = "0.8.8"
-        reportsDir = file("$buildDir/reports/")
-    }
-
-    task printSonarProps {
-        println "${project.group.split('\\.')[-1]}:${rootProject.name}.${project.name}"
-    }
+tasks.withType<Test> {
+  useJUnitPlatform() // Note: automatically generated when creating project
+  finalizedBy(tasks.jacocoTestReport)
 }
