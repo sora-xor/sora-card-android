@@ -1,8 +1,5 @@
 import java.util.Properties
 import java.io.FileInputStream
-import org.sonarsource.kotlin.buildsrc.tasks.CreateKotlinRuleStubsTask
-import org.sonarsource.kotlin.buildsrc.tasks.CreateKotlinGradleRuleStubsTask
-import org.sonarsource.kotlin.buildsrc.tasks.FetchRuleMetadata
 
 fun secret(name: String): String? {
     val fileProperties = File(rootProject.projectDir.absolutePath, "local.properties")
@@ -48,7 +45,6 @@ android {
         multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        enableUnitTestCoverage = true
     }
 
     buildTypes {
@@ -134,16 +130,6 @@ dependencies {
     implementation("io.ktor:ktor-client-logging:$ktorVersion")
     api("io.ktor:ktor-client-okhttp:$ktorVersion")
 
-    // sonarqube
-    implementation(libs.sonar.analyzer.commons)
-    implementation(libs.sonar.xml.parsing)
-    implementation(libs.sonar.regex.parsing)
-    implementation(libs.sonar.performance.measure)
-    implementation(libs.kotlin.compiler.embeddable)
-    implementation(libs.staxmate)
-    implementation(libs.gson)
-    implementation(libs.sonar.analyzer.commons.recognizers)
-
     debugImplementation("junit:junit:4.13.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
     implementation("junit:junit:4.13.2")
@@ -151,16 +137,6 @@ dependencies {
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
     testImplementation("androidx.arch.core:core-testing:2.2.0")
     testImplementation("io.mockk:mockk:1.13.5")
-}
-
-jacocoTestReport {
-    reports {
-        xml.required = true
-    }
-}
-test.finalizedBy jacocoTestReport
-tasks.named('sonarqube').configure {
-    dependsOn test
 }
 
 kapt {
