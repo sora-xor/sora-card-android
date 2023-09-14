@@ -1,4 +1,4 @@
-@Library('jenkins-library@feature/DOPS-2655') _
+@Library('jenkins-library') _
 
 def extraBuildSecrets = [
   [$class: 'UsernamePasswordMultiBinding', credentialsId: 'bot-soramitsu-rw', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD'],
@@ -22,8 +22,7 @@ def extraBuildSecrets = [
 
 new org.soramitsu.mainLibrary().call(
   agentLabel: "android",
-  // skipSonar: true,
-  // skipDojo: true,
+  skipSonar: true,
   agentImage: "android-build-box-jdk11:latest",
   nexusCredentials: "bot-soramitsu-rw",
   buildCommand: './gradlew clean :oauth:build',
