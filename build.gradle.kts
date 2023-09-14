@@ -56,16 +56,3 @@ jacoco {
     toolVersion = "0.8.8"
     reportsDir = file("$buildDir/reports/")
 }
-
-tasks.jacocoTestReport {
-    reports {
-        xml.required.set(false)
-        csv.required.set(false)
-        html.outputLocation.set(layout.buildDirectory.dir("$buildDir/reports"))
-    }
-}
-
-tasks.withType<Test> {
-  useJUnitPlatform() // Note: automatically generated when creating project
-  finalizedBy(tasks.jacocoTestReport)
-}

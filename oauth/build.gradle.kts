@@ -172,3 +172,30 @@ publishing {
         }
     }
 }
+
+tasks.withType<Test> {
+	useJUnitPlatform()
+	finalizedBy(tasks.jacocoTestReport)
+}
+
+jacoco {
+	toolVersion = "0.8.8"
+	reportsDirectory.set(layout.buildDirectory.dir("$buildDir/reports/"))
+//	reportsDirectory.set(layout.projectDirectory.dir("$buildDir/reports/"))
+}
+
+tasks.withType<JacocoReport> {
+	reports {
+		xml.required.set(true)
+		csv.required.set(true)
+		html.required.set(true)
+	}
+
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.map {
+			fileTree(it).apply {
+				exclude( "**/JacocoApplication**")
+			}
+		}))
+	}
+}
