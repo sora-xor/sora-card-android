@@ -43,16 +43,58 @@ tasks.register("ktlintFormat", JavaExec::class) {
     args = listOf("-F", "$project.rootDir/**/src/main/**/*.kt", "--android")
 }
 
-sonarqube {
-    properties {
-        property(
-            "sonar.coverage.jacoco.xmlReportPaths",
-            "${project.projectDir}/build/reports/testCoverage/*.xml"
-        )
-    }
-}
+subprojects {
+    apply plugin: 'org.sonarqube'
+    apply plugin: 'jacoco'
 
-jacoco {
-    toolVersion = "0.8.8"
-    reportsDir = file("$buildDir/reports/")
+    task testCoverage(type: JacocoReport) {
+        reports {
+            xml.enabled true
+            html.enabled true
+        }
+
+        def excludes = [
+                '**/R.class',
+                '**/R$*.class',
+                '**/BuildConfig.*',
+                '**/Manifest*.*',
+                '**/*Test*.*',
+                'android/**/*.*',
+                'androidx/**/*.*',
+                '**/*$ViewInjector*.*',
+                '**/*Dagger*.*',
+                '**/*MembersInjector*.*',
+                '**/*_Factory.*',
+                '**/*_Provide*Factory*.*',
+                '**/*_ViewBinding*.*',
+                '**/AutoValue_*.*',
+                '**/R2.class',
+                '**/R2$*.class',
+                '**/*Directions$*',
+                '**/*Directions.*',
+                '**/*Binding.*'
+        ]
+
+    }
+
+    test {
+        useJUnitPlatform()
+        failFast = true
+        testLogging {
+            events "passed", "skipped", "failed"
+        }
+        reports {
+            junitXml.enabled = true
+        }
+        finalizedBy testCoverage
+    }
+
+    jacoco {
+        toolVersion = "0.8.8"
+        reportsDir = file("$buildDir/reports/")
+    }
+
+    task printSonarProps {
+        println "${project.group.split('\\.')[-1]}:${rootProject.name}.${project.name}"
+    }
 }
