@@ -140,6 +140,16 @@ dependencies {
     testImplementation("io.mockk:mockk:1.13.5")
 }
 
+jacocoTestReport {
+    reports {
+        xml.required = true
+    }
+}
+test.finalizedBy jacocoTestReport
+tasks.named('sonarqube').configure {
+    dependsOn test
+}
+
 kapt {
     correctErrorTypes = true
 }
