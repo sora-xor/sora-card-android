@@ -26,10 +26,10 @@ plugins {
 }
 
 val composeCompilerVersion by extra("1.4.6")
-val uiCoreVersion by extra("0.1.2")
+val uiCoreVersion by extra("0.1.4")
 val hiltVersion by extra("2.45")
 val pwOauthSdkVersion by extra("1.3.1")
-val pwKycSdkVersion by extra("4.5.0")
+val pwKycSdkVersion by extra("4.6.1")
 val dataStoreVersion by extra("1.0.0")
 val ktorVersion by extra("2.3.1")
 
@@ -142,7 +142,7 @@ kapt {
     correctErrorTypes = true
 }
 
-val currentVersion by extra("0.1.41")
+val currentVersion by extra("0.1.42")
 publishing {
     publications {
         register<MavenPublication>("release") {
