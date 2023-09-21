@@ -23,7 +23,6 @@ def extraBuildSecrets = [
 new org.soramitsu.mainLibrary().call(
   agentLabel: "android",
   skipSonar: true,
-  skipDojo: true,
   agentImage: "android-build-box-jdk11:latest",
   nexusCredentials: "bot-soramitsu-rw",
   buildCommand: './gradlew clean :oauth:build',
@@ -31,6 +30,6 @@ new org.soramitsu.mainLibrary().call(
   publishCommand: './gradlew publish',
   publishLibrary: true,
   skipDockerImage: true,
-  dojoProductType: "sora-card-android",
+  dojoProductType: "sora",
   extraBuildSecrets: extraBuildSecrets
 )
