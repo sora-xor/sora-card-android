@@ -1,13 +1,22 @@
 package jp.co.soramitsu.oauth.feature.verify.phone
 
+import android.os.CountDownTimer
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.compose.ui.text.input.TextFieldValue
+import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.junit4.MockKRule
+import io.mockk.just
+import io.mockk.runs
+import io.mockk.verify
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
-import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
+import jp.co.soramitsu.oauth.base.sdk.SoraCardEnvironmentType
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
+import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.oauth.feature.verify.Timer
@@ -21,13 +30,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
-import org.mockito.kotlin.verify
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@RunWith(MockitoJUnitRunner::class)
 class VerifyPhoneNumberViewModelTest {
 
     @Rule
@@ -35,33 +39,46 @@ class VerifyPhoneNumberViewModelTest {
     val rule: TestRule = InstantTaskExecutorRule()
 
     @get:Rule
+    val mockkRule = MockKRule(this)
+
+    @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-    @Mock
+    @MockK
     private lateinit var mainRouter: MainRouter
 
-    @Mock
+    @MockK
     private lateinit var authCallback: OAuthCallback
 
-    @Mock
+    @MockK
     private lateinit var setActivityResult: SetActivityResult
 
-    @Mock
+    @MockK
     private lateinit var userSessionRepository: UserSessionRepository
 
-    @Mock
+    @MockK
     private lateinit var pwoAuthClientProxy: PWOAuthClientProxy
 
-    @Mock
+    @MockK
     private lateinit var inMemoryRepo: InMemoryRepo
 
-    @Mock
+    @MockK
+    private lateinit var cdTimer: CountDownTimer
+
+    @MockK
     private lateinit var timer: Timer
 
     private lateinit var viewModel: VerifyPhoneNumberViewModel
 
     @Before
     fun setUp() {
+        every { inMemoryRepo.environment } returns SoraCardEnvironmentType.PRODUCTION
+        every { timer.setOnTickListener(any()) } just runs
+        every { timer.setOnFinishListener(any()) } just runs
+        every { timer.start() } returns cdTimer
+        every { mainRouter.back() } just runs
+        coEvery { pwoAuthClientProxy.signInWithPhoneNumberVerifyOtp(any(), any()) } just runs
+        coEvery { pwoAuthClientProxy.signInWithPhoneNumberRequestOtp(any(), any(), any()) } just runs
         viewModel = VerifyPhoneNumberViewModel(
             mainRouter,
             userSessionRepository,
@@ -139,7 +156,6 @@ class VerifyPhoneNumberViewModelTest {
     @Test
     fun `on back EXPECT navigate back`() {
         viewModel.onToolbarNavigation()
-
-        verify(mainRouter).back()
+        verify { mainRouter.back() }
     }
 }

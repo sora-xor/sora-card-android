@@ -1,11 +1,17 @@
 package jp.co.soramitsu.oauth.feature.kyc.result
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.junit4.MockKRule
+import io.mockk.just
+import io.mockk.runs
+import io.mockk.verify
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
-import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
 import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
+import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert.assertEquals
@@ -14,13 +20,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
-import org.mockito.kotlin.verify
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@RunWith(MockitoJUnitRunner::class)
 class VerificationFailedViewModelTest {
 
     @Rule
@@ -30,16 +31,20 @@ class VerificationFailedViewModelTest {
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-    @Mock
+    @get:Rule
+    val mockkRule = MockKRule(this)
+
+    @MockK
     private lateinit var setActivityResult: SetActivityResult
 
-    @Mock
+    @MockK
     private lateinit var userSessionRepository: UserSessionRepository
 
     private lateinit var viewModel: VerificationFailedViewModel
 
     @Before
     fun setUp() {
+        every { setActivityResult.setResult(any()) } just runs
         viewModel = VerificationFailedViewModel(
             setActivityResult = setActivityResult,
             userSessionRepository = userSessionRepository,
@@ -55,9 +60,6 @@ class VerificationFailedViewModelTest {
     @Test
     fun `call onClose EXPECT finish kyc`() {
         viewModel.onClose()
-
-        verify(setActivityResult).setResult(
-            SoraCardResult.Failure(SoraCardCommonVerification.Failed)
-        )
+        verify { setActivityResult.setResult(SoraCardResult.Failure(SoraCardCommonVerification.Failed)) }
     }
 }

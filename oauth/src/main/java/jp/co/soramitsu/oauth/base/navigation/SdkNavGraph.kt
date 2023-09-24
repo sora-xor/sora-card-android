@@ -4,9 +4,9 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.dialog
 import androidx.navigation.navArgument
-import com.google.accompanist.navigation.animation.AnimatedNavHost
 import jp.co.soramitsu.oauth.common.navigation.flow.api.destinations.KycRequirementsUnfulfilledDestination
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.cardissuance.CardIssuanceScreen
@@ -32,7 +32,7 @@ internal fun SdkNavGraph(
     startDestination: Destination,
     authCallback: OAuthCallback,
 ) {
-    AnimatedNavHost(navHostController, startDestination = startDestination.route) {
+    NavHost(navHostController, startDestination = startDestination.route) {
         animatedComposable(Destination.TERMS_AND_CONDITIONS.route) {
             TermsAndConditionsScreen()
         }

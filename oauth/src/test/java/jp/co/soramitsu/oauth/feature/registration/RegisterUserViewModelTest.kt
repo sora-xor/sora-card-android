@@ -2,9 +2,15 @@ package jp.co.soramitsu.oauth.feature.registration
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.compose.ui.text.input.TextFieldValue
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.junit4.MockKRule
+import io.mockk.just
+import io.mockk.runs
+import io.mockk.verify
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
-import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
+import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -12,13 +18,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
-import org.mockito.kotlin.verify
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@RunWith(MockitoJUnitRunner::class)
 class RegisterUserViewModelTest {
 
     @Rule
@@ -28,13 +29,17 @@ class RegisterUserViewModelTest {
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-    @Mock
+    @get:Rule
+    val mockkRule = MockKRule(this)
+
+    @MockK
     private lateinit var mainRouter: MainRouter
 
     private lateinit var viewModel: RegisterUserViewModel
 
     @Before
     fun setUp() {
+        every { mainRouter.back() } just runs
         viewModel = RegisterUserViewModel(mainRouter)
     }
 
@@ -45,12 +50,18 @@ class RegisterUserViewModelTest {
 
     @Test
     fun `init EXPECT set up first name state`() {
-        assertEquals(R.string.user_registration_first_name_input_filed_label, viewModel.state.firstNameState.label)
+        assertEquals(
+            R.string.user_registration_first_name_input_filed_label,
+            viewModel.state.firstNameState.label
+        )
     }
 
     @Test
     fun `init EXPECT set up last name state`() {
-        assertEquals(R.string.user_registration_last_name_input_filed_label, viewModel.state.lastNameState.label)
+        assertEquals(
+            R.string.user_registration_last_name_input_filed_label,
+            viewModel.state.lastNameState.label
+        )
     }
 
     @Test
@@ -90,7 +101,6 @@ class RegisterUserViewModelTest {
     @Test
     fun `back EXPECT navigate back`() {
         viewModel.onToolbarNavigation()
-
-        verify(mainRouter).back()
+        verify { mainRouter.back() }
     }
 }

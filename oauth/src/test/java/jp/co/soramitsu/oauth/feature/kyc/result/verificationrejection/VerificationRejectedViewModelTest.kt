@@ -1,18 +1,24 @@
 package jp.co.soramitsu.oauth.feature.kyc.result.verificationrejection
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.junit4.MockKRule
+import io.mockk.just
+import io.mockk.runs
+import io.mockk.verify
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
-import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PriceInteractor
 import jp.co.soramitsu.oauth.common.model.KycAttemptsDto
 import jp.co.soramitsu.oauth.common.model.XorEuroPrice
 import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
+import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import jp.co.soramitsu.oauth.feature.kyc.result.verificationrejected.VerificationRejectedViewModel
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -21,16 +27,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
-import org.mockito.kotlin.any
-import org.mockito.kotlin.given
-import org.mockito.kotlin.times
-import org.mockito.kotlin.verify
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@RunWith(MockitoJUnitRunner::class)
 class VerificationRejectedViewModelTest {
 
     @Rule
@@ -38,26 +36,25 @@ class VerificationRejectedViewModelTest {
     val rule: TestRule = InstantTaskExecutorRule()
 
     @get:Rule
-    var mainCoroutineRule = MainCoroutineRule(TestCoroutineDispatcher())
+    var mainCoroutineRule = MainCoroutineRule()
 
-    @Mock
+    @get:Rule
+    val mockkRule = MockKRule(this)
+
+    @MockK
     private lateinit var mainRouter: MainRouter
 
-    @Mock
+    @MockK
     private lateinit var setActivityResult: SetActivityResult
 
-    @Mock
+    @MockK
     private lateinit var userSessionRepository: UserSessionRepository
 
-    @Mock
+    @MockK
     private lateinit var kycRepository: KycRepository
 
-    @Mock
+    @MockK
     private lateinit var priceInteractor: PriceInteractor
-
-    private lateinit var viewModel: VerificationRejectedViewModel
-
-    private lateinit var kycCountAttemptsAvailable: KycAttemptsDto
 
     private lateinit var kycCountAttemptsUnavailable: KycAttemptsDto
 
@@ -65,30 +62,23 @@ class VerificationRejectedViewModelTest {
 
     @Before
     fun setUp() {
-        KycAttemptsDto(
-            total = 3,
-            completed = 1,
-            rejected = 1,
-            freeAttemptAvailable = true,
-            freeAttemptsCount = 2,
-            totalFreeAttemptsCount = 4,
-        ).apply { kycCountAttemptsAvailable = this }
-
-        KycAttemptsDto(
+        every { mainRouter.openSupportChat() } just runs
+        every { mainRouter.openGetPrepared() } just runs
+        kycCountAttemptsUnavailable = KycAttemptsDto(
             total = 3,
             completed = 3,
             rejected = 1,
             freeAttemptAvailable = false,
             freeAttemptsCount = 3,
             totalFreeAttemptsCount = 4,
-        ).apply { kycCountAttemptsUnavailable = this }
+        )
 
-        XorEuroPrice(
+        xorEuroPrice = XorEuroPrice(
             pair = "test pair",
             price = 1.0,
             source = "test source",
             timeOfUpdate = 7
-        ).apply { xorEuroPrice = this }
+        )
     }
 
     @Test
@@ -111,14 +101,19 @@ class VerificationRejectedViewModelTest {
     @Test
     fun `try again on available attempts EXPECT main router navigate to get prepared screen`() =
         runTest {
-            given(userSessionRepository.getAccessToken())
-                .willReturn("Token")
-
-            given(kycRepository.getFreeKycAttemptsInfo(any()))
-                .willReturn(Result.success(kycCountAttemptsAvailable))
-
-            given(priceInteractor.calculateKycAttemptPrice())
-                .willReturn(Result.success(3.80))
+            val kycCountAttemptsAvailable = KycAttemptsDto(
+                total = 3,
+                completed = 1,
+                rejected = 1,
+                freeAttemptAvailable = true,
+                freeAttemptsCount = 2,
+                totalFreeAttemptsCount = 4,
+            )
+            coEvery { userSessionRepository.getAccessToken() } returns "Token"
+            coEvery { kycRepository.getFreeKycAttemptsInfo(any()) } returns Result.success(
+                kycCountAttemptsAvailable
+            )
+            coEvery { priceInteractor.calculateKycAttemptPrice() } returns Result.success(3.80)
 
             val viewModel = VerificationRejectedViewModel(
                 mainRouter = mainRouter,
@@ -127,12 +122,13 @@ class VerificationRejectedViewModelTest {
                 setActivityResult = setActivityResult,
                 priceInteractor = priceInteractor,
             )
+            advanceUntilIdle()
 
             viewModel.onTryAgain()
             advanceUntilIdle()
 
-            verify(mainRouter).openGetPrepared()
-            verify(setActivityResult, times(0)).setResult(any())
+            verify { mainRouter.openGetPrepared() }
+            verify(exactly = 0) { setActivityResult.setResult(any()) }
         }
 
 //    @Test
@@ -165,7 +161,6 @@ class VerificationRejectedViewModelTest {
 
         viewModel.openTelegramSupport()
         advanceUntilIdle()
-
-        verify(mainRouter).openSupportChat()
+        verify { mainRouter.openSupportChat() }
     }
 }

@@ -1,6 +1,8 @@
 import java.util.Properties
 import java.io.FileInputStream
 
+@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
+
 fun secret(name: String): String? {
     val fileProperties = File(rootProject.projectDir.absolutePath, "local.properties")
     val pr = runCatching { FileInputStream(fileProperties) }.getOrNull()?.let { file ->
@@ -16,25 +18,34 @@ fun maybeWrapQuotes(s: String): String {
 }
 
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.kapt")
-    id("org.jetbrains.kotlin.android")
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.kapt)
+    alias(libs.plugins.hilt)
+}
+
+val composeCompilerVersion: String by project
+
+kotlin {
+    jvmToolchain(11)
 }
 
 android {
     namespace = "jp.co.soramitsu.card"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "jp.co.soramitsu.card"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
         multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary = true
+        }
     }
 
     buildTypes {
@@ -73,15 +84,18 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.6"
+        kotlinCompilerExtensionVersion = composeCompilerVersion
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_1_8.toString()
+//    compileOptions {
+//        sourceCompatibility = JavaVersion.VERSION_1_8
+//        targetCompatibility = JavaVersion.VERSION_1_8
+//    }
+//    kotlinOptions {
+//        jvmTarget = "1.8"
+//    }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
 }
@@ -89,15 +103,17 @@ android {
 dependencies {
 
     implementation(project(":oauth"))
-    implementation("com.google.android.material:material:1.9.0")
-    implementation("androidx.activity:activity-compose:1.7.2")
-    implementation("androidx.compose.material:material:1.4.3")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.4.3")
+    implementation(libs.material)
+    implementation(libs.activity.compose)
+    implementation(libs.compose.ui)
+    implementation(libs.compose.material)
+    debugImplementation(libs.compose.ui.tooling)
+    implementation(libs.compose.ui.tooling.preview)
 
-    implementation( "com.google.dagger:hilt-android:2.45")
-    "kapt"("com.google.dagger:hilt-compiler:2.45")
+    implementation(libs.hiltandroid)
+    kapt(libs.hiltcompiler)
 
-    implementation("jp.co.soramitsu:ui-core:0.1.0")
+    implementation(libs.soramitsu.uicore)
 }
 
 kapt {

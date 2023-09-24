@@ -4,10 +4,7 @@ import androidx.compose.ui.text.AnnotatedString
 import jp.co.soramitsu.oauth.base.compose.maskFilter
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
 
-@RunWith(MockitoJUnitRunner::class)
 class MasksTests {
 
     @Test
