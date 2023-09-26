@@ -25,8 +25,7 @@ new org.android.ShareFeature().call(
   test: true,
   dockerImage: "build-tools/android-build-box:jdk17",
   nexusCredentials: "bot-soramitsu-rw",
-  buildCmd: './gradlew clean :oauth:build',
-  testCmd: './gradlew clean :oauth:test',
-  publishCmd: './gradlew publish',
+  buildCmd: 'clean :oauth:build',
+  testCmd: 'clean :oauth:test',
   extraBuildSecrets: extraBuildSecrets
 )
