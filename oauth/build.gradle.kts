@@ -1,5 +1,8 @@
+import org.gradle.kotlin.dsl.kapt
 import java.util.Properties
 import java.io.FileInputStream
+
+@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 
 fun secret(name: String): String? {
     val fileProperties = File(rootProject.projectDir.absolutePath, "local.properties")
@@ -16,30 +19,29 @@ fun maybeWrapQuotes(s: String): String {
 }
 
 plugins {
-    id("com.android.library")
-    id("kotlin-parcelize")
-    id("org.jetbrains.kotlin.kapt")
-    id("org.jetbrains.kotlin.android")
-    id("com.google.dagger.hilt.android")
     id("maven-publish")
-    kotlin("plugin.serialization")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.serialization)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.kapt)
+    id("kotlin-parcelize")
 }
 
-val composeCompilerVersion by extra("1.4.6")
-val uiCoreVersion by extra("0.1.4")
-val hiltVersion by extra("2.45")
-val pwOauthSdkVersion by extra("1.3.1")
-val pwKycSdkVersion by extra("4.6.1")
-val dataStoreVersion by extra("1.0.0")
+val composeCompilerVersion: String by project
+
 val ktorVersion by extra("2.3.1")
+
+kotlin {
+    jvmToolchain(11)
+}
 
 android {
     namespace = "jp.co.soramitsu.oauth"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 24
-        targetSdk = 33
         multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -69,13 +71,13 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    } 
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
+//    compileOptions {
+//        sourceCompatibility = JavaVersion.VERSION_1_8
+//        targetCompatibility = JavaVersion.VERSION_1_8
+//    }
+//    kotlinOptions {
+//        jvmTarget = "1.8"
+//    }
 
     buildFeatures {
         compose = true
@@ -83,44 +85,45 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = composeCompilerVersion
     }
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+        targetSdk = 34
+    }
 }
 
 dependencies {
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("androidx.core:core-ktx:1.10.1")
-    implementation("androidx.fragment:fragment-ktx:1.5.7")
+    implementation(libs.core.ktx)
+    implementation(libs.fragment.ktx)
+    implementation(libs.appcompat)
 
-    implementation("androidx.compose.ui:ui:1.4.3")
-    implementation("androidx.compose.material:material:1.4.3")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.4.3")
-    implementation("androidx.compose.runtime:runtime-livedata:1.4.3")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.1")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.4.3")
+    implementation(libs.compose.ui)
+    implementation(libs.compose.material)
+    debugImplementation(libs.compose.ui.tooling)
+    implementation(libs.compose.ui.tooling.preview)
+    implementation(libs.compose.runtime.livedata)
+    implementation(libs.lifecycle.runtime.compose)
+    implementation(libs.lifecycle.viewmodel.ktx)
+    implementation(libs.lifecycle.viewmodel.compose)
+    implementation(libs.compose.navigation)
+    //implementation(libs.accompanist.navigation)
 
-    implementation("jp.co.soramitsu:ui-core:$uiCoreVersion")
+    implementation(libs.soramitsu.uicore)
+    implementation(libs.datastore)
 
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+    implementation(libs.hiltandroid)
+    implementation(libs.hiltnavigationcompose)
+    kapt(libs.hiltcompiler)
 
-    implementation("androidx.navigation:navigation-compose:2.5.3")
-    implementation("com.google.accompanist:accompanist-navigation-animation:0.30.1")
-
-    implementation( "com.google.dagger:hilt-android:$hiltVersion")
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
-    "kapt"("com.google.dagger:hilt-compiler:$hiltVersion")
-
-    implementation("com.paywings.oauth:android-sdk:$pwOauthSdkVersion") {
+    implementation(libs.pwoauth) {
         exclude("com.android.support", "support-compat")
         exclude("com.android.support", "support-media-compat")
     }
-    implementation("com.paywings.onboarding.kyc:android-sdk:$pwKycSdkVersion") {
+    implementation(libs.pwkyc) {
         exclude("com.android.support", "support-compat")
         exclude("com.android.support", "support-media-compat")
         exclude(module = "pinview")
     }
-    implementation("io.github.chaosleung:pinview:1.4.4")
-
-    implementation("androidx.datastore:datastore-preferences:$dataStoreVersion")
+    implementation(libs.pinview)
 
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
@@ -128,27 +131,24 @@ dependencies {
     implementation("io.ktor:ktor-client-logging:$ktorVersion")
     api("io.ktor:ktor-client-okhttp:$ktorVersion")
 
-    debugImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
-    debugImplementation("junit:junit:4.13.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
-    implementation("junit:junit:4.13.2")
-    testImplementation("org.mockito:mockito-inline:5.2.0")
-    testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
-    testImplementation("androidx.arch.core:core-testing:2.2.0")
-    testImplementation("io.mockk:mockk:1.13.5")
+    implementation(libs.coroutine.core)
+
+    testImplementation(libs.tests.archcore)
+    testImplementation(libs.tests.junit)
+    testImplementation(libs.tests.mockk)
+    testImplementation(libs.coroutine.test)
 }
 
 kapt {
     correctErrorTypes = true
 }
 
-val currentVersion by extra("0.1.42")
 publishing {
     publications {
         register<MavenPublication>("release") {
             groupId = "jp.co.soramitsu"
             artifactId = "android-sora-card"
-            version = currentVersion
+            version = "0.1.45"
 
             afterEvaluate {
                 from(components["release"])

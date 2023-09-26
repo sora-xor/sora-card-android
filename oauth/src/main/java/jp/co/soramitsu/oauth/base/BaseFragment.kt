@@ -4,19 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavHostController
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.theme.AuthSdkTheme
 
-
-@OptIn(ExperimentalAnimationApi::class)
 @AndroidEntryPoint
 internal abstract class BaseFragment : Fragment() {
 
@@ -32,7 +29,7 @@ internal abstract class BaseFragment : Fragment() {
     ): View? {
         return ComposeView(requireContext()).apply {
             setContent {
-                val navController = rememberAnimatedNavController()
+                val navController = rememberNavController()
                 navHostController = navController
                 mainRouter.attachNavController(requireActivity(), navController)
                 AuthSdkTheme {

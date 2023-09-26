@@ -2,11 +2,19 @@ package jp.co.soramitsu.oauth.feature.verify.phone
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.compose.ui.text.input.TextFieldValue
+import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.junit4.MockKRule
+import io.mockk.just
+import io.mockk.runs
+import io.mockk.verify
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
-import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
+import jp.co.soramitsu.oauth.base.sdk.SoraCardEnvironmentType
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
+import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -17,13 +25,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
-import org.mockito.kotlin.verify
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@RunWith(MockitoJUnitRunner::class)
 class EnterPhoneNumberViewModelTest {
 
     @Rule
@@ -31,21 +34,27 @@ class EnterPhoneNumberViewModelTest {
     val rule: TestRule = InstantTaskExecutorRule()
 
     @get:Rule
+    val mockkRule = MockKRule(this)
+
+    @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-    @Mock
+    @MockK
     private lateinit var mainRouter: MainRouter
 
-    @Mock
+    @MockK
     private lateinit var pwoAuthClientProxy: PWOAuthClientProxy
 
-    @Mock
+    @MockK
     private lateinit var inMemoryRepo: InMemoryRepo
 
     private lateinit var viewModel: EnterPhoneNumberViewModel
 
     @Before
     fun setUp() {
+        every { inMemoryRepo.environment } returns SoraCardEnvironmentType.PRODUCTION
+        coEvery { pwoAuthClientProxy.signInWithPhoneNumberRequestOtp(any(), any(), any()) } just runs
+        every { mainRouter.back() } just runs
         viewModel = EnterPhoneNumberViewModel(
             mainRouter,
             inMemoryRepo,
@@ -127,7 +136,6 @@ class EnterPhoneNumberViewModelTest {
     @Test
     fun `on back EXPECT navigate back`() {
         viewModel.onToolbarNavigation()
-
-        verify(mainRouter).back()
+        verify { mainRouter.back() }
     }
 }

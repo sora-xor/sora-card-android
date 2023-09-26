@@ -1,10 +1,18 @@
 package jp.co.soramitsu.oauth.feature.verify.email
 
+import android.os.CountDownTimer
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.junit4.MockKRule
+import io.mockk.just
+import io.mockk.runs
+import io.mockk.verify
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
-import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
+import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.oauth.feature.verify.Timer
@@ -18,13 +26,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
-import org.mockito.kotlin.verify
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@RunWith(MockitoJUnitRunner::class)
 class VerifyEmailViewModelTest {
 
     @Rule
@@ -32,27 +35,39 @@ class VerifyEmailViewModelTest {
     val rule: TestRule = InstantTaskExecutorRule()
 
     @get:Rule
+    val mockkRule = MockKRule(this)
+
+    @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-    @Mock
+    @MockK
     private lateinit var mainRouter: MainRouter
 
-    @Mock
+    @MockK
     private lateinit var authCallback: OAuthCallback
 
-    @Mock
+    @MockK
     private lateinit var userSessionRepository: UserSessionRepository
 
-    @Mock
+    @MockK
     private lateinit var pwoAuthClientProxy: PWOAuthClientProxy
 
-    @Mock
+    @MockK
+    private lateinit var cdTimer: CountDownTimer
+
+    @MockK
     private lateinit var timer: Timer
 
     private lateinit var viewModel: VerifyEmailViewModel
 
     @Before
     fun setUp() {
+        every { timer.setOnTickListener(any()) } just runs
+        every { timer.setOnFinishListener(any()) } just runs
+        every { timer.start() } returns cdTimer
+        every { mainRouter.back() } just runs
+        every { mainRouter.openChangeEmail() } just runs
+        coEvery { pwoAuthClientProxy.sendNewVerificationEmail(any()) } just runs
         viewModel = VerifyEmailViewModel(
             mainRouter,
             userSessionRepository,
@@ -81,7 +96,7 @@ class VerifyEmailViewModelTest {
 
     @Test
     fun `init EXPECT start resend link timer`() {
-        verify(timer).start()
+        verify { timer.start() }
     }
 
     @Test
@@ -103,14 +118,12 @@ class VerifyEmailViewModelTest {
     @Test
     fun `on change email EXPECT navigate`() {
         viewModel.onChangeEmail()
-
-        verify(mainRouter).openChangeEmail()
+        verify { mainRouter.openChangeEmail() }
     }
 
     @Test
     fun `back EXPECT navigate back`() {
         viewModel.onToolbarNavigation()
-
-        verify(mainRouter).back()
+        verify { mainRouter.back() }
     }
 }

@@ -20,17 +20,14 @@ def extraBuildSecrets = [
   [$class: 'StringBinding', credentialsId: 'SORA_BACKEND_RELEASE', variable: 'SORA_BACKEND_RELEASE']
 ]
 
-new org.soramitsu.mainLibrary().call(
-  agentLabel: "android",
-  skipSonar: true,
-  skipDojo: true,
-  agentImage: "android-build-box-jdk11:latest",
+new org.android.ShareFeature().call(
+  detekt: false,
+  test: true,
+  dockerImage: "build-tools/android-build-box:jdk17",
   nexusCredentials: "bot-soramitsu-rw",
-  buildCommand: './gradlew clean :oauth:build',
-  testCommand: './gradlew clean :oauth:test',
-  publishCommand: './gradlew publish',
-  publishLibrary: true,
-  skipDockerImage: true,
-  dojoProductType: "sora-card-android",
-  extraBuildSecrets: extraBuildSecrets
+  buildCmd: 'clean :oauth:build',
+  testCmd: 'clean :oauth:test',
+  extraBuildSecrets: extraBuildSecrets,
+  dojo: true,
+  dojoProductType: "sora"
 )

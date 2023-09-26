@@ -1,4 +1,4 @@
-package jp.co.soramitsu.oauth.base.test
+package jp.co.soramitsu.oauth.domain
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

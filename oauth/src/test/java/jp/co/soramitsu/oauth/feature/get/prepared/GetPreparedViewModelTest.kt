@@ -6,7 +6,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
 import io.mockk.verify
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
+import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PriceInteractor
 import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult

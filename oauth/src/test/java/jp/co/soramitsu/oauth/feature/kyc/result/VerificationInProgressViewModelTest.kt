@@ -1,10 +1,16 @@
 package jp.co.soramitsu.oauth.feature.kyc.result
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.junit4.MockKRule
+import io.mockk.just
+import io.mockk.runs
+import io.mockk.verify
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
-import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
 import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
+import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -14,13 +20,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
-import org.mockito.kotlin.verify
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@RunWith(MockitoJUnitRunner::class)
 class VerificationInProgressViewModelTest {
 
     @Rule
@@ -30,19 +31,23 @@ class VerificationInProgressViewModelTest {
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-    @Mock
+    @get:Rule
+    val mockkRule = MockKRule(this)
+
+    @MockK
     private lateinit var userSessionRepository: UserSessionRepository
 
-    @Mock
+    @MockK
     private lateinit var setActivityResult: SetActivityResult
 
-    @Mock
+    @MockK
     private lateinit var mainRouter: MainRouter
 
     private lateinit var viewModel: VerificationInProgressViewModel
 
     @Before
     fun setUp() {
+        every { mainRouter.openSupportChat() } just runs
         viewModel = VerificationInProgressViewModel(
             mainRouter = mainRouter,
             setActivityResult = setActivityResult,
@@ -62,7 +67,6 @@ class VerificationInProgressViewModelTest {
     @Test
     fun `call openTelegramSupport EXPECT flow routes to telegram support`() = runTest {
         viewModel.openTelegramSupport()
-
-        verify(mainRouter).openSupportChat()
+        verify { mainRouter.openSupportChat() }
     }
 }
