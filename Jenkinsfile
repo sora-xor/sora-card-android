@@ -27,5 +27,7 @@ new org.android.ShareFeature().call(
   nexusCredentials: "bot-soramitsu-rw",
   buildCmd: 'clean :oauth:build',
   testCmd: 'clean :oauth:test',
-  extraBuildSecrets: extraBuildSecrets
+  extraBuildSecrets: extraBuildSecrets,
+  dojo: true,
+  dojoProductType: "sora"
 )
