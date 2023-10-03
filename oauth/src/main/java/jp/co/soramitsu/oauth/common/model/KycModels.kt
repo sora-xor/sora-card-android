@@ -37,5 +37,12 @@ data class KycResponse(
     @SerialName("kyc_status") val kycStatus: KycStatus,
     @SerialName("verification_status") val verificationStatus: VerificationStatus,
     @SerialName("iban_status") val ibanStatus: IbanStatus,
-    @SerialName("update_time") val updateTime: Int
+    @SerialName("update_time") val updateTime: Int,
+    @SerialName("additional_description") val additionalDescription: String? = null,
+    @SerialName("rejection_reasons") val rejectionReasons: List<KycResponseRejectionReason>? = null,
+)
+
+@Serializable
+data class KycResponseRejectionReason(
+    @SerialName("Description") val desc: String,
 )

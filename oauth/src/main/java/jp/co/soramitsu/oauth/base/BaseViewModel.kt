@@ -7,9 +7,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import jp.co.soramitsu.oauth.base.state.DialogAlertState
-import jp.co.soramitsu.oauth.network.SoraCardNetworkException
 import jp.co.soramitsu.ui_core.component.toolbar.Action
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
+import jp.co.soramitsu.xnetworking.basic.networkclient.SoramitsuNetworkException
 
 open class BaseViewModel : ViewModel() {
 
@@ -26,7 +26,7 @@ open class BaseViewModel : ViewModel() {
     open fun onToolbarMenuItemSelected(action: Action) = Unit
 
     private fun onError(throwable: Throwable) {
-        if (throwable is SoraCardNetworkException) {
+        if (throwable is SoramitsuNetworkException) {
             // TODO implement error handling
         }
     }
