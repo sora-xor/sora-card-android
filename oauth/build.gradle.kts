@@ -30,8 +30,6 @@ plugins {
 
 val composeCompilerVersion: String by project
 
-val ktorVersion by extra("2.3.1")
-
 kotlin {
     jvmToolchain(11)
 }
@@ -71,14 +69,6 @@ android {
         }
     }
 
-//    compileOptions {
-//        sourceCompatibility = JavaVersion.VERSION_1_8
-//        targetCompatibility = JavaVersion.VERSION_1_8
-//    }
-//    kotlinOptions {
-//        jvmTarget = "1.8"
-//    }
-
     buildFeatures {
         compose = true
     }
@@ -105,9 +95,9 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.compose.navigation)
-    //implementation(libs.accompanist.navigation)
 
     implementation(libs.soramitsu.uicore)
+    implementation(libs.soramitsu.xnetworking.basic)
     implementation(libs.datastore)
 
     implementation(libs.hiltandroid)
@@ -124,12 +114,6 @@ dependencies {
         exclude(module = "pinview")
     }
     implementation(libs.pinview)
-
-    implementation("io.ktor:ktor-client-core:$ktorVersion")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
-    implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-    implementation("io.ktor:ktor-client-logging:$ktorVersion")
-    api("io.ktor:ktor-client-okhttp:$ktorVersion")
 
     implementation(libs.coroutine.core)
 
@@ -148,7 +132,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "jp.co.soramitsu"
             artifactId = "android-sora-card"
-            version = "0.1.45"
+            version = "0.1.46"
 
             afterEvaluate {
                 from(components["release"])
