@@ -19,13 +19,6 @@ enum class NetworkRequest(val url: String) {
 @Module
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
-    @Provides
-    @Singleton
-    fun provideSoramitsuNetworkClient(): SoramitsuNetworkClient =
-        SoramitsuNetworkClient(
-            timeout = 10000,
-            logging = false,
-        )
 
     @Provides
     @Singleton
