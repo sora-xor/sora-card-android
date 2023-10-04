@@ -8,7 +8,7 @@ data class VerificationRejectedScreenState(
     private val screenStatus: ScreenStatus,
     val kycFreeAttemptsCount: Int,
     val isFreeAttemptsLeft: Boolean,
-    val kycAttemptCostInEuros: Double,
+    val kycAttemptCostInEuros: String,
 ) {
 
     val kycAttemptsLeftText: Text
@@ -30,7 +30,7 @@ data class VerificationRejectedScreenState(
             if (kycFreeAttemptsCount <= 0)
                 return Text.StringResWithArgs(
                     id = R.string.verification_rejected_screen_try_again_for_euros,
-                    payload = arrayOf(kycAttemptCostInEuros.toString())
+                    payload = arrayOf(kycAttemptCostInEuros)
                 )
 
             return Text.StringRes(id = R.string.verification_rejected_screen_try_again_for_free)

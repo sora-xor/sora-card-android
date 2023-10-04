@@ -7,7 +7,7 @@ data class CardIssuanceScreenState(
     val xorInsufficientAmount: Double,
     val euroInsufficientAmount: Double,
     val euroLiquidityThreshold: Double,
-    val euroIssuanceAmount: Int
+    val euroIssuanceAmount: String,
 ) {
 
     val isScreenLoading: Boolean = screenStatus === ScreenStatus.LOADING

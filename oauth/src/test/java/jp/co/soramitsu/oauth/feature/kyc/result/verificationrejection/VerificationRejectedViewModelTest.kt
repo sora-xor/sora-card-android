@@ -113,7 +113,7 @@ class VerificationRejectedViewModelTest {
             coEvery { kycRepository.getFreeKycAttemptsInfo(any()) } returns Result.success(
                 kycCountAttemptsAvailable
             )
-            coEvery { priceInteractor.calculateKycAttemptPrice() } returns Result.success(3.80)
+            coEvery { priceInteractor.calculateKycAttemptPrice() } returns "3.80"
 
             val viewModel = VerificationRejectedViewModel(
                 mainRouter = mainRouter,

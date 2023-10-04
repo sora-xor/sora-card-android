@@ -36,7 +36,7 @@ class CardIssuanceViewModel @Inject constructor(
             xorInsufficientAmount = 0.toDouble(),
             euroInsufficientAmount = 0.toDouble(),
             euroLiquidityThreshold = 0.toDouble(),
-            euroIssuanceAmount = 0
+            euroIssuanceAmount = "",
         )
     )
         private set
@@ -63,14 +63,14 @@ class CardIssuanceViewModel @Inject constructor(
                 val euroLiquiditySufficiency =
                     priceInteractor.calculateEuroLiquiditySufficiency().getOrThrow()
                 val euroCardIssuancePrice =
-                    priceInteractor.calculateCardIssuancePrice().getOrThrow()
+                    priceInteractor.calculateCardIssuancePrice()
 
                 cardIssuanceScreenState = cardIssuanceScreenState.copy(
                     screenStatus = ScreenStatus.READY_TO_RENDER,
                     xorInsufficientAmount = xorLiquiditySufficiency.xorInsufficiency,
                     euroInsufficientAmount = euroLiquiditySufficiency.euroInsufficiency,
                     euroLiquidityThreshold = euroLiquiditySufficiency.euroLiquidityFullPrice,
-                    euroIssuanceAmount = euroCardIssuancePrice.toInt()
+                    euroIssuanceAmount = euroCardIssuancePrice
                 )
             }.onFailure {
                 cardIssuanceScreenState = cardIssuanceScreenState.copy(

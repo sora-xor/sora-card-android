@@ -80,9 +80,9 @@ class GetPreparedViewModel @Inject constructor(
                     )
                 }
             priceInteractor.calculateKycAttemptPrice()
-                .onSuccess {
+                .let {
                     _state.value = _state.value.copy(
-                        attemptCost = it.toString(),
+                        attemptCost = it,
                     )
                 }
         }

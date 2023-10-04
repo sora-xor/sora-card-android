@@ -271,11 +271,11 @@ private fun PreviewCardIssuanceScreen() {
                 TODO("Not yet implemented")
             }
 
-            override suspend fun calculateCardIssuancePrice(): Result<Double> {
+            override suspend fun calculateCardIssuancePrice(): String {
                 TODO("Not yet implemented")
             }
 
-            override suspend fun calculateKycAttemptPrice(): Result<Double> {
+            override suspend fun calculateKycAttemptPrice(): String {
                 TODO("Not yet implemented")
             }
 

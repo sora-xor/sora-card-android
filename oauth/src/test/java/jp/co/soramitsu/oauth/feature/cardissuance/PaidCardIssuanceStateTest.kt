@@ -21,7 +21,7 @@ class PaidCardIssuanceStateTest {
     fun setUp() {
         PaidCardIssuanceState(
             screenStatus = ScreenStatus.LOADING,
-            euroIssuanceAmount = 0
+            euroIssuanceAmount = "0",
         ).apply { state = this }
     }
 

@@ -22,7 +22,7 @@ class VerificationRejectedScreenStateTest {
         VerificationRejectedScreenState(
             screenStatus = ScreenStatus.LOADING,
             kycFreeAttemptsCount = 3,
-            kycAttemptCostInEuros = 1.0,
+            kycAttemptCostInEuros = "1.0",
             isFreeAttemptsLeft = false
         ).apply { state = this }
     }
@@ -40,7 +40,7 @@ class VerificationRejectedScreenStateTest {
         state = state.copy(
             screenStatus = ScreenStatus.READY_TO_RENDER,
             kycFreeAttemptsCount = 0,
-            kycAttemptCostInEuros = 1.0
+            kycAttemptCostInEuros = "1.0"
         )
         assertEquals(R.string.verification_rejected_screen_attempts_used, (state.kycAttemptsLeftText as Text.StringRes).id)
         (state.tryAgainText as Text.StringResWithArgs).let {
@@ -62,7 +62,7 @@ class VerificationRejectedScreenStateTest {
         state = state.copy(
             screenStatus = ScreenStatus.READY_TO_RENDER,
             kycFreeAttemptsCount = 3,
-            kycAttemptCostInEuros = 1.0
+            kycAttemptCostInEuros = "1.0"
         )
         (state.kycAttemptsLeftText as Text.StringPluralWithArgs).let {
             assertEquals(3, it.amount)
