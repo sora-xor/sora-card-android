@@ -45,8 +45,8 @@
   <string name="enter_phone_number_description">You will receive\na verification code via SMS</string>
   <string name="enter_phone_number_phone_input_field_label">Phone Number</string>
   <string name="entry_card_info">Card info</string>
-  <string name="get_more_xor_dialog_buy_option">Buy XOR with EUR</string>
-  <string name="get_more_xor_dialog_deposit_option">Deposit XOR</string>
+  <string name="get_more_xor_dialog_buy_option">Buy XOR with card</string>
+  <string name="get_more_xor_dialog_deposit_option">Receive XOR</string>
   <string name="get_more_xor_dialog_description">You can swap for XOR or buy with Euro</string>
   <string name="get_more_xor_dialog_swap_option">Swap crypto for XOR</string>
   <string name="get_prepared_alert" formatted="false">You have only %s free attempts to pass the KYC process. Every other attempt after that will cost €%s. Paid attempts will be available after the next update of the app.</string>

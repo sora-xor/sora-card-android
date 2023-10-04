@@ -45,8 +45,8 @@
   <string name="enter_phone_number_description">Вы получите\nкод подтверждения по SMS</string>
   <string name="enter_phone_number_phone_input_field_label">Номер телефона</string>
   <string name="entry_card_info">Информация о карте</string>
-  <string name="get_more_xor_dialog_buy_option">Купить XOR за EUR</string>
-  <string name="get_more_xor_dialog_deposit_option">Депозит XOR</string>
+  <string name="get_more_xor_dialog_buy_option">Купить XOR с помощью карты</string>
+  <string name="get_more_xor_dialog_deposit_option">Получить XOR</string>
   <string name="get_more_xor_dialog_description">Вы можете обменять на XOR или купить за евро</string>
   <string name="get_more_xor_dialog_swap_option">Обменять криптовалюту на XOR</string>
   <string name="get_prepared_alert" formatted="false">У вас есть только %s бесплатных попыток пройти процедуру KYC. Каждая следующая попытка после этого будет стоить € %s . Платные попытки станут доступны после следующего обновления приложения.</string>
