@@ -98,6 +98,8 @@ dependencies {
 
     implementation(libs.soramitsu.uicore)
     implementation(libs.soramitsu.xnetworking.basic)
+    implementation(libs.ktor)
+    implementation(libs.kotlinx.serialization)
     implementation(libs.datastore)
 
     implementation(libs.hiltandroid)
@@ -132,7 +134,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "jp.co.soramitsu"
             artifactId = "android-sora-card"
-            version = "0.1.47"
+            version = "0.1.48"
 
             afterEvaluate {
                 from(components["release"])
