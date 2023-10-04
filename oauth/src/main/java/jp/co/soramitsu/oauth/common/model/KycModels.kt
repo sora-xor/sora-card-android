@@ -10,6 +10,7 @@ enum class KycStatus {
     Failed,
     Rejected,
     Successful,
+    Retry,
     ;
 }
 
