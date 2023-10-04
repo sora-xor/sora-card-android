@@ -3,6 +3,7 @@ package jp.co.soramitsu.oauth.common.data
 import io.ktor.client.call.body
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.common.domain.KycRepository
+import jp.co.soramitsu.oauth.common.model.FeesDto
 import jp.co.soramitsu.oauth.common.model.GetReferenceNumberRequest
 import jp.co.soramitsu.oauth.common.model.GetReferenceNumberResponse
 import jp.co.soramitsu.oauth.common.model.KycAttemptsDto
@@ -113,6 +114,26 @@ class KycRepositoryImpl(
             ).body()
         }
     }
+
+    private var feesCache: Pair<String, String>? = null
+
+    override suspend fun getRetryFee(): String =
+        feesCache?.first ?: getFeesInternal().getOrNull()?.let {
+            feesCache = it
+            it.first
+        } ?: ""
+
+    override suspend fun getApplicationFee(): String =
+        feesCache?.second ?: getFeesInternal().getOrNull()?.let {
+            feesCache = it
+            it.second
+        } ?: ""
+
+    private suspend fun getFeesInternal(): Result<Pair<String, String>> =
+        runCatching {
+            val dto = apiClient.get(bearerToken = null, url = NetworkRequest.FEES.url).body<FeesDto>()
+            dto.retryFee to dto.applicationFee
+        }
 
     override suspend fun getCurrentXorEuroPrice(accessToken: String): Result<XorEuroPrice> {
         return runCatching {

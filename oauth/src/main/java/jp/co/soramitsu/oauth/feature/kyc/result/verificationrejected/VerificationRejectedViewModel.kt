@@ -34,7 +34,7 @@ class VerificationRejectedViewModel @Inject constructor(
             screenStatus = ScreenStatus.ERROR,
             kycFreeAttemptsCount = 0,
             isFreeAttemptsLeft = false,
-            kycAttemptCostInEuros = (-1).toDouble()
+            kycAttemptCostInEuros = "",
         )
     )
     val verificationRejectedScreenState = _verificationRejectedScreenState.asStateFlow()
@@ -61,7 +61,7 @@ class VerificationRejectedViewModel @Inject constructor(
                 val (actualKycAttemptsLeft, isKycAttemptsLeft) = kycRepository.getFreeKycAttemptsInfo(token)
                     .getOrThrow().run { freeAttemptsCount to freeAttemptAvailable }
 
-                val kycAttemptPrice = priceInteractor.calculateKycAttemptPrice().getOrThrow()
+                val kycAttemptPrice = priceInteractor.calculateKycAttemptPrice()
 
                 _verificationRejectedScreenState.value = _verificationRejectedScreenState.value.copy(
                     screenStatus = ScreenStatus.READY_TO_RENDER,

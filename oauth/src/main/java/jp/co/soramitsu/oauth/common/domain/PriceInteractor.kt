@@ -9,9 +9,9 @@ interface PriceInteractor {
 
     suspend fun calculateEuroLiquiditySufficiency(): Result<EuroLiquiditySufficiency>
 
-    suspend fun calculateCardIssuancePrice(): Result<Double>
+    suspend fun calculateCardIssuancePrice(): String
 
-    suspend fun calculateKycAttemptPrice(): Result<Double>
+    suspend fun calculateKycAttemptPrice(): String
 
 }
 

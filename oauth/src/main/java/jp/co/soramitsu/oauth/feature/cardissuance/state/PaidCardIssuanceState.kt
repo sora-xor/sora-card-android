@@ -6,7 +6,7 @@ import jp.co.soramitsu.oauth.base.compose.Text
 
 data class PaidCardIssuanceState(
     val screenStatus: ScreenStatus,
-    val euroIssuanceAmount: Int
+    val euroIssuanceAmount: String,
 ) {
 
     val titleText: Text
@@ -14,7 +14,7 @@ data class PaidCardIssuanceState(
             if (screenStatus === ScreenStatus.READY_TO_RENDER)
                 return Text.StringResWithArgs(
                     id = R.string.card_issuance_screen_paid_card_title,
-                    payload = arrayOf(euroIssuanceAmount.toString())
+                    payload = arrayOf(euroIssuanceAmount)
                 )
 
             return Text.StringRes(id = R.string.cant_fetch_data)
@@ -31,7 +31,7 @@ data class PaidCardIssuanceState(
             if (screenStatus === ScreenStatus.READY_TO_RENDER)
                 return Text.StringResWithArgs(
                     id = R.string.card_issuance_screen_paid_card_pay_euro,
-                    payload = arrayOf(euroIssuanceAmount.toString())
+                    payload = arrayOf(euroIssuanceAmount)
                 )
 
             return Text.StringRes(id = R.string.cant_fetch_data)

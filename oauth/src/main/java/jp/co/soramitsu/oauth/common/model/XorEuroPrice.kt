@@ -10,3 +10,9 @@ data class XorEuroPrice(
     @SerialName("source") val source: String,
     @SerialName("update_time") val timeOfUpdate: Int
 )
+
+@Serializable
+data class FeesDto(
+    @SerialName("application_fee") val applicationFee: String,
+    @SerialName("retry_fee") val retryFee: String,
+)

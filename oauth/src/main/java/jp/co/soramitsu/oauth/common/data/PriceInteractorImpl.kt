@@ -11,7 +11,7 @@ import javax.inject.Inject
 class PriceInteractorImpl(
     private val userSessionRepository: UserSessionRepository,
     private val inMemoryCache: InMemoryRepo,
-    private val kycRepository: KycRepository
+    private val kycRepository: KycRepository,
 ): PriceInteractor {
 
     override suspend fun calculateXorLiquiditySufficiency(): Result<XorLiquiditySufficiency> {
@@ -24,11 +24,10 @@ class PriceInteractorImpl(
 
                 XorLiquiditySufficiency(
                     xorInsufficiency = xorLiquidityFullPrice - inMemoryCache.userAvailableXorAmount,
-                    xorLiquidityFullPrice = xorLiquidityFullPrice
+                    xorLiquidityFullPrice = xorLiquidityFullPrice,
                 )
             }
     }
-
 
     override suspend fun calculateEuroLiquiditySufficiency(): Result<EuroLiquiditySufficiency> {
         val accessToken = userSessionRepository.getAccessToken()
@@ -45,9 +44,9 @@ class PriceInteractorImpl(
             }
     }
 
-    override suspend fun calculateCardIssuancePrice(): Result<Double> =
-        kotlin.runCatching { inMemoryCache.euroCardIssuancePrice.toDouble() }
+    override suspend fun calculateCardIssuancePrice(): String =
+        kycRepository.getApplicationFee()
 
-    override suspend fun calculateKycAttemptPrice(): Result<Double> =
-        kotlin.runCatching { inMemoryCache.kycAttemptPrice }
+    override suspend fun calculateKycAttemptPrice(): String =
+        kycRepository.getRetryFee()
 }
