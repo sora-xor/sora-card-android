@@ -3,18 +3,6 @@ package jp.co.soramitsu.oauth.common.model
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-/**
- * GetReferenceNumber POST request structure
- *
- *  @param referenceID Your unique reference ID.
- *  @param mobileNumber Required if: When mobile number is not verified through PayWings OAuth system.
- *  @param email User email address.
- *  @param addressChanged If set to true, user will have to enter address even if address data exists and is accepted.
- *  @param documentChanged If set to true, user will have to provide a document identification even if document data exists and is accepted.
- *  @param additionalData Additional data and/or instructions for vendors.
- *
- * Learn more from [GetReferenceNumber](https://onboarding-kyc-test.paywings.io/whitelabel/GetReferenceNumber).
- */
 @Serializable
 data class GetReferenceNumberRequest(
     @SerialName("ReferenceID") val referenceID: String,
@@ -25,17 +13,6 @@ data class GetReferenceNumberRequest(
     @SerialName("AdditionalData") val additionalData: String,
 )
 
-/**
- * GetReferenceNumber response structure
- *
- * @param referenceID PayWings response reference ID.
- * @param callerReferenceID Your request reference ID.
- * @param referenceNumber Reference number.
- * @param statusCode Status code.
- * @param statusDescription Status description.
- *
- * Learn more from [GetReferenceNumber](https://onboarding-kyc-test.paywings.io/whitelabel/GetReferenceNumber).
- */
 @Serializable
 data class GetReferenceNumberResponse(
     @SerialName("ReferenceID") val referenceID: String,
