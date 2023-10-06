@@ -68,6 +68,7 @@
   <string name="login_title">Войдите или зарегистрируйтесь</string>
   <string name="no_free_kyc_attempts_description">Вы использовали все бесплатные попытки прохождения процедуры KYC.\n\nПросим вас дождаться следующего обновления приложения, чтобы продолжить с оплачиваемыми попытками.</string>
   <string name="no_free_kyc_attempts_title">Нет больше бесплатных попыток</string>
+  <string name="paid_attempts_available_later">Платные попытки будут доступны позднее</string>
   <string name="payment_widget_unavailable_confirm">Да, я понимаю</string>
   <string name="payment_widget_unavailable_description">Приносим извинения за неудобства. Мы прилагаем все усилия для решения данной проблемы. Пожалуйста, повторите попытку позже.</string>
   <string name="payment_widget_unavailable_message">Виджет оплаты в настоящее время недоступен</string>

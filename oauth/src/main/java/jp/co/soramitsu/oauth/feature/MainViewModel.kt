@@ -178,13 +178,10 @@ class MainViewModel @Inject constructor(
     fun onAuthSucceed(accessToken: String) {
         viewModelScope.launch {
             kycRepository.getKycLastFinalStatus(accessToken).onSuccess { kycResponse ->
-                if (kycResponse == SoraCardCommonVerification.Rejected ||
-                    kycResponse == SoraCardCommonVerification.Pending ||
-                    kycResponse == SoraCardCommonVerification.Successful
-                ) {
-                    showKycStatusScreen(kycResponse)
-                } else {
-                    checkKycRequirementsFulfilled(accessToken)
+                when (kycResponse) {
+                    SoraCardCommonVerification.Rejected -> checkKycRequirementsFulfilled(accessToken)
+                    SoraCardCommonVerification.Failed -> mainRouter.openGetPrepared()
+                    else -> showKycStatusScreen(kycResponse)
                 }
             }
                 .onFailure {
@@ -193,32 +190,22 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private suspend fun checkKycRequirementsFulfilled(accessToken: String) {
-        kycRepository.hasFreeKycAttempt(accessToken)
-            .onFailure {
-                _toast.value = it.localizedMessage.orEmpty()
-            }
-            .onSuccess { hasFreeAttempt ->
-                if (inMemoryRepo.isEnoughXorAvailable) {
-                    if (hasFreeAttempt) {
-                        mainRouter.openGetPrepared()
-                    } else {
-                        showKycStatusScreen(SoraCardCommonVerification.Rejected)
-                    }
-                } else {
-                    kycRequirementsUnfulfilledFlow.start(
-                        fromDestination = CompatibilityDestination(Destination.ENTER_PHONE_NUMBER.route)
-                    )
-                }
-            }
+    private fun checkKycRequirementsFulfilled(accessToken: String) {
+        if (inMemoryRepo.isEnoughXorAvailable) {
+            showKycStatusScreen(SoraCardCommonVerification.Rejected)
+        } else {
+            kycRequirementsUnfulfilledFlow.start(
+                fromDestination = CompatibilityDestination(Destination.ENTER_PHONE_NUMBER.route)
+            )
+        }
     }
 
-    fun checkKycStatus(statusDescription: String? = null) {
+    fun checkKycStatus() {
         viewModelScope.launch {
             showLoading(true)
             checkAccessTokenValidity { accessToken ->
                 kycRepository.getKycLastFinalStatus(accessToken).onSuccess { status ->
-                    showKycStatusScreen(status, statusDescription)
+                    showKycStatusScreen(status)
                 }
                     .onFailure {
                         _toast.value = it.localizedMessage.orEmpty()
@@ -241,21 +228,25 @@ class MainViewModel @Inject constructor(
                 mainRouter.openVerificationSuccessful()
             }
 
+            (kycResponse == SoraCardCommonVerification.Retry) -> {
+                mainRouter.openVerificationRejected()
+            }
+
+            (kycResponse == SoraCardCommonVerification.Started) -> {
+                mainRouter.openGetPrepared()
+            }
+
             kycResponse == SoraCardCommonVerification.Failed -> {
-                mainRouter.openVerificationFailed(additionalDescription = statusDescription)
+                onKycFailed(statusDescription)
             }
 
             kycResponse == SoraCardCommonVerification.Rejected -> {
-                mainRouter.openVerificationRejected(
-                    additionalDescription = statusDescription
-                )
+                mainRouter.openVerificationRejected()
             }
         }
     }
 
     fun onKycFailed(statusDescription: String?) {
-        viewModelScope.launch {
-            mainRouter.openVerificationFailed(additionalDescription = statusDescription)
-        }
+        mainRouter.openVerificationFailed(additionalDescription = statusDescription)
     }
 }

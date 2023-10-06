@@ -43,6 +43,10 @@ data class KycResponse(
     @SerialName("rejection_reasons") val rejectionReasons: List<KycResponseRejectionReason>? = null,
 )
 
+val emptyKycResponse = KycResponse(
+    "", "", "", "", KycStatus.Rejected, VerificationStatus.None, IbanStatus.None, 1000, "", null,
+)
+
 @Serializable
 data class KycResponseRejectionReason(
     @SerialName("Description") val desc: String,

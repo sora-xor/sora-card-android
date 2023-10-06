@@ -21,13 +21,16 @@ class KycRepositoryImpl(
     private val userSessionRepository: UserSessionRepository,
 ) : KycRepository {
 
+    private var cacheReference: String = ""
+
     override suspend fun getReferenceNumber(
         accessToken: String,
         phoneNumber: String?,
         email: String?
     ): Result<String> {
+        if (cacheReference.isNotEmpty()) return Result.success(cacheReference)
         return runCatching {
-            apiClient.post(
+            val ref = apiClient.post(
                 bearerToken = accessToken,
                 url = NetworkRequest.GET_REFERENCE_NUMBER.url,
                 body = GetReferenceNumberRequest(
@@ -40,60 +43,67 @@ class KycRepositoryImpl(
                 )
             ).body<GetReferenceNumberResponse>()
                 .referenceNumber
+            cacheReference = ref
+            cacheReference
         }
     }
 
     private suspend fun getKycInfo(
         accessToken: String,
         baseUrl: String? = null,
-    ): Result<List<KycResponse>> {
-        return runCatching {
+    ): Result<KycResponse> = runCatching {
             apiClient.get(
                 bearerToken = accessToken,
                 url = NetworkRequest.GET_KYC_STATUS.url,
                 baseUrl = baseUrl,
-            ).body<List<KycResponse>>()
-                .sortedBy { it.updateTime }
+            ).body<KycResponse>()
         }
+
+    private var cacheKycResponse: Pair<SoraCardCommonVerification, KycResponse>? = null
+
+    override fun getCachedKycResponse(): Pair<SoraCardCommonVerification, KycResponse>? {
+        val local = cacheKycResponse
+        cacheKycResponse = null
+        return local
     }
 
     override suspend fun getKycLastFinalStatus(accessToken: String, baseUrl: String?): Result<SoraCardCommonVerification> {
         userSessionRepository.getKycStatus()?.let {
             if (it == SoraCardCommonVerification.Successful) return Result.success(SoraCardCommonVerification.Successful)
         }
-        return getKycInfo(accessToken, baseUrl).map { kycStatuses ->
-            val status = getFinalizedFromList(kycStatuses) ?: kycStatuses.lastOrNull()
-            map(status).also {
+        return getKycInfo(accessToken, baseUrl).map { kycStatus ->
+            mapKycStatus(kycStatus).also {
+                cacheKycResponse = it to kycStatus
+                cacheReference = if (it == SoraCardCommonVerification.Rejected) {
+                    ""
+                } else {
+                    kycStatus.userReferenceNumber
+                }
                 userSessionRepository.setKycStatus(it)
             }
         }
     }
 
-    private fun getFinalizedFromList(kycStatuses: List<KycResponse>): KycResponse? {
-        for (i in kycStatuses.lastIndex downTo 0) {
-            val currentStatus = kycStatuses[i].kycStatus
-            if (currentStatus == KycStatus.Completed || currentStatus == KycStatus.Successful) {
-                return kycStatuses[i]
-            }
-        }
-        return null
-    }
-
-    private fun map(kycResponse: KycResponse?): SoraCardCommonVerification {
-        if (kycResponse == null) return SoraCardCommonVerification.NotFound
+    private fun mapKycStatus(kycResponse: KycResponse): SoraCardCommonVerification {
         return when {
-            (kycResponse.verificationStatus == VerificationStatus.Pending
-                    && (kycResponse.kycStatus == KycStatus.Successful || kycResponse.kycStatus == KycStatus.Completed)) -> {
-                SoraCardCommonVerification.Pending
+            (kycResponse.verificationStatus == VerificationStatus.Accepted) -> {
+                SoraCardCommonVerification.Successful
             }
 
-            (kycResponse.verificationStatus == VerificationStatus.Accepted
-                    && (kycResponse.kycStatus == KycStatus.Successful || kycResponse.kycStatus == KycStatus.Completed)) -> {
-                SoraCardCommonVerification.Successful
+            (kycResponse.kycStatus == KycStatus.Successful || kycResponse.kycStatus == KycStatus.Completed) -> {
+                SoraCardCommonVerification.Pending
             }
 
             kycResponse.kycStatus == KycStatus.Failed -> {
                 SoraCardCommonVerification.Failed
+            }
+
+            kycResponse.kycStatus == KycStatus.Started -> {
+                SoraCardCommonVerification.Started
+            }
+
+            kycResponse.kycStatus == KycStatus.Retry -> {
+                SoraCardCommonVerification.Retry
             }
 
             kycResponse.kycStatus == KycStatus.Rejected -> {

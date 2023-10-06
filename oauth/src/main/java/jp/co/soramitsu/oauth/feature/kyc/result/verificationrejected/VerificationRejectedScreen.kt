@@ -3,11 +3,16 @@ package jp.co.soramitsu.oauth.feature.kyc.result.verificationrejected
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
@@ -36,7 +41,6 @@ import jp.co.soramitsu.ui_core.theme.customTypography
 @Composable
 fun VerificationRejectedScreen(
     viewModel: VerificationRejectedViewModel = hiltViewModel(),
-    additionalDescription: String? = null
 ) {
     BackHandler {
         viewModel.onToolbarNavigation()
@@ -46,7 +50,6 @@ fun VerificationRejectedScreen(
     ) { scrollState ->
         VerificationRejectedContent(
             scrollState = scrollState,
-            additionalDescription = additionalDescription,
             state = viewModel.verificationRejectedScreenState.collectAsStateWithLifecycle().value,
             onTryAgain = viewModel::onTryAgain,
             onTelegramSupport = viewModel::openTelegramSupport,
@@ -57,7 +60,6 @@ fun VerificationRejectedScreen(
 @Composable
 private fun VerificationRejectedContent(
     scrollState: ScrollState,
-    additionalDescription: String?,
     state: VerificationRejectedScreenState,
     onTryAgain: () -> Unit,
     onTelegramSupport: () -> Unit,
@@ -65,80 +67,108 @@ private fun VerificationRejectedContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(scrollState)
-            .padding(top = Dimens.x3, start = Dimens.x3, end = Dimens.x3, bottom = Dimens.x5)
+            .padding(top = Dimens.x3, start = Dimens.x3, end = Dimens.x3, bottom = Dimens.x5),
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = stringResource(id = R.string.verification_rejected_description),
-            style = MaterialTheme.customTypography.paragraphM,
-            color = MaterialTheme.customColors.fgPrimary
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .verticalScroll(scrollState),
+        ) {
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = state.reason
+                    ?: stringResource(id = R.string.verification_rejected_description),
+                style = MaterialTheme.customTypography.paragraphM,
+                color = MaterialTheme.customColors.fgPrimary
+            )
+            state.reasonDetails?.let { details ->
+                Spacer(modifier = Modifier.size(Dimens.x2))
+                details.forEach {
+                    ReasonRow(reason = it)
+                }
+            }
+        }
+
+        Image(
+            painter = painterResource(R.drawable.ic_verification_rejected),
+            contentDescription = null
         )
 
-        if (additionalDescription != null)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
+        ) {
+
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = Dimens.x3),
-                text = additionalDescription,
-                style = MaterialTheme.customTypography.paragraphM,
-                color = MaterialTheme.customColors.fgPrimary
+                text = state.kycAttemptsLeftText.retrieveString(),
+                style = MaterialTheme.customTypography.paragraphMBold,
+                color = MaterialTheme.customColors.fgPrimary,
+                textAlign = TextAlign.Center
             )
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            contentAlignment = Alignment.Center
-        ) {
-            Image(
-                painter = painterResource(R.drawable.ic_verification_rejected),
-                contentDescription = null
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = Dimens.x1_2),
+                text = stringResource(
+                    id = R.string.paid_attempts_available_later,
+                    formatArgs = arrayOf(state.kycAttemptCostInEuros),
+                ),
+                style = MaterialTheme.customTypography.paragraphM,
+                color = MaterialTheme.customColors.fgPrimary,
+                textAlign = TextAlign.Center
+            )
+
+            FilledButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = Dimens.x3),
+                order = Order.SECONDARY,
+                enabled = state.shouldTryAgainButtonBeEnabled,
+                size = Size.Large,
+                text = state.tryAgainText.retrieveString(),
+                onClick = onTryAgain,
+            )
+
+            TonalButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = Dimens.x3),
+                order = Order.SECONDARY,
+                size = Size.Large,
+                text = stringResource(id = R.string.verification_rejected_screen_support_telegram),
+                onClick = onTelegramSupport,
             )
         }
+    }
+}
 
+@Composable
+private fun ReasonRow(reason: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+    ) {
         Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = Dimens.x3),
-            text = state.kycAttemptsLeftText.retrieveString(),
-            style = MaterialTheme.customTypography.paragraphMBold,
-            color = MaterialTheme.customColors.fgPrimary,
-            textAlign = TextAlign.Center
-        )
-
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = Dimens.x1_2),
-            text = stringResource(
-                id = R.string.verification_rejected_screen_attempts_price_disclaimer,
-                formatArgs = arrayOf(state.kycAttemptCostInEuros.toString()),
-            ),
+            modifier = Modifier.wrapContentSize(),
+            text = "•",
             style = MaterialTheme.customTypography.paragraphM,
             color = MaterialTheme.customColors.fgPrimary,
-            textAlign = TextAlign.Center
         )
-
-        FilledButton(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = Dimens.x3),
-            order = Order.SECONDARY,
-            enabled = state.shouldTryAgainButtonBeEnabled,
-            size = Size.Large,
-            text = state.tryAgainText.retrieveString(),
-            onClick = onTryAgain,
-        )
-
-        TonalButton(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = Dimens.x3),
-            order = Order.SECONDARY,
-            size = Size.Large,
-            text = stringResource(id = R.string.verification_rejected_screen_support_telegram),
-            onClick = onTelegramSupport,
+        Spacer(modifier = Modifier.size(Dimens.x1))
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = reason,
+            style = MaterialTheme.customTypography.paragraphM,
+            color = MaterialTheme.customColors.fgPrimary,
         )
     }
 }
@@ -148,12 +178,26 @@ private fun VerificationRejectedContent(
 private fun PreviewApplicationRejected1() {
     VerificationRejectedContent(
         scrollState = rememberScrollState(),
-        additionalDescription = "description",
         state = VerificationRejectedScreenState(
             screenStatus = ScreenStatus.READY_TO_RENDER,
             kycFreeAttemptsCount = 5,
             isFreeAttemptsLeft = true,
             kycAttemptCostInEuros = "3.80",
+            reason = "Video was rejected",
+            reasonDetails = listOf(
+                "The user uploaded screenshot, Why did he do it, Who knows.",
+                "The user uploaded screenshot, Why did he do it, Who knows.",
+//                "The user uploaded screenshot, Why did he do it, Who knows.",
+//                "The user uploaded screenshot, Why did he do it, Who knows.",
+//                "Poor quality",
+//                "Poor quality",
+//                "Poor quality",
+//                "Poor quality",
+//                "Damaged",
+//                "Damaged",
+//                "Damaged",
+                "Damaged",
+            ),
         ),
         onTelegramSupport = {},
         onTryAgain = {},
@@ -165,12 +209,13 @@ private fun PreviewApplicationRejected1() {
 private fun PreviewApplicationRejected2() {
     VerificationRejectedContent(
         scrollState = rememberScrollState(),
-        additionalDescription = "description",
         state = VerificationRejectedScreenState(
             screenStatus = ScreenStatus.READY_TO_RENDER,
             kycFreeAttemptsCount = 0,
             isFreeAttemptsLeft = false,
             kycAttemptCostInEuros = "3.80",
+            reason = null,
+            reasonDetails = null,
         ),
         onTelegramSupport = {},
         onTryAgain = {},

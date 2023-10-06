@@ -3,6 +3,7 @@ package jp.co.soramitsu.oauth.common.domain
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.common.model.KycAttemptsDto
 import jp.co.soramitsu.oauth.common.model.IbanAccountResponseWrapper
+import jp.co.soramitsu.oauth.common.model.KycResponse
 import jp.co.soramitsu.oauth.common.model.XorEuroPrice
 
 interface KycRepository {
@@ -14,6 +15,8 @@ interface KycRepository {
     ): Result<String>
 
     suspend fun getKycLastFinalStatus(accessToken: String, baseUrl: String? = null): Result<SoraCardCommonVerification>
+
+    fun getCachedKycResponse(): Pair<SoraCardCommonVerification, KycResponse>?
 
     suspend fun hasFreeKycAttempt(accessToken: String): Result<Boolean>
 

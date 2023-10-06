@@ -68,6 +68,7 @@
   <string name="login_title">Đăng nhập hoặc đăng ký</string>
   <string name="no_free_kyc_attempts_description">Bạn đã sử dụng nỗ lực miễn phí của mình để vượt qua quy trình KYC.\n\nChúng tôi đề nghị bạn đợi cho đến lần nâng cấp tiếp theo của ứng dụng để tiếp tục với các lần dùng thử trả phí.</string>
   <string name="no_free_kyc_attempts_title">Không còn nỗ lực miễn phí</string>
+  <string name="paid_attempts_available_later">Paid attempts will be available at a later stage</string>
   <string name="payment_widget_unavailable_confirm">Vâng, tôi hiểu</string>
   <string name="payment_widget_unavailable_description">Xin lỗi vì sự bất tiện. \n Chúng tôi đang nỗ lực làm việc để giải quyết vấn đề này. \n Vui lòng thử lại sau.</string>
   <string name="payment_widget_unavailable_message">Tiện ích thanh toán hiện không khả dụng</string>

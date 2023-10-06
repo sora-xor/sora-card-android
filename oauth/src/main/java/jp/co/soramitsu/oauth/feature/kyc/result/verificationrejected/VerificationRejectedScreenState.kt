@@ -9,6 +9,8 @@ data class VerificationRejectedScreenState(
     val kycFreeAttemptsCount: Int,
     val isFreeAttemptsLeft: Boolean,
     val kycAttemptCostInEuros: String,
+    val reason: String?,
+    val reasonDetails: List<String>?,
 ) {
 
     val kycAttemptsLeftText: Text

@@ -58,7 +58,8 @@ internal fun VerifyUserData(
         )
 
         InputText(
-            modifier = Modifier.testTagAsId("VerifyUserInput").fillMaxWidth(),            state = inputTextState,
+            modifier = Modifier.testTagAsId("VerifyUserInput").fillMaxWidth(),
+            state = inputTextState,
             onValueChange = onDataEntered,
             visualTransformation = inputVisualTransformation,
             keyboardOptions = keyboardOptions
@@ -72,7 +73,8 @@ internal fun VerifyUserData(
             loaderSize = Size.Large
         ) { modifier, _ ->
             FilledButton(
-                modifier = modifier.testTagAsId("PrimaryButton"),                order = Order.SECONDARY,
+                modifier = modifier.testTagAsId("PrimaryButton"),
+                order = Order.SECONDARY,
                 size = Size.Large,
                 text = buttonState.timer.takeIf { it != null } ?: buttonState.title.toTitle(),
                 enabled = buttonState.enabled,
