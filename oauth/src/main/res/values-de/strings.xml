@@ -36,6 +36,7 @@
   <string name="details_already_used_free_try">Sie haben Ihren kostenlosen Versuch bereits genutzt</string>
   <string name="details_description">Erhalten Sie ein Euro-IBAN Konto und eine Debitkarte, auf die Sie mit Ihrem SORA Wallet zugreifen können.</string>
   <string name="details_enough_xor_desription">Sie haben genug XOR</string>
+  <string name="details_free_card_issuance_conditions_euro">oder %s € Anmeldegebühr</string>
   <string name="details_get_more_xor">Hole mehr XOR</string>
   <string name="details_issue_card">Karte kostenlos ausstellen</string>
   <string name="details_need_xor_desription" formatted="false">Sie benötigen %s mehr XOR (€%s)</string>

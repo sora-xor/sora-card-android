@@ -36,6 +36,7 @@
   <string name="details_already_used_free_try">Вы уже использовали свою бесплатную попытку</string>
   <string name="details_description">Получите европейский IBAN-счет и дебетовую карту, доступные в вашем кошельке SORA</string>
   <string name="details_enough_xor_desription">У вас достаточно XOR</string>
+  <string name="details_free_card_issuance_conditions_euro">или €%s регистрационный взнос</string>
   <string name="details_get_more_xor">Получить больше XOR</string>
   <string name="details_issue_card">Получение карты бесплатно</string>
   <string name="details_need_xor_desription" formatted="false">Вам нужно еще %s XOR (€ %s )</string>

@@ -36,6 +36,7 @@
   <string name="details_already_used_free_try">Já utilizou a sua tentativa gratuita</string>
   <string name="details_description">Obtenha uma conta Euro IBAN e um cartão de débito acessíveis na sua carteira SORA</string>
   <string name="details_enough_xor_desription">Tem XOR suficiente</string>
+  <string name="details_free_card_issuance_conditions_euro">ou %s € taxa de candidatura</string>
   <string name="details_get_more_xor">Obter mais XOR</string>
   <string name="details_issue_card">Emitir cartão gratuitamente</string>
   <string name="details_need_xor_desription" formatted="false">Precisa de mais %s XOR (€%s)</string>

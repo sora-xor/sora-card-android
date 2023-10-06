@@ -36,6 +36,7 @@
   <string name="details_already_used_free_try">You already used your free try</string>
   <string name="details_description">Get a Euro IBAN account and debit card accessible within your SORA Wallet</string>
   <string name="details_enough_xor_desription">You have enough XOR</string>
+  <string name="details_free_card_issuance_conditions_euro">or €%s application fee</string>
   <string name="details_get_more_xor">Get more XOR</string>
   <string name="details_issue_card">Issue card for free</string>
   <string name="details_need_xor_desription" formatted="false">You need %s more XOR (€%s)</string>
