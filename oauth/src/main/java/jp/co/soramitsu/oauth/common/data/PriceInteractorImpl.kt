@@ -6,13 +6,12 @@ import jp.co.soramitsu.oauth.common.domain.PriceInteractor
 import jp.co.soramitsu.oauth.common.model.EuroLiquiditySufficiency
 import jp.co.soramitsu.oauth.common.model.XorLiquiditySufficiency
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
-import javax.inject.Inject
 
 class PriceInteractorImpl(
     private val userSessionRepository: UserSessionRepository,
     private val inMemoryCache: InMemoryRepo,
     private val kycRepository: KycRepository,
-): PriceInteractor {
+) : PriceInteractor {
 
     override suspend fun calculateXorLiquiditySufficiency(): Result<XorLiquiditySufficiency> {
         val accessToken = userSessionRepository.getAccessToken()
@@ -20,7 +19,7 @@ class PriceInteractorImpl(
         return kycRepository.getCurrentXorEuroPrice(accessToken)
             .map {
                 val xorLiquidityFullPrice =
-                    inMemoryCache.euroLiquidityThreshold.div(it.price)
+                    inMemoryCache.euroLiquidityThreshold.div(it)
 
                 XorLiquiditySufficiency(
                     xorInsufficiency = xorLiquidityFullPrice - inMemoryCache.userAvailableXorAmount,
@@ -35,7 +34,7 @@ class PriceInteractorImpl(
         return kycRepository.getCurrentXorEuroPrice(accessToken)
             .map {
                 val userAvailableEuroAmount =
-                    inMemoryCache.userAvailableXorAmount.times(it.price)
+                    inMemoryCache.userAvailableXorAmount.times(it)
 
                 EuroLiquiditySufficiency(
                     euroInsufficiency = inMemoryCache.euroLiquidityThreshold - userAvailableEuroAmount,

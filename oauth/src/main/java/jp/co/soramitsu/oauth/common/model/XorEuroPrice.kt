@@ -6,9 +6,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class XorEuroPrice(
     @SerialName("pair") val pair: String,
-    @SerialName("price") val price: Double,
+    @SerialName("price") val price: String,
     @SerialName("source") val source: String,
-    @SerialName("update_time") val timeOfUpdate: Int
+    @SerialName("update_time") val timeOfUpdate: Long,
 )
 
 @Serializable

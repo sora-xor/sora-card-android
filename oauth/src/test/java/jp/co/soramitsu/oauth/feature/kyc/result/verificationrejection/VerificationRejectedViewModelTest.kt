@@ -77,7 +77,7 @@ class VerificationRejectedViewModelTest {
 
         xorEuroPrice = XorEuroPrice(
             pair = "test pair",
-            price = 1.0,
+            price = "1.0",
             source = "test source",
             timeOfUpdate = 7
         )
