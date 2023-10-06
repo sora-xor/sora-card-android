@@ -18,6 +18,7 @@ import jp.co.soramitsu.ui_core.component.input.InputTextState
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -111,9 +112,13 @@ class EnterPhoneNumberViewModel @Inject constructor(
         )
     }
 
+    private var requestOtpAttempts: Long = 0
+
     fun onRequestCode() {
         viewModelScope.launch {
             loading(true)
+            delay(1000 * 15 * requestOtpAttempts)
+            requestOtpAttempts++
             pwoAuthClientProxy.signInWithPhoneNumberRequestOtp(
                 phoneNumber = _state.value.inputTextState.value.text.formatForAuth(),
                 callback = requestOtpCallback,

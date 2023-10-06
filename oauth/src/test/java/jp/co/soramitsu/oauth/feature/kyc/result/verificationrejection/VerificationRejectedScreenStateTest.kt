@@ -23,7 +23,9 @@ class VerificationRejectedScreenStateTest {
             screenStatus = ScreenStatus.LOADING,
             kycFreeAttemptsCount = 3,
             kycAttemptCostInEuros = "1.0",
-            isFreeAttemptsLeft = false
+            isFreeAttemptsLeft = false,
+            reason = null,
+            reasonDetails = null,
         ).apply { state = this }
     }
 

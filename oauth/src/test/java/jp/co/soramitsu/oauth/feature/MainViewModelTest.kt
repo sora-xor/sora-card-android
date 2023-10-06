@@ -115,7 +115,7 @@ class MainViewModelTest {
     fun `no free kyc tries EXPECT show kyc requirements unfulfilled flow started`() = runTest {
         every { inMemoryRepo.isEnoughXorAvailable } returns false
         coEvery { kycRepository.hasFreeKycAttempt("accessToken") } returns Result.success(true)
-        setupViewModel(SoraCardCommonVerification.Failed)
+        setupViewModel(SoraCardCommonVerification.Rejected)
         viewModel.onAuthSucceed("accessToken")
         advanceUntilIdle()
         verify { kycRequirementsUnfulfilledFlow.start(any()) }

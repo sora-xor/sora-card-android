@@ -68,6 +68,7 @@
   <string name="login_title">Log in or Sign up</string>
   <string name="no_free_kyc_attempts_description">You have used your free attempt to pass the KYC process.\n\nWe kindly ask you to wait until the next upgrade of the application to proceed with paid attempts.</string>
   <string name="no_free_kyc_attempts_title">No more free attempts</string>
+  <string name="paid_attempts_available_later">Paid attempts will be available at a later stage</string>
   <string name="payment_widget_unavailable_confirm">Yes, I understand</string>
   <string name="payment_widget_unavailable_description">Apologies for the inconvenience.\nWe’re working diligently to resolve this.\nPlease, try again later.</string>
   <string name="payment_widget_unavailable_message">The payment widget is currently unavailable</string>

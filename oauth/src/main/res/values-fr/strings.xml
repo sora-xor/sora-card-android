@@ -68,6 +68,7 @@
   <string name="login_title">S\'identifier ou s\'inscrire</string>
   <string name="no_free_kyc_attempts_description">Vous avez épuisé votre nombre d\'essais gratuits pour l\'opération de KYC.\nNous vous prions d\'attendre la prochaine mise à jour pour continuer avec les essais payants</string>
   <string name="no_free_kyc_attempts_title">Nombre d\'essais gratuits épuisé</string>
+  <string name="paid_attempts_available_later">Paid attempts will be available at a later stage</string>
   <string name="payment_widget_unavailable_confirm">Oui, je comprends</string>
   <string name="payment_widget_unavailable_description">Veuillez nous excuser du désagrément. Nous travaillons actuellement à résoudre le problème. Veuillez réessayer plus tard.</string>
   <string name="payment_widget_unavailable_message">Le widget de paiement est actuellement indisponible</string>

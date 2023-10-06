@@ -26,7 +26,7 @@ class VerificationRejectedViewModel @Inject constructor(
     private val userSessionRepository: UserSessionRepository,
     private val kycRepository: KycRepository,
     private val setActivityResult: SetActivityResult,
-    private val priceInteractor: PriceInteractor
+    private val priceInteractor: PriceInteractor,
 ) : BaseViewModel() {
 
     private val _verificationRejectedScreenState = MutableStateFlow(
@@ -35,6 +35,8 @@ class VerificationRejectedViewModel @Inject constructor(
             kycFreeAttemptsCount = 0,
             isFreeAttemptsLeft = false,
             kycAttemptCostInEuros = "",
+            reason = null,
+            reasonDetails = null,
         )
     )
     val verificationRejectedScreenState = _verificationRejectedScreenState.asStateFlow()
@@ -56,23 +58,27 @@ class VerificationRejectedViewModel @Inject constructor(
     private fun fetchKycAttemptInfo() {
         viewModelScope.launch {
             runCatching {
+                val reasons = kycRepository.getCachedKycResponse()
                 val token = userSessionRepository.getAccessToken()
-
-                val (actualKycAttemptsLeft, isKycAttemptsLeft) = kycRepository.getFreeKycAttemptsInfo(token)
-                    .getOrThrow().run { freeAttemptsCount to freeAttemptAvailable }
-
+                val (actualKycAttemptsLeft, isKycAttemptsLeft) =
+                    kycRepository.getFreeKycAttemptsInfo(token)
+                        .getOrThrow().run { freeAttemptsCount to freeAttemptAvailable }
                 val kycAttemptPrice = priceInteractor.calculateKycAttemptPrice()
 
-                _verificationRejectedScreenState.value = _verificationRejectedScreenState.value.copy(
-                    screenStatus = ScreenStatus.READY_TO_RENDER,
-                    kycFreeAttemptsCount = actualKycAttemptsLeft,
-                    kycAttemptCostInEuros = kycAttemptPrice,
-                    isFreeAttemptsLeft = isKycAttemptsLeft,
-                )
+                _verificationRejectedScreenState.value =
+                    _verificationRejectedScreenState.value.copy(
+                        screenStatus = ScreenStatus.READY_TO_RENDER,
+                        kycFreeAttemptsCount = actualKycAttemptsLeft,
+                        kycAttemptCostInEuros = kycAttemptPrice,
+                        isFreeAttemptsLeft = if (reasons?.first == SoraCardCommonVerification.Retry) true else isKycAttemptsLeft,
+                        reason = reasons?.second?.additionalDescription,
+                        reasonDetails = reasons?.second?.rejectionReasons?.map { it.desc },
+                    )
             }.onFailure {
-                _verificationRejectedScreenState.value = _verificationRejectedScreenState.value.copy(
-                    screenStatus = ScreenStatus.ERROR
-                )
+                _verificationRejectedScreenState.value =
+                    _verificationRejectedScreenState.value.copy(
+                        screenStatus = ScreenStatus.ERROR
+                    )
             }
         }
     }

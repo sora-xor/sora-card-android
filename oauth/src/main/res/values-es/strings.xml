@@ -68,6 +68,7 @@
   <string name="login_title">Iniciar sesión o Registrarse</string>
   <string name="no_free_kyc_attempts_description">Has utilizado tu intento gratuito para pasar el proceso KYC.\n\n Le solicitamos amablemente que espere hasta la próxima actualización de la aplicación para proceder con los intentos pagando</string>
   <string name="no_free_kyc_attempts_title">No quedan más intentos gratuitos</string>
+  <string name="paid_attempts_available_later">Paid attempts will be available at a later stage</string>
   <string name="payment_widget_unavailable_confirm">Sí, entiendo</string>
   <string name="payment_widget_unavailable_description">Disculpe las molestias.\NEstamos trabajando diligentemente para resolverlo.\NPor favor, inténtelo de nuevo más tarde.</string>
   <string name="payment_widget_unavailable_message">El widget de pago no está disponible actualmente</string>

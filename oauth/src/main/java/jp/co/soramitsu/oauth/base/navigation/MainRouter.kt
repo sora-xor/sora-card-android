@@ -38,7 +38,7 @@ interface MainRouter {
 
     fun openVerificationFailed(additionalDescription: String?)
 
-    fun openVerificationRejected(additionalDescription: String?)
+    fun openVerificationRejected()
 
     fun openSupportChat()
 
@@ -153,13 +153,9 @@ class MainRouterImpl : MainRouter {
         }
     }
 
-    override fun openVerificationRejected(additionalDescription: String?) {
+    override fun openVerificationRejected() {
         navHostController?.popBackStack()
         navHostController?.apply {
-            currentBackStackEntry?.arguments?.putString(
-                Argument.ADDITIONAL_DESCRIPTION.arg,
-                additionalDescription
-            )
             navigate(Destination.VERIFICATION_REJECTED.route)
         }
     }

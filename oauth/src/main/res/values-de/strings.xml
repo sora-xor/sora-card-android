@@ -68,6 +68,7 @@
   <string name="login_title">Anmelden oder Registrieren</string>
   <string name="no_free_kyc_attempts_description">Sie haben Ihren kostenlosen Versuch genutzt, um den Identitätsverifizierungs-Prozess zu durchlaufen.\n\n Wir bitten Sie, bis zur nächsten Aktualisierung der Anwendung zu warten, um mit kostenpflichtigen Versuchen fortzufahren.</string>
   <string name="no_free_kyc_attempts_title">Keine Freiversuche mehr</string>
+  <string name="paid_attempts_available_later">Paid attempts will be available at a later stage</string>
   <string name="payment_widget_unavailable_confirm">Ja, ich verstehe</string>
   <string name="payment_widget_unavailable_description">Entschuldigung für die Unannehmlichkeiten. \n Wir arbeiten fleißig daran, dieses Problem zu lösen. \n Bitte versuchen Sie es später noch einmal.</string>
   <string name="payment_widget_unavailable_message">Das Zahlungs-Widget ist derzeit nicht verfügbar</string>

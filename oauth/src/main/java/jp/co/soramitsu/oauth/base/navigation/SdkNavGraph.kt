@@ -110,11 +110,7 @@ internal fun SdkNavGraph(
         }
 
         animatedComposable(Destination.VERIFICATION_REJECTED.route) {
-            VerificationRejectedScreen(
-                additionalDescription = navHostController.previousBackStackEntry
-                    ?.arguments
-                    ?.getString(Argument.ADDITIONAL_DESCRIPTION.arg),
-            )
+            VerificationRejectedScreen()
         }
 
         animatedComposable(Destination.VERIFICATION_IN_PROGRESS.route) {

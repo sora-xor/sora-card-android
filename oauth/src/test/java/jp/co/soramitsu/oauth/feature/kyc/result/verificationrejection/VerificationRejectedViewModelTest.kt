@@ -10,10 +10,12 @@ import io.mockk.runs
 import io.mockk.verify
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
+import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PriceInteractor
 import jp.co.soramitsu.oauth.common.model.KycAttemptsDto
 import jp.co.soramitsu.oauth.common.model.XorEuroPrice
+import jp.co.soramitsu.oauth.common.model.emptyKycResponse
 import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import jp.co.soramitsu.oauth.feature.kyc.result.verificationrejected.VerificationRejectedViewModel
@@ -110,6 +112,7 @@ class VerificationRejectedViewModelTest {
                 totalFreeAttemptsCount = 4,
             )
             coEvery { userSessionRepository.getAccessToken() } returns "Token"
+            every { kycRepository.getCachedKycResponse() } returns (SoraCardCommonVerification.Rejected to emptyKycResponse)
             coEvery { kycRepository.getFreeKycAttemptsInfo(any()) } returns Result.success(
                 kycCountAttemptsAvailable
             )
@@ -130,24 +133,6 @@ class VerificationRejectedViewModelTest {
             verify { mainRouter.openGetPrepared() }
             verify(exactly = 0) { setActivityResult.setResult(any()) }
         }
-
-//    @Test
-//    fun `try again on unavailable attempts EXPECT set activity result navigate to buy xor`() =
-//        runTest {
-//            val viewModel = VerificationRejectedViewModel(
-//                mainRouter = mainRouter,
-//                userSessionRepository = userSessionRepository,
-//                kycRepository = kycRepository,
-//                setActivityResult = setActivityResult,
-//                priceInteractor = priceInteractor
-//            )
-//
-//            viewModel.onTryAgain()
-//            advanceUntilIdle()
-//
-//            verify(setActivityResult).setResult(SoraCardResult.NavigateTo(OutwardsScreen.BUY))
-//            verify(mainRouter, times(0)).openGetPrepared()
-//        }
 
     @Test
     fun `open telegram support EXPECT navigate to support chat`() = runTest {
