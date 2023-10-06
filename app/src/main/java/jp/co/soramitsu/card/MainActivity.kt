@@ -17,7 +17,6 @@ import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardBasicContractData
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardContract
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardContractData
 import jp.co.soramitsu.oauth.clients.ClientsFacade
-import jp.co.soramitsu.oauth.common.model.KycStatus
 import jp.co.soramitsu.oauth.theme.AuthSdkTheme
 import jp.co.soramitsu.ui_core.component.button.FilledButton
 import jp.co.soramitsu.ui_core.component.button.properties.Order
@@ -43,7 +42,7 @@ class MainActivity : ComponentActivity() {
             AuthSdkTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     Column(modifier = Modifier.fillMaxSize()) {
-                        Button(onClick = { startRegistrationFlow(kycStatus = null) }) {
+                        Button(onClick = { startRegistrationFlow() }) {
                             Text("registration")
                         }
 
@@ -65,7 +64,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun startRegistrationFlow(kycStatus: KycStatus? = null) {
+    private fun startRegistrationFlow() {
         registrationLauncher.launch(
             SoraCardContractData(
                 basic = basic(),
@@ -76,6 +75,8 @@ class MainActivity : ComponentActivity() {
                     password = BuildConfig.SORA_CARD_KYC_PASSWORD,
                 ),
                 client = buildClient(),
+//                userAvailableXorAmount = 19.9,
+//                isEnoughXorAvailable = false,
                 userAvailableXorAmount = 19999.9,
                 isEnoughXorAvailable = true,
                 areAttemptsPaidSuccessfully = true,

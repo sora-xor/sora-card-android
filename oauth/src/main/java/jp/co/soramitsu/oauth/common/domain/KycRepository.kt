@@ -22,7 +22,7 @@ interface KycRepository {
 
     suspend fun getFreeKycAttemptsInfo(accessToken: String): Result<KycAttemptsDto>
 
-    suspend fun getCurrentXorEuroPrice(accessToken: String): Result<XorEuroPrice>
+    suspend fun getCurrentXorEuroPrice(accessToken: String): Result<Double>
 
     suspend fun getRetryFee(): String
     suspend fun getApplicationFee(): String

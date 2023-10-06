@@ -14,6 +14,7 @@ import jp.co.soramitsu.oauth.common.model.XorEuroPrice
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.oauth.network.NetworkRequest
 import jp.co.soramitsu.oauth.network.SoraCardNetworkClient
+import jp.co.soramitsu.xnetworking.basic.common.Utils.toDoubleNan
 import java.util.UUID
 
 class KycRepositoryImpl(
@@ -52,12 +53,12 @@ class KycRepositoryImpl(
         accessToken: String,
         baseUrl: String? = null,
     ): Result<KycResponse> = runCatching {
-            apiClient.get(
-                bearerToken = accessToken,
-                url = NetworkRequest.GET_KYC_STATUS.url,
-                baseUrl = baseUrl,
-            ).body<KycResponse>()
-        }
+        apiClient.get(
+            bearerToken = accessToken,
+            url = NetworkRequest.GET_KYC_STATUS.url,
+            baseUrl = baseUrl,
+        ).body<KycResponse>()
+    }
 
     private var cacheKycResponse: Pair<SoraCardCommonVerification, KycResponse>? = null
 
@@ -67,9 +68,14 @@ class KycRepositoryImpl(
         return local
     }
 
-    override suspend fun getKycLastFinalStatus(accessToken: String, baseUrl: String?): Result<SoraCardCommonVerification> {
+    override suspend fun getKycLastFinalStatus(
+        accessToken: String,
+        baseUrl: String?
+    ): Result<SoraCardCommonVerification> {
         userSessionRepository.getKycStatus()?.let {
-            if (it == SoraCardCommonVerification.Successful) return Result.success(SoraCardCommonVerification.Successful)
+            if (it == SoraCardCommonVerification.Successful) return Result.success(
+                SoraCardCommonVerification.Successful
+            )
         }
         return getKycInfo(accessToken, baseUrl).map { kycStatus ->
             mapKycStatus(kycStatus).also {
@@ -109,6 +115,7 @@ class KycRepositoryImpl(
             kycResponse.kycStatus == KycStatus.Rejected -> {
                 SoraCardCommonVerification.Rejected
             }
+
             else -> SoraCardCommonVerification.NotFound
         }
     }
@@ -141,16 +148,19 @@ class KycRepositoryImpl(
 
     private suspend fun getFeesInternal(): Result<Pair<String, String>> =
         runCatching {
-            val dto = apiClient.get(bearerToken = null, url = NetworkRequest.FEES.url).body<FeesDto>()
+            val dto =
+                apiClient.get(bearerToken = null, url = NetworkRequest.FEES.url).body<FeesDto>()
             dto.retryFee to dto.applicationFee
         }
 
-    override suspend fun getCurrentXorEuroPrice(accessToken: String): Result<XorEuroPrice> {
+    override suspend fun getCurrentXorEuroPrice(accessToken: String): Result<Double> {
         return runCatching {
             apiClient.get(
                 accessToken,
                 NetworkRequest.GET_CURRENT_XOR_EURO_PRICE.url
-            ).body()
+            ).body<XorEuroPrice>()
+        }.mapCatching {
+            it.price.toDoubleNan() ?: throw IllegalArgumentException("XOR Euro price failed")
         }
     }
 }
