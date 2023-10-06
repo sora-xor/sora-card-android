@@ -36,6 +36,7 @@
   <string name="details_already_used_free_try">Vous avez déjà utilisé votre essai gratuit</string>
   <string name="details_description">Obtenez un IBAN en compte Euros ainsi qu\'un carte de débit connectés à votre portefeuille SORA</string>
   <string name="details_enough_xor_desription">Vous avez assez de XOR</string>
+  <string name="details_free_card_issuance_conditions_euro">ou %s€ de frais de demande</string>
   <string name="details_get_more_xor">Obtenir plus de XOR</string>
   <string name="details_issue_card">Recevoir la carte gratuitement</string>
   <string name="details_need_xor_desription" formatted="false">Vous avez besoin de %s plus XOR (€%s)</string>

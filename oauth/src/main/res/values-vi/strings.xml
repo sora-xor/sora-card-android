@@ -36,6 +36,7 @@
   <string name="details_already_used_free_try">Bạn đã sử dụng bản dùng thử miễn phí của mình</string>
   <string name="details_description">Nhận tài khoản Euro IBAN và thẻ ghi nợ có thể truy cập trong Ví SORA của bạn</string>
   <string name="details_enough_xor_desription">Bạn có đủ XOR</string>
+  <string name="details_free_card_issuance_conditions_euro">hoặc đăng ký với %s €</string>
   <string name="details_get_more_xor">Nhận thêm XOR</string>
   <string name="details_issue_card">Phát hành thẻ miễn phí</string>
   <string name="details_need_xor_desription" formatted="false">Bạn cần thêm %s XOR (€%s)</string>

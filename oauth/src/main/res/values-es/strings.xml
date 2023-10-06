@@ -36,6 +36,7 @@
   <string name="details_already_used_free_try">Ya ha utilizado su intento gratuito</string>
   <string name="details_description">Consigue una cuenta Euro IBAN y Tarjeta de Débito conectadas a tu billetera SORA</string>
   <string name="details_enough_xor_desription">Tienes suficientes XOR</string>
+  <string name="details_free_card_issuance_conditions_euro">o tarifa de solicitud de %s €</string>
   <string name="details_get_more_xor">Conseguir más XOR</string>
   <string name="details_issue_card">Emitir tarjeta gratuitamente</string>
   <string name="details_need_xor_desription" formatted="false">Necesita %s más XOR (€%s)</string>
