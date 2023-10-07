@@ -48,13 +48,19 @@ class MainActivity : ComponentActivity() {
 
                         FilledButton(size = Size.Large, order = Order.SECONDARY, text = "text") {
                             facade.init(basic(), applicationContext, BuildConfig.SORA_API_BASE_URL)
+//                            MainScope().launch {
+//                                facade.getKycStatus()
+//                                    .onFailure {
+//                                        Log.e("srms", "error ${it.localizedMessage}")
+//                                    }
+//                                    .onSuccess {
+//                                        Log.e("srms", "success $it")
+//                                    }
+//                            }
                             MainScope().launch {
-                                facade.getKycStatus()
-                                    .onFailure {
-                                        Log.e("srms", "error ${it.localizedMessage}")
-                                    }
-                                    .onSuccess {
-                                        Log.e("srms", "success $it")
+                                facade.getApplicationFee()
+                                    .also {
+                                        Log.e("srms", "getApplicationFee $it")
                                     }
                             }
                         }

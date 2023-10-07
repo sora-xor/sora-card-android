@@ -25,5 +25,5 @@ interface KycRepository {
     suspend fun getCurrentXorEuroPrice(accessToken: String): Result<Double>
 
     suspend fun getRetryFee(): String
-    suspend fun getApplicationFee(): String
+    suspend fun getApplicationFee(baseUrl: String? = null): String
 }
