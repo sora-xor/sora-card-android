@@ -36,7 +36,7 @@ class ClientsFacade @Inject constructor(
         pwoAuthClientProxy.init(context, contract.environment, contract.apiKey, contract.domain)
     }
 
-    suspend fun getApplicationFee(): String = kycRepository.getApplicationFee()
+    suspend fun getApplicationFee(): String = kycRepository.getApplicationFee(baseUrl)
 
     suspend fun getKycStatus(): Result<SoraCardCommonVerification> {
         return when (val validity = tokenValidator.checkAccessTokenValidity()) {

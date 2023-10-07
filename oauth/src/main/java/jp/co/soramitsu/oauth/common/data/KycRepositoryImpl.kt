@@ -140,16 +140,17 @@ class KycRepositoryImpl(
             it.first
         } ?: ""
 
-    override suspend fun getApplicationFee(): String =
-        feesCache?.second ?: getFeesInternal().getOrNull()?.let {
+    override suspend fun getApplicationFee(baseUrl: String?): String =
+        feesCache?.second ?: getFeesInternal(baseUrl).getOrNull()?.let {
             feesCache = it
             it.second
         } ?: ""
 
-    private suspend fun getFeesInternal(): Result<Pair<String, String>> =
+    private suspend fun getFeesInternal(baseUrl: String? = null): Result<Pair<String, String>> =
         runCatching {
             val dto =
-                apiClient.get(bearerToken = null, url = NetworkRequest.FEES.url).body<FeesDto>()
+                apiClient.get(bearerToken = null, url = NetworkRequest.FEES.url, baseUrl = baseUrl)
+                    .body<FeesDto>()
             dto.retryFee to dto.applicationFee
         }
 
