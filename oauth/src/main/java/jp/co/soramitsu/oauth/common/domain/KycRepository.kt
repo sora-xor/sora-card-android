@@ -16,7 +16,7 @@ interface KycRepository {
 
     suspend fun getKycLastFinalStatus(accessToken: String, baseUrl: String? = null): Result<SoraCardCommonVerification>
 
-    fun getCachedKycResponse(): Pair<SoraCardCommonVerification, KycResponse>?
+    fun getCachedKycResponse(): Pair<SoraCardCommonVerification, KycResponse?>?
 
     suspend fun hasFreeKycAttempt(accessToken: String): Result<Boolean>
 

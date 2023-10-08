@@ -52,17 +52,17 @@ class KycRepositoryImpl(
     private suspend fun getKycInfo(
         accessToken: String,
         baseUrl: String? = null,
-    ): Result<KycResponse> = runCatching {
+    ): Result<KycResponse?> = runCatching {
         apiClient.get(
             bearerToken = accessToken,
             url = NetworkRequest.GET_KYC_STATUS.url,
             baseUrl = baseUrl,
-        ).body<KycResponse>()
+        ).body<KycResponse?>()
     }
 
-    private var cacheKycResponse: Pair<SoraCardCommonVerification, KycResponse>? = null
+    private var cacheKycResponse: Pair<SoraCardCommonVerification, KycResponse?>? = null
 
-    override fun getCachedKycResponse(): Pair<SoraCardCommonVerification, KycResponse>? {
+    override fun getCachedKycResponse(): Pair<SoraCardCommonVerification, KycResponse?>? {
         val local = cacheKycResponse
         cacheKycResponse = null
         return local
@@ -83,15 +83,17 @@ class KycRepositoryImpl(
                 cacheReference = if (it == SoraCardCommonVerification.Rejected) {
                     ""
                 } else {
-                    kycStatus.userReferenceNumber
+                    kycStatus?.userReferenceNumber.orEmpty()
                 }
                 userSessionRepository.setKycStatus(it)
             }
         }
     }
 
-    private fun mapKycStatus(kycResponse: KycResponse): SoraCardCommonVerification {
+    private fun mapKycStatus(kycResponse: KycResponse?): SoraCardCommonVerification {
         return when {
+            kycResponse == null -> SoraCardCommonVerification.NotFound
+
             (kycResponse.verificationStatus == VerificationStatus.Accepted) -> {
                 SoraCardCommonVerification.Successful
             }

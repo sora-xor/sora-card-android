@@ -234,6 +234,9 @@ class MainViewModel @Inject constructor(
             (kycResponse == SoraCardCommonVerification.Started) -> {
                 checkKycRequirementsFulfilled()
             }
+            (kycResponse == SoraCardCommonVerification.NotFound) -> {
+                checkKycRequirementsFulfilled()
+            }
 
             kycResponse == SoraCardCommonVerification.Failed -> {
                 onKycFailed(statusDescription)
