@@ -118,7 +118,7 @@ class MainViewModelTest {
         setupViewModel(SoraCardCommonVerification.Started)
         viewModel.onAuthSucceed("accessToken")
         advanceUntilIdle()
-        verify { kycRequirementsUnfulfilledFlow.start(any()) }
+        verify { mainRouter.openGetPrepared() }
     }
 
     @Test

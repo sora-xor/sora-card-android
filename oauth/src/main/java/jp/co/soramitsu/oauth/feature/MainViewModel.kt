@@ -232,7 +232,7 @@ class MainViewModel @Inject constructor(
             }
 
             (kycResponse == SoraCardCommonVerification.Started) -> {
-                checkKycRequirementsFulfilled()
+                mainRouter.openGetPrepared()
             }
             (kycResponse == SoraCardCommonVerification.NotFound) -> {
                 checkKycRequirementsFulfilled()
