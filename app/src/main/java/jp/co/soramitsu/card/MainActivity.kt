@@ -17,6 +17,7 @@ import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardBasicContractData
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardContract
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardContractData
 import jp.co.soramitsu.oauth.clients.ClientsFacade
+import jp.co.soramitsu.oauth.feature.flagEmoji
 import jp.co.soramitsu.oauth.theme.AuthSdkTheme
 import jp.co.soramitsu.ui_core.component.button.FilledButton
 import jp.co.soramitsu.ui_core.component.button.properties.Order
@@ -46,6 +47,9 @@ class MainActivity : ComponentActivity() {
                             Text("registration")
                         }
 
+                        Text(text = Locale.getISOCountries().joinToString(";"))
+                        Text(text = Locale("", "gb").displayCountry + "US".flagEmoji())
+
                         FilledButton(size = Size.Large, order = Order.SECONDARY, text = "text") {
                             facade.init(basic(), applicationContext, BuildConfig.SORA_API_BASE_URL)
 //                            MainScope().launch {
@@ -60,7 +64,7 @@ class MainActivity : ComponentActivity() {
                             MainScope().launch {
                                 facade.getApplicationFee()
                                     .also {
-                                        Log.e("srms", "getApplicationFee $it")
+                                        Log.e("srms", "res= $it")
                                     }
                             }
                         }

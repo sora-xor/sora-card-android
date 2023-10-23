@@ -24,6 +24,7 @@ open class BaseViewModel : ViewModel() {
     open fun onToolbarNavigation() = Unit
 
     open fun onToolbarMenuItemSelected(action: Action) = Unit
+    open fun onToolbarSearch(value: String) = Unit
 
     private fun onError(throwable: Throwable) {
         if (throwable is SoramitsuNetworkException) {

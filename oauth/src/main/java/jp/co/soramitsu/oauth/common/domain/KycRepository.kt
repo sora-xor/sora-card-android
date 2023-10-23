@@ -1,6 +1,7 @@
 package jp.co.soramitsu.oauth.common.domain
 
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
+import jp.co.soramitsu.oauth.common.model.CountryDial
 import jp.co.soramitsu.oauth.common.model.KycAttemptsDto
 import jp.co.soramitsu.oauth.common.model.IbanAccountResponseWrapper
 import jp.co.soramitsu.oauth.common.model.KycResponse
@@ -26,4 +27,6 @@ interface KycRepository {
 
     suspend fun getRetryFee(): String
     suspend fun getApplicationFee(baseUrl: String? = null): String
+
+    suspend fun getCountries(baseUrl: String? = null): List<CountryDial>
 }

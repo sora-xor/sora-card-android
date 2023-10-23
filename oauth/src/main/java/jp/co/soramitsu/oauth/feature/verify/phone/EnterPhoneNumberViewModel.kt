@@ -10,7 +10,9 @@ import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.sdk.SoraCardEnvironmentType
+import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
+import jp.co.soramitsu.oauth.feature.telephone.LocaleService
 import jp.co.soramitsu.oauth.feature.verify.formatForAuth
 import jp.co.soramitsu.oauth.feature.verify.model.ButtonState
 import jp.co.soramitsu.oauth.feature.verify.phone.model.EnterPhoneNumberState
@@ -29,6 +31,8 @@ class EnterPhoneNumberViewModel @Inject constructor(
     private val mainRouter: MainRouter,
     inMemoryRepo: InMemoryRepo,
     private val pwoAuthClientProxy: PWOAuthClientProxy,
+    private val localeService: LocaleService,
+    private val kycRepository: KycRepository,
 ) : BaseViewModel() {
 
     companion object {
@@ -38,28 +42,56 @@ class EnterPhoneNumberViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(
         EnterPhoneNumberState(
-            inputTextState = InputTextState(
-                label = if (inMemoryRepo.environment == SoraCardEnvironmentType.TEST) {
-                    "Use +12345678901 in this field"
-                } else {
-                    R.string.enter_phone_number_phone_input_field_label
-                },
+            inputTextStateCode = InputTextState(
+                value = TextFieldValue(""),
+                label = null,
+                descriptionText = null,
+            ),
+            inputTextStateNumber = InputTextState(
+                value = TextFieldValue(""),
+                label = if (inMemoryRepo.environment == SoraCardEnvironmentType.TEST) "Use 12346578 in this field" else R.string.enter_phone_number_phone_input_field_label,
                 descriptionText = R.string.common_no_spam,
             ),
             buttonState = ButtonState(
                 title = R.string.common_send_code,
                 enabled = false,
             ),
+            countryCode = "",
+            countryName = "",
+            countryLoading = true,
         )
     )
     val state = _state.asStateFlow()
+
+    fun setLocale(locale: String?) {
+        viewModelScope.launch {
+            val countries = kycRepository.getCountries()
+            if (countries.isEmpty()) {
+                _state.value = _state.value.copy(
+                    countryLoading = false,
+                )
+            } else {
+                val cur = localeService.code
+                val country = countries.find { it.code.lowercase() == (locale ?: cur).lowercase() }
+                    ?: countries[0]
+                _state.value = _state.value.copy(
+                    countryLoading = false,
+                    countryCode = country.code,
+                    countryName = country.name,
+                    inputTextStateCode = _state.value.inputTextStateCode.copy(
+                        value = TextFieldValue(country.dialCode),
+                    )
+                )
+            }
+        }
+    }
 
     private val requestOtpCallback = object : SignInWithPhoneNumberRequestOtpCallback {
         override fun onError(error: OAuthErrorCode, errorMessage: String?) {
             loading(false)
             getErrorMessage(error)?.let { descriptionText ->
                 _state.value = _state.value.copy(
-                    inputTextState = _state.value.inputTextState.copy(
+                    inputTextStateNumber = _state.value.inputTextStateNumber.copy(
                         error = true,
                         descriptionText = descriptionText
                     )
@@ -80,7 +112,10 @@ class EnterPhoneNumberViewModel @Inject constructor(
 
         override fun onShowOtpInputScreen(otpLength: Int) {
             loading(false)
-            mainRouter.openVerifyPhoneNumber(_state.value.inputTextState.value.text, otpLength)
+            mainRouter.openVerifyPhoneNumber(
+                getPhoneCode() + _state.value.inputTextStateNumber.value.text,
+                otpLength
+            )
         }
     }
 
@@ -96,23 +131,26 @@ class EnterPhoneNumberViewModel @Inject constructor(
     }
 
     fun onPhoneChanged(value: TextFieldValue) {
-        if (value.text.length > PHONE_NUMBER_LENGTH_MAX) {
+        if (getPhoneCode().length + value.text.length > PHONE_NUMBER_LENGTH_MAX) {
             return
         }
 
         val numbers = value.copy(text = value.text.filter { it.isDigit() })
 
         _state.value = _state.value.copy(
-            inputTextState = _state.value.inputTextState.copy(
+            inputTextStateNumber = _state.value.inputTextStateNumber.copy(
                 value = numbers,
                 error = false,
-                descriptionText = R.string.common_no_spam,
             ),
-            buttonState = _state.value.buttonState.copy(enabled = numbers.text.isNotEmpty() && numbers.text.length >= PHONE_NUMBER_LENGTH_MIN)
+            buttonState = _state.value.buttonState.copy(enabled = numbers.text.isNotEmpty() && getPhoneCode().length + numbers.text.length >= PHONE_NUMBER_LENGTH_MIN)
         )
     }
 
     private var requestOtpAttempts: Long = 0
+
+    fun onSelectCountry() {
+        mainRouter.openCountryList()
+    }
 
     fun onRequestCode() {
         viewModelScope.launch {
@@ -120,11 +158,13 @@ class EnterPhoneNumberViewModel @Inject constructor(
             delay(1000 * 15 * requestOtpAttempts)
             requestOtpAttempts++
             pwoAuthClientProxy.signInWithPhoneNumberRequestOtp(
-                phoneNumber = _state.value.inputTextState.value.text.formatForAuth(),
+                phoneNumber = (getPhoneCode() + _state.value.inputTextStateNumber.value.text).formatForAuth(),
                 callback = requestOtpCallback,
             )
         }
     }
+
+    private fun getPhoneCode() = _state.value.inputTextStateCode.value.text.substring(1)
 
     private fun loading(loading: Boolean) {
         _state.value = _state.value.copy(

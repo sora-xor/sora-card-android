@@ -14,7 +14,8 @@ enum class NetworkRequest(val url: String) {
     GET_KYC_FREE_ATTEMPT_INFO("kyc-attempt-count"),
     GET_CURRENT_XOR_EURO_PRICE("prices/xor_euro"),
     GET_IBAN_DESC("ibans"),
-    FEES("fees")
+    FEES("fees"),
+    COUNTRY_CODES("country-codes"),
 }
 
 @Module

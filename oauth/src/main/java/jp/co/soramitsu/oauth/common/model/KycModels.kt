@@ -3,6 +3,12 @@ package jp.co.soramitsu.oauth.common.model
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+data class CountryDial(
+    val code: String,
+    val name: String,
+    val dialCode: String,
+)
+
 enum class KycStatus {
 
     Started,

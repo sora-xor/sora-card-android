@@ -16,3 +16,9 @@ data class FeesDto(
     @SerialName("application_fee") val applicationFee: String,
     @SerialName("retry_fee") val retryFee: String,
 )
+
+@Serializable
+data class CountryCodeDto(
+    @SerialName("name") val countryName: String,
+    @SerialName("dial_code") val dialCode: String,
+)

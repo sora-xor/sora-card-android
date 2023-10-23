@@ -3,6 +3,9 @@
   <string name="cant_fetch_data">No se pueden obtener datos</string>
   <string name="cant_fetch_refresh">No se pueden obtener datos, pulse para actualizar.</string>
   <string name="card_attention_text">Atención</string>
+  <string name="card_hub_update_button">Update now</string>
+  <string name="card_hub_update_description">You are using an outdated version of the app, some part might not be working as intended.</string>
+  <string name="card_hub_update_title">Update app to latest version</string>
   <string name="card_issuance_screen_free_card_description">Para emitir una tarjeta GRATIS:\n Mantenga, haga staking o proporcione liquidez por al menos € %s por valor de XOR en su cuenta SORA</string>
   <string name="card_issuance_screen_free_card_get_xor">Comprar %s XOR</string>
   <string name="card_issuance_screen_free_card_title">Emisión gratuita de la tarjeta</string>
@@ -10,6 +13,8 @@
   <string name="card_issuance_screen_paid_card_pay_euro">Pagar € %s de comisión de emisión</string>
   <string name="card_issuance_screen_paid_card_title">€%s tasa de emisión</string>
   <string name="card_issuance_screen_title">Emisión de tarjeta</string>
+  <string name="card_update_button">Update app</string>
+  <string name="card_update_title">Update app to latest version to access SORA Card</string>
   <string name="cardhub_coming_soon">La Gestión de la Tarjeta llegará pronto</string>
   <string name="cardhub_exchange">Intercambiar</string>
   <string name="cardhub_freeze">Congelar tarjeta</string>
@@ -63,6 +68,7 @@
   <string name="get_prepared_take_selfie_description">Se facilitará la guía durante el proceso</string>
   <string name="get_prepared_take_selfie_title">Hazte un selfie</string>
   <string name="get_prepared_title">Prepárate</string>
+  <string name="iban_pending_description">Your IBAN issuance is pending.\nIn case the wait longer than 72h contact us via techsupport@soracard.com</string>
   <string name="kyc_result_verification_in_progress">Verificación en progreso</string>
   <string name="kyc_result_verification_in_progress_description">Ha completado exitosamente su solicitud de KYC. La revisión está pendiente y puedes esperar una decisión en breve. \n\nHabitualmente la decisión se toma el mismo día y en algunos casos puede tardar hasta 3 días.</string>
   <string name="log_out">Cerrar sesión</string>
@@ -74,6 +80,7 @@
   <string name="payment_widget_unavailable_description">Disculpe las molestias.\NEstamos trabajando diligentemente para resolverlo.\NPor favor, inténtelo de nuevo más tarde.</string>
   <string name="payment_widget_unavailable_message">El widget de pago no está disponible actualmente</string>
   <string name="payment_widget_unavailable_title">Widget no disponible</string>
+  <string name="select_your_country">Select your country</string>
   <string name="terms_and_conditions_accept_and_continue">Aceptar y Continuar</string>
   <string name="terms_and_conditions_confirm_description">Al continuar confirma que ha leído, entendido y aceptado estas políticas</string>
   <string name="terms_and_conditions_description">Queremos que sepas exactamente como trabajan los servicios de la Tarjeta SORA, quién y por qué necesita tus detalles. Revisar estas políticas te ayudará a continuar usando la App con tranquilidad absoluta.</string>

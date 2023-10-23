@@ -10,7 +10,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -35,6 +37,7 @@ internal fun VerifyUserData(
     buttonState: ButtonState,
     inputVisualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    focusRequester: FocusRequester = remember { FocusRequester() },
     onDataEntered: (TextFieldValue) -> Unit,
     onConfirm: () -> Unit
 ) {
@@ -60,6 +63,7 @@ internal fun VerifyUserData(
         InputText(
             modifier = Modifier.testTagAsId("VerifyUserInput").fillMaxWidth(),
             state = inputTextState,
+            focusRequester = focusRequester,
             onValueChange = onDataEntered,
             visualTransformation = inputVisualTransformation,
             keyboardOptions = keyboardOptions
