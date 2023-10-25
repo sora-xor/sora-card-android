@@ -62,7 +62,7 @@ class MainActivity : ComponentActivity() {
 //                                    }
 //                            }
                             MainScope().launch {
-                                facade.getApplicationFee()
+                                facade.getSoraSupportVersion()
                                     .also {
                                         Log.e("srms", "res= $it")
                                     }
