@@ -16,6 +16,7 @@ enum class NetworkRequest(val url: String) {
     GET_IBAN_DESC("ibans"),
     FEES("fees"),
     COUNTRY_CODES("country-codes"),
+    VERSION("version"),
 }
 
 @Module

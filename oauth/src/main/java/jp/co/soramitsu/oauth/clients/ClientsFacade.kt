@@ -41,6 +41,18 @@ class ClientsFacade @Inject constructor(
 
     suspend fun getApplicationFee(): String = kycRepository.getApplicationFee(baseUrl)
 
+    suspend fun getFearlessSupportVersion() = getSupportVersion().map { it.fearless }
+
+    suspend fun getSoraSupportVersion() = getSupportVersion().map { it.sora }
+
+    private suspend fun getSupportVersion() = runCatching {
+        apiClient.get(
+            null,
+            NetworkRequest.VERSION.url,
+            baseUrl,
+        ).body<VersionsDto>()
+    }
+
     suspend fun getKycStatus(): Result<SoraCardCommonVerification> {
         return when (val validity = tokenValidator.checkAccessTokenValidity()) {
             is AccessTokenResponse.Token -> {
