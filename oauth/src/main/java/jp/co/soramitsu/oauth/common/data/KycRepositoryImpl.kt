@@ -3,6 +3,8 @@ package jp.co.soramitsu.oauth.common.data
 import io.ktor.client.call.body
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.common.domain.KycRepository
+import jp.co.soramitsu.oauth.common.model.CountryCodeDto
+import jp.co.soramitsu.oauth.common.model.CountryDial
 import jp.co.soramitsu.oauth.common.model.FeesDto
 import jp.co.soramitsu.oauth.common.model.GetReferenceNumberRequest
 import jp.co.soramitsu.oauth.common.model.GetReferenceNumberResponse
@@ -15,6 +17,7 @@ import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.oauth.network.NetworkRequest
 import jp.co.soramitsu.oauth.network.SoraCardNetworkClient
 import jp.co.soramitsu.xnetworking.basic.common.Utils.toDoubleNan
+import kotlinx.serialization.json.Json
 import java.util.UUID
 
 class KycRepositoryImpl(
@@ -166,4 +169,24 @@ class KycRepositoryImpl(
             it.price.toDoubleNan() ?: throw IllegalArgumentException("XOR Euro price failed")
         }
     }
+
+    private val countriesCache = mutableListOf<CountryDial>()
+
+    override suspend fun getCountries(baseUrl: String?): List<CountryDial> =
+        countriesCache.takeIf { it.isNotEmpty() } ?: getCountriesInternal(baseUrl).also {
+            countriesCache.clear()
+            countriesCache.addAll(it)
+        }
+
+    private suspend fun getCountriesInternal(baseUrl: String?) =
+        runCatching {
+            val response = apiClient.get(
+                bearerToken = null,
+                url = NetworkRequest.COUNTRY_CODES.url,
+                baseUrl = baseUrl,
+            ).body<String>()
+            Json.decodeFromString<Map<String, CountryCodeDto>>(response).map {
+                CountryDial(it.key, it.value.countryName, it.value.dialCode)
+            }
+        }.getOrDefault(emptyList())
 }

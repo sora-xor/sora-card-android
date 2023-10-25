@@ -13,8 +13,11 @@ import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.sdk.SoraCardEnvironmentType
+import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
+import jp.co.soramitsu.oauth.common.model.CountryDial
 import jp.co.soramitsu.oauth.domain.MainCoroutineRule
+import jp.co.soramitsu.oauth.feature.telephone.LocaleService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -47,6 +50,10 @@ class EnterPhoneNumberViewModelTest {
 
     @MockK
     private lateinit var inMemoryRepo: InMemoryRepo
+    @MockK
+    private lateinit var localeService: LocaleService
+    @MockK
+    private lateinit var kycRepository: KycRepository
 
     private lateinit var viewModel: EnterPhoneNumberViewModel
 
@@ -55,10 +62,14 @@ class EnterPhoneNumberViewModelTest {
         every { inMemoryRepo.environment } returns SoraCardEnvironmentType.PRODUCTION
         coEvery { pwoAuthClientProxy.signInWithPhoneNumberRequestOtp(any(), any(), any()) } just runs
         every { mainRouter.back() } just runs
+        every { localeService.code } returns "US"
+        coEvery { kycRepository.getCountries(null) } returns listOf(CountryDial("US", "USA", "+1"))
         viewModel = EnterPhoneNumberViewModel(
             mainRouter,
             inMemoryRepo,
             pwoAuthClientProxy,
+            localeService,
+            kycRepository,
         )
     }
 
@@ -69,8 +80,8 @@ class EnterPhoneNumberViewModelTest {
 
     @Test
     fun `init EXPECT set up input field state`() {
-        assertEquals(R.string.enter_phone_number_phone_input_field_label, viewModel.state.value.inputTextState.label)
-        assertEquals(R.string.common_no_spam, viewModel.state.value.inputTextState.descriptionText)
+        assertEquals(R.string.enter_phone_number_phone_input_field_label, viewModel.state.value.inputTextStateNumber.label)
+        assertEquals(R.string.common_no_spam, viewModel.state.value.inputTextStateNumber.descriptionText)
     }
 
     @Test
@@ -80,46 +91,64 @@ class EnterPhoneNumberViewModelTest {
     }
 
     @Test
-    fun `phone length is bigger than max length EXPECT no state change`() {
+    fun `phone length is bigger than max length EXPECT no state change`() = runTest {
+        advanceUntilIdle()
+        viewModel.setLocale(null)
+        advanceUntilIdle()
         viewModel.onPhoneChanged(TextFieldValue("333333"))
         viewModel.onPhoneChanged(TextFieldValue("3333333333333333333"))
 
-        assertEquals("333333", viewModel.state.value.inputTextState.value.text)
+        assertEquals("333333", viewModel.state.value.inputTextStateNumber.value.text)
+        assertEquals("+1", viewModel.state.value.inputTextStateCode.value.text)
     }
 
     @Test
-    fun `phone comprises non digit symbols EXPECT filter phone`() {
+    fun `phone comprises non digit symbols EXPECT filter phone`() = runTest {
+        advanceUntilIdle()
+        viewModel.setLocale(null)
+        advanceUntilIdle()
         viewModel.onPhoneChanged(TextFieldValue("3333%33@"))
 
-        assertEquals("333333", viewModel.state.value.inputTextState.value.text)
+        assertEquals("333333", viewModel.state.value.inputTextStateNumber.value.text)
     }
 
     @Test
-    fun `phone changed EXPECT input state value updated`() {
+    fun `phone changed EXPECT input state value updated`() = runTest {
+        advanceUntilIdle()
+        viewModel.setLocale(null)
+        advanceUntilIdle()
+        viewModel.onPhoneChanged(TextFieldValue("333333"))
+        assertEquals("333333", viewModel.state.value.inputTextStateNumber.value.text)
+    }
+
+    @Test
+    fun `phone changed EXPECT error state is false`() = runTest {
+        advanceUntilIdle()
+        viewModel.setLocale(null)
+        advanceUntilIdle()
         viewModel.onPhoneChanged(TextFieldValue("333333"))
 
-        assertEquals("333333", viewModel.state.value.inputTextState.value.text)
+        assertFalse(viewModel.state.value.inputTextStateCode.error)
     }
 
     @Test
-    fun `phone changed EXPECT error state is false`() {
-        viewModel.onPhoneChanged(TextFieldValue("333333"))
-
-        assertFalse(viewModel.state.value.inputTextState.error)
-    }
-
-    @Test
-    fun `phone changed EXPECT description text is default`() {
+    fun `phone changed EXPECT description text is default`() = runTest {
+        advanceUntilIdle()
+        viewModel.setLocale(null)
+        advanceUntilIdle()
         viewModel.onPhoneChanged(TextFieldValue("333333"))
 
         assertEquals(
             R.string.common_no_spam,
-            viewModel.state.value.inputTextState.descriptionText
+            viewModel.state.value.inputTextStateNumber.descriptionText
         )
     }
 
     @Test
-    fun `phone changed EXPECT confirm button is enabled`() {
+    fun `phone changed EXPECT confirm button is enabled`() = runTest {
+        advanceUntilIdle()
+        viewModel.setLocale(null)
+        advanceUntilIdle()
         viewModel.onPhoneChanged(TextFieldValue("333333"))
 
         assertFalse(viewModel.state.value.buttonState.enabled)
@@ -127,6 +156,9 @@ class EnterPhoneNumberViewModelTest {
 
     @Test
     fun `request code EXPECT loading is true`() = runTest {
+        advanceUntilIdle()
+        viewModel.setLocale(null)
+        advanceUntilIdle()
         viewModel.onRequestCode()
         advanceUntilIdle()
 

@@ -3,6 +3,9 @@
   <string name="cant_fetch_data">Не удается получить данные</string>
   <string name="cant_fetch_refresh">Не удается получить данные, нажмите, чтобы обновить.</string>
   <string name="card_attention_text">Внимание</string>
+  <string name="card_hub_update_button">Обновите сейчас</string>
+  <string name="card_hub_update_description">Вы используете устаревшую версию приложения, некоторые части могут работать не так, как задумано.</string>
+  <string name="card_hub_update_title">Обновите приложение до последней версии</string>
   <string name="card_issuance_screen_free_card_description">Чтобы выпустить карту БЕСПЛАТНО: \nХраните, стейкайте или предоставляйте ликвидность XOR на сумму не менее €%s на своем счете SORA</string>
   <string name="card_issuance_screen_free_card_get_xor">Получить %s XOR</string>
   <string name="card_issuance_screen_free_card_title">Бесплатный выпуск карты</string>
@@ -10,6 +13,8 @@
   <string name="card_issuance_screen_paid_card_pay_euro">Оплатить €%s комиссию за выпуск</string>
   <string name="card_issuance_screen_paid_card_title">€%s комиссия за выпуск</string>
   <string name="card_issuance_screen_title">Выпуск карты</string>
+  <string name="card_update_button">Обновите приложение</string>
+  <string name="card_update_title">Обновите приложение до последней версии, чтобы получить доступ к SORA Card</string>
   <string name="cardhub_coming_soon">Управление картами скоро появится</string>
   <string name="cardhub_exchange">Обмен</string>
   <string name="cardhub_freeze">Заморозить</string>
@@ -63,6 +68,7 @@
   <string name="get_prepared_take_selfie_description">Руководство будет предоставлено в ходе процесса</string>
   <string name="get_prepared_take_selfie_title">Сделайте селфи</string>
   <string name="get_prepared_title">Подготовьтесь</string>
+  <string name="iban_pending_description">Выдача вашего IBAN ожидается.\nВ случае ожидания более 72 часов свяжитесь с нами по адресу techsupport@soracard.com.</string>
   <string name="kyc_result_verification_in_progress">Выполняется проверка</string>
   <string name="kyc_result_verification_in_progress_description">Вы успешно завершили подачу заявки на KYC. Решение на стадии рассмотрения, и вы можете ожидать его в ближайшее время.\n\nОбычно решение принимается в тот же день, но в некоторых случаях может потребоваться до 3 дней.</string>
   <string name="log_out">Выйти</string>
@@ -74,6 +80,7 @@
   <string name="payment_widget_unavailable_description">Приносим извинения за неудобства. Мы прилагаем все усилия для решения данной проблемы. Пожалуйста, повторите попытку позже.</string>
   <string name="payment_widget_unavailable_message">Виджет оплаты в настоящее время недоступен</string>
   <string name="payment_widget_unavailable_title">Виджет недоступен</string>
+  <string name="select_your_country">Выберите свою страну</string>
   <string name="terms_and_conditions_accept_and_continue">Принять и продолжить</string>
   <string name="terms_and_conditions_confirm_description">Продолжая, вы подтверждаете, что прочитали, поняли и приняли эти правила</string>
   <string name="terms_and_conditions_description">Мы хотим, чтобы вы знали, как именно будет работать сервис SORA Card, кому нужны ваши данные и для чего. Ознакомление с этими правилами поможет вам использовать приложение с уверенностью и спокойствием.</string>

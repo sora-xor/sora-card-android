@@ -6,6 +6,7 @@ enum class Destination(val route: String) {
     GET_PREPARED("oauth/getPrepared"),
     ENTER_PHONE_NUMBER("oauth/enterPhoneNumber"),
     VERIFY_PHONE_NUMBER("oauth/verifyPhoneNumber"),
+    SELECT_COUNTRY("oauth/selectCountry"),
     REGISTER_USER("oauth/registerUser"),
     ENTER_EMAIL("oauth/enterEmail"),
     VERIFY_EMAIL("oauth/verifyEmail"),
@@ -17,6 +18,7 @@ enum class Destination(val route: String) {
     VERIFICATION_SUCCESSFUL("oauth/verificationSuccessful"),
 }
 
+const val COUNTRY_CODE = "country_code"
 
 enum class Argument(val arg: String) {
 

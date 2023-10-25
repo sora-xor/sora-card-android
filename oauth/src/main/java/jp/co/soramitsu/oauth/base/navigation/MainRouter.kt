@@ -20,6 +20,9 @@ interface MainRouter {
 
     fun openEnterPhoneNumber(clearStack: Boolean = false)
 
+    fun openCountryList()
+    fun backWithCountry(code: String)
+
     fun openVerifyPhoneNumber(phoneNumber: String, otpLength: Int)
 
     fun openRegisterUser()
@@ -85,6 +88,15 @@ class MainRouterImpl : MainRouter {
         navHostController?.navigate(Destination.GET_PREPARED.route) {
             popUpTo(Destination.ENTER_PHONE_NUMBER.route)
         }
+    }
+
+    override fun openCountryList() {
+        navHostController?.navigate(Destination.SELECT_COUNTRY.route)
+    }
+
+    override fun backWithCountry(code: String) {
+        navHostController?.previousBackStackEntry?.savedStateHandle?.set(COUNTRY_CODE, code)
+        navHostController?.popBackStack()
     }
 
     override fun openEnterPhoneNumber(clearStack: Boolean) {

@@ -2,6 +2,7 @@ package jp.co.soramitsu.oauth.base.navigation
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -11,8 +12,8 @@ import jp.co.soramitsu.oauth.common.navigation.flow.api.destinations.KycRequirem
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.cardissuance.CardIssuanceScreen
 import jp.co.soramitsu.oauth.feature.change.email.ChangeEmailScreen
-import jp.co.soramitsu.oauth.feature.getprepared.GetPreparedScreen
 import jp.co.soramitsu.oauth.feature.getmorexor.ChooseXorPurchaseMethodDialog
+import jp.co.soramitsu.oauth.feature.getprepared.GetPreparedScreen
 import jp.co.soramitsu.oauth.feature.kyc.result.VerificationFailedScreen
 import jp.co.soramitsu.oauth.feature.kyc.result.VerificationInProgressScreen
 import jp.co.soramitsu.oauth.feature.kyc.result.VerificationSuccessfulScreen
@@ -22,6 +23,7 @@ import jp.co.soramitsu.oauth.feature.terms.and.conditions.TermsAndConditionsScre
 import jp.co.soramitsu.oauth.feature.terms.and.conditions.WebPageScreen
 import jp.co.soramitsu.oauth.feature.verify.email.EnterEmailScreen
 import jp.co.soramitsu.oauth.feature.verify.email.VerifyEmailScreen
+import jp.co.soramitsu.oauth.feature.verify.phone.CountryListScreen
 import jp.co.soramitsu.oauth.feature.verify.phone.EnterPhoneNumberScreen
 import jp.co.soramitsu.oauth.feature.verify.phone.VerifyPhoneNumberScreen
 
@@ -42,7 +44,12 @@ internal fun SdkNavGraph(
         }
 
         animatedComposable(Destination.ENTER_PHONE_NUMBER.route) {
-            EnterPhoneNumberScreen()
+            val code = it.savedStateHandle.getLiveData<String>(COUNTRY_CODE).observeAsState()
+            EnterPhoneNumberScreen(code.value)
+        }
+
+        animatedComposable(Destination.SELECT_COUNTRY.route) {
+            CountryListScreen()
         }
 
         animatedComposable(

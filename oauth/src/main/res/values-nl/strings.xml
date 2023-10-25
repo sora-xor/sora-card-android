@@ -3,6 +3,9 @@
   <string name="cant_fetch_data">Kan gegevens niet ophalen</string>
   <string name="cant_fetch_refresh">Kan geen gegevens ophalen, tik om te vernieuwen.</string>
   <string name="card_attention_text">Aandacht</string>
+  <string name="card_hub_update_button">Update now</string>
+  <string name="card_hub_update_description">You are using an outdated version of the app, some part might not be working as intended.</string>
+  <string name="card_hub_update_title">Update app to latest version</string>
   <string name="card_issuance_screen_free_card_description">GRATIS een kaart uitgeven: \nHoud, stake of verschaf liquiditeit voor ten minste €%s aan XOR in uw SORA-account.</string>
   <string name="card_issuance_screen_free_card_get_xor">Krijg %s XOR</string>
   <string name="card_issuance_screen_free_card_title">Gratis kaartuitgifte</string>
@@ -10,6 +13,8 @@
   <string name="card_issuance_screen_paid_card_pay_euro">Betaal €%s uitgiftekosten</string>
   <string name="card_issuance_screen_paid_card_title">€%s uitgiftekosten</string>
   <string name="card_issuance_screen_title">Kaartuitgifte</string>
+  <string name="card_update_button">Update app</string>
+  <string name="card_update_title">Update app to latest version to access SORA Card</string>
   <string name="cardhub_coming_soon">Kaartbeheer komt binnenkort</string>
   <string name="cardhub_exchange">Aandelenbeurs</string>
   <string name="cardhub_freeze">Bevriezen</string>
@@ -63,6 +68,7 @@
   <string name="get_prepared_take_selfie_description">Tijdens het proces wordt begeleiding verstrekt</string>
   <string name="get_prepared_take_selfie_title">Neem een selfie</string>
   <string name="get_prepared_title">Bereid je voor.</string>
+  <string name="iban_pending_description">Your IBAN issuance is pending.\nIn case the wait longer than 72h contact us via techsupport@soracard.com</string>
   <string name="kyc_result_verification_in_progress">Verificatie is gaande</string>
   <string name="kyc_result_verification_in_progress_description">U heeft uw KYC-aanvraag succesvol afgerond. De beoordeling is in behandeling en u kunt binnenkort een beslissing verwachten. \n \n Meestal wordt de beslissing dezelfde dag genomen, en in sommige gevallen kan dit tot 3 dagen duren.</string>
   <string name="log_out">Uitloggen</string>
@@ -74,6 +80,7 @@
   <string name="payment_widget_unavailable_description">Excuses voor het ongemak. We werken er hard aan om dit op te lossen. Probeer het later opnieuw.</string>
   <string name="payment_widget_unavailable_message">De betalingswidget is momenteel niet beschikbaar</string>
   <string name="payment_widget_unavailable_title">Widget niet beschikbaar</string>
+  <string name="select_your_country">Select your country</string>
   <string name="terms_and_conditions_accept_and_continue">Accepteren en doorgaan</string>
   <string name="terms_and_conditions_confirm_description">Door verder te gaan, bevestigt u dat u dit beleid hebt gelezen en accepteert</string>
   <string name="terms_and_conditions_description">Wij willen dat u precies weet hoe de SORA Card diensten werken en wie uw gegevens nodig heeft, en waarom ze die nodig hebben. Als u dit beleid doorneemt, kunt u de app met een gerust hart blijven gebruiken.</string>

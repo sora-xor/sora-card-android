@@ -101,18 +101,18 @@ class VerifyPhoneNumberViewModelTest {
 
     @Test
     fun `init EXPECT set up input filed state`() {
-        assertEquals(R.string.verify_phone_number_code_input_field_label, viewModel.state.inputTextState.label)
+        assertEquals(R.string.verify_phone_number_code_input_field_label, viewModel.state.value.inputTextState.label)
     }
 
     @Test
     fun `init EXPECT set up button state`() {
-        assertEquals(R.string.common_resend_code, viewModel.state.buttonState.title)
-        assertFalse(viewModel.state.buttonState.enabled)
+        assertEquals(R.string.common_resend_code, viewModel.state.value.buttonState.title)
+        assertFalse(viewModel.state.value.buttonState.enabled)
     }
 
     @Test
     fun `init viewModel EXPECT resend code button is disabled`() {
-        assertFalse(viewModel.state.buttonState.enabled)
+        assertFalse(viewModel.state.value.buttonState.enabled)
     }
 
     @Test
@@ -120,7 +120,7 @@ class VerifyPhoneNumberViewModelTest {
         viewModel.onCodeChanged(TextFieldValue("123456"))
         viewModel.onCodeChanged(TextFieldValue("1234567"))
 
-        assertEquals("123456", viewModel.state.inputTextState.value.text)
+        assertEquals("123456", viewModel.state.value.inputTextState.value.text)
     }
 
     @Test
@@ -128,21 +128,21 @@ class VerifyPhoneNumberViewModelTest {
         viewModel.onCodeChanged(TextFieldValue("123456"))
         advanceUntilIdle()
 
-        assertTrue(viewModel.state.buttonState.loading)
+        assertTrue(viewModel.state.value.buttonState.loading)
     }
 
     @Test
     fun `code changed EXPECT input error state is false`() {
         viewModel.onCodeChanged(TextFieldValue("1236"))
 
-        assertFalse(viewModel.state.inputTextState.error)
+        assertFalse(viewModel.state.value.inputTextState.error)
     }
 
     @Test
     fun `code changed EXPECT description text is empty`() {
         viewModel.onCodeChanged(TextFieldValue("1236"))
 
-        assertEquals("", viewModel.state.inputTextState.descriptionText)
+        assertEquals("", viewModel.state.value.inputTextState.descriptionText)
     }
 
     @Test
@@ -150,7 +150,7 @@ class VerifyPhoneNumberViewModelTest {
         viewModel.resendOtp()
         advanceUntilIdle()
 
-        assertTrue(viewModel.state.buttonState.loading)
+        assertTrue(viewModel.state.value.buttonState.loading)
     }
 
     @Test
