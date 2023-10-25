@@ -25,6 +25,9 @@ class ClientsFacade @Inject constructor(
     private val tokenValidator: AccessTokenValidator,
     private val pwoAuthClientProxy: PWOAuthClientProxy,
 ) {
+    companion object {
+        const val techSupport = "techsupport@soracard.com"
+    }
     private var baseUrl: String? = null
 
     suspend fun logout() {
