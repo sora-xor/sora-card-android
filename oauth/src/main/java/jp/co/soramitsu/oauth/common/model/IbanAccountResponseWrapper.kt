@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class IbanAccountResponseWrapper(
     @SerialName("ReferenceID") val referenceID: String,
     @SerialName("CallerReferenceID") val callerReferenceID: String,
-    @SerialName("IBANs") val ibans: List<IbanAccountResponse>,
+    @SerialName("IBANs") val ibans: List<IbanAccountResponse>?,
     @SerialName("StatusCode") val statusCode: Int,
     @SerialName("StatusDescription") val statusDescription: String
 )
