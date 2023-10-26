@@ -67,6 +67,6 @@ class CountryListViewModel @Inject constructor(
     }
 
     fun onSelect(index: Int) {
-        mainRouter.backWithCountry(all[index].code)
+        mainRouter.backWithCountry(_state.value.list[index].code)
     }
 }
