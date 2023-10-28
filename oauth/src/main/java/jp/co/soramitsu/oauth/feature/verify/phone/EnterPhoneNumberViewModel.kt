@@ -131,6 +131,7 @@ class EnterPhoneNumberViewModel @Inject constructor(
     }
 
     fun onPhoneChanged(value: TextFieldValue) {
+        if (value.text.getOrNull(0)?.let { it == '0' } == true) return
         if (getPhoneCode().length + value.text.length > PHONE_NUMBER_LENGTH_MAX) {
             return
         }
