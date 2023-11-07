@@ -19,7 +19,7 @@ class GetMoreXorViewModel @Inject constructor(
 
     val choosePurchaseXorMethodState by mutableStateOf(
         ChooseXorPurchaseMethodState(
-            xorPurchaseMethods = XorPurchaseMethod.values().toList(),
+            xorPurchaseMethods = XorPurchaseMethod.entries,
         )
     )
 
