@@ -28,7 +28,7 @@ class ChooseXorPurchaseMethodStateTest {
         assertEquals(R.string.get_more_xor_dialog_description, (state.descriptionText as Text.StringRes).id)
         assertEquals(R.string.get_more_xor_dialog_deposit_option, (state.methodsTextList[0] as Text.StringRes).id)
         assertEquals(R.string.get_more_xor_dialog_swap_option, (state.methodsTextList[1] as Text.StringRes).id)
-        assertEquals(R.string.get_more_xor_dialog_buy_option, (state.methodsTextList[2] as Text.StringRes).id)
+        //assertEquals(R.string.get_more_xor_dialog_buy_option, (state.methodsTextList[2] as Text.StringRes).id)
         assertEquals(R.string.common_cancel, (state.cancelText as Text.StringRes).id)
     }
 

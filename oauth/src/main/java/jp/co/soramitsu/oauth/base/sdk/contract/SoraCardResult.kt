@@ -22,10 +22,10 @@ sealed class SoraCardResult : Parcelable {
     ) : SoraCardResult()
 
     @Parcelize
-    object Canceled : SoraCardResult()
+    data object Canceled : SoraCardResult()
 
     @Parcelize
-    object Logout : SoraCardResult()
+    data object Logout : SoraCardResult()
 
     @Parcelize
     data class NavigateTo(
