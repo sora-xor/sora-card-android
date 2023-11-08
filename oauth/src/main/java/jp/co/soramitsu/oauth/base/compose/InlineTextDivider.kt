@@ -45,7 +45,7 @@ fun InlineTextDivider() {
                         )
                         lineTo(size.width - Dimens.x7.value, l.getLineBottom(0) - heightSplit)
                     },
-                    Colors.Grey70,
+                    Colors.Yellow30,
                     style = Stroke(width = thickness),
                 )
             })
