@@ -39,7 +39,7 @@ fun AuthSdkTheme(
         darkColors = darkColors,
         typography = typography,
         borderRadius = borderRadius,
-        content = content
+        content = content,
     )
 }
 
