@@ -1,5 +1,5 @@
 [versions]
-agp = "8.2.0-rc02"
+agp = "8.2.0-rc03"
 kotlin = "1.9.10"
 core-ktx = "1.12.0"
 appcompat = "1.6.1"
@@ -20,13 +20,12 @@ xnetworking = "0.2.4"
 ktor = "2.3.1"
 kotlinx-serialization-v = "1.5.1"
 navigation-compose = "2.7.5"
-accompanist = "0.30.1"
 datastore = "1.0.0"
 mockk = "1.13.8"
 coroutine = "1.7.3"
 pinview = "1.4.4"
 pwoauth = "1.3.1"
-pwkyc = "4.6.2"
+pwkyc = "4.7.0"
 
 [libraries]
 coroutine-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutine" }
@@ -49,7 +48,6 @@ compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling
 compose-material = { group = "androidx.compose.material", name = "material", version.ref = "compose" }
 compose-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "compose" }
 compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation-compose" }
-accompanist-navigation = { group = "com.google.accompanist", name = "accompanist-navigation-animation", version.ref = "accompanist" }
 soramitsu-uicore = { group = "jp.co.soramitsu", name = "ui-core", version.ref = "uicore" }
 soramitsu-xnetworking-basic = { group = "jp.co.soramitsu.xnetworking", name = "basic-android", version.ref = "xnetworking" }
 ktor = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
