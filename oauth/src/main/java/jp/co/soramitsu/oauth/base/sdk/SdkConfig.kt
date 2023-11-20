@@ -7,6 +7,7 @@ import javax.inject.Singleton
 @Singleton
 class InMemoryRepo @Inject constructor() {
 
+    var locale: String = "en"
     var endpointUrl: String = ""
     var username: String = ""
     var password: String = ""
