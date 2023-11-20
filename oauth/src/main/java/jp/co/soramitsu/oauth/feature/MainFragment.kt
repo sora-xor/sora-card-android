@@ -25,6 +25,7 @@ import jp.co.soramitsu.oauth.base.extension.onBackPressed
 import jp.co.soramitsu.oauth.base.mapSoraCardResult
 import jp.co.soramitsu.oauth.base.navigation.Destination
 import jp.co.soramitsu.oauth.base.navigation.SdkNavGraph
+import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.feature.terms.and.conditions.ProgressDialog
@@ -32,9 +33,13 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import java.util.UUID
+import javax.inject.Inject
 
 @AndroidEntryPoint
 internal class MainFragment : BaseFragment() {
+
+    @Inject
+    lateinit var inMemoryRepo: InMemoryRepo
 
     private val viewModel: MainViewModel by viewModels()
 
@@ -97,7 +102,8 @@ internal class MainFragment : BaseFragment() {
                                 ),
                                 KycSettings(
                                     appReferenceId = UUID.randomUUID().toString(),
-                                    referenceNumber = state.referenceNumber
+                                    language = inMemoryRepo.locale,
+                                    referenceNumber = state.referenceNumber,
                                 ),
                                 userData = state.kycUserData,
                                 userCredentials = state.userCredentials

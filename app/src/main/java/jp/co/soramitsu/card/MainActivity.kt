@@ -78,7 +78,7 @@ class MainActivity : ComponentActivity() {
         registrationLauncher.launch(
             SoraCardContractData(
                 basic = basic(),
-                locale = Locale.ENGLISH,
+                locale = Locale.getDefault(),
                 kycCredentials = SoraCardKycCredentials(
                     endpointUrl = BuildConfig.SORA_CARD_KYC_ENDPOINT_URL,
                     username = BuildConfig.SORA_CARD_KYC_USERNAME,

@@ -68,6 +68,7 @@ class CardActivity : AppCompatActivity(R.layout.card_activity) {
         contractData?.let { data ->
             ContextManager.setLocale(data.locale)
 
+            vm.inMemoryRepo.locale = data.locale.country
             vm.inMemoryRepo.endpointUrl = data.kycCredentials.endpointUrl
             vm.inMemoryRepo.username = data.kycCredentials.username
             vm.inMemoryRepo.password = data.kycCredentials.password
