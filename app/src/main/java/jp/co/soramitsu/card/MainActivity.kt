@@ -11,6 +11,8 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
+import javax.inject.Inject
 import jp.co.soramitsu.oauth.base.sdk.SoraCardEnvironmentType
 import jp.co.soramitsu.oauth.base.sdk.SoraCardKycCredentials
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardBasicContractData
@@ -24,14 +26,12 @@ import jp.co.soramitsu.ui_core.component.button.properties.Order
 import jp.co.soramitsu.ui_core.component.button.properties.Size
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import java.util.Locale
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val registrationLauncher = registerForActivityResult(
-        SoraCardContract()
+        SoraCardContract(),
     ) {}
 
     @Inject
@@ -92,7 +92,7 @@ class MainActivity : ComponentActivity() {
                 areAttemptsPaidSuccessfully = true,
                 isIssuancePaid = false,
                 soraBackEndUrl = BuildConfig.SORA_API_BASE_URL,
-            )
+            ),
         )
     }
 

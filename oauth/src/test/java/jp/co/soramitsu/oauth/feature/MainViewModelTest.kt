@@ -13,11 +13,11 @@ import io.mockk.verify
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
-import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.common.model.AccessTokenResponse
 import jp.co.soramitsu.oauth.common.navigation.flow.api.NavigationFlow
+import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -67,11 +67,15 @@ class MainViewModelTest {
     @Before
     fun setUp() = runTest {
         coEvery { userSessionRepository.getAccessToken() } returns "accessToken"
-        coEvery { userSessionRepository.getAccessTokenExpirationTime() } returns System.currentTimeMillis() + 300000
+        coEvery {
+            userSessionRepository.getAccessTokenExpirationTime()
+        } returns System.currentTimeMillis() + 300000
         coEvery { userSessionRepository.setNewAccessToken(any(), any()) } returns Unit
         coEvery { userSessionRepository.getUser() } returns Triple("refresh", "access", 0)
         coEvery { kycRequirementsUnfulfilledFlow.start(any()) } returns Unit
-        coEvery { kycRepository.getKycLastFinalStatus(any(), any()) } returns Result.success(SoraCardCommonVerification.Successful)
+        coEvery {
+            kycRepository.getKycLastFinalStatus(any(), any())
+        } returns Result.success(SoraCardCommonVerification.Successful)
         every { mainRouter.openGetPrepared() } returns Unit
         every { mainRouter.openVerificationFailed(any()) } returns Unit
         every { mainRouter.openVerificationSuccessful() } just runs
@@ -96,13 +100,17 @@ class MainViewModelTest {
         every { inMemoryRepo.isEnoughXorAvailable } returns true
         coEvery { kycRepository.hasFreeKycAttempt("accessToken") } returns Result.success(true)
         coEvery { userSessionRepository.getRefreshToken() } returns "refreshToken"
-        coEvery { tokenValidator.checkAccessTokenValidity() } returns AccessTokenResponse.Token("token", 1000)
+        coEvery {
+            tokenValidator.checkAccessTokenValidity()
+        } returns AccessTokenResponse.Token("token", 1000)
         val slot = slot<GetUserDataCallback>()
         coEvery { pwoAuthClientProxy.getUserData(any(), capture(slot)) } answers {
             slot.captured.onUserData("", "", "", "", false, "")
         }
         coEvery { userSessionRepository.setUserId(any()) } returns Unit
-        coEvery { kycRepository.getReferenceNumber(any(), any(), any()) } returns Result.success("refnumber")
+        coEvery {
+            kycRepository.getReferenceNumber(any(), any(), any())
+        } returns Result.success("refnumber")
         setupViewModel(SoraCardCommonVerification.Failed)
         advanceUntilIdle()
         viewModel.getUserData()

@@ -27,11 +27,9 @@ import jp.co.soramitsu.ui_core.theme.customColors
 import jp.co.soramitsu.ui_core.theme.customTypography
 
 @Composable
-fun CountryListScreen(
-    viewModel: CountryListViewModel = hiltViewModel(),
-) {
+fun CountryListScreen(viewModel: CountryListViewModel = hiltViewModel()) {
     Screen(
-        viewModel = viewModel
+        viewModel = viewModel,
     ) {
         val state = viewModel.state.collectAsStateWithLifecycle().value
         CountriesScreen(
@@ -42,16 +40,13 @@ fun CountryListScreen(
 }
 
 @Composable
-private fun CountriesScreen(
-    state: CountryListState,
-    onSelect: (Int) -> Unit,
-) {
+private fun CountriesScreen(state: CountryListState, onSelect: (Int) -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(
                 vertical = Dimens.x2,
-                horizontal = Dimens.x3
+                horizontal = Dimens.x3,
             ),
     ) {
         if (state.loading) {
@@ -73,7 +68,7 @@ private fun CountriesScreen(
                         .clickable { onSelect.invoke(index) }
                         .fillMaxWidth()
                         .wrapContentHeight()
-                        .padding(vertical = Dimens.x1)
+                        .padding(vertical = Dimens.x1),
                 ) {
                     Text(countryDial.code.flagEmoji())
                     Text(
@@ -107,7 +102,7 @@ private fun PreviewCountriesScreen() {
                 CountryDial("GB", "Gre Brit", "+123"),
                 CountryDial("VE", "Gre Brit", "+123"),
                 CountryDial("IR", "Gre Brit", "+123"),
-            )
+            ),
         ),
         onSelect = {},
     )

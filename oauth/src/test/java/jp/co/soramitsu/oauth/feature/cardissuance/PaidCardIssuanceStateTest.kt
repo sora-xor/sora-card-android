@@ -1,16 +1,15 @@
 package jp.co.soramitsu.oauth.feature.cardissuance
 
+import jp.co.soramitsu.oauth.R
+import jp.co.soramitsu.oauth.base.compose.ScreenStatus
 import jp.co.soramitsu.oauth.base.compose.Text
 import jp.co.soramitsu.oauth.feature.cardissuance.state.PaidCardIssuanceState
-import org.junit.Assert
+import org.junit.Assert.assertArrayEquals
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
-import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.compose.ScreenStatus
-import org.junit.Assert.assertArrayEquals
-import org.junit.Assert.assertEquals
 
 @RunWith(MockitoJUnitRunner::class)
 class PaidCardIssuanceStateTest {
@@ -27,7 +26,10 @@ class PaidCardIssuanceStateTest {
 
     @Test
     fun `init EXPECT description is set up`() {
-        assertEquals(R.string.card_issuance_screen_paid_card_description, (state.descriptionText as Text.StringRes).id)
+        assertEquals(
+            R.string.card_issuance_screen_paid_card_description,
+            (state.descriptionText as Text.StringRes).id,
+        )
     }
 
     @Test

@@ -59,7 +59,7 @@ class VerificationInProgressViewModelTest {
     fun `init EXPECT toolbar title`() {
         assertEquals(
             R.string.kyc_result_verification_in_progress,
-            viewModel.toolbarState.value?.basic?.title
+            viewModel.toolbarState.value?.basic?.title,
         )
         assertNotNull(viewModel.toolbarState.value?.basic?.navIcon)
     }

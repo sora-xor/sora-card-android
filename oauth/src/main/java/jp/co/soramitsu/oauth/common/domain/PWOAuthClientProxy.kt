@@ -16,15 +16,27 @@ import jp.co.soramitsu.oauth.base.sdk.toPayWingsType
 interface PWOAuthClientProxy {
     fun init(context: Context, type: SoraCardEnvironmentType, key: String, domain: String)
 
-    suspend fun signInWithPhoneNumberVerifyOtp(otp: String, callback: SignInWithPhoneNumberVerifyOtpCallback)
+    suspend fun signInWithPhoneNumberVerifyOtp(
+        otp: String,
+        callback: SignInWithPhoneNumberVerifyOtpCallback,
+    )
 
-    suspend fun signInWithPhoneNumberRequestOtp(phoneNumber: String, smsContentTemplate: String? = null, callback: SignInWithPhoneNumberRequestOtpCallback)
+    suspend fun signInWithPhoneNumberRequestOtp(
+        phoneNumber: String,
+        smsContentTemplate: String? = null,
+        callback: SignInWithPhoneNumberRequestOtpCallback,
+    )
 
     suspend fun checkEmailVerified(callback: CheckEmailVerifiedCallback)
 
     suspend fun sendNewVerificationEmail(callback: SendNewVerificationEmailCallback)
 
-    suspend fun registerUser(firstName: String, lastName: String, email: String, callback: RegisterUserCallback)
+    suspend fun registerUser(
+        firstName: String,
+        lastName: String,
+        email: String,
+        callback: RegisterUserCallback,
+    )
 
     suspend fun changeUnverifiedEmail(email: String, callback: ChangeUnverifiedEmailCallback)
 
@@ -42,7 +54,7 @@ internal class PWOAuthClientProxyImpl() : PWOAuthClientProxy {
         context: Context,
         type: SoraCardEnvironmentType,
         key: String,
-        domain: String
+        domain: String,
     ) {
         if (initialized.not()) {
             synchronized(this) {
@@ -56,7 +68,7 @@ internal class PWOAuthClientProxyImpl() : PWOAuthClientProxy {
 
     override suspend fun signInWithPhoneNumberVerifyOtp(
         otp: String,
-        callback: SignInWithPhoneNumberVerifyOtpCallback
+        callback: SignInWithPhoneNumberVerifyOtpCallback,
     ) {
         PayWingsOAuthClient.instance.signInWithPhoneNumberVerifyOtp(
             otp = otp,
@@ -67,7 +79,7 @@ internal class PWOAuthClientProxyImpl() : PWOAuthClientProxy {
     override suspend fun signInWithPhoneNumberRequestOtp(
         phoneNumber: String,
         smsContentTemplate: String?,
-        callback: SignInWithPhoneNumberRequestOtpCallback
+        callback: SignInWithPhoneNumberRequestOtpCallback,
     ) {
         PayWingsOAuthClient.instance.signInWithPhoneNumberRequestOtp(
             phoneNumber = phoneNumber,
@@ -91,26 +103,28 @@ internal class PWOAuthClientProxyImpl() : PWOAuthClientProxy {
         callback: RegisterUserCallback,
     ) {
         PayWingsOAuthClient.instance.registerUser(
-            firstName, lastName, email, callback,
+            firstName,
+            lastName,
+            email,
+            callback,
         )
     }
 
     override suspend fun changeUnverifiedEmail(
         email: String,
-        callback: ChangeUnverifiedEmailCallback
+        callback: ChangeUnverifiedEmailCallback,
     ) {
         PayWingsOAuthClient.instance.changeUnverifiedEmail(
-            email, callback,
+            email,
+            callback,
         )
     }
 
     override suspend fun getUserData(accessToken: String, callback: GetUserDataCallback) {
-        PayWingsOAuthClient.instance.getUserData(accessToken, callback,)
+        PayWingsOAuthClient.instance.getUserData(accessToken, callback)
     }
 
-    override suspend fun getNewAccessToken(
-        refreshToken: String,
-    ): GetNewAccessTokenResult =
+    override suspend fun getNewAccessToken(refreshToken: String): GetNewAccessTokenResult =
         PayWingsOAuthClient.instance.getNewAccessToken(
             refreshToken,
         )

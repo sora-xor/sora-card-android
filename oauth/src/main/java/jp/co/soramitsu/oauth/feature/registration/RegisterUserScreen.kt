@@ -18,11 +18,9 @@ import jp.co.soramitsu.ui_core.component.input.InputText
 import jp.co.soramitsu.ui_core.resources.Dimens
 
 @Composable
-fun RegisterUserScreen(
-    viewModel: RegisterUserViewModel = hiltViewModel()
-) {
+fun RegisterUserScreen(viewModel: RegisterUserViewModel = hiltViewModel()) {
     Screen(
-        viewModel = viewModel
+        viewModel = viewModel,
     ) { scrollState ->
         val state = viewModel.state
 
@@ -30,7 +28,7 @@ fun RegisterUserScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(scrollState)
-                .padding(vertical = Dimens.x2, horizontal = Dimens.x3)
+                .padding(vertical = Dimens.x2, horizontal = Dimens.x3),
         ) {
             InputText(
                 modifier = Modifier
@@ -51,7 +49,7 @@ fun RegisterUserScreen(
             LoaderWrapper(
                 modifier = Modifier.fillMaxWidth(),
                 loaderSize = Size.Large,
-                loading = state.buttonState.loading
+                loading = state.buttonState.loading,
             ) { modifier, _ ->
                 FilledButton(
                     modifier = modifier,
@@ -59,7 +57,7 @@ fun RegisterUserScreen(
                     size = Size.Large,
                     text = state.buttonState.title.toTitle(),
                     enabled = state.buttonState.enabled,
-                    onClick = viewModel::onConfirm
+                    onClick = viewModel::onConfirm,
                 )
             }
         }

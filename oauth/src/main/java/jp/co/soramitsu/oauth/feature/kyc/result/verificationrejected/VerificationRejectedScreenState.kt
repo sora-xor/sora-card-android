@@ -15,8 +15,9 @@ data class VerificationRejectedScreenState(
 
     val kycAttemptsLeftText: Text
         get() {
-            if (kycFreeAttemptsCount <= 0)
+            if (kycFreeAttemptsCount <= 0) {
                 return Text.StringRes(id = R.string.verification_rejected_screen_attempts_used)
+            }
 
             return Text.StringPluralWithArgs(
                 id = R.plurals.verification_rejected_screen_attempts_left,
@@ -29,11 +30,12 @@ data class VerificationRejectedScreenState(
 
     val tryAgainText: Text
         get() {
-            if (kycFreeAttemptsCount <= 0)
+            if (kycFreeAttemptsCount <= 0) {
                 return Text.StringResWithArgs(
                     id = R.string.verification_rejected_screen_try_again_for_euros,
-                    payload = arrayOf(kycAttemptCostInEuros)
+                    payload = arrayOf(kycAttemptCostInEuros),
                 )
+            }
 
             return Text.StringRes(id = R.string.verification_rejected_screen_try_again_for_free)
         }

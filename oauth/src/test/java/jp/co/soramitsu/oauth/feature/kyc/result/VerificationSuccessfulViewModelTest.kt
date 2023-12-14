@@ -57,7 +57,7 @@ class VerificationSuccessfulViewModelTest {
     fun `init EXPECT toolbar title`() {
         assertEquals(
             R.string.verification_successful_title,
-            viewModel.toolbarState.value?.basic?.title
+            viewModel.toolbarState.value?.basic?.title,
         )
         assertNotNull(viewModel.toolbarState.value?.basic?.navIcon)
     }
@@ -66,6 +66,10 @@ class VerificationSuccessfulViewModelTest {
     fun `call onClose EXPECT finish kyc`() = runTest {
         viewModel.onClose()
         advanceUntilIdle()
-        verify { setActivityResult.setResult(SoraCardResult.Success(SoraCardCommonVerification.Successful)) }
+        verify {
+            setActivityResult.setResult(
+                SoraCardResult.Success(SoraCardCommonVerification.Successful),
+            )
+        }
     }
 }

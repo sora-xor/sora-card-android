@@ -24,9 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.capitalize
-import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -55,13 +52,13 @@ fun GetPreparedScreen(
     }
 
     Screen(
-        viewModel = viewModel
+        viewModel = viewModel,
     ) { scrollState ->
         val state = viewModel.state.collectAsStateWithLifecycle()
         GetPreparedScreenContent(
             scrollState,
             state.value,
-            onConfirm = viewModel::onConfirm
+            onConfirm = viewModel::onConfirm,
         )
     }
 }
@@ -70,7 +67,7 @@ fun GetPreparedScreen(
 private fun GetPreparedScreenContent(
     scrollState: ScrollState,
     state: GetPreparedState,
-    onConfirm: () -> Unit
+    onConfirm: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -97,9 +94,13 @@ private fun GetPreparedScreenContent(
             Text(
                 modifier = Modifier
                     .fillMaxWidth(),
-                text = stringResource(R.string.get_prepared_alert, state.totalFreeAttemptsCount, state.attemptCost),
+                text = stringResource(
+                    R.string.get_prepared_alert,
+                    state.totalFreeAttemptsCount,
+                    state.attemptCost,
+                ),
                 style = MaterialTheme.customTypography.paragraphM,
-                color = MaterialTheme.customColors.accentTertiary
+                color = MaterialTheme.customColors.accentTertiary,
             )
         }
 
@@ -109,7 +110,7 @@ private fun GetPreparedScreenContent(
                 .padding(bottom = Dimens.x4),
             text = stringResource(id = R.string.get_prepared_need),
             style = MaterialTheme.customTypography.paragraphM,
-            color = MaterialTheme.customColors.fgPrimary
+            color = MaterialTheme.customColors.fgPrimary,
         )
 
         state.steps.forEach {
@@ -119,7 +120,7 @@ private fun GetPreparedScreenContent(
         Spacer(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f)
+                .weight(1f),
         )
 
         FilledButton(
@@ -129,7 +130,7 @@ private fun GetPreparedScreenContent(
             text = stringResource(id = R.string.get_prepared_ok_title),
             order = Order.SECONDARY,
             size = Size.Large,
-            onClick = onConfirm
+            onClick = onConfirm,
         )
     }
 }
@@ -141,12 +142,12 @@ private fun StepIcon(modifier: Modifier = Modifier, index: Int) {
             .size(Dimens.x6)
             .clip(CircleShape)
             .background(MaterialTheme.customColors.bgPage),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Text(
             text = index.toString(),
             style = MaterialTheme.customTypography.headline2,
-            color = MaterialTheme.customColors.fgPrimary
+            color = MaterialTheme.customColors.fgPrimary,
         )
     }
 }
@@ -158,17 +159,17 @@ private fun Step(step: Step) {
             .fillMaxWidth()
             .padding(bottom = Dimens.x3),
         verticalAlignment = Alignment.Top,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         StepIcon(
             modifier = Modifier.padding(end = Dimens.x2),
-            index = step.index
+            index = step.index,
         )
 
         Column(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
                 modifier = Modifier
@@ -176,19 +177,18 @@ private fun Step(step: Step) {
                     .padding(bottom = Dimens.x1_2),
                 text = stringResource(step.title),
                 style = MaterialTheme.customTypography.headline3,
-                color = MaterialTheme.customColors.fgPrimary
+                color = MaterialTheme.customColors.fgPrimary,
             )
 
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = step.description.map { stringResource(id = it) }.joinToString("\n\n"),
                 style = MaterialTheme.customTypography.paragraphS,
-                color = MaterialTheme.customColors.fgSecondary
+                color = MaterialTheme.customColors.fgSecondary,
             )
         }
     }
 }
-
 
 @Preview
 @Composable
@@ -212,15 +212,18 @@ private fun PreviewGetPreparedScreen() {
                 Step(
                     index = 3,
                     title = R.string.get_prepared_proof_address_title,
-                    description = listOf(R.string.get_prepared_proof_address_description, R.string.get_prepared_proof_address_note),
+                    description = listOf(
+                        R.string.get_prepared_proof_address_description,
+                        R.string.get_prepared_proof_address_note,
+                    ),
                 ),
                 Step(
                     index = 4,
                     title = R.string.get_prepared_personal_info_title,
                     description = listOf(R.string.get_prepared_personal_info_description),
                 ),
-            )
+            ),
         ),
-        onConfirm = {}
+        onConfirm = {},
     )
 }

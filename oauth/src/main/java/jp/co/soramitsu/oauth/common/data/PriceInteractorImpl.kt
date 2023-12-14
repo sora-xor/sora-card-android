@@ -38,14 +38,12 @@ class PriceInteractorImpl(
 
                 EuroLiquiditySufficiency(
                     euroInsufficiency = inMemoryCache.euroLiquidityThreshold - userAvailableEuroAmount,
-                    euroLiquidityFullPrice = inMemoryCache.euroLiquidityThreshold.toDouble()
+                    euroLiquidityFullPrice = inMemoryCache.euroLiquidityThreshold.toDouble(),
                 )
             }
     }
 
-    override suspend fun calculateCardIssuancePrice(): String =
-        kycRepository.getApplicationFee()
+    override suspend fun calculateCardIssuancePrice(): String = kycRepository.getApplicationFee()
 
-    override suspend fun calculateKycAttemptPrice(): String =
-        kycRepository.getRetryFee()
+    override suspend fun calculateKycAttemptPrice(): String = kycRepository.getRetryFee()
 }

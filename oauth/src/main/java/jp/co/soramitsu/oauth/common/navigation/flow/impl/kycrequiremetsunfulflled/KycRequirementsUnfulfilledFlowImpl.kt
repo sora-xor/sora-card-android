@@ -1,15 +1,15 @@
 package jp.co.soramitsu.oauth.common.navigation.flow.impl.kycrequiremetsunfulflled
 
-import jp.co.soramitsu.oauth.base.navigation.MainRouter
-import jp.co.soramitsu.oauth.common.navigation.flow.api.destinations.KycRequirementsUnfulfilledDestination
-import jp.co.soramitsu.oauth.common.navigation.flow.api.NavigationFlow
-import jp.co.soramitsu.oauth.common.navigation.flow.api.destinations.NavigationFlowDestination
 import java.util.Stack
 import javax.inject.Inject
+import jp.co.soramitsu.oauth.base.navigation.MainRouter
+import jp.co.soramitsu.oauth.common.navigation.flow.api.NavigationFlow
+import jp.co.soramitsu.oauth.common.navigation.flow.api.destinations.KycRequirementsUnfulfilledDestination
+import jp.co.soramitsu.oauth.common.navigation.flow.api.destinations.NavigationFlowDestination
 
 class KycRequirementsUnfulfilledFlowImpl @Inject constructor(
-    private val mainRouter: MainRouter
-): NavigationFlow {
+    private val mainRouter: MainRouter,
+) : NavigationFlow {
 
     private val screensStack: Stack<NavigationFlowDestination> =
         Stack<NavigationFlowDestination>()
@@ -24,7 +24,7 @@ class KycRequirementsUnfulfilledFlowImpl @Inject constructor(
     }
 
     override fun proceed() {
-        when(screensStack.last()) {
+        when (screensStack.last()) {
             is KycRequirementsUnfulfilledDestination.CardIssuanceOptionsScreen -> {
                 screensStack.push(KycRequirementsUnfulfilledDestination.GetMoreXorDialog())
                 mainRouter.navigate(destinationRoute = screensStack.last().destination)
@@ -37,7 +37,7 @@ class KycRequirementsUnfulfilledFlowImpl @Inject constructor(
     }
 
     override fun back() {
-        when(screensStack.last()) {
+        when (screensStack.last()) {
             is KycRequirementsUnfulfilledDestination.CardIssuanceOptionsScreen -> {
                 exit()
             }

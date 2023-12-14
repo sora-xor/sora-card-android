@@ -19,5 +19,5 @@ data class GetReferenceNumberResponse(
     @SerialName("CallerReferenceID") val callerReferenceID: String,
     @SerialName("ReferenceNumber") val referenceNumber: String,
     @SerialName("StatusCode") val statusCode: Int,
-    @SerialName("StatusDescription") val statusDescription: String
+    @SerialName("StatusDescription") val statusDescription: String,
 )

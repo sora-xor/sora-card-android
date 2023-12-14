@@ -39,10 +39,10 @@ fun SelectableDialog(
 ) {
     // TODO extract to UI module
     Box(
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Dialog(
-            onDismissRequest = { /*DO NOTHING*/ }
+            onDismissRequest = { /*DO NOTHING*/ },
         ) {
             ContentCard(
                 cornerRadius = Dimens.x3,
@@ -59,7 +59,7 @@ fun SelectableDialog(
                         text = dialogTitle,
                         style = MaterialTheme.customTypography.textLBold,
                         color = MaterialTheme.customColors.fgPrimary,
-                        textAlign = TextAlign.Left
+                        textAlign = TextAlign.Left,
                     )
                     Text(
                         modifier = Modifier
@@ -68,7 +68,7 @@ fun SelectableDialog(
                         text = dialogDescription,
                         style = MaterialTheme.customTypography.textM,
                         color = MaterialTheme.customColors.fgPrimary,
-                        textAlign = TextAlign.Left
+                        textAlign = TextAlign.Left,
                     )
 
                     Spacer(modifier = Modifier.height(Dimens.x1))
@@ -81,11 +81,12 @@ fun SelectableDialog(
                             text = selectableChoices[index],
                             size = Size.Small,
                             order = Order.PRIMARY,
-                            onClick = { onChoiceSelectedClickListener.invoke(index) }
+                            onClick = { onChoiceSelectedClickListener.invoke(index) },
                         )
 
-                        if (index < selectableChoices.lastIndex)
+                        if (index < selectableChoices.lastIndex) {
                             Divider()
+                        }
                     }
 
                     Row(

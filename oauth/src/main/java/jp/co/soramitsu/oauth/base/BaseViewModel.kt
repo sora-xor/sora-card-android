@@ -13,8 +13,8 @@ import jp.co.soramitsu.xnetworking.basic.networkclient.SoramitsuNetworkException
 
 open class BaseViewModel : ViewModel() {
 
-    protected val _toolbarState = MutableLiveData<SoramitsuToolbarState>()
-    val toolbarState: LiveData<SoramitsuToolbarState> = _toolbarState
+    protected val mToolbarState = MutableLiveData<SoramitsuToolbarState>()
+    val toolbarState: LiveData<SoramitsuToolbarState> = mToolbarState
 
     var dialogState by mutableStateOf<DialogAlertState?>(null)
         protected set

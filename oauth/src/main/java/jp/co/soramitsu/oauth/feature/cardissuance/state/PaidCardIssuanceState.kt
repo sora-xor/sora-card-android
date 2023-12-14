@@ -11,11 +11,12 @@ data class PaidCardIssuanceState(
 
     val titleText: Text
         get() {
-            if (screenStatus === ScreenStatus.READY_TO_RENDER)
+            if (screenStatus === ScreenStatus.READY_TO_RENDER) {
                 return Text.StringResWithArgs(
                     id = R.string.card_issuance_screen_paid_card_title,
-                    payload = arrayOf(euroIssuanceAmount)
+                    payload = arrayOf(euroIssuanceAmount),
                 )
+            }
 
             return Text.StringRes(id = R.string.cant_fetch_data)
         }
@@ -28,13 +29,13 @@ data class PaidCardIssuanceState(
 
     val payIssuanceAmountText: Text
         get() {
-            if (screenStatus === ScreenStatus.READY_TO_RENDER)
+            if (screenStatus === ScreenStatus.READY_TO_RENDER) {
                 return Text.StringResWithArgs(
                     id = R.string.card_issuance_screen_paid_card_pay_euro,
-                    payload = arrayOf(euroIssuanceAmount)
+                    payload = arrayOf(euroIssuanceAmount),
                 )
+            }
 
             return Text.StringRes(id = R.string.cant_fetch_data)
         }
-
 }

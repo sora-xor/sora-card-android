@@ -9,7 +9,7 @@ data class IbanAccountResponseWrapper(
     @SerialName("CallerReferenceID") val callerReferenceID: String,
     @SerialName("IBANs") val ibans: List<IbanAccountResponse>?,
     @SerialName("StatusCode") val statusCode: Int,
-    @SerialName("StatusDescription") val statusDescription: String
+    @SerialName("StatusDescription") val statusDescription: String,
 )
 
 @Serializable
@@ -27,7 +27,7 @@ data class IbanAccountResponse(
     @SerialName("MinTransactionAmount") val minTransactionAmount: Long,
     @SerialName("MaxTransactionAmount") val maxTransactionAmount: Long,
     @SerialName("Balance") val balance: Long,
-    @SerialName("AvailableBalance") val availableBalance: Long
+    @SerialName("AvailableBalance") val availableBalance: Long,
 ) {
 
     companion object {

@@ -17,15 +17,14 @@ data class CardIssuanceScreenState(
             screenStatus = screenStatus,
             xorInsufficientAmount = xorInsufficientAmount,
             euroInsufficientAmount = euroInsufficientAmount,
-            euroLiquidityThreshold = euroLiquidityThreshold
+            euroLiquidityThreshold = euroLiquidityThreshold,
         )
     }
 
     val paidCardIssuanceState: PaidCardIssuanceState by lazy {
         PaidCardIssuanceState(
             screenStatus = screenStatus,
-            euroIssuanceAmount = euroIssuanceAmount
+            euroIssuanceAmount = euroIssuanceAmount,
         )
     }
-
 }

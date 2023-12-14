@@ -14,9 +14,15 @@ class MaskTransformation : VisualTransformation {
 }
 
 fun maskFilter(text: AnnotatedString): TransformedText {
-
     val numbers = text.text.replace("+", "")
-    val trimmed = if (numbers.length >= PHONE_NUMBER_LENGTH_MAX) numbers.substring(0, PHONE_NUMBER_LENGTH_MAX) else numbers
+    val trimmed = if (numbers.length >= PHONE_NUMBER_LENGTH_MAX) {
+        numbers.substring(
+            0,
+            PHONE_NUMBER_LENGTH_MAX,
+        )
+    } else {
+        numbers
+    }
 
     val annotatedString = AnnotatedString.Builder().run {
         for (i in trimmed.indices) {

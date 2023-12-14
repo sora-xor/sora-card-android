@@ -33,18 +33,16 @@ import jp.co.soramitsu.ui_core.theme.customTypography
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
-fun TermsAndConditionsScreen(
-    viewModel: TermsAndConditionsViewModel = hiltViewModel()
-) {
+fun TermsAndConditionsScreen(viewModel: TermsAndConditionsViewModel = hiltViewModel()) {
     Screen(
-        viewModel = viewModel
+        viewModel = viewModel,
     ) { scrollState ->
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(scrollState)
-                .padding(top = Dimens.x1, start = Dimens.x3, end = Dimens.x3, bottom = Dimens.x5)
+                .padding(top = Dimens.x1, start = Dimens.x3, end = Dimens.x3, bottom = Dimens.x5),
         ) {
             Text(
                 modifier = Modifier
@@ -52,7 +50,7 @@ fun TermsAndConditionsScreen(
                     .padding(bottom = Dimens.x2),
                 text = stringResource(R.string.terms_and_conditions_description),
                 style = MaterialTheme.customTypography.paragraphM,
-                color = MaterialTheme.customColors.fgPrimary
+                color = MaterialTheme.customColors.fgPrimary,
             )
 
             Box(
@@ -60,7 +58,7 @@ fun TermsAndConditionsScreen(
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(MaterialTheme.borderRadius.s))
                     .background(MaterialTheme.customColors.accentTertiaryContainer),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 Text(
                     modifier = Modifier
@@ -68,7 +66,7 @@ fun TermsAndConditionsScreen(
                         .padding(Dimens.x2),
                     text = stringResource(R.string.terms_and_conditions_sora_community_alert),
                     style = MaterialTheme.customTypography.paragraphM,
-                    color = MaterialTheme.customColors.accentTertiary
+                    color = MaterialTheme.customColors.accentTertiary,
                 )
             }
 
@@ -85,7 +83,7 @@ fun TermsAndConditionsScreen(
                 text = stringResource(R.string.terms_and_conditions_confirm_description),
                 style = MaterialTheme.customTypography.textS,
                 color = MaterialTheme.customColors.fgSecondary,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
 
             FilledButton(
@@ -95,7 +93,7 @@ fun TermsAndConditionsScreen(
                 text = stringResource(R.string.terms_and_conditions_accept_and_continue),
                 order = Order.SECONDARY,
                 size = Size.Large,
-                onClick = viewModel::onConfirm
+                onClick = viewModel::onConfirm,
             )
         }
     }
@@ -109,21 +107,21 @@ private fun TermsAndConditionsMenu(
 ) {
     ContentCard(
         modifier = modifier.fillMaxWidth(),
-        cornerRadius = MaterialTheme.borderRadius.s
+        cornerRadius = MaterialTheme.borderRadius.s,
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(MaterialTheme.borderRadius.s))
-                .background(MaterialTheme.customColors.bgSurface)
+                .background(MaterialTheme.customColors.bgSurface),
         ) {
             MenuItem(
                 label = stringResource(R.string.terms_and_conditions_general_terms),
-                onClick = onGeneralTermsClick
+                onClick = onGeneralTermsClick,
             )
             MenuItem(
                 label = stringResource(R.string.terms_and_conditions_privacy_policy),
-                onClick = onPrivacyPolicy
+                onClick = onPrivacyPolicy,
             )
         }
     }

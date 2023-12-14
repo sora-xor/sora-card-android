@@ -6,6 +6,7 @@ import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
 import com.paywings.oauth.android.sdk.service.callback.SignInWithPhoneNumberRequestOtpCallback
 import com.paywings.oauth.android.sdk.service.callback.SignInWithPhoneNumberVerifyOtpCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
@@ -27,7 +28,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class VerifyPhoneNumberViewModel @Inject constructor(
@@ -49,13 +49,13 @@ class VerifyPhoneNumberViewModel @Inject constructor(
                     "Use 123456 in this field"
                 } else {
                     R.string.verify_phone_number_code_input_field_label
-                }
+                },
             ),
             buttonState = ButtonState(
                 title = R.string.common_resend_code,
                 enabled = false,
-            )
-        )
+            ),
+        ),
     )
     val state = _state.asStateFlow()
 
@@ -65,7 +65,7 @@ class VerifyPhoneNumberViewModel @Inject constructor(
     private var authCallback: OAuthCallback? = null
 
     init {
-        _toolbarState.value = SoramitsuToolbarState(
+        mToolbarState.value = SoramitsuToolbarState(
             type = SoramitsuToolbarType.Small(),
             basic = BasicToolbarState(
                 title = R.string.verify_phone_number_title,
@@ -83,8 +83,8 @@ class VerifyPhoneNumberViewModel @Inject constructor(
             _state.value = _state.value.copy(
                 buttonState = _state.value.buttonState.copy(
                     enabled = false,
-                    timer = millisUntilFinished.format()
-                )
+                    timer = millisUntilFinished.format(),
+                ),
             )
         }
 
@@ -92,8 +92,8 @@ class VerifyPhoneNumberViewModel @Inject constructor(
             _state.value = _state.value.copy(
                 buttonState = _state.value.buttonState.copy(
                     enabled = true,
-                    timer = null
-                )
+                    timer = null,
+                ),
             )
         }
     }
@@ -102,11 +102,7 @@ class VerifyPhoneNumberViewModel @Inject constructor(
         timer.start()
     }
 
-    fun setArgs(
-        phoneNumber: String?,
-        otpLength: Int?,
-        authCallback: OAuthCallback,
-    ) {
+    fun setArgs(phoneNumber: String?, otpLength: Int?, authCallback: OAuthCallback) {
         phoneNumber?.let {
             this.phoneNumber = it
         }
@@ -122,8 +118,8 @@ class VerifyPhoneNumberViewModel @Inject constructor(
             _state.value = _state.value.copy(
                 inputTextState = _state.value.inputTextState.copy(
                     error = true,
-                    descriptionText = error.description
-                )
+                    descriptionText = error.description,
+                ),
             )
         }
 
@@ -140,7 +136,7 @@ class VerifyPhoneNumberViewModel @Inject constructor(
         override fun onSignInSuccessful(
             refreshToken: String,
             accessToken: String,
-            accessTokenExpirationTime: Long
+            accessTokenExpirationTime: Long,
         ) {
             viewModelScope.launch {
                 signInUser(refreshToken, accessToken, accessTokenExpirationTime)
@@ -157,8 +153,8 @@ class VerifyPhoneNumberViewModel @Inject constructor(
             _state.value = _state.value.copy(
                 inputTextState = _state.value.inputTextState.copy(
                     error = true,
-                    descriptionText = "OTP is not valid"
-                )
+                    descriptionText = "OTP is not valid",
+                ),
             )
         }
     }
@@ -166,12 +162,12 @@ class VerifyPhoneNumberViewModel @Inject constructor(
     private suspend fun signInUser(
         refreshToken: String,
         accessToken: String,
-        accessTokenExpirationTime: Long
+        accessTokenExpirationTime: Long,
     ) {
         userSessionRepository.signInUser(
             refreshToken,
             accessToken,
-            accessTokenExpirationTime
+            accessTokenExpirationTime,
         )
     }
 
@@ -181,8 +177,8 @@ class VerifyPhoneNumberViewModel @Inject constructor(
             _state.value = _state.value.copy(
                 inputTextState = _state.value.inputTextState.copy(
                     error = true,
-                    descriptionText = error.description
-                )
+                    descriptionText = error.description,
+                ),
             )
         }
 
@@ -205,8 +201,8 @@ class VerifyPhoneNumberViewModel @Inject constructor(
             inputTextState = _state.value.inputTextState.copy(
                 value = value,
                 error = false,
-                descriptionText = ""
-            )
+                descriptionText = "",
+            ),
         )
     }
 
@@ -239,7 +235,7 @@ class VerifyPhoneNumberViewModel @Inject constructor(
     private fun loading(loading: Boolean) {
         _state.value = _state.value.copy(
             inputTextState = _state.value.inputTextState.copy(enabled = !loading),
-            buttonState = _state.value.buttonState.copy(loading = loading)
+            buttonState = _state.value.buttonState.copy(loading = loading),
         )
     }
 }

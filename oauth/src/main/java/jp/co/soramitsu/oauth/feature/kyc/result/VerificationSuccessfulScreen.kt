@@ -29,14 +29,12 @@ import jp.co.soramitsu.ui_core.theme.customColors
 import jp.co.soramitsu.ui_core.theme.customTypography
 
 @Composable
-fun VerificationSuccessfulScreen(
-    viewModel: VerificationSuccessfulViewModel = hiltViewModel()
-) {
+fun VerificationSuccessfulScreen(viewModel: VerificationSuccessfulViewModel = hiltViewModel()) {
     BackHandler {
         viewModel.onClose()
     }
     Screen(
-        viewModel = viewModel
+        viewModel = viewModel,
     ) { scrollState ->
         VerificationSuccessfulContent(
             scrollState = scrollState,
@@ -46,32 +44,29 @@ fun VerificationSuccessfulScreen(
 }
 
 @Composable
-private fun VerificationSuccessfulContent(
-    scrollState: ScrollState,
-    onClose: () -> Unit
-) {
+private fun VerificationSuccessfulContent(scrollState: ScrollState, onClose: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(scrollState)
-            .padding(top = Dimens.x3, start = Dimens.x3, end = Dimens.x3, bottom = Dimens.x5)
+            .padding(top = Dimens.x3, start = Dimens.x3, end = Dimens.x3, bottom = Dimens.x5),
     ) {
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(R.string.verification_successful_description),
             style = MaterialTheme.customTypography.paragraphM,
-            color = MaterialTheme.customColors.fgPrimary
+            color = MaterialTheme.customColors.fgPrimary,
         )
 
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Image(
                 painter = painterResource(R.drawable.ic_verification_successful),
-                contentDescription = null
+                contentDescription = null,
             )
         }
 
@@ -83,7 +78,7 @@ private fun VerificationSuccessfulContent(
             size = Size.Large,
             text = stringResource(R.string.common_close),
             enabled = true,
-            onClick = onClose
+            onClick = onClose,
         )
     }
 }
@@ -93,6 +88,6 @@ private fun VerificationSuccessfulContent(
 private fun PreviewVerificationInProgressScreen() {
     VerificationSuccessfulContent(
         scrollState = rememberScrollState(),
-        onClose = {}
+        onClose = {},
     )
 }

@@ -39,14 +39,12 @@ import jp.co.soramitsu.ui_core.theme.customColors
 import jp.co.soramitsu.ui_core.theme.customTypography
 
 @Composable
-fun VerificationRejectedScreen(
-    viewModel: VerificationRejectedViewModel = hiltViewModel(),
-) {
+fun VerificationRejectedScreen(viewModel: VerificationRejectedViewModel = hiltViewModel()) {
     BackHandler {
         viewModel.onToolbarNavigation()
     }
     Screen(
-        viewModel = viewModel
+        viewModel = viewModel,
     ) { scrollState ->
         VerificationRejectedContent(
             scrollState = scrollState,
@@ -82,7 +80,7 @@ private fun VerificationRejectedContent(
                 text = state.reason
                     ?: stringResource(id = R.string.verification_rejected_description),
                 style = MaterialTheme.customTypography.paragraphM,
-                color = MaterialTheme.customColors.fgPrimary
+                color = MaterialTheme.customColors.fgPrimary,
             )
             state.reasonDetails?.let { details ->
                 Spacer(modifier = Modifier.size(Dimens.x2))
@@ -94,7 +92,7 @@ private fun VerificationRejectedContent(
 
         Image(
             painter = painterResource(R.drawable.ic_verification_rejected),
-            contentDescription = null
+            contentDescription = null,
         )
 
         Column(
@@ -102,7 +100,6 @@ private fun VerificationRejectedContent(
                 .fillMaxWidth()
                 .wrapContentHeight(),
         ) {
-
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -110,7 +107,7 @@ private fun VerificationRejectedContent(
                 text = state.kycAttemptsLeftText.retrieveString(),
                 style = MaterialTheme.customTypography.paragraphMBold,
                 color = MaterialTheme.customColors.fgPrimary,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
 
             Text(
@@ -123,7 +120,7 @@ private fun VerificationRejectedContent(
                 ),
                 style = MaterialTheme.customTypography.paragraphM,
                 color = MaterialTheme.customColors.fgPrimary,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
 
             FilledButton(
@@ -155,7 +152,7 @@ private fun ReasonRow(reason: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .wrapContentHeight()
+            .wrapContentHeight(),
     ) {
         Text(
             modifier = Modifier.wrapContentSize(),

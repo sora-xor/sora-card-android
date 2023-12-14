@@ -39,7 +39,7 @@ internal fun VerifyUserData(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     focusRequester: FocusRequester = remember { FocusRequester() },
     onDataEntered: (TextFieldValue) -> Unit,
-    onConfirm: () -> Unit
+    onConfirm: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -47,8 +47,8 @@ internal fun VerifyUserData(
             .verticalScroll(scrollState)
             .padding(
                 vertical = Dimens.x2,
-                horizontal = Dimens.x3
-            )
+                horizontal = Dimens.x3,
+            ),
     ) {
         Text(
             modifier = Modifier
@@ -57,7 +57,7 @@ internal fun VerifyUserData(
             text = title,
             style = MaterialTheme.customTypography.paragraphM,
             color = MaterialTheme.customColors.fgPrimary,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
 
         InputText(
@@ -66,7 +66,7 @@ internal fun VerifyUserData(
             focusRequester = focusRequester,
             onValueChange = onDataEntered,
             visualTransformation = inputVisualTransformation,
-            keyboardOptions = keyboardOptions
+            keyboardOptions = keyboardOptions,
         )
 
         LoaderWrapper(
@@ -74,7 +74,7 @@ internal fun VerifyUserData(
                 .fillMaxWidth()
                 .padding(top = Dimens.x3),
             loading = buttonState.loading,
-            loaderSize = Size.Large
+            loaderSize = Size.Large,
         ) { modifier, _ ->
             FilledButton(
                 modifier = modifier.testTagAsId("PrimaryButton"),
@@ -82,7 +82,7 @@ internal fun VerifyUserData(
                 size = Size.Large,
                 text = buttonState.timer.takeIf { it != null } ?: buttonState.title.toTitle(),
                 enabled = buttonState.enabled,
-                onClick = onConfirm
+                onClick = onConfirm,
             )
         }
     }

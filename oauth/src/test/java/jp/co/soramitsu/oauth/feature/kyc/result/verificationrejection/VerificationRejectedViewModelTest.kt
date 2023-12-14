@@ -79,7 +79,7 @@ class VerificationRejectedViewModelTest {
             pair = "test pair",
             price = "1.0",
             source = "test source",
-            timeOfUpdate = 7
+            timeOfUpdate = 7,
         )
     }
 
@@ -95,7 +95,7 @@ class VerificationRejectedViewModelTest {
 
         assertEquals(
             R.string.verification_rejected_title,
-            viewModel.toolbarState.value?.basic?.title
+            viewModel.toolbarState.value?.basic?.title,
         )
         assertNotNull(viewModel.toolbarState.value?.basic?.navIcon)
     }
@@ -112,9 +112,11 @@ class VerificationRejectedViewModelTest {
                 totalFreeAttemptsCount = 4,
             )
             coEvery { userSessionRepository.getAccessToken() } returns "Token"
-            every { kycRepository.getCachedKycResponse() } returns (SoraCardCommonVerification.Rejected to emptyKycResponse)
+            every {
+                kycRepository.getCachedKycResponse()
+            } returns (SoraCardCommonVerification.Rejected to emptyKycResponse)
             coEvery { kycRepository.getFreeKycAttemptsInfo(any()) } returns Result.success(
-                kycCountAttemptsAvailable
+                kycCountAttemptsAvailable,
             )
             coEvery { priceInteractor.calculateKycAttemptPrice() } returns "3.80"
 

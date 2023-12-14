@@ -17,7 +17,6 @@ enum class KycStatus {
     Rejected,
     Successful,
     Retry,
-    ;
 }
 
 enum class VerificationStatus {
@@ -25,14 +24,14 @@ enum class VerificationStatus {
     None,
     Pending,
     Accepted,
-    Rejected
+    Rejected,
 }
 
 enum class IbanStatus {
 
     None,
     Pending,
-    Rejected
+    Rejected,
 }
 
 @Serializable

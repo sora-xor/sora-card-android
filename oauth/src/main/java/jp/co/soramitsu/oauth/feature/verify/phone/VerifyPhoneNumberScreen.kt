@@ -19,14 +19,14 @@ fun VerifyPhoneNumberScreen(
     phoneNumber: String?,
     otpLength: Int?,
     authCallback: OAuthCallback,
-    viewModel: VerifyPhoneNumberViewModel = hiltViewModel()
+    viewModel: VerifyPhoneNumberViewModel = hiltViewModel(),
 ) {
     LaunchedEffect(Unit) {
         viewModel.setArgs(phoneNumber, otpLength, authCallback)
     }
 
     Screen(
-        viewModel = viewModel
+        viewModel = viewModel,
     ) { scrollState ->
         val state = viewModel.state.collectAsStateWithLifecycle().value
 
@@ -43,7 +43,7 @@ fun VerifyPhoneNumberScreen(
             buttonState = state.buttonState,
             focusRequester = focusRequester,
             onDataEntered = viewModel::onCodeChanged,
-            onConfirm = viewModel::resendOtp
+            onConfirm = viewModel::resendOtp,
         )
         LaunchedEffect(Unit) {
             focusRequester.requestFocus()

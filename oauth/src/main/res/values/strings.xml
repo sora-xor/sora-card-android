@@ -3,6 +3,7 @@
   <string name="cant_fetch_data">Can\'t fetch data</string>
   <string name="cant_fetch_refresh">Can\'t fetch data, tap to refresh.</string>
   <string name="card_attention_text">Attention</string>
+  <string name="card_hub_title">Card details</string>
   <string name="card_hub_update_button">Update now</string>
   <string name="card_hub_update_description">You are using an outdated version of the app, some part might not be working as intended.</string>
   <string name="card_hub_update_title">Update app to latest version</string>
@@ -68,7 +69,7 @@
   <string name="get_prepared_take_selfie_description">The guidance will be provided during the process</string>
   <string name="get_prepared_take_selfie_title">Take a selfie</string>
   <string name="get_prepared_title">Get prepared</string>
-  <string name="iban_pending_description">Your IBAN issuance is pending.\nIn case the wait longer than 72h contact us via techsupport@soracard.com</string>
+  <string name="iban_pending_description">Your IBAN issuance is pending.\nIn case the wait longer than 72h contact us via %s</string>
   <string name="kyc_result_verification_in_progress">Verification in progress</string>
   <string name="kyc_result_verification_in_progress_description">You have successfully completed your KYC application. The review is pending and you can expect a decision shortly.\n\nUsually the decision is made the same day and in some cases can take up to 3 days.</string>
   <string name="log_out">Log out</string>

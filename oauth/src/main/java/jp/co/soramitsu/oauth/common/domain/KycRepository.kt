@@ -10,10 +10,13 @@ interface KycRepository {
     suspend fun getReferenceNumber(
         accessToken: String,
         phoneNumber: String?,
-        email: String?
+        email: String?,
     ): Result<String>
 
-    suspend fun getKycLastFinalStatus(accessToken: String, baseUrl: String? = null): Result<SoraCardCommonVerification>
+    suspend fun getKycLastFinalStatus(
+        accessToken: String,
+        baseUrl: String? = null,
+    ): Result<SoraCardCommonVerification>
 
     fun getCachedKycResponse(): Pair<SoraCardCommonVerification, KycResponse?>?
 

@@ -26,11 +26,9 @@ class UserSessionRepositoryImpl constructor(
         return runCatching { SoraCardCommonVerification.valueOf(data) }.getOrNull()
     }
 
-    override suspend fun getRefreshToken(): String =
-        dataStore.getString(REFRESH_TOKEN_KEY)
+    override suspend fun getRefreshToken(): String = dataStore.getString(REFRESH_TOKEN_KEY)
 
-    override suspend fun getAccessToken(): String =
-        dataStore.getString(ACCESS_TOKEN_KEY)
+    override suspend fun getAccessToken(): String = dataStore.getString(ACCESS_TOKEN_KEY)
 
     override suspend fun getAccessTokenExpirationTime(): Long =
         dataStore.getLong(ACCESS_TOKEN_EXPIRATION_TIME_KEY, 0)

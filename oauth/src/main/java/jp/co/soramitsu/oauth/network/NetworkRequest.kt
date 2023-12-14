@@ -4,9 +4,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.xnetworking.basic.networkclient.SoramitsuNetworkClient
-import javax.inject.Singleton
 
 enum class NetworkRequest(val url: String) {
     GET_REFERENCE_NUMBER("get-reference-number"),
@@ -28,9 +28,8 @@ class NetworkModule {
     fun provideSoraCardNetworkClient(
         inMemoryRepo: InMemoryRepo,
         client: SoramitsuNetworkClient,
-    ): SoraCardNetworkClient =
-        SoraCardNetworkClient(
-            client = client,
-            inMemoryRepo = inMemoryRepo,
-        )
+    ): SoraCardNetworkClient = SoraCardNetworkClient(
+        client = client,
+        inMemoryRepo = inMemoryRepo,
+    )
 }

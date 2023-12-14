@@ -1,6 +1,6 @@
-import org.gradle.kotlin.dsl.kapt
-import java.util.Properties
 import java.io.FileInputStream
+import java.util.Properties
+import org.gradle.kotlin.dsl.kapt
 
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 
@@ -50,14 +50,14 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
         debug {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -114,6 +114,7 @@ dependencies {
         exclude("com.android.support", "support-compat")
         exclude("com.android.support", "support-media-compat")
         exclude(module = "pinview")
+        exclude(module = "idensic-mobile-sdk-videoident")
     }
     implementation(libs.pinview)
 
@@ -134,7 +135,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "jp.co.soramitsu"
             artifactId = "android-sora-card"
-            version = "0.1.69"
+            version = "0.1.70"
 
             afterEvaluate {
                 from(components["release"])

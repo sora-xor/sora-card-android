@@ -6,8 +6,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.HiltAndroidApp
 import dagger.hilt.components.SingletonComponent
-import jp.co.soramitsu.xnetworking.basic.networkclient.SoramitsuNetworkClient
 import javax.inject.Singleton
+import jp.co.soramitsu.xnetworking.basic.networkclient.SoramitsuNetworkClient
 
 @HiltAndroidApp
 open class Application : Application()
@@ -17,9 +17,8 @@ open class Application : Application()
 class AppModule {
     @Provides
     @Singleton
-    fun provideSoramitsuNetworkClient(): SoramitsuNetworkClient =
-        SoramitsuNetworkClient(
-            timeout = 10000,
-            logging = true,
-        )
+    fun provideSoramitsuNetworkClient(): SoramitsuNetworkClient = SoramitsuNetworkClient(
+        timeout = 10000,
+        logging = true,
+    )
 }

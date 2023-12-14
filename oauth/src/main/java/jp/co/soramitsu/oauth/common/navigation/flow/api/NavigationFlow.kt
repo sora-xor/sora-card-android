@@ -11,5 +11,4 @@ interface NavigationFlow {
     fun back()
 
     fun exit()
-
 }

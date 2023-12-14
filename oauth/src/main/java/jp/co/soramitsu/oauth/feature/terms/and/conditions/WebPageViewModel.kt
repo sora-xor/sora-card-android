@@ -14,30 +14,30 @@ import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
 
 @HiltViewModel
 class WebPageViewModel @Inject constructor(
-    private val mainRouter: MainRouter
+    private val mainRouter: MainRouter,
 ) : BaseViewModel() {
 
     var state = mutableStateOf(WebPageState())
         private set
 
     init {
-        _toolbarState.value = SoramitsuToolbarState(
+        mToolbarState.value = SoramitsuToolbarState(
             type = SoramitsuToolbarType.Small(),
             basic = BasicToolbarState(
                 title = "",
                 visibility = true,
-                navIcon = R.drawable.ic_toolbar_back
+                navIcon = R.drawable.ic_toolbar_back,
             ),
         )
     }
 
     fun setArgs(title: String, webUrl: String) {
-        _toolbarState.value = _toolbarState.value?.copy(
+        mToolbarState.value = mToolbarState.value?.copy(
             basic = BasicToolbarState(
                 title = title,
                 visibility = true,
-                navIcon = R.drawable.ic_toolbar_back
-            )
+                navIcon = R.drawable.ic_toolbar_back,
+            ),
         )
         state.value = state.value.copy(url = WebUrl.valueOf(webUrl).url)
     }

@@ -1,6 +1,7 @@
 package jp.co.soramitsu.oauth.common.data
 
 import io.ktor.client.call.body
+import java.util.UUID
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.model.CountryCodeDto
@@ -18,7 +19,6 @@ import jp.co.soramitsu.oauth.network.NetworkRequest
 import jp.co.soramitsu.oauth.network.SoraCardNetworkClient
 import jp.co.soramitsu.xnetworking.basic.common.Utils.toDoubleNan
 import kotlinx.serialization.json.Json
-import java.util.UUID
 
 class KycRepositoryImpl(
     private val apiClient: SoraCardNetworkClient,
@@ -30,7 +30,7 @@ class KycRepositoryImpl(
     override suspend fun getReferenceNumber(
         accessToken: String,
         phoneNumber: String?,
-        email: String?
+        email: String?,
     ): Result<String> {
         if (cacheReference.isNotEmpty()) return Result.success(cacheReference)
         return runCatching {
@@ -43,8 +43,8 @@ class KycRepositoryImpl(
                     email = email,
                     addressChanged = false,
                     documentChanged = false,
-                    additionalData = ""
-                )
+                    additionalData = "",
+                ),
             ).body<GetReferenceNumberResponse>()
                 .referenceNumber
             cacheReference = ref
@@ -73,12 +73,14 @@ class KycRepositoryImpl(
 
     override suspend fun getKycLastFinalStatus(
         accessToken: String,
-        baseUrl: String?
+        baseUrl: String?,
     ): Result<SoraCardCommonVerification> {
         userSessionRepository.getKycStatus()?.let {
-            if (it == SoraCardCommonVerification.Successful) return Result.success(
-                SoraCardCommonVerification.Successful
-            )
+            if (it == SoraCardCommonVerification.Successful) {
+                return Result.success(
+                    SoraCardCommonVerification.Successful,
+                )
+            }
         }
         return getKycInfo(accessToken, baseUrl).map { kycStatus ->
             mapKycStatus(kycStatus).also {
@@ -132,7 +134,7 @@ class KycRepositoryImpl(
         return runCatching {
             apiClient.get(
                 accessToken,
-                NetworkRequest.GET_KYC_FREE_ATTEMPT_INFO.url
+                NetworkRequest.GET_KYC_FREE_ATTEMPT_INFO.url,
             ).body()
         }
     }
@@ -163,7 +165,7 @@ class KycRepositoryImpl(
         return runCatching {
             apiClient.get(
                 accessToken,
-                NetworkRequest.GET_CURRENT_XOR_EURO_PRICE.url
+                NetworkRequest.GET_CURRENT_XOR_EURO_PRICE.url,
             ).body<XorEuroPrice>()
         }.mapCatching {
             it.price.toDoubleNan() ?: throw IllegalArgumentException("XOR Euro price failed")
@@ -178,15 +180,14 @@ class KycRepositoryImpl(
             countriesCache.addAll(it)
         }
 
-    private suspend fun getCountriesInternal(baseUrl: String?) =
-        runCatching {
-            val response = apiClient.get(
-                bearerToken = null,
-                url = NetworkRequest.COUNTRY_CODES.url,
-                baseUrl = baseUrl,
-            ).body<String>()
-            Json.decodeFromString<Map<String, CountryCodeDto>>(response).map {
-                CountryDial(it.key, it.value.countryName, it.value.dialCode)
-            }
-        }.getOrDefault(emptyList())
+    private suspend fun getCountriesInternal(baseUrl: String?) = runCatching {
+        val response = apiClient.get(
+            bearerToken = null,
+            url = NetworkRequest.COUNTRY_CODES.url,
+            baseUrl = baseUrl,
+        ).body<String>()
+        Json.decodeFromString<Map<String, CountryCodeDto>>(response).map {
+            CountryDial(it.key, it.value.countryName, it.value.dialCode)
+        }
+    }.getOrDefault(emptyList())
 }

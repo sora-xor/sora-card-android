@@ -27,23 +27,19 @@ import jp.co.soramitsu.ui_core.theme.customColors
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
-fun WebPageScreen(
-    title: String,
-    webUrl: String,
-    viewModel: WebPageViewModel = hiltViewModel()
-) {
+fun WebPageScreen(title: String, webUrl: String, viewModel: WebPageViewModel = hiltViewModel()) {
     LaunchedEffect(Unit) {
         viewModel.setArgs(title, webUrl)
     }
 
     Screen(
-        viewModel = viewModel
+        viewModel = viewModel,
     ) {
         val state = viewModel.state
 
         Box(
             modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             AndroidView(
                 modifier = Modifier.fillMaxSize(),
@@ -58,7 +54,7 @@ fun WebPageScreen(
                         settings.javaScriptEnabled = true
                         loadUrl(WebUrl.valueOf(webUrl).url)
                     }
-                }
+                },
             )
 
             if (state.value.loading) {
@@ -74,18 +70,18 @@ fun ProgressDialog() {
         onDismissRequest = {},
         properties = DialogProperties(
             dismissOnBackPress = false,
-            dismissOnClickOutside = false
-        )
+            dismissOnClickOutside = false,
+        ),
     ) {
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(Dimens.x2))
                 .background(MaterialTheme.customColors.bgSurface),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             CircularProgressIndicator(
                 modifier = Modifier.size(Dimens.x6).padding(Dimens.x1),
-                color = MaterialTheme.customColors.fgPrimary
+                color = MaterialTheme.customColors.fgPrimary,
             )
         }
     }

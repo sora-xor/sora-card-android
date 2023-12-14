@@ -22,7 +22,7 @@ class FreeCardIssuanceStateTest {
             screenStatus = ScreenStatus.LOADING,
             euroInsufficientAmount = 0.toDouble(),
             xorInsufficientAmount = 0.toDouble(),
-            euroLiquidityThreshold = 100.toDouble()
+            euroLiquidityThreshold = 100.toDouble(),
         ).apply { state = this }
     }
 
@@ -30,7 +30,7 @@ class FreeCardIssuanceStateTest {
     fun `init EXPECT title and description set up`() {
         assertEquals(
             R.string.card_issuance_screen_free_card_title,
-            (state.titleText as Text.StringRes).id
+            (state.titleText as Text.StringRes).id,
         )
         (state.descriptionText as Text.StringResWithArgs).let {
             assertEquals(R.string.card_issuance_screen_free_card_description, it.id)
@@ -47,7 +47,8 @@ class FreeCardIssuanceStateTest {
                 arrayOf(
                     String.format("%.2f", .0f),
                     String.format("%.2f", .0f),
-                ), it.payload
+                ),
+                it.payload,
             )
         }
 
@@ -57,8 +58,9 @@ class FreeCardIssuanceStateTest {
             assertEquals(R.string.card_issuance_screen_free_card_get_xor, it.id)
             assertArrayEquals(
                 arrayOf(
-                    String.format("%.2f", .0f)
-                ), it.payload
+                    String.format("%.2f", .0f),
+                ),
+                it.payload,
             )
         }
     }
@@ -72,7 +74,7 @@ class FreeCardIssuanceStateTest {
         assertEquals(false, state.isGetInsufficientXorButtonEnabled)
         assertEquals(
             R.string.card_issuance_screen_free_card_get_xor,
-            (state.getInsufficientXorText as Text.StringRes).id
+            (state.getInsufficientXorText as Text.StringRes).id,
         )
     }
 }

@@ -3,6 +3,7 @@
   <string name="cant_fetch_data">No se pueden obtener datos</string>
   <string name="cant_fetch_refresh">No se pueden obtener datos, pulse para actualizar.</string>
   <string name="card_attention_text">Atención</string>
+  <string name="card_hub_title">Card details</string>
   <string name="card_hub_update_button">Update now</string>
   <string name="card_hub_update_description">You are using an outdated version of the app, some part might not be working as intended.</string>
   <string name="card_hub_update_title">Update app to latest version</string>
@@ -68,7 +69,7 @@
   <string name="get_prepared_take_selfie_description">Se facilitará la guía durante el proceso</string>
   <string name="get_prepared_take_selfie_title">Hazte un selfie</string>
   <string name="get_prepared_title">Prepárate</string>
-  <string name="iban_pending_description">Your IBAN issuance is pending.\nIn case the wait longer than 72h contact us via techsupport@soracard.com</string>
+  <string name="iban_pending_description">Tu emisión de IBAN está pendiente.\n En caso de que la espera supere las 72h contáctenos vía %s</string>
   <string name="kyc_result_verification_in_progress">Verificación en progreso</string>
   <string name="kyc_result_verification_in_progress_description">Ha completado exitosamente su solicitud de KYC. La revisión está pendiente y puedes esperar una decisión en breve. \n\nHabitualmente la decisión se toma el mismo día y en algunos casos puede tardar hasta 3 días.</string>
   <string name="log_out">Cerrar sesión</string>
@@ -80,7 +81,7 @@
   <string name="payment_widget_unavailable_description">Disculpe las molestias.\NEstamos trabajando diligentemente para resolverlo.\NPor favor, inténtelo de nuevo más tarde.</string>
   <string name="payment_widget_unavailable_message">El widget de pago no está disponible actualmente</string>
   <string name="payment_widget_unavailable_title">Widget no disponible</string>
-  <string name="select_your_country">Select your country</string>
+  <string name="select_your_country">Selecciona tu pais</string>
   <string name="terms_and_conditions_accept_and_continue">Aceptar y Continuar</string>
   <string name="terms_and_conditions_confirm_description">Al continuar confirma que ha leído, entendido y aceptado estas políticas</string>
   <string name="terms_and_conditions_description">Queremos que sepas exactamente como trabajan los servicios de la Tarjeta SORA, quién y por qué necesita tus detalles. Revisar estas políticas te ayudará a continuar usando la App con tranquilidad absoluta.</string>

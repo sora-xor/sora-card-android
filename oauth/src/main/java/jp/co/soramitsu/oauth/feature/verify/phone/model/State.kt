@@ -20,5 +20,5 @@ data class EnterPhoneNumberState(
 
 data class VerifyPhoneNumberState(
     val inputTextState: InputTextState,
-    val buttonState: ButtonState
+    val buttonState: ButtonState,
 )

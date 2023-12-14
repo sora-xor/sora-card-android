@@ -1,10 +1,8 @@
 package jp.co.soramitsu.oauth.feature.getprepared
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
@@ -19,7 +17,6 @@ import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class GetPreparedViewModel @Inject constructor(
@@ -29,13 +26,14 @@ class GetPreparedViewModel @Inject constructor(
     private val priceInteractor: PriceInteractor,
 ) : BaseViewModel() {
 
-    private val _state = MutableStateFlow(GetPreparedState(totalFreeAttemptsCount = "", attemptCost = ""))
+    private val _state =
+        MutableStateFlow(GetPreparedState(totalFreeAttemptsCount = "", attemptCost = ""))
     val state = _state.asStateFlow()
 
     private var authCallback: OAuthCallback? = null
 
     init {
-        _toolbarState.value = SoramitsuToolbarState(
+        mToolbarState.value = SoramitsuToolbarState(
             type = SoramitsuToolbarType.Small(),
             basic = BasicToolbarState(
                 title = R.string.get_prepared_title,
@@ -69,7 +67,7 @@ class GetPreparedViewModel @Inject constructor(
                     title = R.string.get_prepared_personal_info_title,
                     description = listOf(R.string.get_prepared_personal_info_description),
                 ),
-            )
+            ),
         )
         viewModelScope.launch {
             val token = userSessionRepository.getAccessToken()

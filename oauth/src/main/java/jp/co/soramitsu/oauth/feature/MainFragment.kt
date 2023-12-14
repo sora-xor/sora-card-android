@@ -20,6 +20,8 @@ import com.paywings.onboarding.kyc.android.sdk.data.model.KycCredentials
 import com.paywings.onboarding.kyc.android.sdk.data.model.KycSettings
 import com.paywings.onboarding.kyc.android.sdk.util.PayWingsOnboardingKycResult
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.UUID
+import javax.inject.Inject
 import jp.co.soramitsu.oauth.base.BaseFragment
 import jp.co.soramitsu.oauth.base.extension.onBackPressed
 import jp.co.soramitsu.oauth.base.mapSoraCardResult
@@ -32,8 +34,6 @@ import jp.co.soramitsu.oauth.feature.terms.and.conditions.ProgressDialog
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import java.util.UUID
-import javax.inject.Inject
 
 @AndroidEntryPoint
 internal class MainFragment : BaseFragment() {
@@ -44,7 +44,7 @@ internal class MainFragment : BaseFragment() {
     private val viewModel: MainViewModel by viewModels()
 
     private val onboardingKyc = registerForActivityResult(
-        PayWingsOnboardingKycContract()
+        PayWingsOnboardingKycContract(),
     ) { payWingsOnboardingKycResult ->
         when (payWingsOnboardingKycResult) {
             is PayWingsOnboardingKycResult.Success -> {
@@ -53,7 +53,7 @@ internal class MainFragment : BaseFragment() {
 
             is PayWingsOnboardingKycResult.Failure -> {
                 viewModel.onKycFailed(
-                    statusDescription = payWingsOnboardingKycResult.statusDescription
+                    statusDescription = payWingsOnboardingKycResult.statusDescription,
                 )
             }
         }
@@ -76,7 +76,7 @@ internal class MainFragment : BaseFragment() {
             val result = SoraCardResult.Canceled
             requireActivity().setResult(
                 mapSoraCardResult(result),
-                Intent().putExtra(SoraCardConstants.EXTRA_SORA_CARD_RESULT, result)
+                Intent().putExtra(SoraCardConstants.EXTRA_SORA_CARD_RESULT, result),
             )
             requireActivity().finish()
         }
@@ -98,7 +98,7 @@ internal class MainFragment : BaseFragment() {
                                 KycCredentials(
                                     endpointUrl = viewModel.inMemoryRepo.endpointUrl,
                                     username = viewModel.inMemoryRepo.username,
-                                    password = viewModel.inMemoryRepo.password
+                                    password = viewModel.inMemoryRepo.password,
                                 ),
                                 KycSettings(
                                     appReferenceId = UUID.randomUUID().toString(),
@@ -106,8 +106,8 @@ internal class MainFragment : BaseFragment() {
                                     referenceNumber = state.referenceNumber,
                                 ),
                                 userData = state.kycUserData,
-                                userCredentials = state.userCredentials
-                            )
+                                userCredentials = state.userCredentials,
+                            ),
                         )
                     }
                 }

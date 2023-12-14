@@ -9,6 +9,7 @@ import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.extension.getParcelableCompat
 import jp.co.soramitsu.oauth.base.resources.ContextManager
@@ -19,14 +20,11 @@ import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardContractData
 import jp.co.soramitsu.oauth.common.domain.CurrentActivityRetriever
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.feature.MainFragment
-import javax.inject.Inject
 
 @HiltViewModel
 class CardViewModel @Inject constructor(
     val inMemoryRepo: InMemoryRepo,
-) : ViewModel() {
-
-}
+) : ViewModel()
 
 @AndroidEntryPoint
 class CardActivity : AppCompatActivity(R.layout.card_activity) {
@@ -62,7 +60,7 @@ class CardActivity : AppCompatActivity(R.layout.card_activity) {
     private fun setUpRegistrationFlow(bundle: Bundle) {
         val contractData = bundle.getParcelableCompat(
             EXTRA_SORA_CARD_CONTRACT_DATA,
-            SoraCardContractData::class.java
+            SoraCardContractData::class.java,
         )
 
         contractData?.let { data ->

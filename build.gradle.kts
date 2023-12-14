@@ -13,32 +13,42 @@ tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
 }
 
-fun Project.getKtlintConfiguration(): Configuration {
-    return configurations.findByName("ktlint") ?: configurations.create("ktlint") {
-        val dependency = project.dependencies.create("com.pinterest:ktlint:0.46.1").apply {
-            attributes.attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
+val ktlint by configurations.creating
+
+dependencies {
+    ktlint("com.pinterest.ktlint:ktlint-cli:1.0.1") {
+        attributes {
+            attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
         }
-        dependencies.add(dependency)
     }
+    // ktlint(project(":custom-ktlint-ruleset")) // in case of custom ruleset
 }
 
-tasks.register("ktlint", JavaExec::class) {
-    description = "Check Kotlin code style."
-    group = "Verification"
-    classpath = getKtlintConfiguration()
+tasks.register<JavaExec>("ktlint") {
+    group = LifecycleBasePlugin.VERIFICATION_GROUP
+    description = "Check Kotlin code style"
+    classpath = ktlint
     mainClass.set("com.pinterest.ktlint.Main")
-    args = listOf(
-        "--reporter=plain",
-        "--android",
+    // see https://pinterest.github.io/ktlint/install/cli/#command-line-usage for more information
+    args(
+        "**/src/**/*.kt",
+        "**.kts",
+        "!**/build/**",
         "--reporter=checkstyle,output=${project.buildDir}/reports/checkstyle/ktlint.xml",
-        "$project.rootDir/**/src/main/**/*.kt"
     )
 }
 
-tasks.register("ktlintFormat", JavaExec::class) {
-    description = "Fix Kotlin code style deviations."
-    group = "formatting"
-    classpath = getKtlintConfiguration()
+tasks.register<JavaExec>("ktlintFormat") {
+    group = LifecycleBasePlugin.VERIFICATION_GROUP
+    description = "Check Kotlin code style and format"
+    classpath = ktlint
     mainClass.set("com.pinterest.ktlint.Main")
-    args = listOf("-F", "$project.rootDir/**/src/main/**/*.kt", "--android")
+    jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED")
+    // see https://pinterest.github.io/ktlint/install/cli/#command-line-usage for more information
+    args(
+        "-F",
+        "**/src/**/*.kt",
+        "**.kts",
+        "!**/build/**",
+    )
 }

@@ -20,7 +20,7 @@ fun NavGraphBuilder.animatedComposable(
     route: String,
     arguments: List<NamedNavArgument> = emptyList(),
     deepLinks: List<NavDeepLink> = emptyList(),
-    content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
+    content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit,
 ) {
     this.composable(
         route = route,
@@ -29,28 +29,28 @@ fun NavGraphBuilder.animatedComposable(
         enterTransition = {
             slideInHorizontally(
                 initialOffsetX = { it },
-                animationSpec = tween(TRANSITION_DURATION)
+                animationSpec = tween(TRANSITION_DURATION),
             )
         },
         popEnterTransition = {
             slideInHorizontally(
                 initialOffsetX = { -it },
-                animationSpec = tween(TRANSITION_DURATION)
+                animationSpec = tween(TRANSITION_DURATION),
             )
         },
         exitTransition = {
             slideOutHorizontally(
                 targetOffsetX = { -it },
-                animationSpec = tween(TRANSITION_DURATION)
+                animationSpec = tween(TRANSITION_DURATION),
             )
         },
         popExitTransition = {
             slideOutHorizontally(
                 targetOffsetX = { it },
-                animationSpec = tween(TRANSITION_DURATION)
+                animationSpec = tween(TRANSITION_DURATION),
             )
         },
-        content = content
+        content = content,
     )
 }
 

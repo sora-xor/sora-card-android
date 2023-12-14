@@ -5,12 +5,12 @@ import jp.co.soramitsu.ui_core.component.input.InputTextState
 
 data class EnterEmailState(
     val inputTextState: InputTextState,
-    val buttonState: ButtonState
+    val buttonState: ButtonState,
 )
 
 data class VerifyEmailState(
     val resendLinkButtonState: ButtonState = ButtonState(title = "", enabled = false),
     val changeEmailButtonState: ButtonState = ButtonState(title = "", enabled = true),
     val email: String = "",
-    val autoSentEmail: Boolean = false
+    val autoSentEmail: Boolean = false,
 )
