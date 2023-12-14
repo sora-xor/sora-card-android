@@ -7,6 +7,7 @@ import com.paywings.oauth.android.sdk.service.callback.GetUserDataCallback
 import com.paywings.onboarding.kyc.android.sdk.data.model.KycUserData
 import com.paywings.onboarding.kyc.android.sdk.data.model.UserCredentials
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.SingleLiveEvent
 import jp.co.soramitsu.oauth.base.navigation.Destination
@@ -17,15 +18,14 @@ import jp.co.soramitsu.oauth.base.state.DialogAlertState
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.common.model.AccessTokenResponse
-import jp.co.soramitsu.oauth.common.navigation.flow.api.KycRequirementsUnfulfilledFlow
 import jp.co.soramitsu.oauth.common.navigation.flow.api.NavigationFlow
 import jp.co.soramitsu.oauth.common.navigation.flow.api.destinations.CompatibilityDestination
+import jp.co.soramitsu.oauth.common.navigation.flow.impl.di.KycRequirementsUnfulfilledFlow
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -68,7 +68,7 @@ class MainViewModel @Inject constructor(
                 dismissAvailable = true,
                 onPositive = {
                     dialogState = null
-                }
+                },
             )
         }
 
@@ -78,7 +78,7 @@ class MainViewModel @Inject constructor(
             lastName: String?,
             email: String?,
             emailConfirmed: Boolean,
-            phoneNumber: String?
+            phoneNumber: String?,
         ) {
             _state.value = _state.value.copy(
                 kycUserData = KycUserData(
@@ -86,7 +86,7 @@ class MainViewModel @Inject constructor(
                     lastName = lastName,
                     email = email,
                     mobileNumber = phoneNumber,
-                )
+                ),
             )
 
             viewModelScope.launch {
@@ -119,8 +119,8 @@ class MainViewModel @Inject constructor(
                 _state.value = _state.value.copy(
                     userCredentials = UserCredentials(
                         accessToken = accessToken,
-                        refreshToken = refreshToken
-                    )
+                        refreshToken = refreshToken,
+                    ),
                 )
 
                 pwoAuthClientProxy.getUserData(
@@ -137,7 +137,7 @@ class MainViewModel @Inject constructor(
     }
 
     private suspend fun checkAccessTokenValidity(
-        onNewToken: suspend (accessToken: String) -> Unit
+        onNewToken: suspend (accessToken: String) -> Unit,
     ) {
         when (val validity = tokenValidator.checkAccessTokenValidity()) {
             is AccessTokenResponse.AuthError -> {
@@ -194,7 +194,7 @@ class MainViewModel @Inject constructor(
             mainRouter.openGetPrepared()
         } else {
             kycRequirementsUnfulfilledFlow.start(
-                fromDestination = CompatibilityDestination(Destination.ENTER_PHONE_NUMBER.route)
+                fromDestination = CompatibilityDestination(Destination.ENTER_PHONE_NUMBER.route),
             )
         }
     }
@@ -216,7 +216,7 @@ class MainViewModel @Inject constructor(
 
     private fun showKycStatusScreen(
         kycResponse: SoraCardCommonVerification,
-        statusDescription: String? = null
+        statusDescription: String? = null,
     ) {
         when {
             (kycResponse == SoraCardCommonVerification.Pending) -> {

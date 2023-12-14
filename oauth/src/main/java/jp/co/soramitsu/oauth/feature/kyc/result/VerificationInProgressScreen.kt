@@ -29,33 +29,28 @@ import jp.co.soramitsu.ui_core.theme.customColors
 import jp.co.soramitsu.ui_core.theme.customTypography
 
 @Composable
-fun VerificationInProgressScreen(
-    viewModel: VerificationInProgressViewModel = hiltViewModel()
-) {
+fun VerificationInProgressScreen(viewModel: VerificationInProgressViewModel = hiltViewModel()) {
     BackHandler {
         viewModel.onToolbarNavigation()
     }
 
     Screen(
-        viewModel = viewModel
+        viewModel = viewModel,
     ) { scrollState ->
         VerificationInProgressContent(
             scrollState = scrollState,
-            onClose = viewModel::openTelegramSupport
+            onClose = viewModel::openTelegramSupport,
         )
     }
 }
 
 @Composable
-private fun VerificationInProgressContent(
-    scrollState: ScrollState,
-    onClose: () -> Unit
-) {
+private fun VerificationInProgressContent(scrollState: ScrollState, onClose: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(scrollState)
-            .padding(top = Dimens.x3, start = Dimens.x3, end = Dimens.x3, bottom = Dimens.x5)
+            .padding(top = Dimens.x3, start = Dimens.x3, end = Dimens.x3, bottom = Dimens.x5),
     ) {
         Text(
             modifier = Modifier
@@ -63,18 +58,18 @@ private fun VerificationInProgressContent(
                 .padding(top = Dimens.x1),
             text = stringResource(R.string.kyc_result_verification_in_progress_description),
             style = MaterialTheme.customTypography.paragraphM,
-            color = MaterialTheme.customColors.fgPrimary
+            color = MaterialTheme.customColors.fgPrimary,
         )
 
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Image(
                 painter = painterResource(R.drawable.ic_verification_in_progress),
-                contentDescription = null
+                contentDescription = null,
             )
         }
 
@@ -86,7 +81,7 @@ private fun VerificationInProgressContent(
             size = Size.Large,
             text = stringResource(id = R.string.verification_rejected_screen_support_telegram),
             enabled = true,
-            onClick = onClose
+            onClick = onClose,
         )
     }
 }
@@ -97,7 +92,7 @@ private fun PreviewVerificationInProgressScreen() {
     Box(modifier = Modifier.fillMaxSize()) {
         VerificationInProgressContent(
             scrollState = rememberScrollState(),
-            onClose = {}
+            onClose = {},
         )
     }
 }

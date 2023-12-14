@@ -38,7 +38,7 @@ fun VerificationFailedScreen(
     }
 
     Screen(
-        viewModel = viewModel
+        viewModel = viewModel,
     ) { scrollState ->
         VerificationFailedContent(
             scrollState = scrollState,
@@ -58,13 +58,13 @@ private fun VerificationFailedContent(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(scrollState)
-            .padding(top = Dimens.x3, start = Dimens.x3, end = Dimens.x3, bottom = Dimens.x5)
+            .padding(top = Dimens.x3, start = Dimens.x3, end = Dimens.x3, bottom = Dimens.x5),
     ) {
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(R.string.verification_failed_description),
             style = MaterialTheme.customTypography.paragraphM,
-            color = MaterialTheme.customColors.fgPrimary
+            color = MaterialTheme.customColors.fgPrimary,
         )
 
         additionalDescription?.let {
@@ -74,7 +74,7 @@ private fun VerificationFailedContent(
                     .padding(top = Dimens.x3),
                 text = additionalDescription,
                 style = MaterialTheme.customTypography.paragraphM,
-                color = MaterialTheme.customColors.fgPrimary
+                color = MaterialTheme.customColors.fgPrimary,
             )
         }
 
@@ -82,11 +82,11 @@ private fun VerificationFailedContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Image(
                 painter = painterResource(R.drawable.ic_verification_rejected),
-                contentDescription = null
+                contentDescription = null,
             )
         }
 
@@ -98,7 +98,7 @@ private fun VerificationFailedContent(
             size = Size.Large,
             text = stringResource(R.string.common_close),
             enabled = true,
-            onClick = onClose
+            onClick = onClose,
         )
     }
 }
@@ -109,6 +109,6 @@ private fun PreviewVerificationFailedContent() {
     VerificationFailedContent(
         scrollState = rememberScrollState(),
         additionalDescription = "PLACEHOLDER",
-        onClose = {}
+        onClose = {},
     )
 }

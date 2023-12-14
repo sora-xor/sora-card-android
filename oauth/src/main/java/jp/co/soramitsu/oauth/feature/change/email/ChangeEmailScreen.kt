@@ -16,11 +16,9 @@ import jp.co.soramitsu.oauth.feature.verify.model.ButtonState
 import jp.co.soramitsu.ui_core.component.input.InputTextState
 
 @Composable
-fun ChangeEmailScreen(
-    viewModel: ChangeEmailViewModel = hiltViewModel()
-) {
+fun ChangeEmailScreen(viewModel: ChangeEmailViewModel = hiltViewModel()) {
     Screen(
-        viewModel = viewModel
+        viewModel = viewModel,
     ) { scrollState ->
         val state = viewModel.state
 
@@ -29,7 +27,7 @@ fun ChangeEmailScreen(
             state.inputTextState,
             state.buttonState,
             viewModel::onEmailChanged,
-            viewModel::onConfirm
+            viewModel::onConfirm,
         )
     }
 }
@@ -40,7 +38,7 @@ private fun ChangeEmailContent(
     inputTextState: InputTextState,
     buttonState: ButtonState,
     onEmailChanged: (TextFieldValue) -> Unit,
-    onConfirm: () -> Unit
+    onConfirm: () -> Unit,
 ) {
     VerifyUserData(
         scrollState = scrollState,
@@ -49,7 +47,7 @@ private fun ChangeEmailContent(
         buttonState = buttonState,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         onDataEntered = onEmailChanged,
-        onConfirm = onConfirm
+        onConfirm = onConfirm,
     )
 }
 
@@ -61,6 +59,6 @@ private fun PreviewChangeEmail() {
         inputTextState = InputTextState(),
         buttonState = ButtonState(title = "Send link"),
         onEmailChanged = {},
-        onConfirm = {}
+        onConfirm = {},
     )
 }

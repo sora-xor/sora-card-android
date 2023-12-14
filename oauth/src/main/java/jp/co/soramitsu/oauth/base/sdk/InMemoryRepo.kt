@@ -1,8 +1,8 @@
 package jp.co.soramitsu.oauth.base.sdk
 
-import jp.co.soramitsu.oauth.BuildConfig
 import javax.inject.Inject
 import javax.inject.Singleton
+import jp.co.soramitsu.oauth.BuildConfig
 
 @Singleton
 class InMemoryRepo @Inject constructor() {

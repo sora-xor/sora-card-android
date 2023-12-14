@@ -11,9 +11,7 @@ import jp.co.soramitsu.oauth.common.navigation.flow.api.NavigationFlow
 import jp.co.soramitsu.oauth.common.navigation.flow.api.destinations.NavigationFlowDestination
 
 @Composable
-fun ChooseXorPurchaseMethodDialog(
-    getMoreXorViewModel: GetMoreXorViewModel = hiltViewModel()
-) {
+fun ChooseXorPurchaseMethodDialog(getMoreXorViewModel: GetMoreXorViewModel = hiltViewModel()) {
     val state = getMoreXorViewModel.choosePurchaseXorMethodState
     SelectableDialog(
         dialogTitle = state.titleText.retrieveString(),
@@ -21,7 +19,7 @@ fun ChooseXorPurchaseMethodDialog(
         selectableChoices = state.methodsTextList.map { it.retrieveString() },
         cancelText = state.cancelText.retrieveString(),
         onChoiceSelectedClickListener = { getMoreXorViewModel.onPurchaseMethodClicked(it) },
-        onCancelClickListener = getMoreXorViewModel::onCancelDialogClicked
+        onCancelClickListener = getMoreXorViewModel::onCancelDialogClicked,
     )
 }
 
@@ -41,7 +39,7 @@ private fun PreviewChooseXorPurchaseMethodDialog() {
             },
             setActivityResult = object : SetActivityResult {
                 override fun setResult(soraCardResult: SoraCardResult) {}
-            }
-        )
+            },
+        ),
     )
 }

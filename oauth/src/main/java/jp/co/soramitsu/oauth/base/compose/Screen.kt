@@ -47,10 +47,10 @@ fun Screen(
                 onMenuItemClick = viewModel::onToolbarMenuItemSelected,
                 onSearch = viewModel::onToolbarSearch,
             )
-        }
+        },
     ) { padding ->
         Box(
-            modifier = Modifier.fillMaxSize().padding(padding)
+            modifier = Modifier.fillMaxSize().padding(padding),
         ) {
             content(scrollState)
         }

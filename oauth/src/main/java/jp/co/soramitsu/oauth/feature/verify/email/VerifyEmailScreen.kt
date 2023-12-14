@@ -16,9 +16,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.base.compose.toTitle
+import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.ui_core.component.button.LoaderWrapper
 import jp.co.soramitsu.ui_core.component.button.TextButton
-import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.ui_core.component.button.TonalButton
 import jp.co.soramitsu.ui_core.component.button.properties.Order
 import jp.co.soramitsu.ui_core.component.button.properties.Size
@@ -38,7 +38,7 @@ fun VerifyEmailScreen(
     }
 
     Screen(
-        viewModel = viewModel
+        viewModel = viewModel,
     ) { scrollState ->
         val state = viewModel.state
 
@@ -46,7 +46,7 @@ fun VerifyEmailScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(scrollState)
-                .padding(top = Dimens.x1, start = Dimens.x2, end = Dimens.x2, bottom = Dimens.x5)
+                .padding(top = Dimens.x1, start = Dimens.x2, end = Dimens.x2, bottom = Dimens.x5),
         ) {
             Text(
                 modifier = Modifier
@@ -55,7 +55,7 @@ fun VerifyEmailScreen(
                 text = stringResource(R.string.verify_email_description, email),
                 style = MaterialTheme.customTypography.paragraphM,
                 color = MaterialTheme.customColors.fgPrimary,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
 
             LoaderWrapper(
@@ -69,9 +69,11 @@ fun VerifyEmailScreen(
                     modifier = modifier,
                     order = Order.SECONDARY,
                     size = Size.Large,
-                    text = state.resendLinkButtonState.timer.takeIf { it != null } ?: state.resendLinkButtonState.title.toTitle(),
+                    text = state.resendLinkButtonState.timer.takeIf {
+                        it != null
+                    } ?: state.resendLinkButtonState.title.toTitle(),
                     enabled = state.resendLinkButtonState.enabled,
-                    onClick = viewModel::onResendLink
+                    onClick = viewModel::onResendLink,
                 )
             }
 
@@ -83,7 +85,7 @@ fun VerifyEmailScreen(
                 size = Size.Large,
                 text = state.changeEmailButtonState.title.toTitle(),
                 enabled = state.changeEmailButtonState.enabled,
-                onClick = viewModel::onChangeEmail
+                onClick = viewModel::onChangeEmail,
             )
         }
     }

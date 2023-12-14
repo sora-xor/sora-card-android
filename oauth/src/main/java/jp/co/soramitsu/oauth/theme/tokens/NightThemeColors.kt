@@ -45,5 +45,4 @@ object NightThemeColors {
     val StatusError = Color(0xFFf24197)
 
     val StatusErrorContainer = Color(0xFFffe8eb)
-
 }

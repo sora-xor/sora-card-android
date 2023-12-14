@@ -18,18 +18,26 @@ class ChooseXorPurchaseMethodStateTest {
     @Before
     fun setUp() {
         ChooseXorPurchaseMethodState(
-            xorPurchaseMethods = XorPurchaseMethod.values().toList()
+            xorPurchaseMethods = XorPurchaseMethod.values().toList(),
         ).apply { state = this }
     }
 
     @Test
     fun `init EXPECT string res are correct`() {
         assertEquals(R.string.details_get_more_xor, (state.titleText as Text.StringRes).id)
-        assertEquals(R.string.get_more_xor_dialog_description, (state.descriptionText as Text.StringRes).id)
-        assertEquals(R.string.get_more_xor_dialog_deposit_option, (state.methodsTextList[0] as Text.StringRes).id)
-        assertEquals(R.string.get_more_xor_dialog_swap_option, (state.methodsTextList[1] as Text.StringRes).id)
-        //assertEquals(R.string.get_more_xor_dialog_buy_option, (state.methodsTextList[2] as Text.StringRes).id)
+        assertEquals(
+            R.string.get_more_xor_dialog_description,
+            (state.descriptionText as Text.StringRes).id,
+        )
+        assertEquals(
+            R.string.get_more_xor_dialog_deposit_option,
+            (state.methodsTextList[0] as Text.StringRes).id,
+        )
+        assertEquals(
+            R.string.get_more_xor_dialog_swap_option,
+            (state.methodsTextList[1] as Text.StringRes).id,
+        )
+        // assertEquals(R.string.get_more_xor_dialog_buy_option, (state.methodsTextList[2] as Text.StringRes).id)
         assertEquals(R.string.common_cancel, (state.cancelText as Text.StringRes).id)
     }
-
 }

@@ -65,10 +65,7 @@ class MainRouterImpl : MainRouter {
     private var navHostController: NavHostController? = null
     private var activity: Activity? = null
 
-    override fun attachNavController(
-        activity: Activity,
-        navHostController: NavHostController
-    ) {
+    override fun attachNavController(activity: Activity, navHostController: NavHostController) {
         this.navHostController = navHostController
         this.activity = activity
     }
@@ -109,7 +106,7 @@ class MainRouterImpl : MainRouter {
 
     override fun openVerifyPhoneNumber(phoneNumber: String, otpLength: Int) {
         navHostController?.navigate(
-            Destination.VERIFY_PHONE_NUMBER.route + phoneNumber.asArgument() + otpLength.asArgument()
+            Destination.VERIFY_PHONE_NUMBER.route + phoneNumber.asArgument() + otpLength.asArgument(),
         )
     }
 
@@ -119,13 +116,13 @@ class MainRouterImpl : MainRouter {
 
     override fun openEnterEmail(firstName: String, lastName: String) {
         navHostController?.navigate(
-            Destination.ENTER_EMAIL.route + firstName.asArgument() + lastName.asArgument()
+            Destination.ENTER_EMAIL.route + firstName.asArgument() + lastName.asArgument(),
         )
     }
 
     override fun openVerifyEmail(email: String, autoEmailSent: Boolean, clearStack: Boolean) {
         navHostController?.navigate(
-            Destination.VERIFY_EMAIL.route + email.asArgument() + autoEmailSent.asArgument()
+            Destination.VERIFY_EMAIL.route + email.asArgument() + autoEmailSent.asArgument(),
         ) {
             if (clearStack) {
                 popUpTo(Destination.ENTER_PHONE_NUMBER.route)
@@ -136,7 +133,7 @@ class MainRouterImpl : MainRouter {
     override fun openWebPage(@StringRes titleRes: Int, url: WebUrl) {
         val title = navHostController?.context?.getString(titleRes).orEmpty()
         navHostController?.navigate(
-            Destination.WEB_PAGE.route + title.asArgument() + url.asArgument()
+            Destination.WEB_PAGE.route + title.asArgument() + url.asArgument(),
         )
     }
 
@@ -159,7 +156,7 @@ class MainRouterImpl : MainRouter {
         navHostController?.apply {
             currentBackStackEntry?.arguments?.putString(
                 Argument.ADDITIONAL_DESCRIPTION.arg,
-                additionalDescription
+                additionalDescription,
             )
             navigate(Destination.VERIFICATION_FAILED.route)
         }
@@ -197,9 +194,13 @@ class MainRouterImpl : MainRouter {
     }
 
     override fun popUpTo(destinationRoute: String) {
-        if (navHostController?.currentBackStackEntry?.destination?.route?.contains(destinationRoute) == true)
+        if (navHostController?.currentBackStackEntry?.destination?.route?.contains(destinationRoute) == true) {
             navHostController?.popBackStack(destinationRoute, inclusive = false)
-        else
-            navHostController?.popBackStack(Destination.TERMS_AND_CONDITIONS.route, inclusive = false)
+        } else {
+            navHostController?.popBackStack(
+                Destination.TERMS_AND_CONDITIONS.route,
+                inclusive = false,
+            )
+        }
     }
 }

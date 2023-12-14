@@ -10,5 +10,5 @@ data class MainScreenState(
 )
 
 data class MainScreenUiState(
-    val loading: Boolean = false
+    val loading: Boolean = false,
 )

@@ -1,5 +1,5 @@
-import java.util.Properties
 import java.io.FileInputStream
+import java.util.Properties
 
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 
@@ -50,33 +50,81 @@ android {
 
     buildTypes {
         release {
-            buildConfigField("String", "SORA_CARD_API_KEY", maybeWrapQuotes(secret("SORA_CARD_API_KEY_PROD")!!))
-            buildConfigField("String", "SORA_CARD_DOMAIN", maybeWrapQuotes(secret("SORA_CARD_DOMAIN_PROD")!!))
-            buildConfigField("String", "SORA_CARD_KYC_ENDPOINT_URL", maybeWrapQuotes(secret("SORA_CARD_KYC_ENDPOINT_URL_PROD")!!))
-            buildConfigField("String", "SORA_CARD_KYC_USERNAME", maybeWrapQuotes(secret("SORA_CARD_KYC_USERNAME_PROD")!!))
-            buildConfigField("String", "SORA_CARD_KYC_PASSWORD", maybeWrapQuotes(secret("SORA_CARD_KYC_PASSWORD_PROD")!!))
+            buildConfigField(
+                "String",
+                "SORA_CARD_API_KEY",
+                maybeWrapQuotes(secret("SORA_CARD_API_KEY_PROD")!!),
+            )
+            buildConfigField(
+                "String",
+                "SORA_CARD_DOMAIN",
+                maybeWrapQuotes(secret("SORA_CARD_DOMAIN_PROD")!!),
+            )
+            buildConfigField(
+                "String",
+                "SORA_CARD_KYC_ENDPOINT_URL",
+                maybeWrapQuotes(secret("SORA_CARD_KYC_ENDPOINT_URL_PROD")!!),
+            )
+            buildConfigField(
+                "String",
+                "SORA_CARD_KYC_USERNAME",
+                maybeWrapQuotes(secret("SORA_CARD_KYC_USERNAME_PROD")!!),
+            )
+            buildConfigField(
+                "String",
+                "SORA_CARD_KYC_PASSWORD",
+                maybeWrapQuotes(secret("SORA_CARD_KYC_PASSWORD_PROD")!!),
+            )
 
-            buildConfigField("String","SORA_API_BASE_URL",maybeWrapQuotes(secret("SORA_BACKEND_RELEASE")!!))
+            buildConfigField(
+                "String",
+                "SORA_API_BASE_URL",
+                maybeWrapQuotes(secret("SORA_BACKEND_RELEASE")!!),
+            )
 
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
         debug {
-            buildConfigField("String", "SORA_CARD_API_KEY", maybeWrapQuotes(secret("SORA_CARD_API_KEY_TEST")!!))
-            buildConfigField("String", "SORA_CARD_DOMAIN", maybeWrapQuotes(secret("SORA_CARD_DOMAIN_TEST")!!))
-            buildConfigField("String", "SORA_CARD_KYC_ENDPOINT_URL", maybeWrapQuotes(secret("SORA_CARD_KYC_ENDPOINT_URL_TEST")!!))
-            buildConfigField("String", "SORA_CARD_KYC_USERNAME", maybeWrapQuotes(secret("SORA_CARD_KYC_USERNAME_TEST")!!))
-            buildConfigField("String", "SORA_CARD_KYC_PASSWORD", maybeWrapQuotes(secret("SORA_CARD_KYC_PASSWORD_TEST")!!))
+            buildConfigField(
+                "String",
+                "SORA_CARD_API_KEY",
+                maybeWrapQuotes(secret("SORA_CARD_API_KEY_TEST")!!),
+            )
+            buildConfigField(
+                "String",
+                "SORA_CARD_DOMAIN",
+                maybeWrapQuotes(secret("SORA_CARD_DOMAIN_TEST")!!),
+            )
+            buildConfigField(
+                "String",
+                "SORA_CARD_KYC_ENDPOINT_URL",
+                maybeWrapQuotes(secret("SORA_CARD_KYC_ENDPOINT_URL_TEST")!!),
+            )
+            buildConfigField(
+                "String",
+                "SORA_CARD_KYC_USERNAME",
+                maybeWrapQuotes(secret("SORA_CARD_KYC_USERNAME_TEST")!!),
+            )
+            buildConfigField(
+                "String",
+                "SORA_CARD_KYC_PASSWORD",
+                maybeWrapQuotes(secret("SORA_CARD_KYC_PASSWORD_TEST")!!),
+            )
 
-            buildConfigField("String","SORA_API_BASE_URL",maybeWrapQuotes(secret("SORA_BACKEND_DEBUG")!!))
+            buildConfigField(
+                "String",
+                "SORA_API_BASE_URL",
+                maybeWrapQuotes(secret("SORA_BACKEND_DEBUG")!!),
+            )
 
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }

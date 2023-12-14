@@ -36,8 +36,8 @@ fun DialogAlert(state: DialogAlertState) {
                 text = stringResource(id = R.string.common_ok).uppercase(),
                 size = Size.ExtraSmall,
                 order = Order.SECONDARY,
-                onClick = state.onPositive
+                onClick = state.onPositive,
             )
-        }
+        },
     )
 }

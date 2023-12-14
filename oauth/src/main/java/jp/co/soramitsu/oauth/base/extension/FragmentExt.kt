@@ -10,6 +10,6 @@ fun Fragment.onBackPressed(block: () -> Unit) {
             override fun handleOnBackPressed() {
                 block()
             }
-        }
+        },
     )
 }

@@ -101,7 +101,10 @@ class VerifyPhoneNumberViewModelTest {
 
     @Test
     fun `init EXPECT set up input filed state`() {
-        assertEquals(R.string.verify_phone_number_code_input_field_label, viewModel.state.value.inputTextState.label)
+        assertEquals(
+            R.string.verify_phone_number_code_input_field_label,
+            viewModel.state.value.inputTextState.label,
+        )
     }
 
     @Test

@@ -7,7 +7,7 @@ private const val SECOND_IN_MILLS = 1000L
 
 class Timer(
     millisInFuture: Long = RESENT_OTP_MAX_TIME_SECONDS * SECOND_IN_MILLS,
-    countDownInterval: Long = SECOND_IN_MILLS
+    countDownInterval: Long = SECOND_IN_MILLS,
 ) : CountDownTimer(millisInFuture, countDownInterval) {
 
     private var onTickListener: ((Long) -> Unit)? = null

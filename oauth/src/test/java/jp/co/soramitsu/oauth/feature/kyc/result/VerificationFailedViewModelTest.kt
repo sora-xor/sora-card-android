@@ -60,6 +60,10 @@ class VerificationFailedViewModelTest {
     @Test
     fun `call onClose EXPECT finish kyc`() {
         viewModel.onClose()
-        verify { setActivityResult.setResult(SoraCardResult.Failure(SoraCardCommonVerification.Failed)) }
+        verify {
+            setActivityResult.setResult(
+                SoraCardResult.Failure(SoraCardCommonVerification.Failed),
+            )
+        }
     }
 }

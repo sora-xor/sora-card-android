@@ -40,19 +40,17 @@ import jp.co.soramitsu.ui_core.theme.customColors
 import jp.co.soramitsu.ui_core.theme.customTypography
 
 @Composable
-fun CardIssuanceScreen(
-    viewModel: CardIssuanceViewModel = hiltViewModel()
-) {
+fun CardIssuanceScreen(viewModel: CardIssuanceViewModel = hiltViewModel()) {
     BackHandler {
         viewModel.onToolbarNavigation()
     }
     Screen(
-        viewModel = viewModel
+        viewModel = viewModel,
     ) { scrollState ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(scrollState)
+                .verticalScroll(scrollState),
         ) {
             Text(
                 text = stringResource(id = R.string.card_issuance_screen_title),
@@ -62,34 +60,32 @@ fun CardIssuanceScreen(
             )
             if (viewModel.cardIssuanceScreenState.isScreenLoading) {
                 Box(
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
                 ) {
                     CircularProgressIndicator(
                         modifier = Modifier.align(Alignment.Center),
-                        color = MaterialTheme.customColors.fgPrimary
+                        color = MaterialTheme.customColors.fgPrimary,
                     )
                 }
             } else {
                 FreeCardIssuance(viewModel)
                 /* Will be available latter */
-                //InlineTextDivider()
-                //PaidCardIssuance(viewModel)
+                // InlineTextDivider()
+                // PaidCardIssuance(viewModel)
             }
         }
     }
 }
 
 @Composable
-private fun FreeCardIssuance(
-    viewModel: CardIssuanceViewModel
-) {
+private fun FreeCardIssuance(viewModel: CardIssuanceViewModel) {
     val state = viewModel.cardIssuanceScreenState.freeCardIssuanceState
 
     ContentCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = Dimens.x3, vertical = Dimens.x1)
-            .padding(top = Dimens.x1, bottom = Dimens.x7)
+            .padding(top = Dimens.x1, bottom = Dimens.x7),
     ) {
         Column {
             Text(
@@ -100,7 +96,7 @@ private fun FreeCardIssuance(
                 text = state.titleText.retrieveString(),
                 style = MaterialTheme.customTypography.textLBold,
                 color = MaterialTheme.customColors.fgPrimary,
-                textAlign = TextAlign.Left
+                textAlign = TextAlign.Left,
             )
 
             Text(
@@ -111,7 +107,7 @@ private fun FreeCardIssuance(
                 text = state.descriptionText.retrieveString(),
                 style = MaterialTheme.customTypography.textM,
                 color = MaterialTheme.customColors.fgPrimary,
-                textAlign = TextAlign.Left
+                textAlign = TextAlign.Left,
             )
 
             BalanceIndicator(
@@ -132,26 +128,23 @@ private fun FreeCardIssuance(
                 order = Order.PRIMARY,
                 size = Size.Large,
                 enabled = state.isGetInsufficientXorButtonEnabled,
-                onClick = viewModel::onGetXorClick
+                onClick = viewModel::onGetXorClick,
             )
         }
     }
 }
 
 @Composable
-private fun PaidCardIssuance(
-    viewModel: CardIssuanceViewModel
-) {
+private fun PaidCardIssuance(viewModel: CardIssuanceViewModel) {
     val state = viewModel.cardIssuanceScreenState.paidCardIssuanceState
 
     ContentCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = Dimens.x3, vertical = Dimens.x1)
-            .padding(bottom = Dimens.x7)
+            .padding(bottom = Dimens.x7),
     ) {
         Column {
-
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -160,7 +153,7 @@ private fun PaidCardIssuance(
                 text = state.titleText.retrieveString(),
                 style = MaterialTheme.customTypography.textLBold,
                 color = MaterialTheme.customColors.fgPrimary,
-                textAlign = TextAlign.Left
+                textAlign = TextAlign.Left,
             )
 
             Text(
@@ -171,7 +164,7 @@ private fun PaidCardIssuance(
                 text = state.descriptionText.retrieveString(),
                 style = MaterialTheme.customTypography.textM,
                 color = MaterialTheme.customColors.fgPrimary,
-                textAlign = TextAlign.Left
+                textAlign = TextAlign.Left,
             )
 
             OutlinedButton(
@@ -183,7 +176,7 @@ private fun PaidCardIssuance(
                 order = Order.PRIMARY,
                 size = Size.Large,
                 enabled = state.isPayIssuanceAmountButtonEnabled,
-                onClick = viewModel::onPayIssuance
+                onClick = viewModel::onPayIssuance,
             )
         }
     }
@@ -192,93 +185,94 @@ private fun PaidCardIssuance(
 @Preview
 @Composable
 private fun PreviewCardIssuanceScreen() {
-    CardIssuanceScreen(viewModel = CardIssuanceViewModel(
-        userSessionRepository = object : UserSessionRepository {
-            override suspend fun getRefreshToken(): String {
-                TODO("Not yet implemented")
-            }
+    CardIssuanceScreen(
+        viewModel = CardIssuanceViewModel(
+            userSessionRepository = object : UserSessionRepository {
+                override suspend fun getRefreshToken(): String {
+                    TODO("Not yet implemented")
+                }
 
-            override suspend fun getUser(): Triple<String, String, Long> {
-                TODO("Not yet implemented")
-            }
+                override suspend fun getUser(): Triple<String, String, Long> {
+                    TODO("Not yet implemented")
+                }
 
-            override suspend fun getKycStatus(): SoraCardCommonVerification? {
-                TODO("Not yet implemented")
-            }
+                override suspend fun getKycStatus(): SoraCardCommonVerification? {
+                    TODO("Not yet implemented")
+                }
 
-            override suspend fun setKycStatus(status: SoraCardCommonVerification) {
-                TODO("Not yet implemented")
-            }
+                override suspend fun setKycStatus(status: SoraCardCommonVerification) {
+                    TODO("Not yet implemented")
+                }
 
-            override suspend fun getAccessToken(): String {
-                TODO("Not yet implemented")
-            }
+                override suspend fun getAccessToken(): String {
+                    TODO("Not yet implemented")
+                }
 
-            override suspend fun getAccessTokenExpirationTime(): Long {
-                TODO("Not yet implemented")
-            }
+                override suspend fun getAccessTokenExpirationTime(): Long {
+                    TODO("Not yet implemented")
+                }
 
-            override suspend fun signInUser(
-                refreshToken: String,
-                accessToken: String,
-                expirationTime: Long
-            ) {
-                TODO("Not yet implemented")
-            }
+                override suspend fun signInUser(
+                    refreshToken: String,
+                    accessToken: String,
+                    expirationTime: Long,
+                ) {
+                    TODO("Not yet implemented")
+                }
 
-            override suspend fun setNewAccessToken(accessToken: String, expirationTime: Long) {
-                TODO("Not yet implemented")
-            }
+                override suspend fun setNewAccessToken(accessToken: String, expirationTime: Long) {
+                    TODO("Not yet implemented")
+                }
 
-            override suspend fun setUserId(userId: String?) {
-                TODO("Not yet implemented")
-            }
+                override suspend fun setUserId(userId: String?) {
+                    TODO("Not yet implemented")
+                }
 
-            override suspend fun setPersonId(personId: String?) {
-                TODO("Not yet implemented")
-            }
+                override suspend fun setPersonId(personId: String?) {
+                    TODO("Not yet implemented")
+                }
 
-            override suspend fun getUserId(): String {
-                TODO("Not yet implemented")
-            }
+                override suspend fun getUserId(): String {
+                    TODO("Not yet implemented")
+                }
 
-            override suspend fun getPersonId(): String {
-                TODO("Not yet implemented")
-            }
+                override suspend fun getPersonId(): String {
+                    TODO("Not yet implemented")
+                }
 
-            override suspend fun logOutUser() {
-                TODO("Not yet implemented")
-            }
-        },
-        kycRequirementsUnfulfilledFlow = object : NavigationFlow {
-            override fun start(fromDestination: NavigationFlowDestination) {}
+                override suspend fun logOutUser() {
+                    TODO("Not yet implemented")
+                }
+            },
+            kycRequirementsUnfulfilledFlow = object : NavigationFlow {
+                override fun start(fromDestination: NavigationFlowDestination) {}
 
-            override fun proceed() {}
+                override fun proceed() {}
 
-            override fun back() {}
+                override fun back() {}
 
-            override fun exit() {}
-        },
-        setActivityResult = object : SetActivityResult {
-            override fun setResult(soraCardResult: SoraCardResult) {}
-        },
-        priceInteractor = object : PriceInteractor {
-            override suspend fun calculateXorLiquiditySufficiency(): Result<XorLiquiditySufficiency> {
-                TODO("Not yet implemented")
-            }
+                override fun exit() {}
+            },
+            setActivityResult = object : SetActivityResult {
+                override fun setResult(soraCardResult: SoraCardResult) {}
+            },
+            priceInteractor = object : PriceInteractor {
+                override suspend fun calculateXorLiquiditySufficiency(): Result<XorLiquiditySufficiency> {
+                    TODO("Not yet implemented")
+                }
 
-            override suspend fun calculateEuroLiquiditySufficiency(): Result<EuroLiquiditySufficiency> {
-                TODO("Not yet implemented")
-            }
+                override suspend fun calculateEuroLiquiditySufficiency(): Result<EuroLiquiditySufficiency> {
+                    TODO("Not yet implemented")
+                }
 
-            override suspend fun calculateCardIssuancePrice(): String {
-                TODO("Not yet implemented")
-            }
+                override suspend fun calculateCardIssuancePrice(): String {
+                    TODO("Not yet implemented")
+                }
 
-            override suspend fun calculateKycAttemptPrice(): String {
-                TODO("Not yet implemented")
-            }
-
-        }
-    ))
+                override suspend fun calculateKycAttemptPrice(): String {
+                    TODO("Not yet implemented")
+                }
+            },
+        ),
+    )
 }

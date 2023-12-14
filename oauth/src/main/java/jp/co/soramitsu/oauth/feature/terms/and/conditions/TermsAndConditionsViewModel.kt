@@ -1,6 +1,7 @@
 package jp.co.soramitsu.oauth.feature.terms.and.conditions
 
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
@@ -10,7 +11,6 @@ import jp.co.soramitsu.oauth.feature.terms.and.conditions.model.WebUrl
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
-import javax.inject.Inject
 
 @HiltViewModel
 class TermsAndConditionsViewModel @Inject constructor(
@@ -19,7 +19,7 @@ class TermsAndConditionsViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     init {
-        _toolbarState.value = SoramitsuToolbarState(
+        mToolbarState.value = SoramitsuToolbarState(
             type = SoramitsuToolbarType.Small(),
             basic = BasicToolbarState(
                 title = R.string.terms_and_conditions_title,

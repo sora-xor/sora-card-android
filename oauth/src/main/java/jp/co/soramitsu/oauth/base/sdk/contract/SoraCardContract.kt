@@ -10,7 +10,6 @@ import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants
 import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants.BUNDLE_EXTRA_SORA_CARD_CONTRACT_DATA
 import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants.EXTRA_SORA_CARD_CONTRACT_DATA
 
-
 class SoraCardContract :
     ActivityResultContract<SoraCardContractData, SoraCardResult>() {
 
@@ -27,7 +26,7 @@ class SoraCardContract :
     override fun parseResult(resultCode: Int, intent: Intent?): SoraCardResult {
         return intent?.getParcelableCompat(
             SoraCardConstants.EXTRA_SORA_CARD_RESULT,
-            SoraCardResult::class.java
+            SoraCardResult::class.java,
         ) ?: throw IllegalStateException("Sora Card SDK: No result data")
     }
 }

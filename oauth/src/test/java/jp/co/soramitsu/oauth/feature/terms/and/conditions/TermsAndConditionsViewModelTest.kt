@@ -53,7 +53,7 @@ class TermsAndConditionsViewModelTest {
     fun `init EXPECT toolbar title`() {
         assertEquals(
             R.string.terms_and_conditions_title,
-            viewModel.toolbarState.value?.basic?.title
+            viewModel.toolbarState.value?.basic?.title,
         )
     }
 
@@ -63,7 +63,7 @@ class TermsAndConditionsViewModelTest {
         verify {
             mainRouter.openWebPage(
                 titleRes = R.string.terms_and_conditions_general_terms,
-                url = WebUrl.GENERAL_TERMS
+                url = WebUrl.GENERAL_TERMS,
             )
         }
     }
@@ -71,10 +71,12 @@ class TermsAndConditionsViewModelTest {
     @Test
     fun `on privacy policy click EXPECT navigate`() {
         viewModel.onPrivacyPolicy()
-        verify { mainRouter.openWebPage(
-            titleRes = R.string.terms_and_conditions_privacy_policy,
-            url = WebUrl.PRIVACY_POLICY
-        ) }
+        verify {
+            mainRouter.openWebPage(
+                titleRes = R.string.terms_and_conditions_privacy_policy,
+                url = WebUrl.PRIVACY_POLICY,
+            )
+        }
     }
 
     @Test

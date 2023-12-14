@@ -3,6 +3,7 @@
   <string name="cant_fetch_data">Không thể tìm nạp dữ liệu</string>
   <string name="cant_fetch_refresh">Không thể tìm nạp dữ liệu, nhấn để làm mới.</string>
   <string name="card_attention_text">Chú ý</string>
+  <string name="card_hub_title">Card details</string>
   <string name="card_hub_update_button">Cập nhật ngay</string>
   <string name="card_hub_update_description">Bạn đang sử dụng phiên bản hoặc ứng dụng lỗi thời, một số phần có thể không hoạt động như dự kiến.</string>
   <string name="card_hub_update_title">Cập nhật ứng dụng lên phiên bản mới nhất</string>
@@ -68,7 +69,7 @@
   <string name="get_prepared_take_selfie_description">Hướng dẫn sẽ được cung cấp trong quá trình này</string>
   <string name="get_prepared_take_selfie_title">Chụp ảnh selfie</string>
   <string name="get_prepared_title">Chuẩn bị sẵn sàng</string>
-  <string name="iban_pending_description">Your IBAN issuance is pending.\nIn case the wait longer than 72h contact us via techsupport@soracard.com</string>
+  <string name="iban_pending_description">Việc cấp IBAN của bạn đang chờ xử lý.\n Trong trường hợp chờ đợi lâu hơn 72h, hãy liên hệ với chúng tôi qua %s</string>
   <string name="kyc_result_verification_in_progress">Đang xác minh</string>
   <string name="kyc_result_verification_in_progress_description">Bạn đã hoàn thành thành công đơn đăng ký KYC của mình. Việc xem xét đang chờ xử lý và bạn có thể mong đợi một quyết định trong thời gian ngắn.\n\nThông thường quyết định được đưa ra cùng ngày và trong một số trường hợp có thể mất đến 3 ngày.</string>
   <string name="log_out">Đăng xuất</string>
@@ -80,7 +81,7 @@
   <string name="payment_widget_unavailable_description">Xin lỗi vì sự bất tiện. \n Chúng tôi đang nỗ lực làm việc để giải quyết vấn đề này. \n Vui lòng thử lại sau.</string>
   <string name="payment_widget_unavailable_message">Tiện ích thanh toán hiện không khả dụng</string>
   <string name="payment_widget_unavailable_title">Tiện ích không khả dụng</string>
-  <string name="select_your_country">Select your country</string>
+  <string name="select_your_country">Chọn đất nước của bạn</string>
   <string name="terms_and_conditions_accept_and_continue">Chấp nhận &amp; Tiếp tục</string>
   <string name="terms_and_conditions_confirm_description">Bằng cách tiếp tục, bạn xác nhận rằng bạn đã đọc, hiểu và chấp nhận các chính sách này</string>
   <string name="terms_and_conditions_description">Chúng tôi muốn bạn biết chính xác dịch vụ thẻ SORA sẽ hoạt động như thế nào, ai cần thông tin chi tiết của bạn và tại sao. Việc xem xét các chính sách này sẽ giúp bạn yên tâm sử dụng ứng dụng.</string>

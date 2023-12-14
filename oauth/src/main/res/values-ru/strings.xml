@@ -3,6 +3,7 @@
   <string name="cant_fetch_data">Не удается получить данные</string>
   <string name="cant_fetch_refresh">Не удается получить данные, нажмите, чтобы обновить.</string>
   <string name="card_attention_text">Внимание</string>
+  <string name="card_hub_title">Card details</string>
   <string name="card_hub_update_button">Обновите сейчас</string>
   <string name="card_hub_update_description">Вы используете устаревшую версию приложения, некоторые части могут работать не так, как задумано.</string>
   <string name="card_hub_update_title">Обновите приложение до последней версии</string>
@@ -68,7 +69,7 @@
   <string name="get_prepared_take_selfie_description">Руководство будет предоставлено в ходе процесса</string>
   <string name="get_prepared_take_selfie_title">Сделайте селфи</string>
   <string name="get_prepared_title">Подготовьтесь</string>
-  <string name="iban_pending_description">Выдача вашего IBAN ожидается.\nВ случае ожидания более 72 часов свяжитесь с нами по адресу techsupport@soracard.com.</string>
+  <string name="iban_pending_description">Выдача вашего IBAN ожидается.\nВ случае ожидания более 72 часов свяжитесь с нами по адресу %s</string>
   <string name="kyc_result_verification_in_progress">Выполняется проверка</string>
   <string name="kyc_result_verification_in_progress_description">Вы успешно завершили подачу заявки на KYC. Решение на стадии рассмотрения, и вы можете ожидать его в ближайшее время.\n\nОбычно решение принимается в тот же день, но в некоторых случаях может потребоваться до 3 дней.</string>
   <string name="log_out">Выйти</string>

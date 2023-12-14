@@ -12,6 +12,4 @@ interface PriceInteractor {
     suspend fun calculateCardIssuancePrice(): String
 
     suspend fun calculateKycAttemptPrice(): String
-
 }
-

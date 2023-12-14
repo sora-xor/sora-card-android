@@ -2,6 +2,7 @@ package jp.co.soramitsu.oauth.feature.kyc.result.verificationrejected
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.compose.ScreenStatus
@@ -18,7 +19,6 @@ import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class VerificationRejectedViewModel @Inject constructor(
@@ -37,18 +37,18 @@ class VerificationRejectedViewModel @Inject constructor(
             kycAttemptCostInEuros = "",
             reason = null,
             reasonDetails = null,
-        )
+        ),
     )
     val verificationRejectedScreenState = _verificationRejectedScreenState.asStateFlow()
 
     init {
-        _toolbarState.value = SoramitsuToolbarState(
+        mToolbarState.value = SoramitsuToolbarState(
             type = SoramitsuToolbarType.Small(),
             basic = BasicToolbarState(
                 title = R.string.verification_rejected_title,
                 visibility = true,
                 navIcon = R.drawable.ic_cross,
-                actionLabel = R.string.log_out
+                actionLabel = R.string.log_out,
             ),
         )
 
@@ -77,7 +77,7 @@ class VerificationRejectedViewModel @Inject constructor(
             }.onFailure {
                 _verificationRejectedScreenState.value =
                     _verificationRejectedScreenState.value.copy(
-                        screenStatus = ScreenStatus.ERROR
+                        screenStatus = ScreenStatus.ERROR,
                     )
             }
         }
@@ -102,7 +102,7 @@ class VerificationRejectedViewModel @Inject constructor(
             setActivityResult.setResult(
                 SoraCardResult.Success(
                     status = SoraCardCommonVerification.Rejected,
-                )
+                ),
             )
         }
     }

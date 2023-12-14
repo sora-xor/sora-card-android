@@ -87,7 +87,6 @@ class VerifyEmailViewModelTest {
         assertFalse(viewModel.state.resendLinkButtonState.enabled)
     }
 
-
     @Test
     fun `init EXPECT set up change email button state`() {
         assertEquals(R.string.common_change_email, viewModel.state.changeEmailButtonState.title)

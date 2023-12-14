@@ -3,6 +3,7 @@
   <string name="cant_fetch_data">Daten können nicht abgerufen werden</string>
   <string name="cant_fetch_refresh">Daten können nicht abgerufen werden, tippen Sie, um zu aktualisieren.</string>
   <string name="card_attention_text">Aufmerksamkeit</string>
+  <string name="card_hub_title">Card details</string>
   <string name="card_hub_update_button">Update now</string>
   <string name="card_hub_update_description">You are using an outdated version of the app, some part might not be working as intended.</string>
   <string name="card_hub_update_title">Update app to latest version</string>
@@ -68,7 +69,7 @@
   <string name="get_prepared_take_selfie_description">Der Leitfaden wird während des Prozesses zur Verfügung gestellt</string>
   <string name="get_prepared_take_selfie_title">Machen Sie ein Selfie</string>
   <string name="get_prepared_title">Bereite dich vor</string>
-  <string name="iban_pending_description">Your IBAN issuance is pending.\nIn case the wait longer than 72h contact us via techsupport@soracard.com</string>
+  <string name="iban_pending_description">Die Ausstellung Ihrer IBAN steht noch aus.\n Falls die Wartezeit länger als 72 Stunden dauert, kontaktieren Sie uns per %s</string>
   <string name="kyc_result_verification_in_progress">Überprüfung läuft</string>
   <string name="kyc_result_verification_in_progress_description">Sie haben Ihren Identitätsverifizierungs-Antrag erfolgreich abgeschlossen. Die Prüfung ist noch nicht abgeschlossen und Sie können in Kürze mit einer Entscheidung rechnen.\n\nIn der Regel wird die Entscheidung noch am selben Tag getroffen, in manchen Fällen kann sie bis zu 3 Tage dauern.</string>
   <string name="log_out">Ausloggen</string>
@@ -80,7 +81,7 @@
   <string name="payment_widget_unavailable_description">Entschuldigung für die Unannehmlichkeiten. \n Wir arbeiten fleißig daran, dieses Problem zu lösen. \n Bitte versuchen Sie es später noch einmal.</string>
   <string name="payment_widget_unavailable_message">Das Zahlungs-Widget ist derzeit nicht verfügbar</string>
   <string name="payment_widget_unavailable_title">Widget nicht verfügbar</string>
-  <string name="select_your_country">Select your country</string>
+  <string name="select_your_country">Wähle dein Land</string>
   <string name="terms_and_conditions_accept_and_continue">Akzeptieren und fortfahren</string>
   <string name="terms_and_conditions_confirm_description">Indem Sie fortfahren, bestätigen Sie, dass Sie diese Richtlinien gelesen, verstanden und akzeptiert haben</string>
   <string name="terms_and_conditions_description">Wir möchten, dass Sie genau wissen, wie der SORA-Kartenservice funktionieren wird, wer Ihre Daten benötigt und warum. Wenn Sie diese Richtlinien lesen, können Sie die App unbesorgt nutzen.</string>

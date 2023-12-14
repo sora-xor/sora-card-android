@@ -16,14 +16,14 @@ fun EnterEmailScreen(
     firstName: String?,
     lastName: String?,
     viewModel: EnterEmailViewModel = hiltViewModel(),
-    authCallback: OAuthCallback
+    authCallback: OAuthCallback,
 ) {
     LaunchedEffect(Unit) {
         viewModel.setArgs(firstName, lastName, authCallback)
     }
 
     Screen(
-        viewModel = viewModel
+        viewModel = viewModel,
     ) { scrollState ->
         val state = viewModel.state
 
@@ -34,7 +34,7 @@ fun EnterEmailScreen(
             buttonState = state.buttonState,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             onDataEntered = viewModel::onEmailChanged,
-            onConfirm = viewModel::onRegisterUser
+            onConfirm = viewModel::onRegisterUser,
         )
     }
 }

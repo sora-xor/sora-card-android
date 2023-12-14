@@ -54,5 +54,4 @@ object DayThemeColors {
     val StatusError = Color(0xFFCB0F1F)
 
     val StatusErrorContainer = Red5
-
 }

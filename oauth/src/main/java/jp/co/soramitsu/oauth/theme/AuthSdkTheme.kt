@@ -29,10 +29,7 @@ import jp.co.soramitsu.ui_core.theme.defaultCustomTypography
 import jp.co.soramitsu.ui_core.theme.lightColors
 
 @Composable
-fun AuthSdkTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit
-) {
+fun AuthSdkTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
     AppTheme(
         darkTheme = darkTheme,
         lightColors = lightColors,
@@ -64,7 +61,7 @@ private val lightColors = lightColors(
     statusWarning = DayThemeColors.StatusWarning,
     statusWarningContainer = DayThemeColors.StatusWarningContainer,
     statusError = DayThemeColors.StatusError,
-    statusErrorContainer = DayThemeColors.StatusErrorContainer
+    statusErrorContainer = DayThemeColors.StatusErrorContainer,
 )
 
 private val darkColors = darkColors(
@@ -88,7 +85,7 @@ private val darkColors = darkColors(
     statusWarning = NightThemeColors.StatusWarning,
     statusWarningContainer = NightThemeColors.StatusWarningContainer,
     statusError = NightThemeColors.StatusError,
-    statusErrorContainer = NightThemeColors.StatusErrorContainer
+    statusErrorContainer = NightThemeColors.StatusErrorContainer,
 )
 
 private val typography: CustomTypography = defaultCustomTypography(
@@ -107,12 +104,12 @@ private val typography: CustomTypography = defaultCustomTypography(
     paragraphM = paragraphM,
     paragraphS = paragraphS,
     paragraphXS = paragraphXS,
-    buttonM = buttonM
+    buttonM = buttonM,
 )
 
 private val borderRadius: BorderRadius = borderRadiuses(
     s = jp.co.soramitsu.oauth.theme.tokens.BorderRadius.S,
     m = jp.co.soramitsu.oauth.theme.tokens.BorderRadius.M,
     ml = jp.co.soramitsu.oauth.theme.tokens.BorderRadius.ML,
-    xl = jp.co.soramitsu.oauth.theme.tokens.BorderRadius.L
+    xl = jp.co.soramitsu.oauth.theme.tokens.BorderRadius.L,
 )

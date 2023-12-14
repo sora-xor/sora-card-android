@@ -2,6 +2,7 @@ package jp.co.soramitsu.oauth.feature.kyc.result
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
@@ -12,16 +13,15 @@ import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class VerificationSuccessfulViewModel @Inject constructor(
     private val setActivityResult: SetActivityResult,
-    private val userSessionRepository: UserSessionRepository
+    private val userSessionRepository: UserSessionRepository,
 ) : BaseViewModel() {
 
     init {
-        _toolbarState.value = SoramitsuToolbarState(
+        mToolbarState.value = SoramitsuToolbarState(
             type = SoramitsuToolbarType.Small(),
             basic = BasicToolbarState(
                 title = R.string.verification_successful_title,
@@ -53,7 +53,7 @@ class VerificationSuccessfulViewModel @Inject constructor(
             setActivityResult.setResult(
                 soraCardResult = SoraCardResult.Success(
                     status = SoraCardCommonVerification.Successful,
-                )
+                ),
             )
         }
     }

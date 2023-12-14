@@ -3,7 +3,6 @@ package jp.co.soramitsu.oauth.feature.session.data
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
 import io.mockk.just
@@ -64,7 +63,7 @@ class UserSessionRepositoryImplTest {
         repository.signInUser(
             REFRESH_TOKEN_VALUE,
             ACCESS_TOKEN_VALUE,
-            EXPIRATION_TIME_VALUE
+            EXPIRATION_TIME_VALUE,
         )
 
         coVerify { soraCardDataStore.putString(REFRESH_TOKEN_KEY, REFRESH_TOKEN_VALUE) }
@@ -78,7 +77,7 @@ class UserSessionRepositoryImplTest {
         repository.signInUser(
             REFRESH_TOKEN_VALUE,
             ACCESS_TOKEN_VALUE,
-            EXPIRATION_TIME_VALUE
+            EXPIRATION_TIME_VALUE,
         )
 
         coVerify { soraCardDataStore.putString(ACCESS_TOKEN_KEY, ACCESS_TOKEN_VALUE) }
@@ -90,20 +89,20 @@ class UserSessionRepositoryImplTest {
         coEvery {
             soraCardDataStore.getLong(
                 ACCESS_TOKEN_EXPIRATION_TIME_KEY,
-                0
+                0,
             )
         } returns EXPIRATION_TIME_VALUE
 
         repository.signInUser(
             REFRESH_TOKEN_VALUE,
             ACCESS_TOKEN_VALUE,
-            EXPIRATION_TIME_VALUE
+            EXPIRATION_TIME_VALUE,
         )
 
         coVerify {
             soraCardDataStore.putLong(
                 ACCESS_TOKEN_EXPIRATION_TIME_KEY,
-                EXPIRATION_TIME_VALUE
+                EXPIRATION_TIME_VALUE,
             )
         }
         assertEquals(EXPIRATION_TIME_VALUE, repository.getAccessTokenExpirationTime())
@@ -117,7 +116,7 @@ class UserSessionRepositoryImplTest {
         coVerify {
             soraCardDataStore.putLong(
                 ACCESS_TOKEN_EXPIRATION_TIME_KEY,
-                EXPIRATION_TIME_VALUE
+                EXPIRATION_TIME_VALUE,
             )
         }
     }

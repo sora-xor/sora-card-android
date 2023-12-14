@@ -1,6 +1,5 @@
 package jp.co.soramitsu.oauth.base.compose
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,11 +15,7 @@ import jp.co.soramitsu.ui_core.theme.customColors
 import jp.co.soramitsu.ui_core.theme.customTypography
 
 @Composable
-fun BalanceIndicator(
-    modifier: Modifier = Modifier,
-    percent: Float,
-    label: String,
-) {
+fun BalanceIndicator(modifier: Modifier = Modifier, percent: Float, label: String) {
     // TODO extract to UI module
 
     Column(

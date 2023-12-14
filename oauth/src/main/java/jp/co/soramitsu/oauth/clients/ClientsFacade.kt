@@ -2,6 +2,8 @@ package jp.co.soramitsu.oauth.clients
 
 import android.content.Context
 import io.ktor.client.call.body
+import javax.inject.Inject
+import javax.inject.Singleton
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardBasicContractData
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.common.domain.KycRepository
@@ -12,10 +14,10 @@ import jp.co.soramitsu.oauth.feature.AccessTokenValidator
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.oauth.network.NetworkRequest
 import jp.co.soramitsu.oauth.network.SoraCardNetworkClient
-import javax.inject.Inject
-import javax.inject.Singleton
 
-class SoraCardTokenException(val type: String) : IllegalStateException("No valid soracard token: $type")
+class SoraCardTokenException(val type: String) : IllegalStateException(
+    "No valid soracard token: $type",
+)
 
 @Singleton
 class ClientsFacade @Inject constructor(
@@ -26,7 +28,7 @@ class ClientsFacade @Inject constructor(
     private val pwoAuthClientProxy: PWOAuthClientProxy,
 ) {
     companion object {
-        const val techSupport = "techsupport@soracard.com"
+        const val TECH_SUPPORT = "techsupport@soracard.com"
     }
     private var baseUrl: String? = null
 

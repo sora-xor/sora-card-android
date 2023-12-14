@@ -52,7 +52,7 @@ class RegisterUserViewModelTest {
     fun `init EXPECT set up first name state`() {
         assertEquals(
             R.string.user_registration_first_name_input_filed_label,
-            viewModel.state.firstNameState.label
+            viewModel.state.firstNameState.label,
         )
     }
 
@@ -60,7 +60,7 @@ class RegisterUserViewModelTest {
     fun `init EXPECT set up last name state`() {
         assertEquals(
             R.string.user_registration_last_name_input_filed_label,
-            viewModel.state.lastNameState.label
+            viewModel.state.lastNameState.label,
         )
     }
 

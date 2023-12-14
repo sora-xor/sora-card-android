@@ -50,8 +50,10 @@ class EnterPhoneNumberViewModelTest {
 
     @MockK
     private lateinit var inMemoryRepo: InMemoryRepo
+
     @MockK
     private lateinit var localeService: LocaleService
+
     @MockK
     private lateinit var kycRepository: KycRepository
 
@@ -80,8 +82,14 @@ class EnterPhoneNumberViewModelTest {
 
     @Test
     fun `init EXPECT set up input field state`() {
-        assertEquals(R.string.enter_phone_number_phone_input_field_label, viewModel.state.value.inputTextStateNumber.label)
-        assertEquals(R.string.common_no_spam, viewModel.state.value.inputTextStateNumber.descriptionText)
+        assertEquals(
+            R.string.enter_phone_number_phone_input_field_label,
+            viewModel.state.value.inputTextStateNumber.label,
+        )
+        assertEquals(
+            R.string.common_no_spam,
+            viewModel.state.value.inputTextStateNumber.descriptionText,
+        )
     }
 
     @Test
@@ -140,7 +148,7 @@ class EnterPhoneNumberViewModelTest {
 
         assertEquals(
             R.string.common_no_spam,
-            viewModel.state.value.inputTextStateNumber.descriptionText
+            viewModel.state.value.inputTextStateNumber.descriptionText,
         )
     }
 

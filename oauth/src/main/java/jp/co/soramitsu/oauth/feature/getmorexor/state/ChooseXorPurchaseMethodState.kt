@@ -4,7 +4,7 @@ import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.Text
 
 data class ChooseXorPurchaseMethodState(
-    val xorPurchaseMethods: List<XorPurchaseMethod>
+    val xorPurchaseMethods: List<XorPurchaseMethod>,
 ) {
 
     val titleText: Text =
@@ -18,5 +18,4 @@ data class ChooseXorPurchaseMethodState(
 
     val cancelText: Text =
         Text.StringRes(id = R.string.common_cancel)
-
 }

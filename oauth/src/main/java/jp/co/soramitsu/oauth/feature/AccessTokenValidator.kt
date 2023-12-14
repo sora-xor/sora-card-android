@@ -1,11 +1,11 @@
 package jp.co.soramitsu.oauth.feature
 
-import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
-import jp.co.soramitsu.oauth.common.model.AccessTokenResponse
-import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
+import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
+import jp.co.soramitsu.oauth.common.model.AccessTokenResponse
+import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 
 @Singleton
 class AccessTokenValidator @Inject constructor(

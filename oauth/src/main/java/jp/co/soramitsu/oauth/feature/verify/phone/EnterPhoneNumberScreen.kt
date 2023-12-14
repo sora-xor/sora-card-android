@@ -46,13 +46,10 @@ import jp.co.soramitsu.ui_core.theme.customColors
 import jp.co.soramitsu.ui_core.theme.customTypography
 
 @Composable
-fun EnterPhoneNumberScreen(
-    code: String?,
-    viewModel: EnterPhoneNumberViewModel = hiltViewModel()
-) {
+fun EnterPhoneNumberScreen(code: String?, viewModel: EnterPhoneNumberViewModel = hiltViewModel()) {
     viewModel.setLocale(code)
     Screen(
-        viewModel = viewModel
+        viewModel = viewModel,
     ) { scrollState ->
         val state = viewModel.state.collectAsStateWithLifecycle().value
         PhoneScreen(
@@ -83,7 +80,7 @@ private fun PhoneScreen(
     onDataEnteredPhoneCode: (TextFieldValue) -> Unit,
     onDataEnteredPhoneNumber: (TextFieldValue) -> Unit,
     onCountry: () -> Unit,
-    onConfirm: () -> Unit
+    onConfirm: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -91,7 +88,7 @@ private fun PhoneScreen(
             .verticalScroll(scrollState)
             .padding(
                 vertical = Dimens.x2,
-                horizontal = Dimens.x3
+                horizontal = Dimens.x3,
             ),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -148,7 +145,7 @@ private fun PhoneScreen(
             Box(
                 modifier = Modifier
                     .wrapContentHeight()
-                    .weight(1f)
+                    .weight(1f),
             ) {
                 InputText(
                     modifier = Modifier
@@ -163,7 +160,7 @@ private fun PhoneScreen(
             Box(
                 modifier = Modifier
                     .wrapContentHeight()
-                    .weight(2f)
+                    .weight(2f),
             ) {
                 InputText(
                     modifier = Modifier
@@ -181,7 +178,7 @@ private fun PhoneScreen(
                 .fillMaxWidth()
                 .padding(top = Dimens.x3),
             loading = buttonState.loading,
-            loaderSize = Size.Large
+            loaderSize = Size.Large,
         ) { modifier, _ ->
             FilledButton(
                 modifier = modifier.testTagAsId("PrimaryButton"),

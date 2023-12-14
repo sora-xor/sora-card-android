@@ -20,7 +20,8 @@ fun InlineTextDivider() {
     // TODO extract to UI module
 
     var layout: TextLayoutResult? = null
-    Text(text = "or",
+    Text(
+        text = "or",
         style = MaterialTheme.customTypography.textM,
         textAlign = TextAlign.Center,
         onTextLayout = {
@@ -39,14 +40,15 @@ fun InlineTextDivider() {
                         moveTo(Dimens.x7.value, l.getLineBottom(0) - heightSplit)
                         lineTo(l.getLineLeft(0) - Dimens.x2.value, l.getLineBottom(0) - heightSplit)
 
-
                         moveTo(
-                            l.getLineRight(0) + Dimens.x2.value, l.getLineBottom(0) - heightSplit
+                            l.getLineRight(0) + Dimens.x2.value,
+                            l.getLineBottom(0) - heightSplit,
                         )
                         lineTo(size.width - Dimens.x7.value, l.getLineBottom(0) - heightSplit)
                     },
                     Colors.Yellow30,
                     style = Stroke(width = thickness),
                 )
-            })
+            },
+    )
 }

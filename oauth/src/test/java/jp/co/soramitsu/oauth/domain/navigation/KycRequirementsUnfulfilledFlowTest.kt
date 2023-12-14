@@ -41,11 +41,11 @@ class KycRequirementsUnfulfilledFlowTest {
         every { mainRouter.navigate(any()) } returns Unit
         every { mainRouter.popUpTo(any()) } returns Unit
         startingDestination = CompatibilityDestination(
-            destination = "Test Destination"
+            destination = "Test Destination",
         )
 
         kycRequirementsUnfulfilledFlow = KycRequirementsUnfulfilledFlowImpl(
-            mainRouter = mainRouter
+            mainRouter = mainRouter,
         )
     }
 

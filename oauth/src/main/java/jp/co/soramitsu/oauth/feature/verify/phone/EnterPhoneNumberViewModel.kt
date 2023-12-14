@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
 import com.paywings.oauth.android.sdk.service.callback.SignInWithPhoneNumberRequestOtpCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
@@ -24,7 +25,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class EnterPhoneNumberViewModel @Inject constructor(
@@ -59,7 +59,7 @@ class EnterPhoneNumberViewModel @Inject constructor(
             countryCode = "",
             countryName = "",
             countryLoading = true,
-        )
+        ),
     )
     val state = _state.asStateFlow()
 
@@ -80,7 +80,7 @@ class EnterPhoneNumberViewModel @Inject constructor(
                     countryName = country.name,
                     inputTextStateCode = _state.value.inputTextStateCode.copy(
                         value = TextFieldValue(country.dialCode),
-                    )
+                    ),
                 )
             }
         }
@@ -93,8 +93,8 @@ class EnterPhoneNumberViewModel @Inject constructor(
                 _state.value = _state.value.copy(
                     inputTextStateNumber = _state.value.inputTextStateNumber.copy(
                         error = true,
-                        descriptionText = descriptionText
-                    )
+                        descriptionText = descriptionText,
+                    ),
                 )
             }
         }
@@ -114,13 +114,13 @@ class EnterPhoneNumberViewModel @Inject constructor(
             loading(false)
             mainRouter.openVerifyPhoneNumber(
                 getPhoneCode() + _state.value.inputTextStateNumber.value.text,
-                otpLength
+                otpLength,
             )
         }
     }
 
     init {
-        _toolbarState.value = SoramitsuToolbarState(
+        mToolbarState.value = SoramitsuToolbarState(
             type = SoramitsuToolbarType.Small(),
             basic = BasicToolbarState(
                 title = R.string.verify_phone_number_title,
@@ -143,7 +143,7 @@ class EnterPhoneNumberViewModel @Inject constructor(
                 value = numbers,
                 error = false,
             ),
-            buttonState = _state.value.buttonState.copy(enabled = numbers.text.isNotEmpty() && getPhoneCode().length + numbers.text.length >= PHONE_NUMBER_LENGTH_MIN)
+            buttonState = _state.value.buttonState.copy(enabled = numbers.text.isNotEmpty() && getPhoneCode().length + numbers.text.length >= PHONE_NUMBER_LENGTH_MIN),
         )
     }
 
@@ -169,7 +169,7 @@ class EnterPhoneNumberViewModel @Inject constructor(
 
     private fun loading(loading: Boolean) {
         _state.value = _state.value.copy(
-            buttonState = _state.value.buttonState.copy(loading = loading)
+            buttonState = _state.value.buttonState.copy(loading = loading),
         )
     }
 

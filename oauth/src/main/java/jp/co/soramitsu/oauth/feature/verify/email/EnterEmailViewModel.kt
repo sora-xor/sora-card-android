@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
 import com.paywings.oauth.android.sdk.service.callback.RegisterUserCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
@@ -21,7 +22,6 @@ import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class EnterEmailViewModel @Inject constructor(
@@ -39,8 +39,8 @@ class EnterEmailViewModel @Inject constructor(
             buttonState = ButtonState(
                 title = R.string.common_send_link,
                 enabled = false,
-            )
-        )
+            ),
+        ),
     )
         private set
 
@@ -50,7 +50,7 @@ class EnterEmailViewModel @Inject constructor(
     private var authCallback: OAuthCallback? = null
 
     init {
-        _toolbarState.value = SoramitsuToolbarState(
+        mToolbarState.value = SoramitsuToolbarState(
             type = SoramitsuToolbarType.Small(),
             basic = BasicToolbarState(
                 title = R.string.enter_email_title,
@@ -67,8 +67,8 @@ class EnterEmailViewModel @Inject constructor(
                 state = state.copy(
                     inputTextState = state.inputTextState.copy(
                         error = true,
-                        descriptionText = descriptionText
-                    )
+                        descriptionText = descriptionText,
+                    ),
                 )
             }
         }
@@ -90,13 +90,13 @@ class EnterEmailViewModel @Inject constructor(
         override fun onSignInSuccessful(
             refreshToken: String,
             accessToken: String,
-            accessTokenExpirationTime: Long
+            accessTokenExpirationTime: Long,
         ) {
             viewModelScope.launch {
                 userSessionRepository.signInUser(
                     refreshToken,
                     accessToken,
-                    accessTokenExpirationTime
+                    accessTokenExpirationTime,
                 )
                 authCallback?.onOAuthSucceed(accessToken)
             }
@@ -125,7 +125,7 @@ class EnterEmailViewModel @Inject constructor(
                 error = false,
                 descriptionText = R.string.common_no_spam,
             ),
-            buttonState = state.buttonState.copy(enabled = value.text.isNotEmpty())
+            buttonState = state.buttonState.copy(enabled = value.text.isNotEmpty()),
         )
     }
 
@@ -144,7 +144,7 @@ class EnterEmailViewModel @Inject constructor(
     private fun loading(loading: Boolean) {
         state = state.copy(
             inputTextState = state.inputTextState.copy(enabled = !loading),
-            buttonState = state.buttonState.copy(loading = loading)
+            buttonState = state.buttonState.copy(loading = loading),
         )
     }
 

@@ -7,7 +7,6 @@ import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
 import jp.co.soramitsu.oauth.feature.verify.Timer
 
-
 @InstallIn(ViewModelComponent::class)
 @Module
 class VerificationModule {

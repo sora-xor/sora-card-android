@@ -5,5 +5,4 @@ import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 interface SetActivityResult {
 
     fun setResult(soraCardResult: SoraCardResult)
-
 }

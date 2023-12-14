@@ -57,7 +57,7 @@ internal fun SdkNavGraph(
             arguments = listOf(
                 navArgument(Argument.PHONE_NUMBER.arg) { type = NavType.StringType },
                 navArgument(Argument.OTP_LENGTH.arg) { type = NavType.IntType },
-            )
+            ),
         ) { backStackEntry ->
             VerifyPhoneNumberScreen(
                 phoneNumber = backStackEntry.arguments?.getString(Argument.PHONE_NUMBER.arg),
@@ -71,12 +71,12 @@ internal fun SdkNavGraph(
         }
 
         animatedComposable(
-            Destination.ENTER_EMAIL.route + Argument.FIRST_NAME.path() + Argument.LAST_NAME.path()
+            Destination.ENTER_EMAIL.route + Argument.FIRST_NAME.path() + Argument.LAST_NAME.path(),
         ) { backStackEntry ->
             EnterEmailScreen(
                 firstName = backStackEntry.arguments?.getString(Argument.FIRST_NAME.arg),
                 lastName = backStackEntry.arguments?.getString(Argument.LAST_NAME.arg),
-                authCallback = authCallback
+                authCallback = authCallback,
             )
         }
 
@@ -85,22 +85,22 @@ internal fun SdkNavGraph(
             arguments = listOf(
                 navArgument(Argument.EMAIL.arg) { type = NavType.StringType },
                 navArgument(Argument.AUTO_EMAIL_SENT.arg) { type = NavType.BoolType },
-            )
+            ),
         ) { backStackEntry ->
             VerifyEmailScreen(
                 email = backStackEntry.requireArguments().requireString(Argument.EMAIL.arg),
                 autoEmailSent = backStackEntry.requireArguments()
                     .getBoolean(Argument.AUTO_EMAIL_SENT.arg),
-                authCallback = authCallback
+                authCallback = authCallback,
             )
         }
 
         animatedComposable(
-            Destination.WEB_PAGE.route + Argument.TITLE.path() + Argument.URL.path()
+            Destination.WEB_PAGE.route + Argument.TITLE.path() + Argument.URL.path(),
         ) { backStackEntry ->
             WebPageScreen(
                 title = backStackEntry.requireArguments().requireString(Argument.TITLE.arg),
-                webUrl = backStackEntry.requireArguments().requireString(Argument.URL.arg)
+                webUrl = backStackEntry.requireArguments().requireString(Argument.URL.arg),
             )
         }
 
@@ -129,13 +129,13 @@ internal fun SdkNavGraph(
         }
 
         animatedComposable(
-            route = KycRequirementsUnfulfilledDestination.CardIssuanceOptionsScreen().destination
+            route = KycRequirementsUnfulfilledDestination.CardIssuanceOptionsScreen().destination,
         ) {
             CardIssuanceScreen()
         }
 
         dialog(
-            route = KycRequirementsUnfulfilledDestination.GetMoreXorDialog().destination
+            route = KycRequirementsUnfulfilledDestination.GetMoreXorDialog().destination,
         ) {
             ChooseXorPurchaseMethodDialog()
         }

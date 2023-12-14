@@ -30,7 +30,7 @@ enum class Argument(val arg: String) {
     LAST_NAME("lastName"),
     TITLE("title"),
     URL("url"),
-    ADDITIONAL_DESCRIPTION("additionalDescription")
+    ADDITIONAL_DESCRIPTION("additionalDescription"),
 }
 
 fun Argument.path(): String {
@@ -38,5 +38,5 @@ fun Argument.path(): String {
 }
 
 fun Any.asArgument(): String {
-    return "/${this}"
+    return "/$this"
 }

@@ -42,7 +42,7 @@ class GetMoreXorViewModelTest {
         every { setActivityResult.setResult(any()) } just runs
         viewModel = GetMoreXorViewModel(
             kycRequirementsUnfulfilledFlow = kycRequirementsUnfulfilledFlow,
-            setActivityResult = setActivityResult
+            setActivityResult = setActivityResult,
         )
     }
 
