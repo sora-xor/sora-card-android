@@ -115,6 +115,8 @@ dependencies {
         exclude("com.android.support", "support-media-compat")
         exclude(module = "pinview")
         exclude(module = "idensic-mobile-sdk-videoident")
+//        exclude(module = "idensic-mobile-sdk-internal-core")
+//        exclude(module = "idensic-mobile-sdk-internal")
     }
     implementation(libs.pinview)
 
@@ -135,7 +137,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "jp.co.soramitsu"
             artifactId = "android-sora-card"
-            version = "0.1.70"
+            version = "0.1.71"
 
             afterEvaluate {
                 from(components["release"])

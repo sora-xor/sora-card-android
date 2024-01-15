@@ -17,8 +17,6 @@ class InMemoryRepo @Inject constructor() {
 
     var soraBackEndUrl = ""
 
-    val euroLiquidityThreshold = 100
-
     var areAttemptsPaidSuccessfully: Boolean = false
     var isEnoughXorAvailable: Boolean = false
     var isIssuancePaid: Boolean = false
