@@ -3,6 +3,7 @@ package jp.co.soramitsu.oauth.common.data
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PriceInteractor
+import jp.co.soramitsu.oauth.common.domain.PriceInteractor.Companion.KYC_REQUIRED_BALANCE
 import jp.co.soramitsu.oauth.common.model.EuroLiquiditySufficiency
 import jp.co.soramitsu.oauth.common.model.XorLiquiditySufficiency
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
@@ -19,7 +20,7 @@ class PriceInteractorImpl(
         return kycRepository.getCurrentXorEuroPrice(accessToken)
             .map {
                 val xorLiquidityFullPrice =
-                    inMemoryCache.euroLiquidityThreshold.div(it)
+                    KYC_REQUIRED_BALANCE.div(it)
 
                 XorLiquiditySufficiency(
                     xorInsufficiency = xorLiquidityFullPrice - inMemoryCache.userAvailableXorAmount,
@@ -37,8 +38,8 @@ class PriceInteractorImpl(
                     inMemoryCache.userAvailableXorAmount.times(it)
 
                 EuroLiquiditySufficiency(
-                    euroInsufficiency = inMemoryCache.euroLiquidityThreshold - userAvailableEuroAmount,
-                    euroLiquidityFullPrice = inMemoryCache.euroLiquidityThreshold.toDouble(),
+                    euroInsufficiency = KYC_REQUIRED_BALANCE - userAvailableEuroAmount,
+                    euroLiquidityFullPrice = KYC_REQUIRED_BALANCE,
                 )
             }
     }
