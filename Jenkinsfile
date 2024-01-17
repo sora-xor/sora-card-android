@@ -31,6 +31,6 @@ new org.soramitsu.mainLibrary().call(
   publishCommand: './gradlew publish',
   publishLibrary: true,
   skipDockerImage: true,
-  dojoProductType: "sora-card-android",
+  dojoProductType: "sora-card",
   extraBuildSecrets: extraBuildSecrets
 )
