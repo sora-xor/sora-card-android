@@ -70,6 +70,7 @@
   <string name="get_prepared_take_selfie_title">Neem een selfie</string>
   <string name="get_prepared_title">Bereid je voor.</string>
   <string name="iban_pending_description">Uw IBAN-uitgifte is in behandeling.\n Neem contact met ons op via %s als de wachttijd langer dan 72 uur is</string>
+  <string name="iban_suspended_description">Your IBAN has been suspended.\nTo find out more, contact %s</string>
   <string name="kyc_result_verification_in_progress">Verificatie is gaande</string>
   <string name="kyc_result_verification_in_progress_description">U heeft uw KYC-aanvraag succesvol afgerond. De beoordeling is in behandeling en u kunt binnenkort een beslissing verwachten. \n \n Meestal wordt de beslissing dezelfde dag genomen, en in sommige gevallen kan dit tot 3 dagen duren.</string>
   <string name="log_out">Uitloggen</string>

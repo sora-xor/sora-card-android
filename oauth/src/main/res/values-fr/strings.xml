@@ -70,6 +70,7 @@
   <string name="get_prepared_take_selfie_title">Prenez un selfie</string>
   <string name="get_prepared_title">Préparez-vous</string>
   <string name="iban_pending_description">Votre émission d\'IBAN est en attente.\n En cas d\'attente supérieure à 72 heures, contactez-nous via %s</string>
+  <string name="iban_suspended_description">Your IBAN has been suspended.\nTo find out more, contact %s</string>
   <string name="kyc_result_verification_in_progress">Vérification en cours</string>
   <string name="kyc_result_verification_in_progress_description">Vous avez terminé avec succès votre demande de KYC.\nL\'examen de votre demande est en cours et vous devriez recevoir une réponse sous peu.\nLa décision est habituellement rendue le jour même, mais dans certains cas cela peut prendre jusqu\'à 3 jours.</string>
   <string name="log_out">Se déconnecter</string>
