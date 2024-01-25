@@ -32,5 +32,6 @@ new org.soramitsu.mainLibrary().call(
   publishLibrary: true,
   skipDockerImage: true,
   dojoProductType: "sora-card",
-  extraBuildSecrets: extraBuildSecrets
+  extraBuildSecrets: extraBuildSecrets,
+  deepSecretScannerExclusion: ['oauth']
 )
