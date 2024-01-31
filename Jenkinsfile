@@ -24,7 +24,7 @@ new org.soramitsu.mainLibrary().call(
   agentLabel: "android",
   skipSonar: true,
   skipDojo: true,
-  agentImage: "android-build-box-jdk11:latest",
+  agentImage: "android-build-box-jdk11:pip",
   nexusCredentials: "bot-soramitsu-rw",
   buildCommand: './gradlew clean :oauth:build',
   testCommand: './gradlew clean :oauth:test',
