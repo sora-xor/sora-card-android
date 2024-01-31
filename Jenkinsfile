@@ -29,5 +29,5 @@ new org.android.ShareFeature().call(
   testCmd: 'clean :oauth:test',
   extraBuildSecrets: extraBuildSecrets,
   dojo: true,
-  dojoProductType: "sora"
+  dojoProductType: "sora-card"
 )
