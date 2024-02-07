@@ -8,7 +8,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.dialog
 import androidx.navigation.navArgument
-import jp.co.soramitsu.oauth.common.navigation.flow.api.destinations.KycRequirementsUnfulfilledDestination
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.cardissuance.CardIssuanceScreen
 import jp.co.soramitsu.oauth.feature.change.email.ChangeEmailScreen
@@ -129,13 +128,13 @@ internal fun SdkNavGraph(
         }
 
         animatedComposable(
-            route = KycRequirementsUnfulfilledDestination.CardIssuanceOptionsScreen().destination,
+            route = Destination.CARD_ISSUANCE_OPTIONS.route,
         ) {
             CardIssuanceScreen()
         }
 
         dialog(
-            route = KycRequirementsUnfulfilledDestination.GetMoreXorDialog().destination,
+            route = Destination.GET_MORE_XOR_DIALOG.route,
         ) {
             ChooseXorPurchaseMethodDialog()
         }

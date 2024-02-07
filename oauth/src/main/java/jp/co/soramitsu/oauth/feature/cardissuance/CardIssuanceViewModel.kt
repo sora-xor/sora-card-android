@@ -9,12 +9,12 @@ import javax.inject.Inject
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.compose.ScreenStatus
+import jp.co.soramitsu.oauth.base.navigation.Destination
+import jp.co.soramitsu.oauth.base.navigation.MainRouter
+import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.common.domain.PriceInteractor
-import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
-import jp.co.soramitsu.oauth.common.navigation.flow.api.NavigationFlow
-import jp.co.soramitsu.oauth.common.navigation.flow.impl.di.KycRequirementsUnfulfilledFlow
 import jp.co.soramitsu.oauth.feature.cardissuance.state.CardIssuanceScreenState
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
@@ -24,10 +24,10 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class CardIssuanceViewModel @Inject constructor(
-    @KycRequirementsUnfulfilledFlow private val kycRequirementsUnfulfilledFlow: NavigationFlow,
     private val setActivityResult: SetActivityResult,
     private val userSessionRepository: UserSessionRepository,
     private val priceInteractor: PriceInteractor,
+    private val mainRouter: MainRouter,
 ) : BaseViewModel() {
 
     var cardIssuanceScreenState by mutableStateOf(
@@ -98,7 +98,7 @@ class CardIssuanceViewModel @Inject constructor(
     }
 
     fun onGetXorClick() {
-        kycRequirementsUnfulfilledFlow.proceed()
+        mainRouter.navigate(Destination.GET_MORE_XOR_DIALOG.route)
     }
 
     fun onPayIssuance() {

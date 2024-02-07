@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModel
 import jp.co.soramitsu.oauth.base.state.DialogAlertState
 import jp.co.soramitsu.ui_core.component.toolbar.Action
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
-import jp.co.soramitsu.xnetworking.basic.networkclient.SoramitsuNetworkException
 
 open class BaseViewModel : ViewModel() {
 
@@ -25,18 +24,4 @@ open class BaseViewModel : ViewModel() {
 
     open fun onToolbarMenuItemSelected(action: Action) = Unit
     open fun onToolbarSearch(value: String) = Unit
-
-    private fun onError(throwable: Throwable) {
-        if (throwable is SoramitsuNetworkException) {
-            // TODO implement error handling
-        }
-    }
-
-    suspend fun tryCatch(block: suspend () -> Unit) {
-        try {
-            block.invoke()
-        } catch (t: Throwable) {
-            onError(t)
-        }
-    }
 }

@@ -5,10 +5,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
+import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PriceInteractor
-import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState

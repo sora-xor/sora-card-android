@@ -1,6 +1,7 @@
 package jp.co.soramitsu.oauth.feature
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
 import com.paywings.oauth.android.sdk.service.callback.GetUserDataCallback
@@ -8,19 +9,14 @@ import com.paywings.onboarding.kyc.android.sdk.data.model.KycUserData
 import com.paywings.onboarding.kyc.android.sdk.data.model.UserCredentials
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.SingleLiveEvent
 import jp.co.soramitsu.oauth.base.navigation.Destination
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
-import jp.co.soramitsu.oauth.base.state.DialogAlertState
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.common.model.AccessTokenResponse
-import jp.co.soramitsu.oauth.common.navigation.flow.api.NavigationFlow
-import jp.co.soramitsu.oauth.common.navigation.flow.api.destinations.CompatibilityDestination
-import jp.co.soramitsu.oauth.common.navigation.flow.impl.di.KycRequirementsUnfulfilledFlow
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,9 +30,8 @@ class MainViewModel @Inject constructor(
     private val mainRouter: MainRouter,
     val inMemoryRepo: InMemoryRepo,
     private val pwoAuthClientProxy: PWOAuthClientProxy,
-    @KycRequirementsUnfulfilledFlow private val kycRequirementsUnfulfilledFlow: NavigationFlow,
     private val tokenValidator: AccessTokenValidator,
-) : BaseViewModel() {
+) : ViewModel() {
 
     private val _state = MutableStateFlow(MainScreenState())
     val state: StateFlow<MainScreenState?> = _state.asStateFlow()
@@ -62,14 +57,15 @@ class MainViewModel @Inject constructor(
 
     private val getUserDataCallback = object : GetUserDataCallback {
         override fun onError(error: OAuthErrorCode, errorMessage: String?) {
-            dialogState = DialogAlertState(
-                title = error.name,
-                message = error.description,
-                dismissAvailable = true,
-                onPositive = {
-                    dialogState = null
-                },
-            )
+            _toast.value = error.description
+//            dialogState = DialogAlertState(
+//                title = error.name,
+//                message = error.description,
+//                dismissAvailable = true,
+//                onPositive = {
+//                    dialogState = null
+//                },
+//            )
         }
 
         override fun onUserData(
@@ -91,22 +87,20 @@ class MainViewModel @Inject constructor(
 
             viewModelScope.launch {
                 userSessionRepository.setUserId(userId)
-                tryCatch {
-                    val accessToken = userSessionRepository.getAccessToken()
-                    kycRepository.getReferenceNumber(
-                        accessToken = accessToken,
-                        phoneNumber = phoneNumber,
-                        email = email,
-                    ).onSuccess {
-                        _state.value = _state.value.copy(
-                            referenceNumber = it,
-                        )
-                    }
-                        .onFailure {
-                            _toast.value =
-                                it.localizedMessage ?: "Error occurred while get-reference-number"
-                        }
+                val accessToken = userSessionRepository.getAccessToken()
+                kycRepository.getReferenceNumber(
+                    accessToken = accessToken,
+                    phoneNumber = phoneNumber,
+                    email = email,
+                ).onSuccess {
+                    _state.value = _state.value.copy(
+                        referenceNumber = it,
+                    )
                 }
+                    .onFailure {
+                        _toast.value =
+                            it.localizedMessage ?: "Error occurred while get-reference-number"
+                    }
             }
         }
     }
@@ -193,9 +187,7 @@ class MainViewModel @Inject constructor(
         if (inMemoryRepo.isEnoughXorAvailable) {
             mainRouter.openGetPrepared()
         } else {
-            kycRequirementsUnfulfilledFlow.start(
-                fromDestination = CompatibilityDestination(Destination.ENTER_PHONE_NUMBER.route),
-            )
+            mainRouter.navigate(Destination.CARD_ISSUANCE_OPTIONS.route)
         }
     }
 
@@ -234,6 +226,7 @@ class MainViewModel @Inject constructor(
             (kycResponse == SoraCardCommonVerification.Started) -> {
                 mainRouter.openGetPrepared()
             }
+
             (kycResponse == SoraCardCommonVerification.NotFound) -> {
                 checkKycRequirementsFulfilled()
             }

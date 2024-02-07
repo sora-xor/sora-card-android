@@ -16,6 +16,8 @@ enum class Destination(val route: String) {
     VERIFICATION_REJECTED("oauth/verificationRejected"),
     VERIFICATION_IN_PROGRESS("oauth/verificationInProgress"),
     VERIFICATION_SUCCESSFUL("oauth/verificationSuccessful"),
+    CARD_ISSUANCE_OPTIONS("oauth/cardIssuanceOptions"),
+    GET_MORE_XOR_DIALOG("oauth/getMoreXorDialog"),
 }
 
 const val COUNTRY_CODE = "country_code"

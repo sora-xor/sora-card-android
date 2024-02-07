@@ -39,7 +39,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 26
         multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -93,6 +93,7 @@ dependencies {
     implementation(libs.compose.runtime.livedata)
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.lifecycle.viewmodel.ktx)
+    implementation(libs.lifecycle.common)
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.compose.navigation)
 

@@ -4,15 +4,15 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import androidx.annotation.StringRes
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavHostController
 import jp.co.soramitsu.oauth.base.extension.isAppAvailableCompat
 import jp.co.soramitsu.oauth.feature.terms.and.conditions.model.WebUrl
 
-interface MainRouter {
+interface MainRouter : DefaultLifecycleObserver {
 
     fun attachNavController(activity: Activity, navHostController: NavHostController)
-
-    fun detachNavController(activity: Activity, navHostController: NavHostController)
 
     fun back()
 
@@ -70,11 +70,10 @@ class MainRouterImpl : MainRouter {
         this.activity = activity
     }
 
-    override fun detachNavController(activity: Activity, navHostController: NavHostController) {
-        if (this.activity == activity && this.navHostController == navHostController) {
-            this.navHostController = null
-            this.activity = null
-        }
+    override fun onDestroy(owner: LifecycleOwner) {
+        this.navHostController = null
+        this.activity = null
+        super.onDestroy(owner)
     }
 
     override fun back() {

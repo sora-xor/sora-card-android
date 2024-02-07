@@ -9,8 +9,8 @@ import io.mockk.runs
 import io.mockk.verify
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
+import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
-import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import jp.co.soramitsu.oauth.feature.terms.and.conditions.model.WebUrl
 import kotlinx.coroutines.ExperimentalCoroutinesApi

@@ -16,7 +16,6 @@ import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.common.model.AccessTokenResponse
-import jp.co.soramitsu.oauth.common.navigation.flow.api.NavigationFlow
 import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -54,9 +53,6 @@ class MainViewModelTest {
     private lateinit var tokenValidator: AccessTokenValidator
 
     @MockK
-    private lateinit var kycRequirementsUnfulfilledFlow: NavigationFlow
-
-    @MockK
     private lateinit var pwoAuthClientProxy: PWOAuthClientProxy
 
     @MockK
@@ -72,7 +68,6 @@ class MainViewModelTest {
         } returns System.currentTimeMillis() + 300000
         coEvery { userSessionRepository.setNewAccessToken(any(), any()) } returns Unit
         coEvery { userSessionRepository.getUser() } returns Triple("refresh", "access", 0)
-        coEvery { kycRequirementsUnfulfilledFlow.start(any()) } returns Unit
         coEvery {
             kycRepository.getKycLastFinalStatus(any(), any())
         } returns Result.success(SoraCardCommonVerification.Successful)
@@ -90,7 +85,6 @@ class MainViewModelTest {
             mainRouter,
             inMemoryRepo,
             pwoAuthClientProxy,
-            kycRequirementsUnfulfilledFlow,
             tokenValidator,
         )
     }
