@@ -33,12 +33,20 @@ class ClientsFacade @Inject constructor(
     private var baseUrl: String? = null
 
     suspend fun logout() {
+        pwoAuthClientProxy.logout()
         userSessionRepository.logOutUser()
     }
 
-    fun init(contract: SoraCardBasicContractData, context: Context, baseUrl: String) {
+    suspend fun init(contract: SoraCardBasicContractData, context: Context, baseUrl: String) {
         this.baseUrl = baseUrl
-        pwoAuthClientProxy.init(context, contract.environment, contract.apiKey, contract.domain)
+        pwoAuthClientProxy.init(
+            context,
+            contract.environment,
+            contract.apiKey,
+            contract.domain,
+            contract.platform,
+            contract.recaptcha,
+        )
     }
 
     suspend fun getApplicationFee(): String = kycRepository.getApplicationFee(baseUrl)

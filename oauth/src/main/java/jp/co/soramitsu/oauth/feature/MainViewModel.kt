@@ -1,27 +1,29 @@
 package jp.co.soramitsu.oauth.feature
 
-import androidx.lifecycle.LiveData
+import android.app.Activity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.paywings.kyc.android.sdk.data.model.PayWingsUserCredentials
+import com.paywings.kyc.android.sdk.data.model.PayWingsWhiteLabelCredentials
+import com.paywings.kyc.android.sdk.initializer.PayWingsKycClient
 import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
 import com.paywings.oauth.android.sdk.service.callback.GetUserDataCallback
-import com.paywings.onboarding.kyc.android.sdk.data.model.KycUserData
-import com.paywings.onboarding.kyc.android.sdk.data.model.UserCredentials
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import jp.co.soramitsu.oauth.base.SingleLiveEvent
 import jp.co.soramitsu.oauth.base.navigation.Destination
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
+import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardContractData
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.common.model.AccessTokenResponse
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -33,96 +35,94 @@ class MainViewModel @Inject constructor(
     private val tokenValidator: AccessTokenValidator,
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(MainScreenState())
-    val state: StateFlow<MainScreenState?> = _state.asStateFlow()
-
-    private val _toast = SingleLiveEvent<String>()
-    val toast: LiveData<String> = _toast
-
     private val _uiState = MutableStateFlow(MainScreenUiState())
     val uiState = _uiState.asStateFlow()
 
-    init {
+    private var payWingsKycClient: PayWingsKycClient? = null
+    fun launch(contract: SoraCardContractData, activity: Activity) {
+        inMemoryRepo.locale = contract.locale.country
+        inMemoryRepo.environment = contract.basic.environment
+        inMemoryRepo.soraBackEndUrl = contract.soraBackEndUrl
+        inMemoryRepo.client = contract.client
+        inMemoryRepo.userAvailableXorAmount = contract.userAvailableXorAmount
+        inMemoryRepo.areAttemptsPaidSuccessfully = contract.areAttemptsPaidSuccessfully
+        inMemoryRepo.isEnoughXorAvailable = contract.isEnoughXorAvailable
+        inMemoryRepo.isIssuancePaid = contract.isIssuancePaid
+
         viewModelScope.launch {
-            val data = userSessionRepository.getUser()
-            if (data.first.isEmpty() || data.second.isEmpty()) return@launch
-            showLoading(loading = true)
-
-            checkAccessTokenValidity { accessToken ->
-                onAuthSucceed(accessToken)
-                showLoading(false)
-            }
-        }
-    }
-
-    private val getUserDataCallback = object : GetUserDataCallback {
-        override fun onError(error: OAuthErrorCode, errorMessage: String?) {
-            _toast.value = error.description
-//            dialogState = DialogAlertState(
-//                title = error.name,
-//                message = error.description,
-//                dismissAvailable = true,
-//                onPositive = {
-//                    dialogState = null
-//                },
-//            )
-        }
-
-        override fun onUserData(
-            userId: String,
-            firstName: String?,
-            lastName: String?,
-            email: String?,
-            emailConfirmed: Boolean,
-            phoneNumber: String?,
-        ) {
-            _state.value = _state.value.copy(
-                kycUserData = KycUserData(
-                    firstName = firstName,
-                    lastName = lastName,
-                    email = email,
-                    mobileNumber = phoneNumber,
-                ),
+            val initResult = pwoAuthClientProxy.init(
+                activity,
+                contract.basic.environment,
+                contract.basic.apiKey,
+                contract.basic.domain,
+                contract.basic.platform,
+                contract.basic.recaptcha,
             )
-
-            viewModelScope.launch {
-                userSessionRepository.setUserId(userId)
-                val accessToken = userSessionRepository.getAccessToken()
-                kycRepository.getReferenceNumber(
-                    accessToken = accessToken,
-                    phoneNumber = phoneNumber,
-                    email = email,
-                ).onSuccess {
-                    _state.value = _state.value.copy(
-                        referenceNumber = it,
-                    )
-                }
-                    .onFailure {
-                        _toast.value =
-                            it.localizedMessage ?: "Error occurred while get-reference-number"
+            if (initResult.first) {
+                if (pwoAuthClientProxy.isSignIn()) {
+                    if (userSessionRepository.isTermsRead()) {
+                        onAuthSucceed()
+                    } else {
+                        mainRouter.openTermsAndConditions()
                     }
-            }
-        }
-    }
-
-    fun getUserData() {
-        viewModelScope.launch {
-            showLoading(true)
-            checkAccessTokenValidity { accessToken ->
-                val refreshToken = userSessionRepository.getRefreshToken()
-                _state.value = _state.value.copy(
-                    userCredentials = UserCredentials(
-                        accessToken = accessToken,
-                        refreshToken = refreshToken,
-                    ),
+                } else {
+                    if (userSessionRepository.isTermsRead()) {
+                        navigateToSignIn()
+                    } else {
+                        mainRouter.openTermsAndConditions()
+                    }
+                }
+            } else {
+                _uiState.value = _uiState.value.copy(
+                    error = initResult.second,
                 )
-
-                pwoAuthClientProxy.getUserData(
-                    accessToken = accessToken,
-                    callback = getUserDataCallback,
-                )
-                showLoading(false)
             }
+
+            payWingsKycClient = PayWingsKycClient(
+                activity = activity,
+                whiteLabelCredentials = PayWingsWhiteLabelCredentials(
+                    endpointUrl = contract.kycCredentials.endpointUrl,
+                    username = contract.kycCredentials.username,
+                    password = contract.kycCredentials.password,
+                ),
+                userCredentials = { mu, rm ->
+                    runBlocking {
+                        val authData = pwoAuthClientProxy.getNewAccessToken(mu, rm)
+                        when {
+                            authData.dpop.isNullOrBlank().not() &&
+                                authData.accessTokenData != null ->
+                                return@runBlocking PayWingsUserCredentials(
+                                    dpop = authData.dpop!!,
+                                    accessToken = authData.accessTokenData?.accessToken ?: "",
+                                )
+
+                            authData.errorData != null ->
+                                return@runBlocking PayWingsUserCredentials(
+                                    dpop = "",
+                                    accessToken = "",
+                                )
+
+                            else -> {
+                                navigateToSignIn()
+                                return@runBlocking PayWingsUserCredentials(
+                                    dpop = "",
+                                    accessToken = "",
+                                )
+                            }
+                        }
+                    }
+                },
+                onSuccess = { _, _ ->
+                    viewModelScope.launch(Dispatchers.Main) {
+                        checkKycStatus()
+                    }
+                },
+                onError = { _, _, _, code, errorMessage ->
+                    viewModelScope.launch(Dispatchers.Main) {
+                        onKycFailed(errorMessage ?: code.description)
+                    }
+                },
+            )
         }
     }
 
@@ -152,14 +152,13 @@ class MainViewModel @Inject constructor(
 
     private fun onError(error: OAuthErrorCode) {
         showLoading(false)
-        if (error == OAuthErrorCode.MISSING_REFRESH_TOKEN) {
-            navigateToSignIn()
-        }
+        navigateToSignIn()
     }
 
     private fun onUserSignInRequired() {
         viewModelScope.launch {
             showLoading(false)
+            pwoAuthClientProxy.logout()
             userSessionRepository.logOutUser()
             navigateToSignIn()
         }
@@ -169,17 +168,22 @@ class MainViewModel @Inject constructor(
         mainRouter.openEnterPhoneNumber()
     }
 
-    fun onAuthSucceed(accessToken: String) {
+    fun onAuthSucceed() {
         viewModelScope.launch {
-            kycRepository.getKycLastFinalStatus(accessToken).onSuccess { kycResponse ->
-                when (kycResponse) {
-                    SoraCardCommonVerification.Failed -> mainRouter.openGetPrepared()
-                    else -> showKycStatusScreen(kycResponse)
-                }
+            checkAccessTokenValidity { accessToken ->
+                kycRepository.getKycLastFinalStatus(accessToken)
+                    .onSuccess { kycResponse ->
+                        when (kycResponse) {
+                            SoraCardCommonVerification.Failed -> mainRouter.openGetPrepared()
+                            else -> showKycStatusScreen(kycResponse)
+                        }
+                    }
+                    .onFailure {
+                        _uiState.value = _uiState.value.copy(
+                            error = it.localizedMessage ?: "KYC status not found",
+                        )
+                    }
             }
-                .onFailure {
-                    _toast.value = it.localizedMessage.orEmpty()
-                }
         }
     }
 
@@ -191,25 +195,82 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun checkKycStatus() {
+    fun startKycProcess() {
         viewModelScope.launch {
             showLoading(true)
             checkAccessTokenValidity { accessToken ->
-                kycRepository.getKycLastFinalStatus(accessToken).onSuccess { status ->
-                    showKycStatusScreen(status)
-                }
+                pwoAuthClientProxy.getUserData(
+                    callback = object : GetUserDataCallback {
+                        override fun onError(error: OAuthErrorCode, errorMessage: String?) {
+                            showLoading(false)
+                            _uiState.value = _uiState.value.copy(
+                                error = error.description,
+                            )
+                        }
+
+                        override fun onUserSignInRequired() {
+                            showLoading(false)
+                            navigateToSignIn()
+                        }
+
+                        override fun onUserData(
+                            userId: String,
+                            firstName: String?,
+                            lastName: String?,
+                            email: String?,
+                            emailConfirmed: Boolean,
+                            phoneNumber: String?,
+                        ) {
+                            viewModelScope.launch {
+                                kycRepository.getReferenceNumber(
+                                    accessToken = accessToken,
+                                    phoneNumber = phoneNumber,
+                                    email = email,
+                                ).onSuccess {
+                                    showLoading(false)
+                                    val local = payWingsKycClient
+                                    if (local != null) {
+                                        local.startKyc(it)
+                                    } else {
+                                        _uiState.value = _uiState.value.copy(
+                                            error = "KYC client is not initialized",
+                                        )
+                                    }
+                                }
+                                    .onFailure {
+                                        showLoading(false)
+                                        _uiState.value = _uiState.value.copy(
+                                            error = it.localizedMessage
+                                                ?: "Error occurred while get-reference-number",
+                                        )
+                                    }
+                            }
+                        }
+                    },
+                )
+            }
+        }
+    }
+
+    private fun checkKycStatus() {
+        viewModelScope.launch {
+            showLoading(true)
+            checkAccessTokenValidity { accessToken ->
+                kycRepository.getKycLastFinalStatus(accessToken)
+                    .onSuccess { status ->
+                        showKycStatusScreen(status)
+                    }
                     .onFailure {
-                        _toast.value = it.localizedMessage.orEmpty()
+                        _uiState.value = _uiState.value.copy(
+                            error = it.localizedMessage ?: "KYC status not found",
+                        )
                     }
                 showLoading(false)
             }
         }
     }
 
-    private fun showKycStatusScreen(
-        kycResponse: SoraCardCommonVerification,
-        statusDescription: String? = null,
-    ) {
+    private fun showKycStatusScreen(kycResponse: SoraCardCommonVerification) {
         when {
             (kycResponse == SoraCardCommonVerification.Pending) -> {
                 mainRouter.openVerificationInProgress()
@@ -232,7 +293,7 @@ class MainViewModel @Inject constructor(
             }
 
             kycResponse == SoraCardCommonVerification.Failed -> {
-                onKycFailed(statusDescription)
+                onKycFailed(SoraCardCommonVerification.Failed.name)
             }
 
             kycResponse == SoraCardCommonVerification.Rejected -> {
@@ -241,7 +302,13 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun onKycFailed(statusDescription: String?) {
+    private fun onKycFailed(statusDescription: String) {
         mainRouter.openVerificationFailed(additionalDescription = statusDescription)
+    }
+
+    fun onHideErrorDialog() {
+        _uiState.value = _uiState.value.copy(
+            error = null,
+        )
     }
 }

@@ -24,4 +24,6 @@ data class SoraCardBasicContractData(
     val apiKey: String,
     val domain: String,
     val environment: SoraCardEnvironmentType,
+    val platform: String,
+    val recaptcha: String,
 ) : Parcelable

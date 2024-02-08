@@ -14,6 +14,7 @@ import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
+import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.common.domain.PriceInteractor
 import jp.co.soramitsu.oauth.feature.cardissuance.state.CardIssuanceScreenState
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
@@ -28,6 +29,7 @@ class CardIssuanceViewModel @Inject constructor(
     private val userSessionRepository: UserSessionRepository,
     private val priceInteractor: PriceInteractor,
     private val mainRouter: MainRouter,
+    private val pwoAuthClientProxy: PWOAuthClientProxy,
 ) : BaseViewModel() {
 
     var cardIssuanceScreenState by mutableStateOf(
@@ -82,6 +84,7 @@ class CardIssuanceViewModel @Inject constructor(
         super.onToolbarAction()
         try {
             viewModelScope.launch {
+                pwoAuthClientProxy.logout()
                 userSessionRepository.logOutUser()
             }.invokeOnCompletion {
                 setActivityResult.setResult(SoraCardResult.Logout)

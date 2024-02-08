@@ -16,13 +16,14 @@ import jp.co.soramitsu.oauth.feature.verify.VerifyUserData
 
 @Composable
 fun VerifyPhoneNumberScreen(
+    countryCode: String?,
     phoneNumber: String?,
     otpLength: Int?,
     authCallback: OAuthCallback,
     viewModel: VerifyPhoneNumberViewModel = hiltViewModel(),
 ) {
     LaunchedEffect(Unit) {
-        viewModel.setArgs(phoneNumber, otpLength, authCallback)
+        viewModel.setArgs(countryCode, phoneNumber, otpLength, authCallback)
     }
 
     Screen(
@@ -30,9 +31,7 @@ fun VerifyPhoneNumberScreen(
     ) { scrollState ->
         val state = viewModel.state.collectAsStateWithLifecycle().value
 
-        val phone = phoneNumber?.let {
-            maskFilter(AnnotatedString(it)).text
-        }
+        val phone = maskFilter(AnnotatedString(countryCode.orEmpty() + phoneNumber.orEmpty())).text
 
         val focusRequester = remember { FocusRequester() }
 

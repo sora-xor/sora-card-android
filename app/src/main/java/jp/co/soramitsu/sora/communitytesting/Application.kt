@@ -1,4 +1,4 @@
-package jp.co.soramitsu.card
+package jp.co.soramitsu.sora.communitytesting
 
 import android.app.Application
 import dagger.Module

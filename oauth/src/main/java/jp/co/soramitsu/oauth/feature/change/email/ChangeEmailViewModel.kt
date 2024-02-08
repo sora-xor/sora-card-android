@@ -55,7 +55,7 @@ class ChangeEmailViewModel @Inject constructor(
 
         private fun getErrorMessage(errorCode: OAuthErrorCode): String? {
             return when (errorCode) {
-                OAuthErrorCode.NO_INTERNET -> "Check your internet connection"
+                OAuthErrorCode.INTERNET_CONNECTION_ISSUE -> "Check your internet connection"
                 OAuthErrorCode.INVALID_EMAIL -> "Email is not a valid email!"
                 else -> null
             }

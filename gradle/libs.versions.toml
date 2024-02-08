@@ -2,7 +2,6 @@
 agp = "8.2.2"
 kotlin = "1.9.22"
 core-ktx = "1.12.0"
-appcompat = "1.6.1"
 fragment-ktx = "1.6.2"
 junit = "4.13.2"
 coretest = "2.2.0"
@@ -11,21 +10,21 @@ espresso-core = "3.5.1"
 lifecycle-runtime-compose = "2.7.0"
 activity-compose = "1.8.2"
 material = "1.11.0"
-compose = "1.6.0"
+compose = "1.6.1"
 coil = "2.2.2"
 hilt = "2.48.1"
 hiltnavcompose = "1.1.0"
 uicore = "0.2.21"
-xnetworking = "0.2.8"
+xnetworking = "0.2.9"
 ktor = "2.3.1"
 kotlinx-serialization-v = "1.6.0"
-navigation-compose = "2.7.6"
+navigation-compose = "2.7.7"
 datastore = "1.0.0"
 mockk = "1.13.8"
 coroutine = "1.7.3"
 pinview = "1.4.4"
-pwoauth = "1.3.1"
-pwkyc = "4.7.0"
+pwoauth = "2.0.0"
+pwkyc = "1.0.1"
 
 [libraries]
 coroutine-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutine" }
@@ -34,7 +33,6 @@ hiltandroid = { group = "com.google.dagger", name = "hilt-android", version.ref 
 hiltcompiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 hiltnavigationcompose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltnavcompose" }
 datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragment-ktx" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
@@ -55,7 +53,7 @@ ktor = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
 kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-v" }
 pinview = { group = "io.github.chaosleung", name = "pinview", version.ref = "pinview" }
 pwoauth = { group = "com.paywings.oauth", name = "android-sdk", version.ref = "pwoauth" }
-pwkyc = { group = "com.paywings.onboarding.kyc", name = "android-sdk", version.ref = "pwkyc" }
+pwkyc = { group = "com.paywings.kyc", name = "android-sdk", version.ref = "pwkyc" }
 #coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 #coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 #coil-svg = { group = "io.coil-kt", name = "coil-svg", version.ref = "coil" }

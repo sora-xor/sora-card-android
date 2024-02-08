@@ -31,11 +31,11 @@ kotlin {
 }
 
 android {
-    namespace = "jp.co.soramitsu.card"
+    namespace = "jp.co.soramitsu.sora.communitytesting"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "jp.co.soramitsu.card"
+        applicationId = "jp.co.soramitsu.sora.communitytesting"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
@@ -82,6 +82,18 @@ android {
                 maybeWrapQuotes(secret("SORA_BACKEND_RELEASE")!!),
             )
 
+            buildConfigField(
+                "String",
+                "PLATFORM_ID",
+                maybeWrapQuotes(secret("PLATFORM_ID_TEST")!!),
+            )
+
+            buildConfigField(
+                "String",
+                "RECAPTCHA_KEY",
+                maybeWrapQuotes(secret("RECAPTCH_KEY_TEST")!!),
+            )
+
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -119,6 +131,18 @@ android {
                 "String",
                 "SORA_API_BASE_URL",
                 maybeWrapQuotes(secret("SORA_BACKEND_DEBUG")!!),
+            )
+
+            buildConfigField(
+                "String",
+                "PLATFORM_ID",
+                maybeWrapQuotes(secret("PLATFORM_ID_TEST")!!),
+            )
+
+            buildConfigField(
+                "String",
+                "RECAPTCHA_KEY",
+                maybeWrapQuotes(secret("RECAPTCH_KEY_TEST")!!),
             )
 
             isMinifyEnabled = false

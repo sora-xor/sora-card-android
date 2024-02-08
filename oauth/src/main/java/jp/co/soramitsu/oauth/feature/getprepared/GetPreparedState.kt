@@ -8,6 +8,7 @@ data class GetPreparedState(
     val totalFreeAttemptsCount: String,
     val attemptCost: String,
     val steps: List<Step> = emptyList(),
+    val buttonEnabled: Boolean,
 )
 
 data class Step(

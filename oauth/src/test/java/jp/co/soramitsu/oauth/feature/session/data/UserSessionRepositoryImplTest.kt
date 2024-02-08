@@ -11,7 +11,6 @@ import jp.co.soramitsu.oauth.base.data.SoraCardDataStore
 import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -54,58 +53,6 @@ class UserSessionRepositoryImplTest {
         coEvery { soraCardDataStore.putString(any(), any()) } just runs
         coEvery { soraCardDataStore.putLong(any(), any()) } just runs
         repository = UserSessionRepositoryImpl(soraCardDataStore)
-    }
-
-    @Test
-    fun `signIn user EXPECT update refresh token`() = runTest {
-        coEvery { soraCardDataStore.getString(REFRESH_TOKEN_KEY) } returns REFRESH_TOKEN_VALUE
-
-        repository.signInUser(
-            REFRESH_TOKEN_VALUE,
-            ACCESS_TOKEN_VALUE,
-            EXPIRATION_TIME_VALUE,
-        )
-
-        coVerify { soraCardDataStore.putString(REFRESH_TOKEN_KEY, REFRESH_TOKEN_VALUE) }
-        assertEquals(REFRESH_TOKEN_VALUE, repository.getRefreshToken())
-    }
-
-    @Test
-    fun `signIn user EXPECT update access token`() = runTest {
-        coEvery { soraCardDataStore.getString(ACCESS_TOKEN_KEY) } returns ACCESS_TOKEN_VALUE
-
-        repository.signInUser(
-            REFRESH_TOKEN_VALUE,
-            ACCESS_TOKEN_VALUE,
-            EXPIRATION_TIME_VALUE,
-        )
-
-        coVerify { soraCardDataStore.putString(ACCESS_TOKEN_KEY, ACCESS_TOKEN_VALUE) }
-        assertEquals(ACCESS_TOKEN_VALUE, repository.getAccessToken())
-    }
-
-    @Test
-    fun `signIn user EXPECT update expiration time`() = runTest {
-        coEvery {
-            soraCardDataStore.getLong(
-                ACCESS_TOKEN_EXPIRATION_TIME_KEY,
-                0,
-            )
-        } returns EXPIRATION_TIME_VALUE
-
-        repository.signInUser(
-            REFRESH_TOKEN_VALUE,
-            ACCESS_TOKEN_VALUE,
-            EXPIRATION_TIME_VALUE,
-        )
-
-        coVerify {
-            soraCardDataStore.putLong(
-                ACCESS_TOKEN_EXPIRATION_TIME_KEY,
-                EXPIRATION_TIME_VALUE,
-            )
-        }
-        assertEquals(EXPIRATION_TIME_VALUE, repository.getAccessTokenExpirationTime())
     }
 
     @Test

@@ -97,19 +97,8 @@ class VerifyEmailViewModel @Inject constructor(
             }
         }
 
-        override fun onSignInSuccessful(
-            refreshToken: String,
-            accessToken: String,
-            accessTokenExpirationTime: Long,
-        ) {
-            viewModelScope.launch {
-                userSessionRepository.signInUser(
-                    refreshToken,
-                    accessToken,
-                    accessTokenExpirationTime,
-                )
-                authCallback?.onOAuthSucceed(accessToken)
-            }
+        override fun onSignInSuccessful() {
+            authCallback?.onOAuthSucceed()
         }
 
         override fun onUserSignInRequired() {

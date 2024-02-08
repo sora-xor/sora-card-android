@@ -9,6 +9,7 @@ import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
+import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
@@ -20,6 +21,7 @@ class VerificationInProgressViewModel @Inject constructor(
     private val mainRouter: MainRouter,
     private val setActivityResult: SetActivityResult,
     private val userSessionRepository: UserSessionRepository,
+    private val pwoAuthClientProxy: PWOAuthClientProxy,
 ) : BaseViewModel() {
 
     init {
@@ -38,6 +40,7 @@ class VerificationInProgressViewModel @Inject constructor(
         super.onToolbarAction()
         try {
             viewModelScope.launch {
+                pwoAuthClientProxy.logout()
                 userSessionRepository.logOutUser()
             }.invokeOnCompletion {
                 setActivityResult.setResult(SoraCardResult.Logout)

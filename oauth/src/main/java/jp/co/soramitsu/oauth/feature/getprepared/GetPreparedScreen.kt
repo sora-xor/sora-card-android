@@ -130,6 +130,7 @@ private fun GetPreparedScreenContent(
             text = stringResource(id = R.string.get_prepared_ok_title),
             order = Order.SECONDARY,
             size = Size.Large,
+            enabled = state.buttonEnabled,
             onClick = onConfirm,
         )
     }
@@ -198,6 +199,7 @@ private fun PreviewGetPreparedScreen() {
         state = GetPreparedState(
             totalFreeAttemptsCount = "4",
             attemptCost = "3.80",
+            buttonEnabled = true,
             steps = listOf(
                 Step(
                     index = 1,

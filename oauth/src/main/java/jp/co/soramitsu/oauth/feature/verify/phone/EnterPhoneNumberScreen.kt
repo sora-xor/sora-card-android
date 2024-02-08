@@ -1,5 +1,6 @@
 package jp.co.soramitsu.oauth.feature.verify.phone
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -48,6 +49,9 @@ import jp.co.soramitsu.ui_core.theme.customTypography
 @Composable
 fun EnterPhoneNumberScreen(code: String?, viewModel: EnterPhoneNumberViewModel = hiltViewModel()) {
     viewModel.setLocale(code)
+    BackHandler {
+        viewModel.onToolbarNavigation()
+    }
     Screen(
         viewModel = viewModel,
     ) { scrollState ->

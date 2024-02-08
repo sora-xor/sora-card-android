@@ -2,6 +2,7 @@ package jp.co.soramitsu.oauth.base.navigation
 
 enum class Destination(val route: String) {
 
+    INIT_LOADING("oauth/initLoading"),
     TERMS_AND_CONDITIONS("oauth/termsAndConditions"),
     GET_PREPARED("oauth/getPrepared"),
     ENTER_PHONE_NUMBER("oauth/enterPhoneNumber"),
@@ -26,6 +27,7 @@ enum class Argument(val arg: String) {
 
     EMAIL("email"),
     AUTO_EMAIL_SENT("autoEmailSent"),
+    COUNTRY_CODE("countryCode"),
     PHONE_NUMBER("phoneNumber"),
     OTP_LENGTH("otpLength"),
     FIRST_NAME("firstName"),

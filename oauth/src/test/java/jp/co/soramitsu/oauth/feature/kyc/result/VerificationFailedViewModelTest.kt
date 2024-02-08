@@ -11,6 +11,7 @@ import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
+import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -38,6 +39,9 @@ class VerificationFailedViewModelTest {
     private lateinit var setActivityResult: SetActivityResult
 
     @MockK
+    private lateinit var pwoAuthClientProxy: PWOAuthClientProxy
+
+    @MockK
     private lateinit var userSessionRepository: UserSessionRepository
 
     private lateinit var viewModel: VerificationFailedViewModel
@@ -48,6 +52,7 @@ class VerificationFailedViewModelTest {
         viewModel = VerificationFailedViewModel(
             setActivityResult = setActivityResult,
             userSessionRepository = userSessionRepository,
+            pwoAuthClientProxy = pwoAuthClientProxy,
         )
     }
 

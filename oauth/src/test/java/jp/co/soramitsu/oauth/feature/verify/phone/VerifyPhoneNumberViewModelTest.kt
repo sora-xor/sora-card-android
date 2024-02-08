@@ -78,7 +78,7 @@ class VerifyPhoneNumberViewModelTest {
         every { timer.start() } returns cdTimer
         every { mainRouter.back() } just runs
         coEvery { pwoAuthClientProxy.signInWithPhoneNumberVerifyOtp(any(), any()) } just runs
-        coEvery { pwoAuthClientProxy.signInWithPhoneNumberRequestOtp(any(), any(), any()) } just runs
+        coEvery { pwoAuthClientProxy.signInWithPhoneNumberRequestOtp(any(), any(), any(), any()) } just runs
         viewModel = VerifyPhoneNumberViewModel(
             mainRouter,
             userSessionRepository,
@@ -88,6 +88,7 @@ class VerifyPhoneNumberViewModelTest {
         )
 
         viewModel.setArgs(
+            countryCode = "77",
             phoneNumber = "1111111",
             otpLength = 6,
             authCallback = authCallback,

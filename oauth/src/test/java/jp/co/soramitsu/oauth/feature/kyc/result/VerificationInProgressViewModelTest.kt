@@ -10,6 +10,7 @@ import io.mockk.verify
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
+import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -41,6 +42,9 @@ class VerificationInProgressViewModelTest {
     private lateinit var setActivityResult: SetActivityResult
 
     @MockK
+    private lateinit var pwoAuthClientProxy: PWOAuthClientProxy
+
+    @MockK
     private lateinit var mainRouter: MainRouter
 
     private lateinit var viewModel: VerificationInProgressViewModel
@@ -52,6 +56,7 @@ class VerificationInProgressViewModelTest {
             mainRouter = mainRouter,
             setActivityResult = setActivityResult,
             userSessionRepository = userSessionRepository,
+            pwoAuthClientProxy = pwoAuthClientProxy,
         )
     }
 
