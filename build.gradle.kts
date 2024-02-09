@@ -60,3 +60,4 @@ sonarqube {
         property("sonar.projectName", "sora-card-android")
         property("sonar.exclusions", "${project.projectDir}/**/*.txt")
     }
+}
