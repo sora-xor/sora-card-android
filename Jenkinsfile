@@ -31,3 +31,4 @@ def pipeline = new org.android.ShareFeature(
   dojoProductType: "sora-mobile"
 )
 
+pipeline.runPipeline()
