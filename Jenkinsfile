@@ -1,4 +1,4 @@
-@Library('jenkins-library') _
+@Library('jenkins-library@feature/DOPS-2955/update_android_shared_feature') _
 
 def extraBuildSecrets = [
   [$class: 'UsernamePasswordMultiBinding', credentialsId: 'bot-soramitsu-rw', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD'],
@@ -20,14 +20,14 @@ def extraBuildSecrets = [
   [$class: 'StringBinding', credentialsId: 'SORA_BACKEND_RELEASE', variable: 'SORA_BACKEND_RELEASE']
 ]
 
-new org.android.ShareFeature().call(
-  detekt: false,
-  test: true,
-  dockerImage: "build-tools/android-build-box:jdk17",
-  nexusCredentials: "bot-soramitsu-rw",
+def pipeline = new org.android.ShareFeature(
+  steps: this,
+  agentImage: 'build-tools/android-build-box:jdk17',
   buildCmd: 'clean :oauth:build',
   testCmd: 'clean :oauth:test',
   extraBuildSecrets: extraBuildSecrets,
-  dojo: true,
-  dojoProductType: "sora"
+  sonarProjectKey: "sora:sora-card-android",
+  sonarProjectName: "sora-card-android",
+  dojoProductType: "sora-mobile"
 )
+
