@@ -1,4 +1,4 @@
-@Library('jenkins-library@feature/DOPS-2955/update_android_shared_feature') _
+@Library('jenkins-library') _
 
 def extraBuildSecrets = [
   [$class: 'UsernamePasswordMultiBinding', credentialsId: 'bot-soramitsu-rw', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD'],
