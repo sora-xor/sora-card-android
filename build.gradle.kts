@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.kapt) apply false
     alias(libs.plugins.serialization) apply false
+    id("org.sonarqube") version "4.4.1.3373"
 }
 
 tasks.register("clean", Delete::class) {
@@ -51,4 +52,12 @@ tasks.register<JavaExec>("ktlintFormat") {
         "**.kts",
         "!**/build/**",
     )
+}
+
+sonarqube {
+    properties {
+        property("sonar.projectKey", "sora:sora-card-android")
+        property("sonar.projectName", "sora-card-android")
+        property("sonar.exclusions", "${project.projectDir}/**/*.txt")
+    }
 }
