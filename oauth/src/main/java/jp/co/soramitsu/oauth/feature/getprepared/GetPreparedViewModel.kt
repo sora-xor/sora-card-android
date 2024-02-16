@@ -5,10 +5,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
+import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.common.domain.KycRepository
+import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.common.domain.PriceInteractor
-import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
@@ -24,10 +25,13 @@ class GetPreparedViewModel @Inject constructor(
     private val userSessionRepository: UserSessionRepository,
     private val kycRepository: KycRepository,
     private val priceInteractor: PriceInteractor,
+    private val pwoAuthClientProxy: PWOAuthClientProxy,
 ) : BaseViewModel() {
 
     private val _state =
-        MutableStateFlow(GetPreparedState(totalFreeAttemptsCount = "", attemptCost = ""))
+        MutableStateFlow(
+            GetPreparedState(totalFreeAttemptsCount = "", attemptCost = "", buttonEnabled = true),
+        )
     val state = _state.asStateFlow()
 
     private var authCallback: OAuthCallback? = null
@@ -46,6 +50,7 @@ class GetPreparedViewModel @Inject constructor(
         _state.value = GetPreparedState(
             totalFreeAttemptsCount = ".",
             attemptCost = ".",
+            buttonEnabled = true,
             steps = listOf(
                 Step(
                     index = 1,
@@ -90,6 +95,7 @@ class GetPreparedViewModel @Inject constructor(
         super.onToolbarAction()
         runCatching {
             viewModelScope.launch {
+                pwoAuthClientProxy.logout()
                 userSessionRepository.logOutUser()
             }.invokeOnCompletion {
                 setActivityResult.setResult(SoraCardResult.Logout)
@@ -102,6 +108,9 @@ class GetPreparedViewModel @Inject constructor(
     }
 
     fun onConfirm() {
+        _state.value = _state.value.copy(
+            buttonEnabled = false,
+        )
         authCallback?.onStartKyc()
     }
 

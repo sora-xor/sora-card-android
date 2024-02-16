@@ -39,7 +39,7 @@ data class KycResponse(
     @SerialName("kyc_id") val kycID: String,
     @SerialName("person_id") val personID: String,
     @SerialName("user_reference_number") val userReferenceNumber: String,
-    @SerialName("reference_id") val referenceID: String,
+    @SerialName("reference_id") val referenceID: String? = null,
     @SerialName("kyc_status") val kycStatus: KycStatus,
     @SerialName("verification_status") val verificationStatus: VerificationStatus,
     @SerialName("iban_status") val ibanStatus: IbanStatus,

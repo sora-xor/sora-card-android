@@ -39,7 +39,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 26
         multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -84,7 +84,6 @@ android {
 dependencies {
     implementation(libs.core.ktx)
     implementation(libs.fragment.ktx)
-    implementation(libs.appcompat)
 
     implementation(libs.compose.ui)
     implementation(libs.compose.material)
@@ -93,6 +92,7 @@ dependencies {
     implementation(libs.compose.runtime.livedata)
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.lifecycle.viewmodel.ktx)
+    implementation(libs.lifecycle.common)
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.compose.navigation)
 
@@ -137,7 +137,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "jp.co.soramitsu"
             artifactId = "android-sora-card"
-            version = "0.1.72"
+            version = "1.0.0"
 
             afterEvaluate {
                 from(components["release"])

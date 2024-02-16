@@ -75,7 +75,7 @@ class EnterEmailViewModel @Inject constructor(
 
         private fun getErrorMessage(errorCode: OAuthErrorCode): String? {
             return when (errorCode) {
-                OAuthErrorCode.NO_INTERNET -> "Check your internet connection"
+                OAuthErrorCode.INTERNET_CONNECTION_ISSUE -> "Check your internet connection"
                 OAuthErrorCode.USER_IS_SUSPENDED -> "Phone number is suspended"
                 OAuthErrorCode.INVALID_EMAIL -> "Email is not a valid email!"
                 else -> null
@@ -87,19 +87,23 @@ class EnterEmailViewModel @Inject constructor(
             mainRouter.openVerifyEmail(email, autoEmailSent, clearStack = true)
         }
 
-        override fun onSignInSuccessful(
-            refreshToken: String,
-            accessToken: String,
-            accessTokenExpirationTime: Long,
-        ) {
-            viewModelScope.launch {
-                userSessionRepository.signInUser(
-                    refreshToken,
-                    accessToken,
-                    accessTokenExpirationTime,
-                )
-                authCallback?.onOAuthSucceed(accessToken)
-            }
+//        override fun onSignInSuccessful(
+//            refreshToken: String,
+//            accessToken: String,
+//            accessTokenExpirationTime: Long,
+//        ) {
+//            viewModelScope.launch {
+//                userSessionRepository.signInUser(
+//                    refreshToken,
+//                    accessToken,
+//                    accessTokenExpirationTime,
+//                )
+//                authCallback?.onOAuthSucceed(accessToken)
+//            }
+//        }
+
+        override fun onSignInSuccessful() {
+            authCallback?.onOAuthSucceed()
         }
 
         override fun onUserSignInRequired() {

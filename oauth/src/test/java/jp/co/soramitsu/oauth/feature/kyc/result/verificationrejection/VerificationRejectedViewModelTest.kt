@@ -10,13 +10,14 @@ import io.mockk.runs
 import io.mockk.verify
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
+import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.common.domain.KycRepository
+import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.common.domain.PriceInteractor
 import jp.co.soramitsu.oauth.common.model.KycAttemptsDto
 import jp.co.soramitsu.oauth.common.model.XorEuroPrice
 import jp.co.soramitsu.oauth.common.model.emptyKycResponse
-import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import jp.co.soramitsu.oauth.feature.kyc.result.verificationrejected.VerificationRejectedViewModel
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
@@ -56,6 +57,9 @@ class VerificationRejectedViewModelTest {
     private lateinit var kycRepository: KycRepository
 
     @MockK
+    private lateinit var pwoAuthClientProxy: PWOAuthClientProxy
+
+    @MockK
     private lateinit var priceInteractor: PriceInteractor
 
     private lateinit var kycCountAttemptsUnavailable: KycAttemptsDto
@@ -91,6 +95,7 @@ class VerificationRejectedViewModelTest {
             kycRepository = kycRepository,
             setActivityResult = setActivityResult,
             priceInteractor = priceInteractor,
+            pwoAuthClientProxy = pwoAuthClientProxy,
         )
 
         assertEquals(
@@ -126,6 +131,7 @@ class VerificationRejectedViewModelTest {
                 kycRepository = kycRepository,
                 setActivityResult = setActivityResult,
                 priceInteractor = priceInteractor,
+                pwoAuthClientProxy = pwoAuthClientProxy,
             )
             advanceUntilIdle()
 
@@ -144,6 +150,7 @@ class VerificationRejectedViewModelTest {
             kycRepository = kycRepository,
             setActivityResult = setActivityResult,
             priceInteractor = priceInteractor,
+            pwoAuthClientProxy = pwoAuthClientProxy,
         )
 
         viewModel.openTelegramSupport()

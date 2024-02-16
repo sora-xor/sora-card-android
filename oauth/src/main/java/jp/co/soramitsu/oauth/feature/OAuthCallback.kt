@@ -2,7 +2,7 @@ package jp.co.soramitsu.oauth.feature
 
 interface OAuthCallback {
 
-    fun onOAuthSucceed(accessToken: String)
+    fun onOAuthSucceed()
 
     fun onStartKyc()
 }

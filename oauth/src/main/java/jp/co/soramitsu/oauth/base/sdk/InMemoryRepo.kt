@@ -8,9 +8,6 @@ import jp.co.soramitsu.oauth.BuildConfig
 class InMemoryRepo @Inject constructor() {
 
     var locale: String = "en"
-    var endpointUrl: String = ""
-    var username: String = ""
-    var password: String = ""
     var environment: SoraCardEnvironmentType = SoraCardEnvironmentType.NOT_DEFINED
     var client: String = BuildConfig.LIBRARY_PACKAGE_NAME
     var userAvailableXorAmount: Double = 0.toDouble()

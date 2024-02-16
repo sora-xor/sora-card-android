@@ -8,7 +8,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.dialog
 import androidx.navigation.navArgument
-import jp.co.soramitsu.oauth.common.navigation.flow.api.destinations.KycRequirementsUnfulfilledDestination
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.cardissuance.CardIssuanceScreen
 import jp.co.soramitsu.oauth.feature.change.email.ChangeEmailScreen
@@ -19,6 +18,7 @@ import jp.co.soramitsu.oauth.feature.kyc.result.VerificationInProgressScreen
 import jp.co.soramitsu.oauth.feature.kyc.result.VerificationSuccessfulScreen
 import jp.co.soramitsu.oauth.feature.kyc.result.verificationrejected.VerificationRejectedScreen
 import jp.co.soramitsu.oauth.feature.registration.RegisterUserScreen
+import jp.co.soramitsu.oauth.feature.terms.and.conditions.InitLoadingScreen
 import jp.co.soramitsu.oauth.feature.terms.and.conditions.TermsAndConditionsScreen
 import jp.co.soramitsu.oauth.feature.terms.and.conditions.WebPageScreen
 import jp.co.soramitsu.oauth.feature.verify.email.EnterEmailScreen
@@ -35,6 +35,10 @@ internal fun SdkNavGraph(
     authCallback: OAuthCallback,
 ) {
     NavHost(navHostController, startDestination = startDestination.route) {
+        animatedComposable(Destination.INIT_LOADING.route) {
+            InitLoadingScreen()
+        }
+
         animatedComposable(Destination.TERMS_AND_CONDITIONS.route) {
             TermsAndConditionsScreen()
         }
@@ -53,13 +57,15 @@ internal fun SdkNavGraph(
         }
 
         animatedComposable(
-            Destination.VERIFY_PHONE_NUMBER.route + Argument.PHONE_NUMBER.path() + Argument.OTP_LENGTH.path(),
+            Destination.VERIFY_PHONE_NUMBER.route + Argument.COUNTRY_CODE.path() + Argument.PHONE_NUMBER.path() + Argument.OTP_LENGTH.path(),
             arguments = listOf(
+                navArgument(Argument.COUNTRY_CODE.arg) { type = NavType.StringType },
                 navArgument(Argument.PHONE_NUMBER.arg) { type = NavType.StringType },
                 navArgument(Argument.OTP_LENGTH.arg) { type = NavType.IntType },
             ),
         ) { backStackEntry ->
             VerifyPhoneNumberScreen(
+                countryCode = backStackEntry.arguments?.getString(Argument.COUNTRY_CODE.arg),
                 phoneNumber = backStackEntry.arguments?.getString(Argument.PHONE_NUMBER.arg),
                 otpLength = backStackEntry.arguments?.getInt(Argument.OTP_LENGTH.arg),
                 authCallback = authCallback,
@@ -108,12 +114,12 @@ internal fun SdkNavGraph(
             ChangeEmailScreen()
         }
 
-        animatedComposable(Destination.VERIFICATION_FAILED.route) {
-            VerificationFailedScreen(
-                additionalDescription = navHostController.previousBackStackEntry
-                    ?.arguments
-                    ?.getString(Argument.ADDITIONAL_DESCRIPTION.arg),
-            )
+        animatedComposable(
+            Destination.VERIFICATION_FAILED.route + Argument.ADDITIONAL_DESCRIPTION.path(),
+            listOf(navArgument(Argument.ADDITIONAL_DESCRIPTION.arg) { type = NavType.StringType }),
+        ) {
+            val desc = it.arguments?.getString(Argument.ADDITIONAL_DESCRIPTION.arg)
+            VerificationFailedScreen(additionalDescription = desc)
         }
 
         animatedComposable(Destination.VERIFICATION_REJECTED.route) {
@@ -129,13 +135,13 @@ internal fun SdkNavGraph(
         }
 
         animatedComposable(
-            route = KycRequirementsUnfulfilledDestination.CardIssuanceOptionsScreen().destination,
+            route = Destination.CARD_ISSUANCE_OPTIONS.route,
         ) {
             CardIssuanceScreen()
         }
 
         dialog(
-            route = KycRequirementsUnfulfilledDestination.GetMoreXorDialog().destination,
+            route = Destination.GET_MORE_XOR_DIALOG.route,
         ) {
             ChooseXorPurchaseMethodDialog()
         }

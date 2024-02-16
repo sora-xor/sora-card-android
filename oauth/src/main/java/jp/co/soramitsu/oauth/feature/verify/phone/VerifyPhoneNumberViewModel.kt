@@ -17,7 +17,6 @@ import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.oauth.feature.verify.Timer
 import jp.co.soramitsu.oauth.feature.verify.format
-import jp.co.soramitsu.oauth.feature.verify.formatForAuth
 import jp.co.soramitsu.oauth.feature.verify.model.ButtonState
 import jp.co.soramitsu.oauth.feature.verify.phone.model.VerifyPhoneNumberState
 import jp.co.soramitsu.ui_core.component.input.InputTextState
@@ -59,6 +58,7 @@ class VerifyPhoneNumberViewModel @Inject constructor(
     )
     val state = _state.asStateFlow()
 
+    private var countryCode: String = ""
     private var phoneNumber: String = ""
     private var otpLength: Int = Int.MAX_VALUE
 
@@ -102,7 +102,13 @@ class VerifyPhoneNumberViewModel @Inject constructor(
         timer.start()
     }
 
-    fun setArgs(phoneNumber: String?, otpLength: Int?, authCallback: OAuthCallback) {
+    fun setArgs(
+        countryCode: String?,
+        phoneNumber: String?,
+        otpLength: Int?,
+        authCallback: OAuthCallback,
+    ) {
+        countryCode?.let { this.countryCode = it }
         phoneNumber?.let {
             this.phoneNumber = it
         }
@@ -123,6 +129,12 @@ class VerifyPhoneNumberViewModel @Inject constructor(
             )
         }
 
+        override fun onShowTimeBasedOtpSetupScreen(accountName: String, secretKey: String) {
+        }
+
+        override fun onShowTimeBasedOtpVerificationInputScreen(accountName: String) {
+        }
+
         override fun onShowEmailConfirmationScreen(email: String, autoEmailSent: Boolean) {
             loading(false)
             mainRouter.openVerifyEmail(email, autoEmailSent)
@@ -133,15 +145,8 @@ class VerifyPhoneNumberViewModel @Inject constructor(
             mainRouter.openRegisterUser()
         }
 
-        override fun onSignInSuccessful(
-            refreshToken: String,
-            accessToken: String,
-            accessTokenExpirationTime: Long,
-        ) {
-            viewModelScope.launch {
-                signInUser(refreshToken, accessToken, accessTokenExpirationTime)
-                authCallback?.onOAuthSucceed(accessToken)
-            }
+        override fun onSignInSuccessful() {
+            authCallback?.onOAuthSucceed()
         }
 
         override fun onUserSignInRequired() {
@@ -159,18 +164,6 @@ class VerifyPhoneNumberViewModel @Inject constructor(
         }
     }
 
-    private suspend fun signInUser(
-        refreshToken: String,
-        accessToken: String,
-        accessTokenExpirationTime: Long,
-    ) {
-        userSessionRepository.signInUser(
-            refreshToken,
-            accessToken,
-            accessTokenExpirationTime,
-        )
-    }
-
     private val requestOtpCallback = object : SignInWithPhoneNumberRequestOtpCallback {
         override fun onError(error: OAuthErrorCode, errorMessage: String?) {
             loading(false)
@@ -180,6 +173,9 @@ class VerifyPhoneNumberViewModel @Inject constructor(
                     descriptionText = error.description,
                 ),
             )
+        }
+
+        override fun onShowTimeBasedOtpVerificationInputScreen(accountName: String) {
         }
 
         override fun onShowOtpInputScreen(otpLength: Int) {
@@ -226,7 +222,8 @@ class VerifyPhoneNumberViewModel @Inject constructor(
             loading(true)
             delay(LOADING_DELAY)
             pwoAuthClientProxy.signInWithPhoneNumberRequestOtp(
-                phoneNumber = phoneNumber.formatForAuth(),
+                countryCode = countryCode,
+                phoneNumber = phoneNumber,
                 callback = requestOtpCallback,
             )
         }

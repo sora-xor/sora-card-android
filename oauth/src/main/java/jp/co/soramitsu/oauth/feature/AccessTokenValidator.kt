@@ -31,8 +31,7 @@ class AccessTokenValidator @Inject constructor(
     }
 
     private suspend fun getNewAccessToken(): AccessTokenResponse? {
-        val refreshToken = userSessionRepository.getRefreshToken()
-        val newTokenResult = pwoAuthClientProxy.getNewAccessToken(refreshToken)
+        val newTokenResult = pwoAuthClientProxy.getNewAccessToken("", "GET")
         val newTokenResultAccess = newTokenResult.accessTokenData
         if (newTokenResultAccess != null) {
             return AccessTokenResponse.Token(

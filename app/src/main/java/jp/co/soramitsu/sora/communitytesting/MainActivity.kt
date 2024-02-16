@@ -1,4 +1,4 @@
-package jp.co.soramitsu.card
+package jp.co.soramitsu.sora.communitytesting
 
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +10,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
@@ -51,22 +52,28 @@ class MainActivity : ComponentActivity() {
                         Text(text = Locale("", "gb").displayCountry + "US".flagEmoji())
 
                         FilledButton(size = Size.Large, order = Order.SECONDARY, text = "text") {
-                            facade.init(basic(), applicationContext, BuildConfig.SORA_API_BASE_URL)
-//                            MainScope().launch {
-//                                facade.getKycStatus()
-//                                    .onFailure {
-//                                        Log.e("srms", "error ${it.localizedMessage}")
-//                                    }
-//                                    .onSuccess {
-//                                        Log.e("srms", "success $it")
-//                                    }
-//                            }
+                            lifecycleScope.launch {
+                                facade.init(
+                                    basic(),
+                                    applicationContext,
+                                    BuildConfig.SORA_API_BASE_URL,
+                                )
+                            }
                             MainScope().launch {
-                                facade.getSoraSupportVersion()
-                                    .also {
-                                        Log.e("srms", "res= $it")
+                                facade.getKycStatus()
+                                    .onFailure {
+                                        Log.e("srms", "error ${it.localizedMessage}")
+                                    }
+                                    .onSuccess {
+                                        Log.e("srms", "success $it")
                                     }
                             }
+//                            MainScope().launch {
+//                                facade.getSoraSupportVersion()
+//                                    .also {
+//                                        Log.e("srms", "res= $it")
+//                                    }
+//                            }
                         }
                     }
                 }
@@ -100,6 +107,8 @@ class MainActivity : ComponentActivity() {
         apiKey = BuildConfig.SORA_CARD_API_KEY,
         domain = BuildConfig.SORA_CARD_DOMAIN,
         environment = SoraCardEnvironmentType.TEST,
+        platform = BuildConfig.PLATFORM_ID,
+        recaptcha = BuildConfig.RECAPTCHA_KEY,
     )
 
     private fun buildClient(): String =

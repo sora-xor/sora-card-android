@@ -1,6 +1,7 @@
 package jp.co.soramitsu.oauth.feature.terms.and.conditions
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
@@ -9,11 +10,14 @@ import io.mockk.runs
 import io.mockk.verify
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
+import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
-import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.domain.MainCoroutineRule
+import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.oauth.feature.terms.and.conditions.model.WebUrl
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -37,6 +41,9 @@ class TermsAndConditionsViewModelTest {
     private lateinit var mainRouter: MainRouter
 
     @MockK
+    private lateinit var userSessionRepository: UserSessionRepository
+
+    @MockK
     private lateinit var setActivityResult: SetActivityResult
 
     private lateinit var viewModel: TermsAndConditionsViewModel
@@ -46,7 +53,8 @@ class TermsAndConditionsViewModelTest {
         every { setActivityResult.setResult(any()) } just runs
         every { mainRouter.openWebPage(any(), any()) } just runs
         every { mainRouter.openEnterPhoneNumber(any()) } just runs
-        viewModel = TermsAndConditionsViewModel(mainRouter, setActivityResult)
+        coEvery { userSessionRepository.setTermsRead() } just runs
+        viewModel = TermsAndConditionsViewModel(mainRouter, setActivityResult, userSessionRepository)
     }
 
     @Test
@@ -80,8 +88,9 @@ class TermsAndConditionsViewModelTest {
     }
 
     @Test
-    fun `on confirm click EXPECT navigate enter phone number`() {
+    fun `on confirm click EXPECT navigate enter phone number`() = runTest {
         viewModel.onConfirm()
+        advanceUntilIdle()
         verify { mainRouter.openEnterPhoneNumber() }
     }
 

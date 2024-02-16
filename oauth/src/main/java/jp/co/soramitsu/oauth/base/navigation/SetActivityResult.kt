@@ -1,4 +1,4 @@
-package jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api
+package jp.co.soramitsu.oauth.base.navigation
 
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 

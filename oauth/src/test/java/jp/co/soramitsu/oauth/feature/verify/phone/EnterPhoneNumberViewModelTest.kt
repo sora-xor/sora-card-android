@@ -62,7 +62,7 @@ class EnterPhoneNumberViewModelTest {
     @Before
     fun setUp() {
         every { inMemoryRepo.environment } returns SoraCardEnvironmentType.PRODUCTION
-        coEvery { pwoAuthClientProxy.signInWithPhoneNumberRequestOtp(any(), any(), any()) } just runs
+        coEvery { pwoAuthClientProxy.signInWithPhoneNumberRequestOtp(any(), any(), any(), any()) } just runs
         every { mainRouter.back() } just runs
         every { localeService.code } returns "US"
         coEvery { kycRepository.getCountries(null) } returns listOf(CountryDial("US", "USA", "+1"))

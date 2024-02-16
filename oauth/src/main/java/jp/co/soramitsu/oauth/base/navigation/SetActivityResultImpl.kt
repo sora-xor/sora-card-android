@@ -1,4 +1,4 @@
-package jp.co.soramitsu.oauth.common.navigation.engine.activityresult.impl
+package jp.co.soramitsu.oauth.base.navigation
 
 import android.content.Intent
 import javax.inject.Inject
@@ -6,7 +6,6 @@ import jp.co.soramitsu.oauth.base.mapSoraCardResult
 import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.common.domain.CurrentActivityRetriever
-import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 
 class SetActivityResultImpl @Inject constructor(
     private val currentActivityRetriever: CurrentActivityRetriever,

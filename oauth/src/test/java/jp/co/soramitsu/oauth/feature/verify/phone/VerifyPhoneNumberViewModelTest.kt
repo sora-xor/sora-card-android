@@ -12,10 +12,10 @@ import io.mockk.runs
 import io.mockk.verify
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
+import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.sdk.SoraCardEnvironmentType
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
-import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
@@ -78,7 +78,7 @@ class VerifyPhoneNumberViewModelTest {
         every { timer.start() } returns cdTimer
         every { mainRouter.back() } just runs
         coEvery { pwoAuthClientProxy.signInWithPhoneNumberVerifyOtp(any(), any()) } just runs
-        coEvery { pwoAuthClientProxy.signInWithPhoneNumberRequestOtp(any(), any(), any()) } just runs
+        coEvery { pwoAuthClientProxy.signInWithPhoneNumberRequestOtp(any(), any(), any(), any()) } just runs
         viewModel = VerifyPhoneNumberViewModel(
             mainRouter,
             userSessionRepository,
@@ -88,6 +88,7 @@ class VerifyPhoneNumberViewModelTest {
         )
 
         viewModel.setArgs(
+            countryCode = "77",
             phoneNumber = "1111111",
             otpLength = 6,
             authCallback = authCallback,

@@ -6,9 +6,10 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
 import io.mockk.verify
 import jp.co.soramitsu.oauth.R
+import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
 import jp.co.soramitsu.oauth.common.domain.KycRepository
+import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.common.domain.PriceInteractor
-import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.getprepared.GetPreparedViewModel
@@ -46,6 +47,9 @@ class GetPreparedViewModelTest {
     private lateinit var kyc: KycRepository
 
     @MockK
+    private lateinit var pwoAuthClientProxy: PWOAuthClientProxy
+
+    @MockK
     private lateinit var interactor: PriceInteractor
 
     private lateinit var viewModel: GetPreparedViewModel
@@ -59,6 +63,7 @@ class GetPreparedViewModelTest {
             userSessionRepository,
             kyc,
             interactor,
+            pwoAuthClientProxy,
         )
     }
 

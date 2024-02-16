@@ -4,15 +4,17 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import androidx.annotation.StringRes
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptionsBuilder
 import jp.co.soramitsu.oauth.base.extension.isAppAvailableCompat
 import jp.co.soramitsu.oauth.feature.terms.and.conditions.model.WebUrl
 
-interface MainRouter {
+interface MainRouter : DefaultLifecycleObserver {
 
     fun attachNavController(activity: Activity, navHostController: NavHostController)
-
-    fun detachNavController(activity: Activity, navHostController: NavHostController)
 
     fun back()
 
@@ -20,10 +22,12 @@ interface MainRouter {
 
     fun openEnterPhoneNumber(clearStack: Boolean = false)
 
+    fun openTermsAndConditions()
+
     fun openCountryList()
     fun backWithCountry(code: String)
 
-    fun openVerifyPhoneNumber(phoneNumber: String, otpLength: Int)
+    fun openVerifyPhoneNumber(country: String, phoneNumber: String, otpLength: Int)
 
     fun openRegisterUser()
 
@@ -39,17 +43,13 @@ interface MainRouter {
 
     fun openVerificationInProgress()
 
-    fun openVerificationFailed(additionalDescription: String?)
+    fun openVerificationFailed(additionalDescription: String)
 
     fun openVerificationRejected()
 
     fun openSupportChat()
 
     fun navigate(destinationRoute: String)
-
-    fun popUpToAndNavigate(popUpRoute: String, destinationRoute: String)
-
-    fun popUpTo(destinationRoute: String)
 }
 
 class MainRouterImpl : MainRouter {
@@ -70,11 +70,10 @@ class MainRouterImpl : MainRouter {
         this.activity = activity
     }
 
-    override fun detachNavController(activity: Activity, navHostController: NavHostController) {
-        if (this.activity == activity && this.navHostController == navHostController) {
-            this.navHostController = null
-            this.activity = null
-        }
+    override fun onDestroy(owner: LifecycleOwner) {
+        this.navHostController = null
+        this.activity = null
+        super.onDestroy(owner)
     }
 
     override fun back() {
@@ -104,9 +103,25 @@ class MainRouterImpl : MainRouter {
         }
     }
 
-    override fun openVerifyPhoneNumber(phoneNumber: String, otpLength: Int) {
+    override fun openTermsAndConditions() {
+        navHostController?.let {
+            it.navigate(Destination.TERMS_AND_CONDITIONS.route) {
+                singleTop(it)
+            }
+        }
+    }
+
+    private fun NavOptionsBuilder.singleTop(controller: NavHostController) {
+        popUpTo(controller.graph.findStartDestination().id) {
+            saveState = true
+        }
+        launchSingleTop = true
+        restoreState = true
+    }
+
+    override fun openVerifyPhoneNumber(country: String, phoneNumber: String, otpLength: Int) {
         navHostController?.navigate(
-            Destination.VERIFY_PHONE_NUMBER.route + phoneNumber.asArgument() + otpLength.asArgument(),
+            Destination.VERIFY_PHONE_NUMBER.route + country.asArgument() + phoneNumber.asArgument() + otpLength.asArgument(),
         )
     }
 
@@ -151,15 +166,11 @@ class MainRouterImpl : MainRouter {
         navHostController?.navigate(Destination.VERIFICATION_IN_PROGRESS.route)
     }
 
-    override fun openVerificationFailed(additionalDescription: String?) {
+    override fun openVerificationFailed(additionalDescription: String) {
         navHostController?.popBackStack()
-        navHostController?.apply {
-            currentBackStackEntry?.arguments?.putString(
-                Argument.ADDITIONAL_DESCRIPTION.arg,
-                additionalDescription,
-            )
-            navigate(Destination.VERIFICATION_FAILED.route)
-        }
+        navHostController?.navigate(
+            Destination.VERIFICATION_FAILED.route + additionalDescription.asArgument(),
+        )
     }
 
     override fun openVerificationRejected() {
@@ -185,22 +196,5 @@ class MainRouterImpl : MainRouter {
 
     override fun navigate(destinationRoute: String) {
         navHostController?.navigate(destinationRoute)
-    }
-
-    override fun popUpToAndNavigate(popUpRoute: String, destinationRoute: String) {
-        navHostController?.navigate(destinationRoute) {
-            popUpTo(popUpRoute)
-        }
-    }
-
-    override fun popUpTo(destinationRoute: String) {
-        if (navHostController?.currentBackStackEntry?.destination?.route?.contains(destinationRoute) == true) {
-            navHostController?.popBackStack(destinationRoute, inclusive = false)
-        } else {
-            navHostController?.popBackStack(
-                Destination.TERMS_AND_CONDITIONS.route,
-                inclusive = false,
-            )
-        }
     }
 }
