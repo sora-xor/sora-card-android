@@ -9,8 +9,8 @@ import javax.inject.Inject
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
-import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
-import jp.co.soramitsu.oauth.base.sdk.SoraCardEnvironmentType
+import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
+import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.feature.telephone.LocaleService
@@ -29,10 +29,10 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class EnterPhoneNumberViewModel @Inject constructor(
     private val mainRouter: MainRouter,
-    inMemoryRepo: InMemoryRepo,
     private val pwoAuthClientProxy: PWOAuthClientProxy,
     private val localeService: LocaleService,
     private val kycRepository: KycRepository,
+    private val setActivityResult: SetActivityResult,
 ) : BaseViewModel() {
 
     companion object {
@@ -49,7 +49,7 @@ class EnterPhoneNumberViewModel @Inject constructor(
             ),
             inputTextStateNumber = InputTextState(
                 value = TextFieldValue(""),
-                label = if (inMemoryRepo.environment == SoraCardEnvironmentType.TEST) "Use 12346578 in this field" else R.string.enter_phone_number_phone_input_field_label,
+                label = R.string.enter_phone_number_phone_input_field_label,
                 descriptionText = R.string.common_no_spam,
             ),
             buttonState = ButtonState(
@@ -181,6 +181,6 @@ class EnterPhoneNumberViewModel @Inject constructor(
     }
 
     override fun onToolbarNavigation() {
-        mainRouter.back()
+        setActivityResult.setResult(SoraCardResult.Canceled)
     }
 }

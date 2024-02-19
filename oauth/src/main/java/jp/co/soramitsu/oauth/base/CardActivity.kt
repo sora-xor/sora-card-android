@@ -65,7 +65,7 @@ class CardActivity : ComponentActivity() {
         }
 
         override fun onStartKyc() {
-            vm.startKycProcess()
+            vm.startKycProcess(this@CardActivity)
         }
     }
 

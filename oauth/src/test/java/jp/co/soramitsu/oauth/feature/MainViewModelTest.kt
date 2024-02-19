@@ -12,6 +12,7 @@ import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
+import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.common.domain.KycRepository
@@ -57,6 +58,9 @@ class MainViewModelTest {
     private lateinit var pwoAuthClientProxy: PWOAuthClientProxy
 
     @MockK
+    private lateinit var setActivityResult: SetActivityResult
+
+    @MockK
     private lateinit var activity: Activity
 
     @MockK
@@ -71,9 +75,6 @@ class MainViewModelTest {
             userSessionRepository.getAccessTokenExpirationTime()
         } returns System.currentTimeMillis() + 300000
         coEvery { userSessionRepository.setNewAccessToken(any(), any()) } returns Unit
-        coEvery {
-            kycRepository.getKycLastFinalStatus(any(), any())
-        } returns Result.success(SoraCardCommonVerification.Successful)
         every { mainRouter.openGetPrepared() } returns Unit
         every { mainRouter.openVerificationFailed(any()) } returns Unit
         every { mainRouter.openVerificationSuccessful() } just runs
@@ -91,6 +92,7 @@ class MainViewModelTest {
             inMemoryRepo,
             pwoAuthClientProxy,
             tokenValidator,
+            setActivityResult,
         )
     }
 
@@ -108,13 +110,14 @@ class MainViewModelTest {
         } returns Result.success("refnumber")
         setupViewModel(SoraCardCommonVerification.Failed)
         advanceUntilIdle()
-        viewModel.startKycProcess()
+        viewModel.startKycProcess(activity)
     }
 
     @Test
     fun `no free kyc tries EXPECT show kyc requirements unfulfilled flow started`() = runTest {
         every { inMemoryRepo.isEnoughXorAvailable } returns false
         coEvery { kycRepository.hasFreeKycAttempt("accessToken") } returns Result.success(true)
+        coEvery { kycRepository.getIbanStatus(any()) } returns Result.success(null)
         setupViewModel(SoraCardCommonVerification.Started)
         viewModel.onAuthSucceed()
         advanceUntilIdle()
@@ -125,6 +128,7 @@ class MainViewModelTest {
     fun `free kyc tries available EXPECT show get prepared screen`() = runTest {
         every { inMemoryRepo.isEnoughXorAvailable } returns true
         coEvery { kycRepository.hasFreeKycAttempt("accessToken") } returns Result.success(true)
+        coEvery { kycRepository.getIbanStatus(any()) } returns Result.success(null)
         setupViewModel(SoraCardCommonVerification.Failed)
         viewModel.onAuthSucceed()
         advanceUntilIdle()

@@ -4,16 +4,17 @@ import android.content.Context
 import io.ktor.client.call.body
 import javax.inject.Inject
 import javax.inject.Singleton
+import jp.co.soramitsu.oauth.base.sdk.contract.IbanInfo
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardBasicContractData
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.common.model.AccessTokenResponse
-import jp.co.soramitsu.oauth.common.model.IbanAccountResponseWrapper
 import jp.co.soramitsu.oauth.feature.AccessTokenValidator
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.oauth.network.NetworkRequest
 import jp.co.soramitsu.oauth.network.SoraCardNetworkClient
+import kotlinx.coroutines.CompletableDeferred
 
 class SoraCardTokenException(val type: String) : IllegalStateException(
     "No valid soracard token: $type",
@@ -31,22 +32,29 @@ class ClientsFacade @Inject constructor(
         const val TECH_SUPPORT = "techsupport@soracard.com"
     }
     private var baseUrl: String? = null
+    private val initDeferred: CompletableDeferred<Boolean> = CompletableDeferred()
 
     suspend fun logout() {
         pwoAuthClientProxy.logout()
         userSessionRepository.logOutUser()
     }
 
-    suspend fun init(contract: SoraCardBasicContractData, context: Context, baseUrl: String) {
+    suspend fun init(
+        contract: SoraCardBasicContractData,
+        context: Context,
+        baseUrl: String,
+    ): Pair<Boolean, String> {
         this.baseUrl = baseUrl
-        pwoAuthClientProxy.init(
+        return pwoAuthClientProxy.init(
             context,
             contract.environment,
             contract.apiKey,
             contract.domain,
             contract.platform,
             contract.recaptcha,
-        )
+        ).also {
+            initDeferred.complete(it.first)
+        }
     }
 
     suspend fun getApplicationFee(): String = kycRepository.getApplicationFee(baseUrl)
@@ -64,6 +72,8 @@ class ClientsFacade @Inject constructor(
     }
 
     suspend fun getKycStatus(): Result<SoraCardCommonVerification> {
+        val init = initDeferred.await()
+        if (init.not()) return Result.failure(SoraCardTokenException("OAuth init failed (KYC)"))
         return when (val validity = tokenValidator.checkAccessTokenValidity()) {
             is AccessTokenResponse.Token -> {
                 kycRepository.getKycLastFinalStatus(validity.token, baseUrl)
@@ -72,16 +82,12 @@ class ClientsFacade @Inject constructor(
         }
     }
 
-    suspend fun getIBAN(): Result<IbanAccountResponseWrapper> {
+    suspend fun getIBAN(): Result<IbanInfo?> {
+        val init = initDeferred.await()
+        if (init.not()) return Result.failure(SoraCardTokenException("OAuth init failed (IBAN)"))
         return when (val validity = tokenValidator.checkAccessTokenValidity()) {
             is AccessTokenResponse.Token -> {
-                runCatching {
-                    apiClient.get(
-                        validity.token,
-                        NetworkRequest.GET_IBAN_DESC.url,
-                        baseUrl,
-                    ).body()
-                }
+                kycRepository.getIbanStatus(validity.token, baseUrl)
             }
 
             else -> Result.failure(SoraCardTokenException("IBAN"))

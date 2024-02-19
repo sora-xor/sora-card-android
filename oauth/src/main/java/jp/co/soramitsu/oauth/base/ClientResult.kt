@@ -4,7 +4,7 @@ import android.app.Activity
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 
 fun mapSoraCardResult(result: SoraCardResult) = when (result) {
-    is SoraCardResult.Success, is SoraCardResult.NavigateTo, SoraCardResult.Logout -> {
+    is SoraCardResult.Success, is SoraCardResult.NavigateTo, SoraCardResult.Logout, SoraCardResult.SuccessWithIban -> {
         Activity.RESULT_OK
     }
 

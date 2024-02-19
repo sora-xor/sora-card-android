@@ -2,6 +2,7 @@ package jp.co.soramitsu.oauth.common.data
 
 import io.ktor.client.call.body
 import java.util.UUID
+import jp.co.soramitsu.oauth.base.sdk.contract.IbanInfo
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.model.CountryCodeDto
@@ -9,6 +10,8 @@ import jp.co.soramitsu.oauth.common.model.CountryDial
 import jp.co.soramitsu.oauth.common.model.FeesDto
 import jp.co.soramitsu.oauth.common.model.GetReferenceNumberRequest
 import jp.co.soramitsu.oauth.common.model.GetReferenceNumberResponse
+import jp.co.soramitsu.oauth.common.model.IbanAccountResponse.Companion.IBAN_ACCOUNT_ACTIVE_STATUS
+import jp.co.soramitsu.oauth.common.model.IbanAccountResponseWrapper
 import jp.co.soramitsu.oauth.common.model.KycAttemptsDto
 import jp.co.soramitsu.oauth.common.model.KycResponse
 import jp.co.soramitsu.oauth.common.model.KycStatus
@@ -70,6 +73,33 @@ class KycRepositoryImpl(
         cacheKycResponse = null
         return local
     }
+
+    override suspend fun getIbanStatus(accessToken: String, baseUrl: String?): Result<IbanInfo?> =
+        runCatching {
+            val wrapper = apiClient.get(
+                accessToken,
+                NetworkRequest.GET_IBAN_DESC.url,
+                baseUrl,
+            ).body<IbanAccountResponseWrapper>()
+            wrapper.ibans?.maxByOrNull { it.createdDate }?.let { response ->
+                val bal = response.availableBalance.let {
+                    "%s%.2f".format("€", it / 100.0)
+                }
+                if (response.status == IBAN_ACCOUNT_ACTIVE_STATUS) {
+                    IbanInfo(
+                        iban = response.iban,
+                        active = true,
+                        balance = bal,
+                    )
+                } else {
+                    IbanInfo(
+                        iban = response.statusDescription,
+                        active = false,
+                        balance = bal,
+                    )
+                }
+            }
+        }
 
     override suspend fun getKycLastFinalStatus(
         accessToken: String,

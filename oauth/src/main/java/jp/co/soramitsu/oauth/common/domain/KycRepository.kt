@@ -1,5 +1,6 @@
 package jp.co.soramitsu.oauth.common.domain
 
+import jp.co.soramitsu.oauth.base.sdk.contract.IbanInfo
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.common.model.CountryDial
 import jp.co.soramitsu.oauth.common.model.KycAttemptsDto
@@ -17,6 +18,8 @@ interface KycRepository {
         accessToken: String,
         baseUrl: String? = null,
     ): Result<SoraCardCommonVerification>
+
+    suspend fun getIbanStatus(accessToken: String, baseUrl: String? = null): Result<IbanInfo?>
 
     fun getCachedKycResponse(): Pair<SoraCardCommonVerification, KycResponse?>?
 
