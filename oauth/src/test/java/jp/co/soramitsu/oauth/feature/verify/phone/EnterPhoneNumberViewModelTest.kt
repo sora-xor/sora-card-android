@@ -11,8 +11,10 @@ import io.mockk.runs
 import io.mockk.verify
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
+import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.sdk.SoraCardEnvironmentType
+import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.common.model.CountryDial
@@ -52,6 +54,9 @@ class EnterPhoneNumberViewModelTest {
     private lateinit var inMemoryRepo: InMemoryRepo
 
     @MockK
+    private lateinit var setActivityResult: SetActivityResult
+
+    @MockK
     private lateinit var localeService: LocaleService
 
     @MockK
@@ -65,13 +70,14 @@ class EnterPhoneNumberViewModelTest {
         coEvery { pwoAuthClientProxy.signInWithPhoneNumberRequestOtp(any(), any(), any(), any()) } just runs
         every { mainRouter.back() } just runs
         every { localeService.code } returns "US"
+        every { setActivityResult.setResult(any()) } just runs
         coEvery { kycRepository.getCountries(null) } returns listOf(CountryDial("US", "USA", "+1"))
         viewModel = EnterPhoneNumberViewModel(
             mainRouter,
-            inMemoryRepo,
             pwoAuthClientProxy,
             localeService,
             kycRepository,
+            setActivityResult,
         )
     }
 
@@ -176,6 +182,6 @@ class EnterPhoneNumberViewModelTest {
     @Test
     fun `on back EXPECT navigate back`() {
         viewModel.onToolbarNavigation()
-        verify { mainRouter.back() }
+        verify { setActivityResult.setResult(SoraCardResult.Canceled) }
     }
 }

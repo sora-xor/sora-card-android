@@ -3,6 +3,12 @@ package jp.co.soramitsu.oauth.base.sdk.contract
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
+data class IbanInfo(
+    val iban: String,
+    val active: Boolean,
+    val balance: String,
+)
+
 enum class SoraCardCommonVerification {
     Failed,
     Rejected,
@@ -20,6 +26,9 @@ sealed class SoraCardResult : Parcelable {
     data class Success(
         val status: SoraCardCommonVerification,
     ) : SoraCardResult()
+
+    @Parcelize
+    data object SuccessWithIban : SoraCardResult()
 
     @Parcelize
     data class Failure(

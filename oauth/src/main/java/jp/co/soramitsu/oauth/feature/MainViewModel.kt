@@ -12,9 +12,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import jp.co.soramitsu.oauth.base.navigation.Destination
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
+import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardContractData
+import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.common.model.AccessTokenResponse
@@ -33,13 +35,16 @@ class MainViewModel @Inject constructor(
     val inMemoryRepo: InMemoryRepo,
     private val pwoAuthClientProxy: PWOAuthClientProxy,
     private val tokenValidator: AccessTokenValidator,
+    private val setActivityResult: SetActivityResult,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MainScreenUiState())
     val uiState = _uiState.asStateFlow()
 
-    private var payWingsKycClient: PayWingsKycClient? = null
+    private var soraCardContractData: SoraCardContractData? = null
+
     fun launch(contract: SoraCardContractData, activity: Activity) {
+        soraCardContractData = contract
         inMemoryRepo.locale = contract.locale.country
         inMemoryRepo.environment = contract.basic.environment
         inMemoryRepo.soraBackEndUrl = contract.soraBackEndUrl
@@ -60,11 +65,7 @@ class MainViewModel @Inject constructor(
             )
             if (initResult.first) {
                 if (pwoAuthClientProxy.isSignIn()) {
-                    if (userSessionRepository.isTermsRead()) {
-                        onAuthSucceed()
-                    } else {
-                        mainRouter.openTermsAndConditions()
-                    }
+                    onAuthSucceed()
                 } else {
                     if (userSessionRepository.isTermsRead()) {
                         navigateToSignIn()
@@ -77,52 +78,6 @@ class MainViewModel @Inject constructor(
                     error = initResult.second,
                 )
             }
-
-            payWingsKycClient = PayWingsKycClient(
-                activity = activity,
-                whiteLabelCredentials = PayWingsWhiteLabelCredentials(
-                    endpointUrl = contract.kycCredentials.endpointUrl,
-                    username = contract.kycCredentials.username,
-                    password = contract.kycCredentials.password,
-                ),
-                userCredentials = { mu, rm ->
-                    runBlocking {
-                        val authData = pwoAuthClientProxy.getNewAccessToken(mu, rm)
-                        when {
-                            authData.dpop.isNullOrBlank().not() &&
-                                authData.accessTokenData != null ->
-                                return@runBlocking PayWingsUserCredentials(
-                                    dpop = authData.dpop!!,
-                                    accessToken = authData.accessTokenData?.accessToken ?: "",
-                                )
-
-                            authData.errorData != null ->
-                                return@runBlocking PayWingsUserCredentials(
-                                    dpop = "",
-                                    accessToken = "",
-                                )
-
-                            else -> {
-                                navigateToSignIn()
-                                return@runBlocking PayWingsUserCredentials(
-                                    dpop = "",
-                                    accessToken = "",
-                                )
-                            }
-                        }
-                    }
-                },
-                onSuccess = { _, _ ->
-                    viewModelScope.launch(Dispatchers.Main) {
-                        checkKycStatus()
-                    }
-                },
-                onError = { _, _, _, code, errorMessage ->
-                    viewModelScope.launch(Dispatchers.Main) {
-                        onKycFailed(errorMessage ?: code.description)
-                    }
-                },
-            )
         }
     }
 
@@ -171,16 +126,28 @@ class MainViewModel @Inject constructor(
     fun onAuthSucceed() {
         viewModelScope.launch {
             checkAccessTokenValidity { accessToken ->
-                kycRepository.getKycLastFinalStatus(accessToken)
-                    .onSuccess { kycResponse ->
-                        when (kycResponse) {
-                            SoraCardCommonVerification.Failed -> mainRouter.openGetPrepared()
-                            else -> showKycStatusScreen(kycResponse)
+                kycRepository.getIbanStatus(accessToken)
+                    .onSuccess { info ->
+                        if (info == null) {
+                            kycRepository.getKycLastFinalStatus(accessToken)
+                                .onSuccess { kycResponse ->
+                                    when (kycResponse) {
+                                        SoraCardCommonVerification.Failed -> mainRouter.openGetPrepared()
+                                        else -> showKycStatusScreen(kycResponse)
+                                    }
+                                }
+                                .onFailure {
+                                    _uiState.value = _uiState.value.copy(
+                                        error = it.localizedMessage ?: "KYC status failed",
+                                    )
+                                }
+                        } else {
+                            setActivityResult.setResult(SoraCardResult.SuccessWithIban)
                         }
                     }
                     .onFailure {
                         _uiState.value = _uiState.value.copy(
-                            error = it.localizedMessage ?: "KYC status not found",
+                            error = it.localizedMessage ?: "IBAN status failed",
                         )
                     }
             }
@@ -195,9 +162,55 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun startKycProcess() {
+    fun startKycProcess(activity: Activity) {
+        val contract = soraCardContractData ?: return
         viewModelScope.launch {
             showLoading(true)
+            val payWingsKycClient = PayWingsKycClient(
+                activity = activity,
+                whiteLabelCredentials = PayWingsWhiteLabelCredentials(
+                    endpointUrl = contract.kycCredentials.endpointUrl,
+                    username = contract.kycCredentials.username,
+                    password = contract.kycCredentials.password,
+                ),
+                userCredentials = { mu, rm ->
+                    runBlocking {
+                        val authData = pwoAuthClientProxy.getNewAccessToken(mu, rm)
+                        when {
+                            authData.dpop.isNullOrBlank().not() &&
+                                authData.accessTokenData != null ->
+                                return@runBlocking PayWingsUserCredentials(
+                                    dpop = authData.dpop!!,
+                                    accessToken = authData.accessTokenData?.accessToken ?: "",
+                                )
+
+                            authData.errorData != null ->
+                                return@runBlocking PayWingsUserCredentials(
+                                    dpop = "",
+                                    accessToken = "",
+                                )
+
+                            else -> {
+                                navigateToSignIn()
+                                return@runBlocking PayWingsUserCredentials(
+                                    dpop = "",
+                                    accessToken = "",
+                                )
+                            }
+                        }
+                    }
+                },
+                onSuccess = { _, _ ->
+                    viewModelScope.launch(Dispatchers.Main) {
+                        checkKycStatus()
+                    }
+                },
+                onError = { _, _, _, code, errorMessage ->
+                    viewModelScope.launch(Dispatchers.Main) {
+                        onKycFailed(errorMessage ?: code.description)
+                    }
+                },
+            )
             checkAccessTokenValidity { accessToken ->
                 pwoAuthClientProxy.getUserData(
                     callback = object : GetUserDataCallback {
@@ -228,14 +241,7 @@ class MainViewModel @Inject constructor(
                                     email = email,
                                 ).onSuccess {
                                     showLoading(false)
-                                    val local = payWingsKycClient
-                                    if (local != null) {
-                                        local.startKyc(it)
-                                    } else {
-                                        _uiState.value = _uiState.value.copy(
-                                            error = "KYC client is not initialized",
-                                        )
-                                    }
+                                    payWingsKycClient.startKyc(it)
                                 }
                                     .onFailure {
                                         showLoading(false)

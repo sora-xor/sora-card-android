@@ -33,7 +33,9 @@ class MainActivity : ComponentActivity() {
 
     private val registrationLauncher = registerForActivityResult(
         SoraCardContract(),
-    ) {}
+    ) {
+        Log.e("srms", "contract result $it")
+    }
 
     @Inject
     lateinit var facade: ClientsFacade
