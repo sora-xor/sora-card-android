@@ -31,6 +31,7 @@ class ClientsFacade @Inject constructor(
     companion object {
         const val TECH_SUPPORT = "techsupport@soracard.com"
     }
+
     private var baseUrl: String? = null
     private val initDeferred: CompletableDeferred<Boolean> = CompletableDeferred()
 
@@ -57,11 +58,20 @@ class ClientsFacade @Inject constructor(
         }
     }
 
-    suspend fun getApplicationFee(): String = kycRepository.getApplicationFee(baseUrl)
+    suspend fun getApplicationFee(): String {
+        initDeferred.await()
+        return kycRepository.getApplicationFee(baseUrl)
+    }
 
-    suspend fun getFearlessSupportVersion() = getSupportVersion().map { it.fearless }
+    suspend fun getFearlessSupportVersion(): Result<String> {
+        initDeferred.await()
+        return getSupportVersion().map { it.fearless }
+    }
 
-    suspend fun getSoraSupportVersion() = getSupportVersion().map { it.sora }
+    suspend fun getSoraSupportVersion(): Result<String> {
+        initDeferred.await()
+        return getSupportVersion().map { it.sora }
+    }
 
     private suspend fun getSupportVersion() = runCatching {
         apiClient.get(
@@ -78,6 +88,7 @@ class ClientsFacade @Inject constructor(
             is AccessTokenResponse.Token -> {
                 kycRepository.getKycLastFinalStatus(validity.token, baseUrl)
             }
+
             else -> Result.failure(SoraCardTokenException("KYC status"))
         }
     }
