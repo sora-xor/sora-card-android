@@ -17,6 +17,7 @@ enum class SoraCardCommonVerification {
     Retry,
     Started,
     NotFound,
+    IbanIssued,
 }
 
 @Parcelize
@@ -26,9 +27,6 @@ sealed class SoraCardResult : Parcelable {
     data class Success(
         val status: SoraCardCommonVerification,
     ) : SoraCardResult()
-
-    @Parcelize
-    data object SuccessWithIban : SoraCardResult()
 
     @Parcelize
     data class Failure(

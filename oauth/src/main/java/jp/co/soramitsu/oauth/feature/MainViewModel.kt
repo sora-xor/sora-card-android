@@ -142,7 +142,9 @@ class MainViewModel @Inject constructor(
                                     )
                                 }
                         } else {
-                            setActivityResult.setResult(SoraCardResult.SuccessWithIban)
+                            setActivityResult.setResult(
+                                SoraCardResult.Success(SoraCardCommonVerification.IbanIssued),
+                            )
                         }
                     }
                     .onFailure {
