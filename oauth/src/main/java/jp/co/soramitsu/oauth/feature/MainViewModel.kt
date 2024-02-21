@@ -129,18 +129,7 @@ class MainViewModel @Inject constructor(
                 kycRepository.getIbanStatus(accessToken)
                     .onSuccess { info ->
                         if (info == null) {
-                            kycRepository.getKycLastFinalStatus(accessToken)
-                                .onSuccess { kycResponse ->
-                                    when (kycResponse) {
-                                        SoraCardCommonVerification.Failed -> mainRouter.openGetPrepared()
-                                        else -> showKycStatusScreen(kycResponse)
-                                    }
-                                }
-                                .onFailure {
-                                    _uiState.value = _uiState.value.copy(
-                                        error = it.localizedMessage ?: "KYC status failed",
-                                    )
-                                }
+                            onAuthSucceedNoIban(accessToken)
                         } else {
                             setActivityResult.setResult(
                                 SoraCardResult.Success(SoraCardCommonVerification.IbanIssued),
@@ -148,12 +137,25 @@ class MainViewModel @Inject constructor(
                         }
                     }
                     .onFailure {
-                        _uiState.value = _uiState.value.copy(
-                            error = it.localizedMessage ?: "IBAN status failed",
-                        )
+                        onAuthSucceedNoIban(accessToken)
                     }
             }
         }
+    }
+
+    private suspend fun onAuthSucceedNoIban(accessToken: String) {
+        kycRepository.getKycLastFinalStatus(accessToken)
+            .onSuccess { kycResponse ->
+                when (kycResponse) {
+                    SoraCardCommonVerification.Failed -> mainRouter.openGetPrepared()
+                    else -> showKycStatusScreen(kycResponse)
+                }
+            }
+            .onFailure {
+                _uiState.value = _uiState.value.copy(
+                    error = it.localizedMessage ?: "KYC status failed",
+                )
+            }
     }
 
     private fun checkKycRequirementsFulfilled() {
