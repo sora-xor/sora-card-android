@@ -24,14 +24,13 @@ new org.soramitsu.mainLibrary().call(
   agentLabel: "android",
   skipSonar: true,
   skipDojo: true,
-  agentImage: "android-build-box-jdk11:pip",
+  agentImage: "android-build-box-jdk11:latest",
   nexusCredentials: "bot-soramitsu-rw",
   buildCommand: './gradlew clean :oauth:build',
   testCommand: './gradlew clean :oauth:test',
   publishCommand: './gradlew publish',
   publishLibrary: true,
   skipDockerImage: true,
-  dojoProductType: "sora-card",
-  extraBuildSecrets: extraBuildSecrets,
-  deepSecretScannerExclusion: ['oauth']
+  dojoProductType: "sora-mobile",
+  extraBuildSecrets: extraBuildSecrets
 )
