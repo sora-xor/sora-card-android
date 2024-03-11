@@ -1,20 +1,22 @@
 [versions]
 agp = "8.3.0"
 kotlin = "1.9.22"
-core-ktx = "1.12.0"
-fragment-ktx = "1.6.2"
 junit = "4.13.2"
 coretest = "2.2.0"
 androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
 lifecycle-runtime-compose = "2.7.0"
-activity-compose = "1.8.2"
+lifecycle-runtime-ktx = "2.7.0"
+lifecycle-viewmodel-ktx = "2.7.0"
+lifecycle-viewmodel-compose = "2.7.0"
+lifecycle-common = "2.7.0"
 material = "1.11.0"
-compose = "1.6.1"
-coil = "2.2.2"
-hilt = "2.48.1"
-hiltnavcompose = "1.1.0"
-uicore = "0.2.21"
+coreKtx = "1.12.0"
+activity-compose = "1.8.2"
+compose-bom = "2024.02.02"
+hilt = "2.49"
+hiltnavcompose = "1.2.0"
+uicore = "0.2.22"
 xnetworking = "0.2.9"
 ktor = "2.3.1"
 kotlinx-serialization-v = "1.6.0"
@@ -33,20 +35,24 @@ hiltandroid = { group = "com.google.dagger", name = "hilt-android", version.ref 
 hiltcompiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 hiltnavigationcompose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltnavcompose" }
 datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragment-ktx" }
-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
+core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
+lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
 lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle-runtime-compose" }
-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle-runtime-compose" }
-lifecycle-common = { group = "androidx.lifecycle", name = "lifecycle-common", version.ref = "lifecycle-runtime-compose" }
-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle-runtime-compose" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "compose" }
-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "compose" }
-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "compose" }
-compose-material = { group = "androidx.compose.material", name = "material", version.ref = "compose" }
-compose-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "compose" }
+lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle-viewmodel-ktx" }
+lifecycle-common = { group = "androidx.lifecycle", name = "lifecycle-common", version.ref = "lifecycle-common" }
+lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle-viewmodel-compose" }
+activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
 compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation-compose" }
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
+ui = { group = "androidx.compose.ui", name = "ui" }
+compose-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata" }
+compose-material = { group = "androidx.compose.material", name = "material" }
+ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 soramitsu-uicore = { group = "jp.co.soramitsu", name = "ui-core", version.ref = "uicore" }
 soramitsu-xnetworking-basic = { group = "jp.co.soramitsu.xnetworking", name = "basic-android", version.ref = "xnetworking" }
 ktor = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
@@ -54,14 +60,6 @@ kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-seria
 pinview = { group = "io.github.chaosleung", name = "pinview", version.ref = "pinview" }
 pwoauth = { group = "com.paywings.oauth", name = "android-sdk", version.ref = "pwoauth" }
 pwkyc = { group = "com.paywings.kyc", name = "android-sdk", version.ref = "pwkyc" }
-#coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
-#coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
-#coil-svg = { group = "io.coil-kt", name = "coil-svg", version.ref = "coil" }
-#compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
-#ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-#ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-#androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
-#espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
 tests-mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 tests-junit = { group = "junit", name = "junit", version.ref = "junit" }
 tests-archcore = { group = "androidx.arch.core", name = "core-testing", version.ref = "coretest" }

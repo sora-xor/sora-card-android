@@ -83,18 +83,18 @@ android {
 
 dependencies {
     implementation(libs.core.ktx)
-    implementation(libs.fragment.ktx)
-
-    implementation(libs.compose.ui)
-    implementation(libs.compose.material)
-    debugImplementation(libs.compose.ui.tooling)
-    implementation(libs.compose.ui.tooling.preview)
-    implementation(libs.compose.runtime.livedata)
+    implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.lifecycle.runtime.compose)
-    implementation(libs.lifecycle.viewmodel.ktx)
-    implementation(libs.lifecycle.common)
-    implementation(libs.lifecycle.viewmodel.compose)
+    implementation(libs.activity.compose)
+    implementation(libs.material)
     implementation(libs.compose.navigation)
+
+    implementation(platform(libs.compose.bom))
+    implementation(libs.ui)
+    implementation(libs.compose.runtime.livedata)
+    implementation(libs.compose.material)
+    implementation(libs.ui.graphics)
+    implementation(libs.ui.tooling.preview)
 
     implementation(libs.soramitsu.uicore)
     implementation(libs.soramitsu.xnetworking.basic)
@@ -106,19 +106,12 @@ dependencies {
     implementation(libs.hiltnavigationcompose)
     kapt(libs.hiltcompiler)
 
-    implementation(libs.pwoauth) {
-        exclude("com.android.support", "support-compat")
-        exclude("com.android.support", "support-media-compat")
-    }
+    implementation(libs.pwoauth)
     implementation(libs.pwkyc) {
-        exclude("com.android.support", "support-compat")
-        exclude("com.android.support", "support-media-compat")
-        exclude(module = "pinview")
         exclude(module = "idensic-mobile-sdk-videoident")
 //        exclude(module = "idensic-mobile-sdk-internal-core")
 //        exclude(module = "idensic-mobile-sdk-internal")
     }
-    implementation(libs.pinview)
 
     implementation(libs.coroutine.core)
 
@@ -137,7 +130,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "jp.co.soramitsu"
             artifactId = "android-sora-card"
-            version = "1.0.5"
+            version = "1.0.6"
 
             afterEvaluate {
                 from(components["release"])

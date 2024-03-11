@@ -168,12 +168,17 @@ android {
 dependencies {
 
     implementation(project(":oauth"))
-    implementation(libs.material)
+    implementation(libs.core.ktx)
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.lifecycle.runtime.compose)
     implementation(libs.activity.compose)
-    implementation(libs.compose.ui)
+    implementation(libs.material)
+
+    implementation(platform(libs.compose.bom))
+    implementation(libs.ui)
     implementation(libs.compose.material)
-    debugImplementation(libs.compose.ui.tooling)
-    implementation(libs.compose.ui.tooling.preview)
+    implementation(libs.ui.graphics)
+    implementation(libs.ui.tooling.preview)
 
     implementation(libs.hiltandroid)
     kapt(libs.hiltcompiler)

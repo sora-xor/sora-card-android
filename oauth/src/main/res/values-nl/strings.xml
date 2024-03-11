@@ -3,6 +3,9 @@
   <string name="cant_fetch_data">Kan gegevens niet ophalen</string>
   <string name="cant_fetch_refresh">Kan geen gegevens ophalen, tik om te vernieuwen.</string>
   <string name="card_attention_text">Aandacht</string>
+  <string name="card_hub_manage_card">Manage SORA Card</string>
+  <string name="card_hub_manage_card_alert_title">Download SORA Card App</string>
+  <string name="card_hub_manage_google_play">To manage your SORA Card, please install the official SORA Card App. Tap OK to be directed to the Google Play.</string>
   <string name="card_hub_title">Card details</string>
   <string name="card_hub_update_button">Update now</string>
   <string name="card_hub_update_description">You are using an outdated version of the app, some part might not be working as intended.</string>
@@ -69,6 +72,7 @@
   <string name="get_prepared_take_selfie_description">Tijdens het proces wordt begeleiding verstrekt</string>
   <string name="get_prepared_take_selfie_title">Neem een selfie</string>
   <string name="get_prepared_title">Bereid je voor.</string>
+  <string name="iban_frozen_description">Your IBAN has been frozen.\nTo find out more, contact %s</string>
   <string name="iban_pending_description">Uw IBAN-uitgifte is in behandeling.\n Neem contact met ons op via %s als de wachttijd langer dan 72 uur is</string>
   <string name="iban_suspended_description">Your IBAN has been suspended.\nTo find out more, contact %s</string>
   <string name="kyc_result_verification_in_progress">Verificatie is gaande</string>
