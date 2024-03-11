@@ -3,6 +3,9 @@
   <string name="cant_fetch_data">Не удается получить данные</string>
   <string name="cant_fetch_refresh">Не удается получить данные, нажмите, чтобы обновить.</string>
   <string name="card_attention_text">Внимание</string>
+  <string name="card_hub_manage_card">Управление картой SORA</string>
+  <string name="card_hub_manage_card_alert_title">Скачать приложение SORA Card</string>
+  <string name="card_hub_manage_google_play">Для управления картой SORA Card установите официальное приложение SORA Card. Нажмите OK, чтобы перейти в Google Play.</string>
   <string name="card_hub_title">Card details</string>
   <string name="card_hub_update_button">Обновите сейчас</string>
   <string name="card_hub_update_description">Вы используете устаревшую версию приложения, некоторые части могут работать не так, как задумано.</string>
@@ -69,6 +72,7 @@
   <string name="get_prepared_take_selfie_description">Руководство будет предоставлено в ходе процесса</string>
   <string name="get_prepared_take_selfie_title">Сделайте селфи</string>
   <string name="get_prepared_title">Подготовьтесь</string>
+  <string name="iban_frozen_description">Ваш IBAN был заморожен.\nЧтобы узнать больше, свяжитесь с %s</string>
   <string name="iban_pending_description">Выдача вашего IBAN ожидается.\nВ случае ожидания более 72 часов свяжитесь с нами по адресу %s</string>
   <string name="iban_suspended_description">Ваш IBAN был приостановлен.\nЧтобы узнать больше, свяжитесь с %s</string>
   <string name="kyc_result_verification_in_progress">Выполняется проверка</string>

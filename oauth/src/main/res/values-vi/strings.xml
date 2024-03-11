@@ -3,6 +3,9 @@
   <string name="cant_fetch_data">Không thể tìm nạp dữ liệu</string>
   <string name="cant_fetch_refresh">Không thể tìm nạp dữ liệu, nhấn để làm mới.</string>
   <string name="card_attention_text">Chú ý</string>
+  <string name="card_hub_manage_card">Quản lý thẻ SORA</string>
+  <string name="card_hub_manage_card_alert_title">Tải ứng dụng thẻ SORA</string>
+  <string name="card_hub_manage_google_play">To manage your SORA Card, please install the official SORA Card App. Tap OK to be directed to the Google Play.</string>
   <string name="card_hub_title">Chi tiết thẻ</string>
   <string name="card_hub_update_button">Cập nhật ngay</string>
   <string name="card_hub_update_description">Bạn đang sử dụng phiên bản hoặc ứng dụng lỗi thời, một số phần có thể không hoạt động như dự kiến.</string>
@@ -69,8 +72,9 @@
   <string name="get_prepared_take_selfie_description">Hướng dẫn sẽ được cung cấp trong quá trình này</string>
   <string name="get_prepared_take_selfie_title">Chụp ảnh selfie</string>
   <string name="get_prepared_title">Chuẩn bị sẵn sàng</string>
+  <string name="iban_frozen_description">IBAN của bạn đã bị đóng băng.\n Để tìm hiểu thêm, hãy liên hệ %s</string>
   <string name="iban_pending_description">Việc cấp IBAN của bạn đang chờ xử lý.\n Trong trường hợp chờ đợi lâu hơn 72h, hãy liên hệ với chúng tôi qua %s</string>
-  <string name="iban_suspended_description">Your IBAN has been suspended.\nTo find out more, contact %s</string>
+  <string name="iban_suspended_description">IBAN của bạn đã bị đình chỉ.\n Để tìm hiểu thêm, hãy liên hệ %s</string>
   <string name="kyc_result_verification_in_progress">Đang xác minh</string>
   <string name="kyc_result_verification_in_progress_description">Bạn đã hoàn thành thành công đơn đăng ký KYC của mình. Việc xem xét đang chờ xử lý và bạn có thể mong đợi một quyết định trong thời gian ngắn.\n\nThông thường quyết định được đưa ra cùng ngày và trong một số trường hợp có thể mất đến 3 ngày.</string>
   <string name="log_out">Đăng xuất</string>
