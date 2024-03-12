@@ -74,7 +74,6 @@
   <string name="get_prepared_title">Bereid je voor.</string>
   <string name="iban_frozen_description">Your IBAN has been frozen.\nTo find out more, contact %s</string>
   <string name="iban_pending_description">Uw IBAN-uitgifte is in behandeling.\n Neem contact met ons op via %s als de wachttijd langer dan 72 uur is</string>
-  <string name="iban_suspended_description">Your IBAN has been suspended.\nTo find out more, contact %s</string>
   <string name="kyc_result_verification_in_progress">Verificatie is gaande</string>
   <string name="kyc_result_verification_in_progress_description">U heeft uw KYC-aanvraag succesvol afgerond. De beoordeling is in behandeling en u kunt binnenkort een beslissing verwachten. \n \n Meestal wordt de beslissing dezelfde dag genomen, en in sommige gevallen kan dit tot 3 dagen duren.</string>
   <string name="log_out">Uitloggen</string>
@@ -113,6 +112,7 @@
   <string name="verification_rejected_screen_try_again_for_free">Probeer het gratis opnieuw</string>
   <string name="verification_rejected_support">Support</string>
   <string name="verification_rejected_title">Aanvraag afgewezen</string>
+  <string name="verification_successful">Verification successful!</string>
   <string name="verification_successful_description">Uw KYC-verificatie is succesvol en we zijn al bezig met de voorbereidingen om u de SORA Card te sturen!</string>
   <string name="verification_successful_title">Aanvraag goedgekeurd</string>
   <string name="verify_email_description">Volg de magische link die \n is verzonden naar %s \n Het kan enkele minuten duren voordat de e-mail aankomt. Controleer uw spam folder als u de e-mail na 5 minuten nog niet heeft ontvangen.</string>

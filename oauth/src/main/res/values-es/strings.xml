@@ -74,7 +74,6 @@
   <string name="get_prepared_title">Prepárate</string>
   <string name="iban_frozen_description">Your IBAN has been frozen.\nTo find out more, contact %s</string>
   <string name="iban_pending_description">Tu emisión de IBAN está pendiente.\n En caso de que la espera supere las 72h contáctenos vía %s</string>
-  <string name="iban_suspended_description">Your IBAN has been suspended.\nTo find out more, contact %s</string>
   <string name="kyc_result_verification_in_progress">Verificación en progreso</string>
   <string name="kyc_result_verification_in_progress_description">Ha completado exitosamente su solicitud de KYC. La revisión está pendiente y puedes esperar una decisión en breve. \n\nHabitualmente la decisión se toma el mismo día y en algunos casos puede tardar hasta 3 días.</string>
   <string name="log_out">Cerrar sesión</string>
@@ -113,6 +112,7 @@
   <string name="verification_rejected_screen_try_again_for_free">Inténtelo de nuevo gratis</string>
   <string name="verification_rejected_support">Ayuda</string>
   <string name="verification_rejected_title">Solicitud rechazada</string>
+  <string name="verification_successful">Verification successful!</string>
   <string name="verification_successful_description">¡Tu verificación KYC fue exitosa y ya nos estamos preparando para enviarte la tarjeta SORA!</string>
   <string name="verification_successful_title">Solicitud aprobada</string>
   <string name="verify_email_description">Click en el enlace mágico que se ha enviado a %s \nEl correo electrónico puede tardar varios minutos en llegar. Por favor, comprueba tu carpeta de correo no deseado si no has recibido el correo después de 5 minutos.</string>

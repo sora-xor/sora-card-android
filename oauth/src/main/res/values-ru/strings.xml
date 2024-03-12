@@ -74,7 +74,6 @@
   <string name="get_prepared_title">Подготовьтесь</string>
   <string name="iban_frozen_description">Ваш IBAN был заморожен.\nЧтобы узнать больше, свяжитесь с %s</string>
   <string name="iban_pending_description">Выдача вашего IBAN ожидается.\nВ случае ожидания более 72 часов свяжитесь с нами по адресу %s</string>
-  <string name="iban_suspended_description">Ваш IBAN был приостановлен.\nЧтобы узнать больше, свяжитесь с %s</string>
   <string name="kyc_result_verification_in_progress">Выполняется проверка</string>
   <string name="kyc_result_verification_in_progress_description">Вы успешно завершили подачу заявки на KYC. Решение на стадии рассмотрения, и вы можете ожидать его в ближайшее время.\n\nОбычно решение принимается в тот же день, но в некоторых случаях может потребоваться до 3 дней.</string>
   <string name="log_out">Выйти</string>
@@ -115,6 +114,7 @@
   <string name="verification_rejected_screen_try_again_for_free">Попробуйте еще раз бесплатно</string>
   <string name="verification_rejected_support">Поддержка</string>
   <string name="verification_rejected_title">Заявка отклонена</string>
+  <string name="verification_successful">Верификация прошла успешно!</string>
   <string name="verification_successful_description">Ваша проверка KYC прошла успешно, и мы уже готовимся отправить вам SORA Card!</string>
   <string name="verification_successful_title">Заявка одобрена</string>
   <string name="verify_email_description">Перейдите по волшебной ссылке, которая была отправлена\nна %s \nДоставка письма может занять несколько минут. Пожалуйста, проверьте папку со спамом, если вы не получили письмо в течение 5 минут.</string>

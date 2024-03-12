@@ -20,8 +20,11 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -56,11 +59,13 @@ fun EnterPhoneNumberScreen(code: String?, viewModel: EnterPhoneNumberViewModel =
         viewModel = viewModel,
     ) { scrollState ->
         val state = viewModel.state.collectAsStateWithLifecycle().value
+        val focusRequester = remember { FocusRequester() }
         PhoneScreen(
             scrollState = scrollState,
             inputTextStatePhoneCode = state.inputTextStateCode,
             inputTextStatePhoneNumber = state.inputTextStateNumber,
             buttonState = state.buttonState,
+            focusRequester = focusRequester,
             onDataEnteredPhoneCode = {},
             onDataEnteredPhoneNumber = viewModel::onPhoneChanged,
             countryName = state.countryName,
@@ -69,6 +74,9 @@ fun EnterPhoneNumberScreen(code: String?, viewModel: EnterPhoneNumberViewModel =
             onCountry = viewModel::onSelectCountry,
             onConfirm = viewModel::onRequestCode,
         )
+        LaunchedEffect(Unit) {
+            focusRequester.requestFocus()
+        }
     }
 }
 
@@ -81,6 +89,7 @@ private fun PhoneScreen(
     countryCode: String,
     countryName: String,
     countryLoading: Boolean,
+    focusRequester: FocusRequester,
     onDataEnteredPhoneCode: (TextFieldValue) -> Unit,
     onDataEnteredPhoneNumber: (TextFieldValue) -> Unit,
     onCountry: () -> Unit,
@@ -171,6 +180,7 @@ private fun PhoneScreen(
                         .testTagAsId("PhoneDialNumberInput")
                         .fillMaxWidth(),
                     state = inputTextStatePhoneNumber,
+                    focusRequester = focusRequester,
                     onValueChange = onDataEnteredPhoneNumber,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 )
@@ -206,6 +216,7 @@ private fun PreviewScreen() {
         buttonState = ButtonState("Title"),
         countryCode = "NZ",
         countryName = "New Zealand",
+        focusRequester = remember { FocusRequester() },
         countryLoading = false,
         onCountry = {},
         onDataEnteredPhoneCode = {},
