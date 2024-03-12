@@ -74,7 +74,6 @@
   <string name="get_prepared_title">Bereite dich vor</string>
   <string name="iban_frozen_description">Your IBAN has been frozen.\nTo find out more, contact %s</string>
   <string name="iban_pending_description">Die Ausstellung Ihrer IBAN steht noch aus.\n Falls die Wartezeit länger als 72 Stunden dauert, kontaktieren Sie uns per %s</string>
-  <string name="iban_suspended_description">Your IBAN has been suspended.\nTo find out more, contact %s</string>
   <string name="kyc_result_verification_in_progress">Überprüfung läuft</string>
   <string name="kyc_result_verification_in_progress_description">Sie haben Ihren Identitätsverifizierungs-Antrag erfolgreich abgeschlossen. Die Prüfung ist noch nicht abgeschlossen und Sie können in Kürze mit einer Entscheidung rechnen.\n\nIn der Regel wird die Entscheidung noch am selben Tag getroffen, in manchen Fällen kann sie bis zu 3 Tage dauern.</string>
   <string name="log_out">Ausloggen</string>
@@ -113,6 +112,7 @@
   <string name="verification_rejected_screen_try_again_for_free">Erneut kostenlos versuchen</string>
   <string name="verification_rejected_support">Support</string>
   <string name="verification_rejected_title">Verifizierung abgelehnt</string>
+  <string name="verification_successful">Verification successful!</string>
   <string name="verification_successful_description">Ihre Identitätsverifizierung ist erfolgreich und wir bereiten bereits den Versand der SORA Card vor!</string>
   <string name="verification_successful_title">Antrag genehmigt</string>
   <string name="verify_email_description">Folgen Sie dem Magic Link, der an %s gesendet wurde.</string>

@@ -119,6 +119,9 @@ dependencies {
     testImplementation(libs.tests.junit)
     testImplementation(libs.tests.mockk)
     testImplementation(libs.coroutine.test)
+
+    androidTestImplementation(libs.ui.test.junit4)
+    debugImplementation(libs.ui.test.manifest)
 }
 
 kapt {
@@ -130,7 +133,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "jp.co.soramitsu"
             artifactId = "android-sora-card"
-            version = "1.0.6"
+            version = "1.0.7"
 
             afterEvaluate {
                 from(components["release"])

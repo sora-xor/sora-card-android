@@ -26,7 +26,7 @@ class VerificationSuccessfulViewModel @Inject constructor(
         mToolbarState.value = SoramitsuToolbarState(
             type = SoramitsuToolbarType.Small(),
             basic = BasicToolbarState(
-                title = R.string.verification_successful_title,
+                title = R.string.verification_successful,
                 visibility = true,
                 navIcon = R.drawable.ic_cross,
                 actionLabel = R.string.log_out,

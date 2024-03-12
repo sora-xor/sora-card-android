@@ -1,6 +1,7 @@
 package jp.co.soramitsu.oauth.feature.terms.and.conditions
 
 import android.annotation.SuppressLint
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,6 +35,9 @@ import jp.co.soramitsu.ui_core.theme.customTypography
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun TermsAndConditionsScreen(viewModel: TermsAndConditionsViewModel = hiltViewModel()) {
+    BackHandler {
+        viewModel.onToolbarNavigation()
+    }
     Screen(
         viewModel = viewModel,
     ) { scrollState ->

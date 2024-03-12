@@ -74,7 +74,6 @@
   <string name="get_prepared_title">Préparez-vous</string>
   <string name="iban_frozen_description">Your IBAN has been frozen.\nTo find out more, contact %s</string>
   <string name="iban_pending_description">Votre émission d\'IBAN est en attente.\n En cas d\'attente supérieure à 72 heures, contactez-nous via %s</string>
-  <string name="iban_suspended_description">Your IBAN has been suspended.\nTo find out more, contact %s</string>
   <string name="kyc_result_verification_in_progress">Vérification en cours</string>
   <string name="kyc_result_verification_in_progress_description">Vous avez terminé avec succès votre demande de KYC.\nL\'examen de votre demande est en cours et vous devriez recevoir une réponse sous peu.\nLa décision est habituellement rendue le jour même, mais dans certains cas cela peut prendre jusqu\'à 3 jours.</string>
   <string name="log_out">Se déconnecter</string>
@@ -113,6 +112,7 @@
   <string name="verification_rejected_screen_try_again_for_free">Réessayer gratuitement</string>
   <string name="verification_rejected_support">Support</string>
   <string name="verification_rejected_title">Demande rejetée</string>
+  <string name="verification_successful">Verification successful!</string>
   <string name="verification_successful_description">Votre vérification KYC a été validée et nous préparons déjà votre carte pour vous l\'envoyer!</string>
   <string name="verification_successful_title">Demande approuvée</string>
   <string name="verify_email_description">Suivez le lien magique envoyé à \n%s\nL\'e-mail peut prendre plusieurs minutes pour arriver. Pensez à vérifier votre dossier Spam si vous n\'avez toujours pas reçu l\'e-mail après 5 minutes.</string>

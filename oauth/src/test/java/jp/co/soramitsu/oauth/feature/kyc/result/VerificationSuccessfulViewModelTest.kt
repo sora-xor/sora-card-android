@@ -61,7 +61,7 @@ class VerificationSuccessfulViewModelTest {
     @Test
     fun `init EXPECT toolbar title`() {
         assertEquals(
-            R.string.verification_successful_title,
+            R.string.verification_successful,
             viewModel.toolbarState.value?.basic?.title,
         )
         assertNotNull(viewModel.toolbarState.value?.basic?.navIcon)

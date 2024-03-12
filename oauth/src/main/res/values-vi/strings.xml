@@ -74,7 +74,6 @@
   <string name="get_prepared_title">Chuẩn bị sẵn sàng</string>
   <string name="iban_frozen_description">IBAN của bạn đã bị đóng băng.\n Để tìm hiểu thêm, hãy liên hệ %s</string>
   <string name="iban_pending_description">Việc cấp IBAN của bạn đang chờ xử lý.\n Trong trường hợp chờ đợi lâu hơn 72h, hãy liên hệ với chúng tôi qua %s</string>
-  <string name="iban_suspended_description">IBAN của bạn đã bị đình chỉ.\n Để tìm hiểu thêm, hãy liên hệ %s</string>
   <string name="kyc_result_verification_in_progress">Đang xác minh</string>
   <string name="kyc_result_verification_in_progress_description">Bạn đã hoàn thành thành công đơn đăng ký KYC của mình. Việc xem xét đang chờ xử lý và bạn có thể mong đợi một quyết định trong thời gian ngắn.\n\nThông thường quyết định được đưa ra cùng ngày và trong một số trường hợp có thể mất đến 3 ngày.</string>
   <string name="log_out">Đăng xuất</string>
@@ -112,6 +111,7 @@
   <string name="verification_rejected_screen_try_again_for_free">Thử lại miễn phí</string>
   <string name="verification_rejected_support">Hỗ trợ</string>
   <string name="verification_rejected_title">Xác minh bị từ chối</string>
+  <string name="verification_successful">Verification successful!</string>
   <string name="verification_successful_description">Xác minh KYC của bạn đã thành công và chúng tôi đã chuẩn bị gửi cho bạn thẻ SORA!</string>
   <string name="verification_successful_title">Đơn đăng ký được chấp thuận</string>
   <string name="verify_email_description">Đi theo liên kết ma thuật đã được gửi \n tới %s \n Có thể mất vài phút để email đến nơi. Vui lòng kiểm thư mục thư rác nếu bạn không nhận được email sau 5 phút.</string>
