@@ -59,5 +59,7 @@ sonarqube {
         property("sonar.projectKey", "sora:sora-card-android")
         property("sonar.projectName", "sora-card-android")
         property("sonar.exclusions", "${project.projectDir}/**/*.txt")
+        property("sonar.junit.reportPaths", "${project.projectDir}/build/reports/tests/testReleaseUnitTest")
+        property("sonar.coverage.jacoco.xmlReportPaths", "${project.rootDir}/report/coverage.xml")
     }
 }
