@@ -17,4 +17,5 @@ class InMemoryRepo @Inject constructor() {
     var areAttemptsPaidSuccessfully: Boolean = false
     var isEnoughXorAvailable: Boolean = false
     var isIssuancePaid: Boolean = false
+    var logIn: Boolean = false
 }

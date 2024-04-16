@@ -96,6 +96,8 @@ dependencies {
     implementation(libs.compose.material)
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
+    debugImplementation(libs.ui.test.manifest)
+    debugImplementation(libs.ui.tooling)
 
     implementation(libs.soramitsu.uicore)
     implementation(libs.soramitsu.xnetworking.basic)
@@ -122,7 +124,6 @@ dependencies {
     testImplementation(libs.coroutine.test)
 
     androidTestImplementation(libs.ui.test.junit4)
-    debugImplementation(libs.ui.test.manifest)
 }
 
 kapt {
@@ -134,7 +135,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "jp.co.soramitsu"
             artifactId = "android-sora-card"
-            version = "1.0.8"
+            version = "1.0.9"
 
             afterEvaluate {
                 from(components["release"])

@@ -30,7 +30,12 @@ class GetPreparedViewModel @Inject constructor(
 
     private val _state =
         MutableStateFlow(
-            GetPreparedState(totalFreeAttemptsCount = "", attemptCost = "", buttonEnabled = true),
+            GetPreparedState(
+                totalFreeAttemptsCount = "",
+                attemptCost = "",
+                buttonEnabled = true,
+                phoneNumber = "",
+            ),
         )
     val state = _state.asStateFlow()
 
@@ -47,47 +52,36 @@ class GetPreparedViewModel @Inject constructor(
             ),
         )
 
-        _state.value = GetPreparedState(
-            totalFreeAttemptsCount = ".",
-            attemptCost = ".",
-            buttonEnabled = true,
-            steps = listOf(
-                Step(
-                    index = 1,
-                    title = R.string.get_prepared_submit_id_photo_title,
-                    description = listOf(R.string.get_prepared_submit_id_photo_description),
-                ),
-                Step(
-                    index = 2,
-                    title = R.string.get_prepared_take_selfie_title,
-                    description = listOf(R.string.get_prepared_take_selfie_description),
-                ),
-                Step(
-                    index = 3,
-                    title = R.string.get_prepared_proof_address_title,
-                    description = listOf(R.string.get_prepared_proof_address_description, R.string.get_prepared_proof_address_note),
-                ),
-                Step(
-                    index = 4,
-                    title = R.string.get_prepared_personal_info_title,
-                    description = listOf(R.string.get_prepared_personal_info_description),
-                ),
-            ),
-        )
         viewModelScope.launch {
             val token = userSessionRepository.getAccessToken()
-            kycRepository.getFreeKycAttemptsInfo(token)
-                .onSuccess {
-                    _state.value = _state.value.copy(
-                        totalFreeAttemptsCount = it.totalFreeAttemptsCount.toString(),
-                    )
-                }
-            priceInteractor.calculateKycAttemptPrice()
-                .let {
-                    _state.value = _state.value.copy(
-                        attemptCost = it,
-                    )
-                }
+            _state.value = GetPreparedState(
+                totalFreeAttemptsCount = kycRepository.getFreeKycAttemptsInfo(token).getOrNull()?.totalFreeAttemptsCount?.toString().orEmpty(),
+                attemptCost = priceInteractor.calculateKycAttemptPrice(),
+                buttonEnabled = true,
+                phoneNumber = userSessionRepository.getPhoneNumber(),
+                steps = listOf(
+                    Step(
+                        index = 1,
+                        title = R.string.get_prepared_submit_id_photo_title,
+                        description = listOf(R.string.get_prepared_submit_id_photo_description),
+                    ),
+                    Step(
+                        index = 2,
+                        title = R.string.get_prepared_take_selfie_title,
+                        description = listOf(R.string.get_prepared_take_selfie_description),
+                    ),
+                    Step(
+                        index = 3,
+                        title = R.string.get_prepared_proof_address_title,
+                        description = listOf(R.string.get_prepared_proof_address_description, R.string.get_prepared_proof_address_note),
+                    ),
+                    Step(
+                        index = 4,
+                        title = R.string.get_prepared_personal_info_title,
+                        description = listOf(R.string.get_prepared_personal_info_description),
+                    ),
+                ),
+            )
         }
     }
 

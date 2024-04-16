@@ -80,11 +80,14 @@
   <string name="login_title">Войдите или зарегистрируйтесь</string>
   <string name="no_free_kyc_attempts_description">Вы использовали все бесплатные попытки прохождения процедуры KYC.\n\nПросим вас дождаться следующего обновления приложения, чтобы продолжить с оплачиваемыми попытками.</string>
   <string name="no_free_kyc_attempts_title">Нет больше бесплатных попыток</string>
+  <string name="no_number_in_database">В базе данных такого номера нет.\nПожалуйста, введите правильный номер или зарегистрируйте новый.</string>
   <string name="paid_attempts_available_later">Платные попытки будут доступны позднее</string>
   <string name="payment_widget_unavailable_confirm">Да, я понимаю</string>
   <string name="payment_widget_unavailable_description">Приносим извинения за неудобства. Мы прилагаем все усилия для решения данной проблемы. Пожалуйста, повторите попытку позже.</string>
   <string name="payment_widget_unavailable_message">Виджет оплаты в настоящее время недоступен</string>
   <string name="payment_widget_unavailable_title">Виджет недоступен</string>
+  <string name="phone_number_leading_zero">Введенный формат телефонного номера кажется необычным. При возникновении проблемы рассмотрите возможность удаления ведущего \"0\".</string>
+  <string name="register_new_account">Зарегистрировать новую учетную запись</string>
   <string name="select_your_country">Выберите свою страну</string>
   <string name="terms_and_conditions_accept_and_continue">Принять и продолжить</string>
   <string name="terms_and_conditions_confirm_description">Продолжая, вы подтверждаете, что прочитали, поняли и приняли эти правила</string>
@@ -93,8 +96,10 @@
   <string name="terms_and_conditions_privacy_policy">Политика конфиденциальности</string>
   <string name="terms_and_conditions_sora_community_alert">Чтобы получить учетную запись IBAN, необходимую для SORA Card, пользователи должны пройти процедуру KYC у эмитента карты. Это обязательное соответствие. Сообщество SORA не собирает и не будет собирать какие-либо ваши личные данные.</string>
   <string name="terms_and_conditions_title">Условия</string>
+  <string name="try_another_number">Попробовать другой номер</string>
   <string name="unsupported_countries_disclaimer">Жители некоторых стран не могут подать заявку на получение SORA Card в данный момент</string>
   <string name="unsupported_countries_link">Посмотреть список</string>
+  <string name="user_not_found">Пользователь не найден</string>
   <string name="user_registration_first_name_input_filed_label">Имя</string>
   <string name="user_registration_last_name_input_filed_label">Фамилия</string>
   <string name="user_registration_title">Представьтесь</string>
@@ -125,4 +130,5 @@
   <string name="verify_phone_number_otp_not_valid">OTP is not valid</string>
   <string name="verify_phone_number_send_code">ОТПРАВИТЬ КОД</string>
   <string name="verify_phone_number_title">Проверьте свой номер телефона</string>
+  <string name="your_phone_number">Ваш номер телефона</string>
 </resources>

@@ -9,6 +9,7 @@ data class GetPreparedState(
     val attemptCost: String,
     val steps: List<Step> = emptyList(),
     val buttonEnabled: Boolean,
+    val phoneNumber: String,
 )
 
 data class Step(

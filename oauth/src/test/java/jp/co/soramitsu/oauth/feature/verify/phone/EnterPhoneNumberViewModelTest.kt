@@ -19,6 +19,7 @@ import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.common.model.CountryDial
 import jp.co.soramitsu.oauth.domain.MainCoroutineRule
+import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.oauth.feature.telephone.LocaleService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -62,6 +63,9 @@ class EnterPhoneNumberViewModelTest {
     @MockK
     private lateinit var kycRepository: KycRepository
 
+    @MockK
+    private lateinit var userSessionRepository: UserSessionRepository
+
     private lateinit var viewModel: EnterPhoneNumberViewModel
 
     @Before
@@ -72,12 +76,16 @@ class EnterPhoneNumberViewModelTest {
         every { localeService.code } returns "US"
         every { setActivityResult.setResult(any()) } just runs
         coEvery { kycRepository.getCountries(null) } returns listOf(CountryDial("US", "USA", "+1"))
+        every { inMemoryRepo.logIn } returns false
+        coEvery { userSessionRepository.setPhoneNumber(any()) } just runs
         viewModel = EnterPhoneNumberViewModel(
             mainRouter,
             pwoAuthClientProxy,
             localeService,
             kycRepository,
             setActivityResult,
+            inMemoryRepo,
+            userSessionRepository,
         )
     }
 

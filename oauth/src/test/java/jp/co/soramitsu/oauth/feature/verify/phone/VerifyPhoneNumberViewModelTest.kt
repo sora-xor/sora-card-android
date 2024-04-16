@@ -81,7 +81,6 @@ class VerifyPhoneNumberViewModelTest {
         coEvery { pwoAuthClientProxy.signInWithPhoneNumberRequestOtp(any(), any(), any(), any()) } just runs
         viewModel = VerifyPhoneNumberViewModel(
             mainRouter,
-            userSessionRepository,
             timer,
             inMemoryRepo,
             pwoAuthClientProxy,

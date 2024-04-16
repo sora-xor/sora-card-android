@@ -31,6 +31,8 @@ interface MainRouter : DefaultLifecycleObserver {
 
     fun openRegisterUser()
 
+    fun openLogInFailedUserNotFound()
+
     fun openEnterEmail(firstName: String, lastName: String)
 
     fun openVerifyEmail(email: String, autoEmailSent: Boolean, clearStack: Boolean = false)
@@ -127,6 +129,10 @@ class MainRouterImpl : MainRouter {
 
     override fun openRegisterUser() {
         navHostController?.navigate(Destination.REGISTER_USER.route)
+    }
+
+    override fun openLogInFailedUserNotFound() {
+        navHostController?.navigate(Destination.USER_NOT_FOUND.route)
     }
 
     override fun openEnterEmail(firstName: String, lastName: String) {

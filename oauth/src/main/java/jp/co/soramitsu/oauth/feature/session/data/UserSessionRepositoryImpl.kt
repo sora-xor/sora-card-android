@@ -13,6 +13,7 @@ class UserSessionRepositoryImpl(
         const val ACCESS_TOKEN_KEY = "ACCESS_TOKEN_KEY"
         const val ACCESS_TOKEN_EXPIRATION_TIME_KEY = "ACCESS_TOKEN_EXPIRATION_TIME_KEY"
         const val KYC = "kyc_status"
+        const val PHONE = "user_phone_number"
         const val TERMS_VALUE = 1L
     }
 
@@ -39,6 +40,12 @@ class UserSessionRepositoryImpl(
     override suspend fun setNewAccessToken(accessToken: String, expirationTime: Long) {
         dataStore.putString(ACCESS_TOKEN_KEY, accessToken)
         dataStore.putLong(ACCESS_TOKEN_EXPIRATION_TIME_KEY, expirationTime)
+    }
+
+    override suspend fun getPhoneNumber(): String = dataStore.getString(PHONE)
+
+    override suspend fun setPhoneNumber(phone: String) {
+        dataStore.putString(PHONE, phone)
     }
 
     override suspend fun logOutUser() {

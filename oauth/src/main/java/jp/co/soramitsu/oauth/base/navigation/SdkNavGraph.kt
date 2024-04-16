@@ -21,6 +21,7 @@ import jp.co.soramitsu.oauth.feature.registration.RegisterUserScreen
 import jp.co.soramitsu.oauth.feature.terms.and.conditions.InitLoadingScreen
 import jp.co.soramitsu.oauth.feature.terms.and.conditions.TermsAndConditionsScreen
 import jp.co.soramitsu.oauth.feature.terms.and.conditions.WebPageScreen
+import jp.co.soramitsu.oauth.feature.usernotfound.UserNotFoundScreen
 import jp.co.soramitsu.oauth.feature.verify.email.EnterEmailScreen
 import jp.co.soramitsu.oauth.feature.verify.email.VerifyEmailScreen
 import jp.co.soramitsu.oauth.feature.verify.phone.CountryListScreen
@@ -138,6 +139,10 @@ internal fun SdkNavGraph(
             route = Destination.CARD_ISSUANCE_OPTIONS.route,
         ) {
             CardIssuanceScreen()
+        }
+
+        animatedComposable(Destination.USER_NOT_FOUND.route) {
+            UserNotFoundScreen()
         }
 
         dialog(

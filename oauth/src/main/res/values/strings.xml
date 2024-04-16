@@ -80,11 +80,14 @@
   <string name="login_title">Log in or Sign up</string>
   <string name="no_free_kyc_attempts_description">You have used your free attempt to pass the KYC process.\n\nWe kindly ask you to wait until the next upgrade of the application to proceed with paid attempts.</string>
   <string name="no_free_kyc_attempts_title">No more free attempts</string>
+  <string name="no_number_in_database">There is no such number in the database.\nPlease enter a correct number or register a new one.</string>
   <string name="paid_attempts_available_later">Paid attempts will be available at a later stage</string>
   <string name="payment_widget_unavailable_confirm">Yes, I understand</string>
   <string name="payment_widget_unavailable_description">Apologies for the inconvenience.\nWe’re working diligently to resolve this.\nPlease, try again later.</string>
   <string name="payment_widget_unavailable_message">The payment widget is currently unavailable</string>
   <string name="payment_widget_unavailable_title">Widget unavailable</string>
+  <string name="phone_number_leading_zero">The phone number format entered seems unusual. If issue arise, consider removing the leading \"0\".</string>
+  <string name="register_new_account">Register new account</string>
   <string name="select_your_country">Select your country</string>
   <string name="terms_and_conditions_accept_and_continue">Accept &amp; Continue</string>
   <string name="terms_and_conditions_confirm_description">By continuing you confirm that you have read, understood and accepted these policies</string>
@@ -93,8 +96,10 @@
   <string name="terms_and_conditions_privacy_policy">Privacy Policy</string>
   <string name="terms_and_conditions_sora_community_alert">The SORA community does not collect any personal data, to get the SORA Card and IBAN account you will need to complete a KYC process directly with the card issuer.</string>
   <string name="terms_and_conditions_title">Terms &amp; Conditions</string>
+  <string name="try_another_number">Try another number</string>
   <string name="unsupported_countries_disclaimer">Residents from certain countries can not apply for SORA Card at this moment</string>
   <string name="unsupported_countries_link">See the list</string>
+  <string name="user_not_found">User not found</string>
   <string name="user_registration_first_name_input_filed_label">First name</string>
   <string name="user_registration_last_name_input_filed_label">Last name</string>
   <string name="user_registration_title">Introduce yourself</string>
@@ -123,4 +128,5 @@
   <string name="verify_phone_number_otp_not_valid">OTP is not valid</string>
   <string name="verify_phone_number_send_code">SEND CODE</string>
   <string name="verify_phone_number_title">Verify your phone number</string>
+  <string name="your_phone_number">Your phone number</string>
 </resources>

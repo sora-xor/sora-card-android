@@ -13,6 +13,8 @@ import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -21,6 +23,9 @@ class VerificationSuccessfulViewModel @Inject constructor(
     private val userSessionRepository: UserSessionRepository,
     private val pwoAuthClientProxy: PWOAuthClientProxy,
 ) : BaseViewModel() {
+
+    private val _state = MutableStateFlow("")
+    val state = _state.asStateFlow()
 
     init {
         mToolbarState.value = SoramitsuToolbarState(
@@ -32,6 +37,9 @@ class VerificationSuccessfulViewModel @Inject constructor(
                 actionLabel = R.string.log_out,
             ),
         )
+        viewModelScope.launch {
+            _state.value = userSessionRepository.getPhoneNumber()
+        }
     }
 
     override fun onToolbarAction() {

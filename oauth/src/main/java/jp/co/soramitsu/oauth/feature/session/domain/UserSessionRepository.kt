@@ -13,6 +13,9 @@ interface UserSessionRepository {
 
     suspend fun setNewAccessToken(accessToken: String, expirationTime: Long)
 
+    suspend fun setPhoneNumber(phone: String)
+    suspend fun getPhoneNumber(): String
+
     suspend fun logOutUser()
 
     suspend fun setKycStatus(status: SoraCardCommonVerification)

@@ -38,6 +38,7 @@ class VerificationRejectedViewModel @Inject constructor(
             isFreeAttemptsLeft = false,
             kycAttemptCostInEuros = "",
             reason = null,
+            phone = "",
             reasonDetails = null,
         ),
     )
@@ -74,6 +75,7 @@ class VerificationRejectedViewModel @Inject constructor(
                         kycAttemptCostInEuros = kycAttemptPrice,
                         isFreeAttemptsLeft = if (reasons?.first == SoraCardCommonVerification.Retry) true else isKycAttemptsLeft,
                         reason = reasons?.second?.additionalDescription,
+                        phone = userSessionRepository.getPhoneNumber(),
                         reasonDetails = reasons?.second?.rejectionReasons?.map { it.desc },
                     )
             }.onFailure {

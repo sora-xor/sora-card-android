@@ -80,11 +80,14 @@
   <string name="login_title">Meld je aan of schrijf je in</string>
   <string name="no_free_kyc_attempts_description">Je hebt je gratis pogingen gebruikt om het KYC proces kostenloos te doorlopen. We vragen je te wachten tot de volgende upgrade van de applicatie om verder te gaan met pogingen tegen betaling.</string>
   <string name="no_free_kyc_attempts_title">Geen gratis KYC pogingen meer</string>
+  <string name="no_number_in_database">There is no such number in the database.\nPlease enter a correct number or register a new one.</string>
   <string name="paid_attempts_available_later">Paid attempts will be available at a later stage</string>
   <string name="payment_widget_unavailable_confirm">Ja ik begrijp het</string>
   <string name="payment_widget_unavailable_description">Excuses voor het ongemak. We werken er hard aan om dit op te lossen. Probeer het later opnieuw.</string>
   <string name="payment_widget_unavailable_message">De betalingswidget is momenteel niet beschikbaar</string>
   <string name="payment_widget_unavailable_title">Widget niet beschikbaar</string>
+  <string name="phone_number_leading_zero">The phone number format entered seems unusual. If issue arise, consider removing the leading \"0\".</string>
+  <string name="register_new_account">Register new account</string>
   <string name="select_your_country">Kies je land</string>
   <string name="terms_and_conditions_accept_and_continue">Accepteren en doorgaan</string>
   <string name="terms_and_conditions_confirm_description">Door verder te gaan, bevestigt u dat u dit beleid hebt gelezen en accepteert</string>
@@ -93,8 +96,10 @@
   <string name="terms_and_conditions_privacy_policy">Privacybeleid</string>
   <string name="terms_and_conditions_sora_community_alert">Om een IBAN-rekening voor deSORA Card te krijgen, moeten gebruikers een KYC-procedure ondergaan bij de uitgever van de kaart. De SORA community verzamelt geen persoonlijke gegevens van de gebruiker, deze worden enkel door de uitgever van de kaart verwerkt.</string>
   <string name="terms_and_conditions_title">algemene voorwaarden</string>
+  <string name="try_another_number">Try another number</string>
   <string name="unsupported_countries_disclaimer">Inwoners uit bepaalde landen kunnen op dit moment geen SORA Card aanvragen</string>
   <string name="unsupported_countries_link">Zie de lijst</string>
+  <string name="user_not_found">User not found</string>
   <string name="user_registration_first_name_input_filed_label">Voornaam</string>
   <string name="user_registration_last_name_input_filed_label">Achternaam</string>
   <string name="user_registration_title">Stel jezelf voor</string>
@@ -123,4 +128,5 @@
   <string name="verify_phone_number_otp_not_valid">OTP is niet geldig</string>
   <string name="verify_phone_number_send_code">Stuur Code</string>
   <string name="verify_phone_number_title">Verifieer je telefoonnummer</string>
+  <string name="your_phone_number">Your phone number</string>
 </resources>

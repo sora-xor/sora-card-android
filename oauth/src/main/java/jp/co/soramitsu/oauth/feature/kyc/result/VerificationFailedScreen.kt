@@ -19,8 +19,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.Screen
+import jp.co.soramitsu.oauth.feature.YourPhoneNumberText
 import jp.co.soramitsu.ui_core.component.button.TonalButton
 import jp.co.soramitsu.ui_core.component.button.properties.Order
 import jp.co.soramitsu.ui_core.component.button.properties.Size
@@ -40,9 +42,11 @@ fun VerificationFailedScreen(
     Screen(
         viewModel = viewModel,
     ) { scrollState ->
+        val state = viewModel.state.collectAsStateWithLifecycle()
         VerificationFailedContent(
             scrollState = scrollState,
             additionalDescription = additionalDescription,
+            phone = state.value,
             onClose = viewModel::onClose,
         )
     }
@@ -52,6 +56,7 @@ fun VerificationFailedScreen(
 private fun VerificationFailedContent(
     scrollState: ScrollState,
     additionalDescription: String?,
+    phone: String,
     onClose: () -> Unit,
 ) {
     Column(
@@ -60,8 +65,11 @@ private fun VerificationFailedContent(
             .verticalScroll(scrollState)
             .padding(top = Dimens.x3, start = Dimens.x3, end = Dimens.x3, bottom = Dimens.x5),
     ) {
+        YourPhoneNumberText(phone = phone)
         Text(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = Dimens.x1),
             text = stringResource(R.string.verification_failed_description),
             style = MaterialTheme.customTypography.paragraphM,
             color = MaterialTheme.customColors.fgPrimary,
@@ -104,11 +112,12 @@ private fun VerificationFailedContent(
 }
 
 @Composable
-@Preview
+@Preview(showBackground = true)
 private fun PreviewVerificationFailedContent() {
     VerificationFailedContent(
         scrollState = rememberScrollState(),
         additionalDescription = "PLACEHOLDER",
+        phone = "+12334556778",
         onClose = {},
     )
 }

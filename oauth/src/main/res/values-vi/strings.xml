@@ -5,7 +5,7 @@
   <string name="card_attention_text">Chú ý</string>
   <string name="card_hub_manage_card">Quản lý thẻ SORA</string>
   <string name="card_hub_manage_card_alert_title">Tải ứng dụng thẻ SORA</string>
-  <string name="card_hub_manage_google_play">To manage your SORA Card, please install the official SORA Card App. Tap OK to be directed to the Google Play.</string>
+  <string name="card_hub_manage_google_play">Để quản lý Thẻ SORA của bạn, vui lòng cài đặt Ứng dụng SORA Card. Nhấn OK để được chuyển đến Google Play.</string>
   <string name="card_hub_title">Chi tiết thẻ</string>
   <string name="card_hub_update_button">Cập nhật ngay</string>
   <string name="card_hub_update_description">Bạn đang sử dụng phiên bản hoặc ứng dụng lỗi thời, một số phần có thể không hoạt động như dự kiến.</string>
@@ -80,11 +80,14 @@
   <string name="login_title">Đăng nhập hoặc đăng ký</string>
   <string name="no_free_kyc_attempts_description">Bạn đã sử dụng nỗ lực miễn phí của mình để vượt qua quy trình KYC.\n\nChúng tôi đề nghị bạn đợi cho đến lần nâng cấp tiếp theo của ứng dụng để tiếp tục với các lần dùng thử trả phí.</string>
   <string name="no_free_kyc_attempts_title">Không còn nỗ lực miễn phí</string>
+  <string name="no_number_in_database">There is no such number in the database.\nPlease enter a correct number or register a new one.</string>
   <string name="paid_attempts_available_later">Các nỗ lực trả phí sẽ có sẵn ở giai đoạn sau</string>
   <string name="payment_widget_unavailable_confirm">Vâng, tôi hiểu</string>
   <string name="payment_widget_unavailable_description">Xin lỗi vì sự bất tiện. \n Chúng tôi đang nỗ lực làm việc để giải quyết vấn đề này. \n Vui lòng thử lại sau.</string>
   <string name="payment_widget_unavailable_message">Tiện ích thanh toán hiện không khả dụng</string>
   <string name="payment_widget_unavailable_title">Tiện ích không khả dụng</string>
+  <string name="phone_number_leading_zero">The phone number format entered seems unusual. If issue arise, consider removing the leading \"0\".</string>
+  <string name="register_new_account">Register new account</string>
   <string name="select_your_country">Chọn đất nước của bạn</string>
   <string name="terms_and_conditions_accept_and_continue">Chấp nhận &amp; Tiếp tục</string>
   <string name="terms_and_conditions_confirm_description">Bằng cách tiếp tục, bạn xác nhận rằng bạn đã đọc, hiểu và chấp nhận các chính sách này</string>
@@ -93,8 +96,10 @@
   <string name="terms_and_conditions_privacy_policy">Chính sách bảo mật</string>
   <string name="terms_and_conditions_sora_community_alert">Cộng đồng SORA không thu thập bất kỳ dữ liệu cá nhân nào, để có được Thẻ SORA và tài khoản IBAN, bạn sẽ cần hoàn thành quy trình KYC trực tiếp với tổ chức phát hành thẻ.</string>
   <string name="terms_and_conditions_title">Điều khoản và điều kiện</string>
+  <string name="try_another_number">Try another number</string>
   <string name="unsupported_countries_disclaimer">Cư dân từ một số quốc gia nhất định không thể đăng ký Thẻ SORA tại thời điểm này</string>
   <string name="unsupported_countries_link">Xem danh sách</string>
+  <string name="user_not_found">User not found</string>
   <string name="user_registration_first_name_input_filed_label">Họ</string>
   <string name="user_registration_last_name_input_filed_label">Tên</string>
   <string name="user_registration_title">Giới thiệu bản thân</string>
@@ -111,7 +116,7 @@
   <string name="verification_rejected_screen_try_again_for_free">Thử lại miễn phí</string>
   <string name="verification_rejected_support">Hỗ trợ</string>
   <string name="verification_rejected_title">Xác minh bị từ chối</string>
-  <string name="verification_successful">Verification successful!</string>
+  <string name="verification_successful">Xác minh thành công!</string>
   <string name="verification_successful_description">Xác minh KYC của bạn đã thành công và chúng tôi đã chuẩn bị gửi cho bạn thẻ SORA!</string>
   <string name="verification_successful_title">Đơn đăng ký được chấp thuận</string>
   <string name="verify_email_description">Đi theo liên kết ma thuật đã được gửi \n tới %s \n Có thể mất vài phút để email đến nơi. Vui lòng kiểm thư mục thư rác nếu bạn không nhận được email sau 5 phút.</string>
@@ -122,4 +127,5 @@
   <string name="verify_phone_number_otp_not_valid">OTP không hợp lệ</string>
   <string name="verify_phone_number_send_code">GỬI MÃ</string>
   <string name="verify_phone_number_title">Xác minh số điện thoại của bạn</string>
+  <string name="your_phone_number">Your phone number</string>
 </resources>
