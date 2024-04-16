@@ -73,6 +73,7 @@ class EnterPhoneNumberViewModelTest {
         every { inMemoryRepo.environment } returns SoraCardEnvironmentType.PRODUCTION
         coEvery { pwoAuthClientProxy.signInWithPhoneNumberRequestOtp(any(), any(), any(), any()) } just runs
         every { mainRouter.back() } just runs
+        every { mainRouter.openCountryList() } just runs
         every { localeService.code } returns "US"
         every { setActivityResult.setResult(any()) } just runs
         coEvery { kycRepository.getCountries(null) } returns listOf(CountryDial("US", "USA", "+1"))
@@ -87,6 +88,35 @@ class EnterPhoneNumberViewModelTest {
             inMemoryRepo,
             userSessionRepository,
         )
+    }
+
+    @Test
+    fun `signup with 0`() = runTest {
+        every { inMemoryRepo.logIn } returns false
+        advanceUntilIdle()
+        assertEquals("", viewModel.state.value.inputTextStateNumber.value.text)
+        viewModel.onPhoneChanged(TextFieldValue("02834"))
+        advanceUntilIdle()
+        assertEquals("", viewModel.state.value.inputTextStateNumber.value.text)
+    }
+
+    @Test
+    fun `login with 0`() = runTest {
+        every { inMemoryRepo.logIn } returns true
+        advanceUntilIdle()
+        viewModel.setLocale(null)
+        advanceUntilIdle()
+        assertEquals("", viewModel.state.value.inputTextStateNumber.value.text)
+        viewModel.onPhoneChanged(TextFieldValue("02834"))
+        advanceUntilIdle()
+        assertEquals("02834", viewModel.state.value.inputTextStateNumber.value.text)
+    }
+
+    @Test
+    fun `select country`() = runTest {
+        advanceUntilIdle()
+        viewModel.onSelectCountry()
+        verify { mainRouter.openCountryList() }
     }
 
     @Test

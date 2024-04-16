@@ -3,12 +3,17 @@ package jp.co.soramitsu.oauth.feature.verify.phone
 import android.os.CountDownTimer
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.compose.ui.text.input.TextFieldValue
+import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
+import com.paywings.oauth.android.sdk.service.callback.SignInWithPhoneNumberRequestOtpCallback
+import com.paywings.oauth.android.sdk.service.callback.SignInWithPhoneNumberVerifyOtpCallback
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
 import io.mockk.just
 import io.mockk.runs
+import io.mockk.slot
 import io.mockk.verify
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
@@ -68,6 +73,9 @@ class VerifyPhoneNumberViewModelTest {
     @MockK
     private lateinit var timer: Timer
 
+    @MockK
+    private lateinit var signInCallback: SignInWithPhoneNumberRequestOtpCallback
+
     private lateinit var viewModel: VerifyPhoneNumberViewModel
 
     @Before
@@ -75,8 +83,12 @@ class VerifyPhoneNumberViewModelTest {
         every { inMemoryRepo.environment } returns SoraCardEnvironmentType.PRODUCTION
         every { timer.setOnTickListener(any()) } just runs
         every { timer.setOnFinishListener(any()) } just runs
+        every { inMemoryRepo.logIn } returns false
         every { timer.start() } returns cdTimer
         every { mainRouter.back() } just runs
+        every { mainRouter.openVerifyEmail(any(), any()) } just runs
+        every { mainRouter.openRegisterUser() } just runs
+        every { authCallback.onOAuthSucceed() } just runs
         coEvery { pwoAuthClientProxy.signInWithPhoneNumberVerifyOtp(any(), any()) } just runs
         coEvery { pwoAuthClientProxy.signInWithPhoneNumberRequestOtp(any(), any(), any(), any()) } just runs
         viewModel = VerifyPhoneNumberViewModel(
@@ -149,11 +161,146 @@ class VerifyPhoneNumberViewModelTest {
     }
 
     @Test
+    fun `verify callback error`() = runTest {
+        advanceUntilIdle()
+        viewModel.onCodeChanged(TextFieldValue("123456"))
+        advanceUntilIdle()
+        assertTrue(viewModel.state.value.buttonState.loading)
+        val state = viewModel.state.value.inputTextState
+        assertEquals("", state.descriptionText)
+        assertEquals(false, state.error)
+        val slot = slot<SignInWithPhoneNumberVerifyOtpCallback>()
+        coVerify {
+            pwoAuthClientProxy.signInWithPhoneNumberVerifyOtp("123456", capture(slot))
+        }
+        val captured = slot.captured
+        captured.onError(OAuthErrorCode.INVALID_EMAIL)
+        advanceUntilIdle()
+        assertTrue(viewModel.state.value.buttonState.loading.not())
+        assertTrue(viewModel.state.value.inputTextState.error)
+        assertEquals(
+            "Email is not a valid email address.",
+            viewModel.state.value.inputTextState.descriptionText,
+        )
+    }
+
+    @Test
+    fun `verify callback email confirmation`() = runTest {
+        advanceUntilIdle()
+        viewModel.onCodeChanged(TextFieldValue("123456"))
+        advanceUntilIdle()
+        assertTrue(viewModel.state.value.buttonState.loading)
+        val state = viewModel.state.value.inputTextState
+        assertEquals("", state.descriptionText)
+        assertEquals(false, state.error)
+        val slot = slot<SignInWithPhoneNumberVerifyOtpCallback>()
+        coVerify {
+            pwoAuthClientProxy.signInWithPhoneNumberVerifyOtp("123456", capture(slot))
+        }
+        val captured = slot.captured
+        captured.onShowEmailConfirmationScreen("qwe@mail.asd", false)
+        advanceUntilIdle()
+        assertTrue(viewModel.state.value.buttonState.loading.not())
+        verify { mainRouter.openVerifyEmail("qwe@mail.asd", false) }
+    }
+
+    @Test
+    fun `verify callback reg screen`() = runTest {
+        advanceUntilIdle()
+        viewModel.onCodeChanged(TextFieldValue("123456"))
+        advanceUntilIdle()
+        assertTrue(viewModel.state.value.buttonState.loading)
+        val state = viewModel.state.value.inputTextState
+        assertEquals("", state.descriptionText)
+        assertEquals(false, state.error)
+        val slot = slot<SignInWithPhoneNumberVerifyOtpCallback>()
+        coVerify {
+            pwoAuthClientProxy.signInWithPhoneNumberVerifyOtp("123456", capture(slot))
+        }
+        val captured = slot.captured
+        captured.onShowRegistrationScreen()
+        advanceUntilIdle()
+        assertTrue(viewModel.state.value.buttonState.loading.not())
+        verify { mainRouter.openRegisterUser() }
+    }
+
+    @Test
+    fun `verify callback signin`() = runTest {
+        advanceUntilIdle()
+        viewModel.onCodeChanged(TextFieldValue("123456"))
+        advanceUntilIdle()
+        assertTrue(viewModel.state.value.buttonState.loading)
+        val state = viewModel.state.value.inputTextState
+        assertEquals("", state.descriptionText)
+        assertEquals(false, state.error)
+        val slot = slot<SignInWithPhoneNumberVerifyOtpCallback>()
+        coVerify {
+            pwoAuthClientProxy.signInWithPhoneNumberVerifyOtp("123456", capture(slot))
+        }
+        val captured = slot.captured
+        captured.onSignInSuccessful()
+        advanceUntilIdle()
+        verify { authCallback.onOAuthSucceed() }
+    }
+
+    @Test
+    fun `verify callback failed`() = runTest {
+        advanceUntilIdle()
+        viewModel.onCodeChanged(TextFieldValue("123456"))
+        advanceUntilIdle()
+        assertTrue(viewModel.state.value.buttonState.loading)
+        val state = viewModel.state.value.inputTextState
+        assertEquals("", state.descriptionText)
+        assertEquals(false, state.error)
+        val slot = slot<SignInWithPhoneNumberVerifyOtpCallback>()
+        coVerify {
+            pwoAuthClientProxy.signInWithPhoneNumberVerifyOtp("123456", capture(slot))
+        }
+        val captured = slot.captured
+        captured.onVerificationFailed()
+        advanceUntilIdle()
+        assertTrue(viewModel.state.value.buttonState.loading.not())
+        assertTrue(viewModel.state.value.inputTextState.error)
+        assertEquals(
+            "OTP is not valid",
+            viewModel.state.value.inputTextState.descriptionText,
+        )
+    }
+
+    @Test
     fun `resend code EXPECT loading is true`() = runTest {
         viewModel.resendOtp()
         advanceUntilIdle()
-
         assertTrue(viewModel.state.value.buttonState.loading)
+        val slot = slot<SignInWithPhoneNumberRequestOtpCallback>()
+        coVerify {
+            pwoAuthClientProxy.signInWithPhoneNumberRequestOtp("77", "1111111", null, capture(slot))
+        }
+        val captured = slot.captured
+        captured.onShowOtpInputScreen(8)
+        advanceUntilIdle()
+        assertTrue(viewModel.state.value.buttonState.loading.not())
+        verify { timer.start() }
+    }
+
+    @Test
+    fun `resend code EXPECT loading is true with error`() = runTest {
+        viewModel.resendOtp()
+        advanceUntilIdle()
+        assertTrue(viewModel.state.value.buttonState.loading)
+        val slot = slot<SignInWithPhoneNumberRequestOtpCallback>()
+        coVerify {
+            pwoAuthClientProxy.signInWithPhoneNumberRequestOtp("77", "1111111", null, capture(slot))
+        }
+        val captured = slot.captured
+        captured.onError(OAuthErrorCode.EMAIL_ALREADY_VERIFIED, null)
+        advanceUntilIdle()
+        assertTrue(viewModel.state.value.buttonState.loading.not())
+        assertTrue(viewModel.state.value.inputTextState.error)
+        assertEquals(
+            "Action not allowed because email is already verified.",
+            viewModel.state.value.inputTextState.descriptionText,
+        )
     }
 
     @Test

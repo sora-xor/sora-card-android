@@ -11,6 +11,7 @@ import jp.co.soramitsu.oauth.base.data.SoraCardDataStore
 import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -52,6 +53,8 @@ class UserSessionRepositoryImplTest {
     fun setUp() {
         coEvery { soraCardDataStore.putString(any(), any()) } just runs
         coEvery { soraCardDataStore.putLong(any(), any()) } just runs
+        coEvery { soraCardDataStore.getString("user_phone_number") } returns "+999"
+        coEvery { soraCardDataStore.getLong(any(), any()) } returns 1L
         repository = UserSessionRepositoryImpl(soraCardDataStore)
     }
 
@@ -66,5 +69,29 @@ class UserSessionRepositoryImplTest {
                 EXPIRATION_TIME_VALUE,
             )
         }
+    }
+
+    @Test
+    fun `test get terms`() = runTest {
+        val read = repository.isTermsRead()
+        assertEquals(true, read)
+    }
+
+    @Test
+    fun `test set terms`() = runTest {
+        repository.setTermsRead()
+        coVerify { soraCardDataStore.putLong("TERMS_READ", 1L) }
+    }
+
+    @Test
+    fun `test get phone number`() = runTest {
+        val number = repository.getPhoneNumber()
+        assertEquals("+999", number)
+    }
+
+    @Test
+    fun `test set phone number`() = runTest {
+        repository.setPhoneNumber("123123")
+        coVerify { soraCardDataStore.putString("user_phone_number", "123123") }
     }
 }

@@ -55,6 +55,8 @@
   <string name="enter_phone_number_description">You will receive\na verification code via SMS</string>
   <string name="enter_phone_number_phone_input_field_label">Phone Number</string>
   <string name="entry_card_info">Card info</string>
+  <string name="exchange_xor">Exchange XOR</string>
+  <string name="expected_volume">Expected volume</string>
   <string name="get_more_xor_dialog_buy_option">Buy XOR with card</string>
   <string name="get_more_xor_dialog_deposit_option">Receive XOR</string>
   <string name="get_more_xor_dialog_description">You can swap for XOR or buy with Euro</string>
@@ -74,6 +76,16 @@
   <string name="get_prepared_title">Get prepared</string>
   <string name="iban_frozen_description">Your IBAN has been frozen.\nTo find out more, contact %s</string>
   <string name="iban_pending_description">Your IBAN issuance is pending.\nIn case the wait longer than 72h contact us via %s</string>
+  <string name="item_holding_crypto">Holding crypto</string>
+  <string name="item_more_than">More than %s</string>
+  <string name="item_other">Other</string>
+  <string name="item_purchasing_crypto">Purchasing crypto</string>
+  <string name="item_receiving_mining_profits">Receiving mining profits</string>
+  <string name="item_salary">Salary</string>
+  <string name="item_savings">Savings</string>
+  <string name="item_sending_receiving_crypto">Sending or receiving crypto</string>
+  <string name="item_trading">Trading</string>
+  <string name="item_trading_profits">Trading profits</string>
   <string name="kyc_result_verification_in_progress">Verification in progress</string>
   <string name="kyc_result_verification_in_progress_description">You have successfully completed your KYC application. The review is pending and you can expect a decision shortly.\n\nUsually the decision is made the same day and in some cases can take up to 3 days.</string>
   <string name="log_out">Log out</string>
@@ -81,6 +93,9 @@
   <string name="no_free_kyc_attempts_description">You have used your free attempt to pass the KYC process.\n\nWe kindly ask you to wait until the next upgrade of the application to proceed with paid attempts.</string>
   <string name="no_free_kyc_attempts_title">No more free attempts</string>
   <string name="no_number_in_database">There is no such number in the database.\nPlease enter a correct number or register a new one.</string>
+  <string name="onboarding_questions">Onboarding questions</string>
+  <string name="onboarding_questions_description">If you want to make an exchange, answer the following three questions.</string>
+  <string name="opening_reason">Opening reason</string>
   <string name="paid_attempts_available_later">Paid attempts will be available at a later stage</string>
   <string name="payment_widget_unavailable_confirm">Yes, I understand</string>
   <string name="payment_widget_unavailable_description">Apologies for the inconvenience.\nWe’re working diligently to resolve this.\nPlease, try again later.</string>
@@ -89,6 +104,8 @@
   <string name="phone_number_leading_zero">The phone number format entered seems unusual. If issue arise, consider removing the leading \"0\".</string>
   <string name="register_new_account">Register new account</string>
   <string name="select_your_country">Select your country</string>
+  <string name="sign_up_sora_card">Sign up for SORA Card</string>
+  <string name="source_of_funds">Source of funds</string>
   <string name="terms_and_conditions_accept_and_continue">Accept &amp; Continue</string>
   <string name="terms_and_conditions_confirm_description">By continuing you confirm that you have read, understood and accepted these policies</string>
   <string name="terms_and_conditions_description">We want you to know exactly how the SORA card service will work, who needs your details and why. Reviewing these policies will help you use the app with peace of mind.</string>

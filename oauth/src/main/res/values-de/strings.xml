@@ -55,6 +55,8 @@
   <string name="enter_phone_number_description">Sie erhalten einen Verifizierungscode per SMS</string>
   <string name="enter_phone_number_phone_input_field_label">Telefonnummer</string>
   <string name="entry_card_info">Card info</string>
+  <string name="exchange_xor">Exchange XOR</string>
+  <string name="expected_volume">Expected volume</string>
   <string name="get_more_xor_dialog_buy_option">Kaufen Sie XOR mit EUR</string>
   <string name="get_more_xor_dialog_deposit_option">XOR einzahlen</string>
   <string name="get_more_xor_dialog_description">Sie können gegen XOR tauschen oder mit Euro kaufen</string>
@@ -74,6 +76,16 @@
   <string name="get_prepared_title">Bereite dich vor</string>
   <string name="iban_frozen_description">Your IBAN has been frozen.\nTo find out more, contact %s</string>
   <string name="iban_pending_description">Die Ausstellung Ihrer IBAN steht noch aus.\n Falls die Wartezeit länger als 72 Stunden dauert, kontaktieren Sie uns per %s</string>
+  <string name="item_holding_crypto">Holding crypto</string>
+  <string name="item_more_than">More than %s</string>
+  <string name="item_other">Other</string>
+  <string name="item_purchasing_crypto">Purchasing crypto</string>
+  <string name="item_receiving_mining_profits">Receiving mining profits</string>
+  <string name="item_salary">Salary</string>
+  <string name="item_savings">Savings</string>
+  <string name="item_sending_receiving_crypto">Sending or receiving crypto</string>
+  <string name="item_trading">Trading</string>
+  <string name="item_trading_profits">Trading profits</string>
   <string name="kyc_result_verification_in_progress">Überprüfung läuft</string>
   <string name="kyc_result_verification_in_progress_description">Sie haben Ihren Identitätsverifizierungs-Antrag erfolgreich abgeschlossen. Die Prüfung ist noch nicht abgeschlossen und Sie können in Kürze mit einer Entscheidung rechnen.\n\nIn der Regel wird die Entscheidung noch am selben Tag getroffen, in manchen Fällen kann sie bis zu 3 Tage dauern.</string>
   <string name="log_out">Ausloggen</string>
@@ -81,6 +93,9 @@
   <string name="no_free_kyc_attempts_description">Sie haben Ihren kostenlosen Versuch genutzt, um den Identitätsverifizierungs-Prozess zu durchlaufen.\n\n Wir bitten Sie, bis zur nächsten Aktualisierung der Anwendung zu warten, um mit kostenpflichtigen Versuchen fortzufahren.</string>
   <string name="no_free_kyc_attempts_title">Keine Freiversuche mehr</string>
   <string name="no_number_in_database">There is no such number in the database.\nPlease enter a correct number or register a new one.</string>
+  <string name="onboarding_questions">Onboarding questions</string>
+  <string name="onboarding_questions_description">If you want to make an exchange, answer the following three questions.</string>
+  <string name="opening_reason">Opening reason</string>
   <string name="paid_attempts_available_later">Paid attempts will be available at a later stage</string>
   <string name="payment_widget_unavailable_confirm">Ja, ich verstehe</string>
   <string name="payment_widget_unavailable_description">Entschuldigung für die Unannehmlichkeiten. \n Wir arbeiten fleißig daran, dieses Problem zu lösen. \n Bitte versuchen Sie es später noch einmal.</string>
@@ -89,6 +104,8 @@
   <string name="phone_number_leading_zero">The phone number format entered seems unusual. If issue arise, consider removing the leading \"0\".</string>
   <string name="register_new_account">Register new account</string>
   <string name="select_your_country">Wähle dein Land</string>
+  <string name="sign_up_sora_card">Sign up for SORA Card</string>
+  <string name="source_of_funds">Source of funds</string>
   <string name="terms_and_conditions_accept_and_continue">Akzeptieren und fortfahren</string>
   <string name="terms_and_conditions_confirm_description">Indem Sie fortfahren, bestätigen Sie, dass Sie diese Richtlinien gelesen, verstanden und akzeptiert haben</string>
   <string name="terms_and_conditions_description">Wir möchten, dass Sie genau wissen, wie der SORA-Kartenservice funktionieren wird, wer Ihre Daten benötigt und warum. Wenn Sie diese Richtlinien lesen, können Sie die App unbesorgt nutzen.</string>
