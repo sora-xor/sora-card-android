@@ -22,6 +22,7 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.kapt)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.kover)
 }
 
 val composeCompilerVersion: String by project
