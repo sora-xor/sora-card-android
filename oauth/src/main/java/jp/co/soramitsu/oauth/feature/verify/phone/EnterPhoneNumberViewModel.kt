@@ -10,9 +10,11 @@ import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
+import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
+import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.oauth.feature.telephone.LocaleService
 import jp.co.soramitsu.oauth.feature.verify.model.ButtonState
 import jp.co.soramitsu.oauth.feature.verify.phone.model.EnterPhoneNumberState
@@ -33,6 +35,8 @@ class EnterPhoneNumberViewModel @Inject constructor(
     private val localeService: LocaleService,
     private val kycRepository: KycRepository,
     private val setActivityResult: SetActivityResult,
+    private val inMemoryRepo: InMemoryRepo,
+    private val userSessionRepository: UserSessionRepository,
 ) : BaseViewModel() {
 
     companion object {
@@ -137,7 +141,7 @@ class EnterPhoneNumberViewModel @Inject constructor(
     }
 
     fun onPhoneChanged(value: TextFieldValue) {
-        if (value.text.getOrNull(0)?.let { it == '0' } == true) return
+        if (inMemoryRepo.logIn.not() && (value.text.getOrNull(0)?.let { it == '0' } == true)) return
         if (getPhoneCode().length + value.text.length > PHONE_NUMBER_LENGTH_MAX) {
             return
         }
@@ -148,6 +152,7 @@ class EnterPhoneNumberViewModel @Inject constructor(
             inputTextStateNumber = _state.value.inputTextStateNumber.copy(
                 value = numbers,
                 error = false,
+                descriptionText = if (inMemoryRepo.logIn && value.text.startsWith("0")) R.string.phone_number_leading_zero else R.string.common_no_spam,
             ),
             buttonState = _state.value.buttonState.copy(enabled = numbers.text.isNotEmpty() && getPhoneCode().length + numbers.text.length >= PHONE_NUMBER_LENGTH_MIN),
         )
@@ -164,6 +169,9 @@ class EnterPhoneNumberViewModel @Inject constructor(
             loading(true)
             delay(1000 * 30 * requestOtpAttempts)
             requestOtpAttempts++
+            userSessionRepository.setPhoneNumber(
+                getPhoneCode() + _state.value.inputTextStateNumber.value.text,
+            )
             pwoAuthClientProxy.signInWithPhoneNumberRequestOtp(
                 countryCode = getPhoneCode(),
                 phoneNumber = _state.value.inputTextStateNumber.value.text,

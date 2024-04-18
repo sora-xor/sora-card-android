@@ -25,6 +25,7 @@ class VerificationRejectedScreenStateTest {
             isFreeAttemptsLeft = false,
             reason = null,
             reasonDetails = null,
+            phone = "+987",
         ).apply { state = this }
     }
 

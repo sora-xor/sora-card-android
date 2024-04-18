@@ -17,6 +17,7 @@ data class SoraCardContractData(
     val areAttemptsPaidSuccessfully: Boolean,
     val isEnoughXorAvailable: Boolean,
     val isIssuancePaid: Boolean,
+    val logIn: Boolean,
 ) : Parcelable
 
 @Parcelize

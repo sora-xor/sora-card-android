@@ -19,8 +19,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.Screen
+import jp.co.soramitsu.oauth.feature.YourPhoneNumberText
 import jp.co.soramitsu.ui_core.component.button.TonalButton
 import jp.co.soramitsu.ui_core.component.button.properties.Order
 import jp.co.soramitsu.ui_core.component.button.properties.Size
@@ -37,25 +39,32 @@ fun VerificationInProgressScreen(viewModel: VerificationInProgressViewModel = hi
     Screen(
         viewModel = viewModel,
     ) { scrollState ->
+        val state = viewModel.state.collectAsStateWithLifecycle()
         VerificationInProgressContent(
             scrollState = scrollState,
+            phone = state.value,
             onClose = viewModel::openTelegramSupport,
         )
     }
 }
 
 @Composable
-private fun VerificationInProgressContent(scrollState: ScrollState, onClose: () -> Unit) {
+private fun VerificationInProgressContent(
+    scrollState: ScrollState,
+    phone: String,
+    onClose: () -> Unit,
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(scrollState)
             .padding(top = Dimens.x3, start = Dimens.x3, end = Dimens.x3, bottom = Dimens.x5),
     ) {
+        YourPhoneNumberText(phone = phone)
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = Dimens.x1),
+                .padding(top = Dimens.x2),
             text = stringResource(R.string.kyc_result_verification_in_progress_description),
             style = MaterialTheme.customTypography.paragraphM,
             color = MaterialTheme.customColors.fgPrimary,
@@ -86,12 +95,13 @@ private fun VerificationInProgressContent(scrollState: ScrollState, onClose: () 
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun PreviewVerificationInProgressScreen() {
     Box(modifier = Modifier.fillMaxSize()) {
         VerificationInProgressContent(
             scrollState = rememberScrollState(),
+            phone = "+12345678",
             onClose = {},
         )
     }

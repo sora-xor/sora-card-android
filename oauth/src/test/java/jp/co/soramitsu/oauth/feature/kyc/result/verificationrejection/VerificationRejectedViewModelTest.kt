@@ -70,6 +70,7 @@ class VerificationRejectedViewModelTest {
     fun setUp() {
         every { mainRouter.openSupportChat() } just runs
         every { mainRouter.openGetPrepared() } just runs
+        coEvery { userSessionRepository.getPhoneNumber() } returns "+987"
         kycCountAttemptsUnavailable = KycAttemptsDto(
             total = 3,
             completed = 3,

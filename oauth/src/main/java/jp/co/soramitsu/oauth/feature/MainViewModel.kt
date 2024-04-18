@@ -10,7 +10,6 @@ import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
 import com.paywings.oauth.android.sdk.service.callback.GetUserDataCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import jp.co.soramitsu.oauth.base.navigation.Destination
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
@@ -53,6 +52,7 @@ class MainViewModel @Inject constructor(
         inMemoryRepo.areAttemptsPaidSuccessfully = contract.areAttemptsPaidSuccessfully
         inMemoryRepo.isEnoughXorAvailable = contract.isEnoughXorAvailable
         inMemoryRepo.isIssuancePaid = contract.isIssuancePaid
+        inMemoryRepo.logIn = contract.logIn
 
         viewModelScope.launch {
             val initResult = pwoAuthClientProxy.init(
@@ -159,11 +159,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun checkKycRequirementsFulfilled() {
-        if (inMemoryRepo.isEnoughXorAvailable) {
-            mainRouter.openGetPrepared()
-        } else {
-            mainRouter.navigate(Destination.CARD_ISSUANCE_OPTIONS.route)
-        }
+        mainRouter.openGetPrepared()
     }
 
     fun startKycProcess(activity: Activity) {

@@ -30,6 +30,7 @@ import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.base.compose.ScreenStatus
 import jp.co.soramitsu.oauth.base.compose.retrieveString
+import jp.co.soramitsu.oauth.feature.YourPhoneNumberText
 import jp.co.soramitsu.ui_core.component.button.FilledButton
 import jp.co.soramitsu.ui_core.component.button.TonalButton
 import jp.co.soramitsu.ui_core.component.button.properties.Order
@@ -69,8 +70,10 @@ private fun VerificationRejectedContent(
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        YourPhoneNumberText(phone = state.phone)
         Column(
             modifier = Modifier
+                .padding(top = Dimens.x2)
                 .fillMaxWidth()
                 .weight(1f)
                 .verticalScroll(scrollState),
@@ -171,7 +174,7 @@ private fun ReasonRow(reason: String) {
 }
 
 @Composable
-@Preview(locale = "en")
+@Preview(locale = "en", showBackground = true)
 private fun PreviewApplicationRejected1() {
     VerificationRejectedContent(
         scrollState = rememberScrollState(),
@@ -179,6 +182,7 @@ private fun PreviewApplicationRejected1() {
             screenStatus = ScreenStatus.READY_TO_RENDER,
             kycFreeAttemptsCount = 5,
             isFreeAttemptsLeft = true,
+            phone = "+876857464645634",
             kycAttemptCostInEuros = "3.80",
             reason = "Video was rejected",
             reasonDetails = listOf(
@@ -202,7 +206,7 @@ private fun PreviewApplicationRejected1() {
 }
 
 @Composable
-@Preview
+@Preview(showBackground = true)
 private fun PreviewApplicationRejected2() {
     VerificationRejectedContent(
         scrollState = rememberScrollState(),
@@ -212,6 +216,7 @@ private fun PreviewApplicationRejected2() {
             isFreeAttemptsLeft = false,
             kycAttemptCostInEuros = "3.80",
             reason = null,
+            phone = "+876857464645634",
             reasonDetails = null,
         ),
         onTelegramSupport = {},

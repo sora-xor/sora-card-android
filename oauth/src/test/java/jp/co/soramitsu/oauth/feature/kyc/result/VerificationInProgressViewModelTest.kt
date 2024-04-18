@@ -1,6 +1,7 @@
 package jp.co.soramitsu.oauth.feature.kyc.result
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
@@ -52,6 +53,7 @@ class VerificationInProgressViewModelTest {
     @Before
     fun setUp() {
         every { mainRouter.openSupportChat() } just runs
+        coEvery { userSessionRepository.getPhoneNumber() } returns "+987"
         viewModel = VerificationInProgressViewModel(
             mainRouter = mainRouter,
             setActivityResult = setActivityResult,

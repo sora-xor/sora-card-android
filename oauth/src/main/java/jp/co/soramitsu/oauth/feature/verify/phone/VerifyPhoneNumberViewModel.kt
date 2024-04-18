@@ -14,7 +14,6 @@ import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.sdk.SoraCardEnvironmentType
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.feature.OAuthCallback
-import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.oauth.feature.verify.Timer
 import jp.co.soramitsu.oauth.feature.verify.format
 import jp.co.soramitsu.oauth.feature.verify.model.ButtonState
@@ -31,9 +30,8 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class VerifyPhoneNumberViewModel @Inject constructor(
     private val mainRouter: MainRouter,
-    private val userSessionRepository: UserSessionRepository,
     private val timer: Timer,
-    inMemoryRepo: InMemoryRepo,
+    private val inMemoryRepo: InMemoryRepo,
     private val pwoAuthClientProxy: PWOAuthClientProxy,
 ) : BaseViewModel() {
 
@@ -142,7 +140,11 @@ class VerifyPhoneNumberViewModel @Inject constructor(
 
         override fun onShowRegistrationScreen() {
             loading(false)
-            mainRouter.openRegisterUser()
+            if (inMemoryRepo.logIn) {
+                mainRouter.openLogInFailedUserNotFound()
+            } else {
+                mainRouter.openRegisterUser()
+            }
         }
 
         override fun onSignInSuccessful() {

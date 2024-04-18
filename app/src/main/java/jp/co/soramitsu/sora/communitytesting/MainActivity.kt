@@ -100,6 +100,7 @@ class MainActivity : ComponentActivity() {
                 isEnoughXorAvailable = true,
                 areAttemptsPaidSuccessfully = true,
                 isIssuancePaid = false,
+                logIn = true,
                 soraBackEndUrl = BuildConfig.SORA_API_BASE_URL,
             ),
         )

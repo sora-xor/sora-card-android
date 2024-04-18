@@ -93,6 +93,8 @@ class ClientsFacade @Inject constructor(
         }
     }
 
+    suspend fun getPhoneNumber(): String = userSessionRepository.getPhoneNumber()
+
     suspend fun getIBAN(): Result<IbanInfo?> {
         val init = initDeferred.await()
         if (init.not()) return Result.failure(SoraCardTokenException("OAuth init failed (IBAN)"))

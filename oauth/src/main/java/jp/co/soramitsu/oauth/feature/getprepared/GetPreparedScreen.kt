@@ -30,6 +30,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.feature.OAuthCallback
+import jp.co.soramitsu.oauth.feature.YourPhoneNumberText
 import jp.co.soramitsu.ui_core.component.button.FilledButton
 import jp.co.soramitsu.ui_core.component.button.properties.Order
 import jp.co.soramitsu.ui_core.component.button.properties.Size
@@ -75,10 +76,11 @@ private fun GetPreparedScreenContent(
             .verticalScroll(scrollState)
             .padding(start = Dimens.x3, end = Dimens.x3, top = Dimens.x1, bottom = Dimens.x5),
     ) {
+        YourPhoneNumberText(phone = state.phoneNumber, topPadding = Dimens.x2)
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = Dimens.x4)
+                .padding(bottom = Dimens.x4, top = Dimens.x3)
                 .clip(RoundedCornerShape(MaterialTheme.borderRadius.s))
                 .background(MaterialTheme.customColors.accentTertiaryContainer)
                 .padding(Dimens.x2),
@@ -191,7 +193,7 @@ private fun Step(step: Step) {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun PreviewGetPreparedScreen() {
     GetPreparedScreenContent(
@@ -200,6 +202,7 @@ private fun PreviewGetPreparedScreen() {
             totalFreeAttemptsCount = "4",
             attemptCost = "3.80",
             buttonEnabled = true,
+            phoneNumber = "123456",
             steps = listOf(
                 Step(
                     index = 1,

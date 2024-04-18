@@ -1,4 +1,4 @@
-package jp.co.soramitsu.oauth.feature.kyc.result
+package jp.co.soramitsu.oauth.feature.usernotfound
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -6,10 +6,7 @@ import javax.inject.Inject
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
-import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
-import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
-import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
-import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
+import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
@@ -19,11 +16,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class VerificationInProgressViewModel @Inject constructor(
+class UserNotFoundViewModel @Inject constructor(
     private val mainRouter: MainRouter,
-    private val setActivityResult: SetActivityResult,
+    private val inMemoryRepo: InMemoryRepo,
     private val userSessionRepository: UserSessionRepository,
-    private val pwoAuthClientProxy: PWOAuthClientProxy,
 ) : BaseViewModel() {
 
     private val _state = MutableStateFlow("")
@@ -33,43 +29,28 @@ class VerificationInProgressViewModel @Inject constructor(
         mToolbarState.value = SoramitsuToolbarState(
             type = SoramitsuToolbarType.Small(),
             basic = BasicToolbarState(
-                title = R.string.kyc_result_verification_in_progress,
+                title = "",
                 visibility = true,
                 navIcon = R.drawable.ic_cross,
-                actionLabel = R.string.log_out,
             ),
         )
+
         viewModelScope.launch {
             _state.value = userSessionRepository.getPhoneNumber()
         }
     }
 
-    override fun onToolbarAction() {
-        super.onToolbarAction()
-        try {
-            viewModelScope.launch {
-                pwoAuthClientProxy.logout()
-                userSessionRepository.logOutUser()
-            }.invokeOnCompletion {
-                setActivityResult.setResult(SoraCardResult.Logout)
-            }
-        } catch (e: Exception) {
-            /* DO NOTHING */
-        }
-    }
-
     override fun onToolbarNavigation() {
         super.onToolbarNavigation()
-        viewModelScope.launch {
-            setActivityResult.setResult(
-                SoraCardResult.Success(
-                    status = SoraCardCommonVerification.Pending,
-                ),
-            )
-        }
+        mainRouter.back()
     }
 
-    fun openTelegramSupport() {
-        mainRouter.openSupportChat()
+    fun onTryAnotherNumber() {
+        mainRouter.openEnterPhoneNumber(true)
+    }
+
+    fun onRegisterNewAccount() {
+        inMemoryRepo.logIn = false
+        mainRouter.openEnterPhoneNumber(true)
     }
 }

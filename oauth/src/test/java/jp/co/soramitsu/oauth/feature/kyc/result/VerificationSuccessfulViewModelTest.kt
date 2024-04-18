@@ -1,6 +1,7 @@
 package jp.co.soramitsu.oauth.feature.kyc.result
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
@@ -51,6 +52,7 @@ class VerificationSuccessfulViewModelTest {
     @Before
     fun setUp() {
         every { setActivityResult.setResult(any()) } just runs
+        coEvery { userSessionRepository.getPhoneNumber() } returns "+987"
         viewModel = VerificationSuccessfulViewModel(
             setActivityResult = setActivityResult,
             userSessionRepository = userSessionRepository,
