@@ -8,8 +8,10 @@ import io.mockk.junit4.MockKRule
 import io.mockk.just
 import io.mockk.runs
 import io.mockk.verify
+import jp.co.soramitsu.androidfoundation.format.unsafeCast
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
+import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardFlow
 import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.oauth.feature.usernotfound.UserNotFoundViewModel
@@ -54,7 +56,7 @@ class UserNotFoundViewModelTest {
         coEvery { userSessionRepository.getPhoneNumber() } returns "+1239"
         every { mainRouter.back() } just runs
         every { mainRouter.openEnterPhoneNumber(true) } just runs
-        every { inMemoryRepo.logIn = any() } just runs
+        every { inMemoryRepo.flow!!.unsafeCast<SoraCardFlow.SoraCardKycFlow>().logIn = any() } just runs
         vm = UserNotFoundViewModel(
             mainRouter, inMemoryRepo, userSessionRepository,
         )
@@ -82,14 +84,16 @@ class UserNotFoundViewModelTest {
     @Test
     fun `test another number`() {
         vm.onTryAnotherNumber()
-        verify(exactly = 0) { inMemoryRepo.logIn = any() }
+        verify(
+            exactly = 0,
+        ) { inMemoryRepo.flow!!.unsafeCast<SoraCardFlow.SoraCardKycFlow>().logIn = any() }
         verify { mainRouter.openEnterPhoneNumber(true) }
     }
 
     @Test
     fun `test reg new`() {
         vm.onRegisterNewAccount()
-        verify { inMemoryRepo.logIn = false }
+        verify { inMemoryRepo.flow!!.unsafeCast<SoraCardFlow.SoraCardKycFlow>().logIn = false }
         verify { mainRouter.openEnterPhoneNumber(true) }
     }
 }

@@ -1,8 +1,8 @@
 package jp.co.soramitsu.oauth.feature.cardissuance
 
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.ScreenStatus
-import jp.co.soramitsu.oauth.base.compose.Text
 import jp.co.soramitsu.oauth.feature.cardissuance.state.PaidCardIssuanceState
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
@@ -28,19 +28,19 @@ class PaidCardIssuanceStateTest {
     fun `init EXPECT description is set up`() {
         assertEquals(
             R.string.card_issuance_screen_paid_card_description,
-            (state.descriptionText as Text.StringRes).id,
+            (state.descriptionText as TextValue.StringRes).id,
         )
     }
 
     @Test
     fun `set state to ready to render EXPECT data is set correctly`() {
         val state = state.copy(screenStatus = ScreenStatus.READY_TO_RENDER)
-        (state.titleText as Text.StringResWithArgs).let {
+        (state.titleText as TextValue.StringResWithArgs).let {
             assertEquals(R.string.card_issuance_screen_paid_card_title, it.id)
             assertArrayEquals(arrayOf(0.toString()), it.payload)
         }
         assertEquals(true, state.isPayIssuanceAmountButtonEnabled)
-        (state.payIssuanceAmountText as Text.StringResWithArgs).let {
+        (state.payIssuanceAmountText as TextValue.StringResWithArgs).let {
             assertEquals(R.string.card_issuance_screen_paid_card_pay_euro, it.id)
             assertArrayEquals(arrayOf(0.toString()), it.payload)
         }
@@ -49,8 +49,11 @@ class PaidCardIssuanceStateTest {
     @Test
     fun `set state to loading EXPECT data is not pasted`() {
         val state = state.copy(screenStatus = ScreenStatus.LOADING)
-        assertEquals(R.string.cant_fetch_data, (state.titleText as Text.StringRes).id)
+        assertEquals(R.string.cant_fetch_data, (state.titleText as TextValue.StringRes).id)
         assertEquals(false, state.isPayIssuanceAmountButtonEnabled)
-        assertEquals(R.string.cant_fetch_data, (state.payIssuanceAmountText as Text.StringRes).id)
+        assertEquals(
+            R.string.cant_fetch_data,
+            (state.payIssuanceAmountText as TextValue.StringRes).id,
+        )
     }
 }

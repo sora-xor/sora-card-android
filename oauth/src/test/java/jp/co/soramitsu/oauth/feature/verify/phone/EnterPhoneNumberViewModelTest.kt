@@ -9,11 +9,13 @@ import io.mockk.junit4.MockKRule
 import io.mockk.just
 import io.mockk.runs
 import io.mockk.verify
+import jp.co.soramitsu.androidfoundation.format.unsafeCast
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.sdk.SoraCardEnvironmentType
+import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardFlow
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
@@ -77,7 +79,7 @@ class EnterPhoneNumberViewModelTest {
         every { localeService.code } returns "US"
         every { setActivityResult.setResult(any()) } just runs
         coEvery { kycRepository.getCountries(null) } returns listOf(CountryDial("US", "USA", "+1"))
-        every { inMemoryRepo.logIn } returns false
+        every { inMemoryRepo.flow!!.unsafeCast<SoraCardFlow.SoraCardKycFlow>().logIn } returns false
         coEvery { userSessionRepository.setPhoneNumber(any()) } just runs
         viewModel = EnterPhoneNumberViewModel(
             mainRouter,
@@ -92,7 +94,7 @@ class EnterPhoneNumberViewModelTest {
 
     @Test
     fun `signup with 0`() = runTest {
-        every { inMemoryRepo.logIn } returns false
+        every { inMemoryRepo.flow!!.unsafeCast<SoraCardFlow.SoraCardKycFlow>().logIn } returns false
         advanceUntilIdle()
         assertEquals("", viewModel.state.value.inputTextStateNumber.value.text)
         viewModel.onPhoneChanged(TextFieldValue("02834"))
@@ -102,7 +104,7 @@ class EnterPhoneNumberViewModelTest {
 
     @Test
     fun `login with 0`() = runTest {
-        every { inMemoryRepo.logIn } returns true
+        every { inMemoryRepo.flow!!.unsafeCast<SoraCardFlow.SoraCardKycFlow>().logIn } returns true
         advanceUntilIdle()
         viewModel.setLocale(null)
         advanceUntilIdle()

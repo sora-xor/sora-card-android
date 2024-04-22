@@ -83,6 +83,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":android-foundation"))
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.lifecycle.runtime.compose)
@@ -135,7 +136,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "jp.co.soramitsu"
             artifactId = "android-sora-card"
-            version = "1.0.9"
+            version = "1.1.0"
 
             afterEvaluate {
                 from(components["release"])

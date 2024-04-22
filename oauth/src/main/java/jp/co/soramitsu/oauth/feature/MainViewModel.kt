@@ -10,11 +10,13 @@ import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
 import com.paywings.oauth.android.sdk.service.callback.GetUserDataCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import jp.co.soramitsu.androidfoundation.format.safeCast
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardContractData
+import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardFlow
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
@@ -48,11 +50,7 @@ class MainViewModel @Inject constructor(
         inMemoryRepo.environment = contract.basic.environment
         inMemoryRepo.soraBackEndUrl = contract.soraBackEndUrl
         inMemoryRepo.client = contract.client
-        inMemoryRepo.userAvailableXorAmount = contract.userAvailableXorAmount
-        inMemoryRepo.areAttemptsPaidSuccessfully = contract.areAttemptsPaidSuccessfully
-        inMemoryRepo.isEnoughXorAvailable = contract.isEnoughXorAvailable
-        inMemoryRepo.isIssuancePaid = contract.isIssuancePaid
-        inMemoryRepo.logIn = contract.logIn
+        inMemoryRepo.flow = contract.flow
 
         viewModelScope.launch {
             val initResult = pwoAuthClientProxy.init(
@@ -64,6 +62,22 @@ class MainViewModel @Inject constructor(
                 contract.basic.recaptcha,
             )
             if (initResult.first) {
+                startFirstScreen(contract)
+            } else {
+                _uiState.value = _uiState.value.copy(
+                    error = initResult.second,
+                )
+            }
+        }
+    }
+
+    private suspend fun startFirstScreen(contract: SoraCardContractData) {
+        when (contract.flow) {
+            SoraCardFlow.SoraCardGateHubFlow -> {
+                mainRouter.openGatehubOnboardingStep1()
+            }
+
+            is SoraCardFlow.SoraCardKycFlow -> {
                 if (pwoAuthClientProxy.isSignIn()) {
                     onAuthSucceed()
                 } else {
@@ -73,10 +87,6 @@ class MainViewModel @Inject constructor(
                         mainRouter.openTermsAndConditions()
                     }
                 }
-            } else {
-                _uiState.value = _uiState.value.copy(
-                    error = initResult.second,
-                )
             }
         }
     }
@@ -164,14 +174,15 @@ class MainViewModel @Inject constructor(
 
     fun startKycProcess(activity: Activity) {
         val contract = soraCardContractData ?: return
+        val flow = contract.flow.safeCast<SoraCardFlow.SoraCardKycFlow>() ?: return
         viewModelScope.launch {
             showLoading(true)
             val payWingsKycClient = PayWingsKycClient(
                 activity = activity,
                 whiteLabelCredentials = PayWingsWhiteLabelCredentials(
-                    endpointUrl = contract.kycCredentials.endpointUrl,
-                    username = contract.kycCredentials.username,
-                    password = contract.kycCredentials.password,
+                    endpointUrl = flow.kycCredentials.endpointUrl,
+                    username = flow.kycCredentials.username,
+                    password = flow.kycCredentials.password,
                 ),
                 userCredentials = { mu, rm ->
                     runBlocking {

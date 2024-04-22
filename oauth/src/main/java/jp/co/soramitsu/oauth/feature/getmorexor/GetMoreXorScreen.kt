@@ -3,8 +3,8 @@ package jp.co.soramitsu.oauth.feature.getmorexor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import jp.co.soramitsu.androidfoundation.format.retrieveString
 import jp.co.soramitsu.oauth.base.compose.SelectableDialog
-import jp.co.soramitsu.oauth.base.compose.retrieveString
 
 @Composable
 fun ChooseXorPurchaseMethodDialog(getMoreXorViewModel: GetMoreXorViewModel = hiltViewModel()) {

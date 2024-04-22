@@ -16,8 +16,8 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import jp.co.soramitsu.oauth.base.compose.toTitle
-import jp.co.soramitsu.oauth.base.extension.testTagAsId
+import jp.co.soramitsu.androidfoundation.compose.toTitle
+import jp.co.soramitsu.oauth.base.testTagAsId
 import jp.co.soramitsu.oauth.feature.verify.model.ButtonState
 import jp.co.soramitsu.ui_core.component.button.FilledButton
 import jp.co.soramitsu.ui_core.component.button.LoaderWrapper

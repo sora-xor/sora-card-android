@@ -33,10 +33,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import jp.co.soramitsu.androidfoundation.compose.toTitle
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.Screen
-import jp.co.soramitsu.oauth.base.compose.toTitle
-import jp.co.soramitsu.oauth.base.extension.testTagAsId
+import jp.co.soramitsu.oauth.base.testTagAsId
 import jp.co.soramitsu.oauth.feature.flagEmoji
 import jp.co.soramitsu.oauth.feature.verify.model.ButtonState
 import jp.co.soramitsu.ui_core.component.button.FilledButton

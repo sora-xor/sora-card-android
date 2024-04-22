@@ -1,8 +1,8 @@
 package jp.co.soramitsu.oauth.common.domain
 
 import java.math.BigDecimal
-import jp.co.soramitsu.oauth.base.extension.divideBy
-import jp.co.soramitsu.oauth.base.extension.greaterThan
+import jp.co.soramitsu.androidfoundation.format.divideBy
+import jp.co.soramitsu.androidfoundation.format.greaterThan
 import jp.co.soramitsu.oauth.common.model.EuroLiquiditySufficiency
 import jp.co.soramitsu.oauth.common.model.XorLiquiditySufficiency
 

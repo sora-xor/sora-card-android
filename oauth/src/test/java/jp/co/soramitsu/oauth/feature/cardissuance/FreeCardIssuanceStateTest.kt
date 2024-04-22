@@ -1,8 +1,8 @@
 package jp.co.soramitsu.oauth.feature.cardissuance
 
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.ScreenStatus
-import jp.co.soramitsu.oauth.base.compose.Text
 import jp.co.soramitsu.oauth.feature.cardissuance.state.FreeCardIssuanceState
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
@@ -30,9 +30,9 @@ class FreeCardIssuanceStateTest {
     fun `init EXPECT title and description set up`() {
         assertEquals(
             R.string.card_issuance_screen_free_card_title,
-            (state.titleText as Text.StringRes).id,
+            (state.titleText as TextValue.StringRes).id,
         )
-        (state.descriptionText as Text.StringResWithArgs).let {
+        (state.descriptionText as TextValue.StringResWithArgs).let {
             assertEquals(R.string.card_issuance_screen_free_card_description, it.id)
             assertArrayEquals(arrayOf(100.toString()), it.payload)
         }
@@ -41,7 +41,7 @@ class FreeCardIssuanceStateTest {
     @Test
     fun `set state to ready to render EXPECT data is set correct`() {
         val state = state.copy(screenStatus = ScreenStatus.READY_TO_RENDER)
-        (state.xorSufficiencyText as Text.StringResWithArgs).let {
+        (state.xorSufficiencyText as TextValue.StringResWithArgs).let {
             assertEquals(R.string.details_need_xor_desription, it.id)
             assertArrayEquals(
                 arrayOf(
@@ -54,7 +54,7 @@ class FreeCardIssuanceStateTest {
 
         assertEquals(1f, state.xorSufficiencyPercentage)
         assertEquals(true, state.isGetInsufficientXorButtonEnabled)
-        (state.getInsufficientXorText as Text.StringResWithArgs).let {
+        (state.getInsufficientXorText as TextValue.StringResWithArgs).let {
             assertEquals(R.string.card_issuance_screen_free_card_get_xor, it.id)
             assertArrayEquals(
                 arrayOf(
@@ -68,13 +68,13 @@ class FreeCardIssuanceStateTest {
     @Test
     fun `set state to loading EXPECT data is not pasted`() {
         val state = state.copy(screenStatus = ScreenStatus.LOADING)
-        assertEquals(R.string.cant_fetch_data, (state.xorSufficiencyText as Text.StringRes).id)
+        assertEquals(R.string.cant_fetch_data, (state.xorSufficiencyText as TextValue.StringRes).id)
 
         assertEquals(0f, state.xorSufficiencyPercentage)
         assertEquals(false, state.isGetInsufficientXorButtonEnabled)
         assertEquals(
             R.string.card_issuance_screen_free_card_get_xor,
-            (state.getInsufficientXorText as Text.StringRes).id,
+            (state.getInsufficientXorText as TextValue.StringRes).id,
         )
     }
 }

@@ -43,3 +43,4 @@ dependencyResolutionManagement {
 rootProject.name = "android-sora-card"
 include(":app")
 include(":oauth")
+include(":android-foundation")

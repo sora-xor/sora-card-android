@@ -31,6 +31,8 @@
   <string name="common_change_email">Использовать другой email</string>
   <string name="common_close">Закрыть</string>
   <string name="common_continue">Продолжить</string>
+  <string name="common_done">Готово</string>
+  <string name="common_next">Следующий</string>
   <string name="common_no_spam">Никакого спама! Только для защиты вашего аккаунта</string>
   <string name="common_ok">хорошо</string>
   <string name="common_resend_code">Отправить код снова</string>
@@ -56,7 +58,7 @@
   <string name="enter_phone_number_phone_input_field_label">Номер телефона</string>
   <string name="entry_card_info">Информация о карте</string>
   <string name="exchange_xor">Обменять XOR</string>
-  <string name="expected_volume">Ожидаемое количество</string>
+  <string name="expected_volume">Каков ваш ожидаемый объем обмена?</string>
   <string name="get_more_xor_dialog_buy_option">Купить XOR с помощью карты</string>
   <string name="get_more_xor_dialog_deposit_option">Получить XOR</string>
   <string name="get_more_xor_dialog_description">Вы можете обменять на XOR или купить за евро</string>
@@ -93,9 +95,9 @@
   <string name="no_free_kyc_attempts_description">Вы использовали все бесплатные попытки прохождения процедуры KYC.\n\nПросим вас дождаться следующего обновления приложения, чтобы продолжить с оплачиваемыми попытками.</string>
   <string name="no_free_kyc_attempts_title">Нет больше бесплатных попыток</string>
   <string name="no_number_in_database">В базе данных такого номера нет.\nПожалуйста, введите правильный номер или зарегистрируйте новый.</string>
-  <string name="onboarding_questions">Вступительные вопросы</string>
+  <string name="onboarding_questions" formatted="false">Вступительный вопрос %s из %s</string>
   <string name="onboarding_questions_description">Если вы хотите совершить обмен, ответьте на следующие три вопроса.</string>
-  <string name="opening_reason">Причина обмена</string>
+  <string name="opening_reason">По какой причине вы пользуетесь биржей?</string>
   <string name="paid_attempts_available_later">Платные попытки будут доступны позднее</string>
   <string name="payment_widget_unavailable_confirm">Да, я понимаю</string>
   <string name="payment_widget_unavailable_description">Приносим извинения за неудобства. Мы прилагаем все усилия для решения данной проблемы. Пожалуйста, повторите попытку позже.</string>
@@ -103,9 +105,11 @@
   <string name="payment_widget_unavailable_title">Виджет недоступен</string>
   <string name="phone_number_leading_zero">Введенный формат телефонного номера кажется необычным. При возникновении проблемы рассмотрите возможность удаления ведущего \"0\".</string>
   <string name="register_new_account">Зарегистрировать новую учетную запись</string>
+  <string name="select_many">Вы можете выбрать несколько ответов:</string>
+  <string name="select_one">Выберите один из следующих вариантов:</string>
   <string name="select_your_country">Выберите свою страну</string>
   <string name="sign_up_sora_card">Зарегистрироваться для получения карты SORA</string>
-  <string name="source_of_funds">Источник средств</string>
+  <string name="source_of_funds">Каков источник ваших средств?</string>
   <string name="terms_and_conditions_accept_and_continue">Принять и продолжить</string>
   <string name="terms_and_conditions_confirm_description">Продолжая, вы подтверждаете, что прочитали, поняли и приняли эти правила</string>
   <string name="terms_and_conditions_description">Мы хотим, чтобы вы знали, как именно будет работать сервис SORA Card, кому нужны ваши данные и для чего. Ознакомление с этими правилами поможет вам использовать приложение с уверенностью и спокойствием.</string>
