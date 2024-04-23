@@ -1,4 +1,4 @@
-package jp.co.soramitsu.oauth.base.navigation.di
+package jp.co.soramitsu.oauth.base.navigation
 
 import dagger.Binds
 import dagger.Module
@@ -6,10 +6,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
-import jp.co.soramitsu.oauth.base.navigation.MainRouter
-import jp.co.soramitsu.oauth.base.navigation.MainRouterImpl
-import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
-import jp.co.soramitsu.oauth.base.navigation.SetActivityResultImpl
 
 @InstallIn(SingletonComponent::class)
 @Module

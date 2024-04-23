@@ -11,6 +11,9 @@ import androidx.navigation.navArgument
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.cardissuance.CardIssuanceScreen
 import jp.co.soramitsu.oauth.feature.change.email.ChangeEmailScreen
+import jp.co.soramitsu.oauth.feature.gatehub.GatehubOnboardingStep1Screen
+import jp.co.soramitsu.oauth.feature.gatehub.GatehubOnboardingStep2Screen
+import jp.co.soramitsu.oauth.feature.gatehub.GatehubOnboardingStep3Screen
 import jp.co.soramitsu.oauth.feature.getmorexor.ChooseXorPurchaseMethodDialog
 import jp.co.soramitsu.oauth.feature.getprepared.GetPreparedScreen
 import jp.co.soramitsu.oauth.feature.kyc.result.VerificationFailedScreen
@@ -55,6 +58,18 @@ internal fun SdkNavGraph(
 
         animatedComposable(Destination.SELECT_COUNTRY.route) {
             CountryListScreen()
+        }
+
+        animatedComposable(Destination.GATEHUB_ONBOARDING_STEP_1.route) {
+            GatehubOnboardingStep1Screen()
+        }
+
+        animatedComposable(Destination.GATEHUB_ONBOARDING_STEP_2.route) {
+            GatehubOnboardingStep2Screen()
+        }
+
+        animatedComposable(Destination.GATEHUB_ONBOARDING_STEP_3.route) {
+            GatehubOnboardingStep3Screen()
         }
 
         animatedComposable(

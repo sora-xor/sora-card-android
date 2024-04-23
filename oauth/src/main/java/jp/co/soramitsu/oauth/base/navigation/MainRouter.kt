@@ -9,7 +9,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptionsBuilder
-import jp.co.soramitsu.oauth.base.extension.isAppAvailableCompat
+import jp.co.soramitsu.androidfoundation.intent.isAppAvailableCompat
 import jp.co.soramitsu.oauth.feature.terms.and.conditions.model.WebUrl
 
 interface MainRouter : DefaultLifecycleObserver {
@@ -52,6 +52,10 @@ interface MainRouter : DefaultLifecycleObserver {
     fun openSupportChat()
 
     fun navigate(destinationRoute: String)
+
+    fun openGatehubOnboardingStep1()
+    fun openGatehubOnboardingStep2()
+    fun openGatehubOnboardingStep3()
 }
 
 class MainRouterImpl : MainRouter {
@@ -80,6 +84,18 @@ class MainRouterImpl : MainRouter {
 
     override fun back() {
         navHostController?.popBackStack()
+    }
+
+    override fun openGatehubOnboardingStep1() {
+        navHostController?.navigate(Destination.GATEHUB_ONBOARDING_STEP_1.route)
+    }
+
+    override fun openGatehubOnboardingStep2() {
+        navHostController?.navigate(Destination.GATEHUB_ONBOARDING_STEP_2.route)
+    }
+
+    override fun openGatehubOnboardingStep3() {
+        navHostController?.navigate(Destination.GATEHUB_ONBOARDING_STEP_3.route)
     }
 
     override fun openGetPrepared() {

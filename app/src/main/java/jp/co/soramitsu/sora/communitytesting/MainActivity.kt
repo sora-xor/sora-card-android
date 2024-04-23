@@ -19,6 +19,7 @@ import jp.co.soramitsu.oauth.base.sdk.SoraCardKycCredentials
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardBasicContractData
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardContract
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardContractData
+import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardFlow
 import jp.co.soramitsu.oauth.clients.ClientsFacade
 import jp.co.soramitsu.oauth.feature.flagEmoji
 import jp.co.soramitsu.oauth.theme.AuthSdkTheme
@@ -88,20 +89,22 @@ class MainActivity : ComponentActivity() {
             SoraCardContractData(
                 basic = basic(),
                 locale = Locale.getDefault(),
-                kycCredentials = SoraCardKycCredentials(
-                    endpointUrl = BuildConfig.SORA_CARD_KYC_ENDPOINT_URL,
-                    username = BuildConfig.SORA_CARD_KYC_USERNAME,
-                    password = BuildConfig.SORA_CARD_KYC_PASSWORD,
-                ),
                 client = buildClient(),
+                soraBackEndUrl = BuildConfig.SORA_API_BASE_URL,
+                flow = SoraCardFlow.SoraCardKycFlow(
+                    kycCredentials = SoraCardKycCredentials(
+                        endpointUrl = BuildConfig.SORA_CARD_KYC_ENDPOINT_URL,
+                        username = BuildConfig.SORA_CARD_KYC_USERNAME,
+                        password = BuildConfig.SORA_CARD_KYC_PASSWORD,
+                    ),
 //                userAvailableXorAmount = 19.9,
 //                isEnoughXorAvailable = false,
-                userAvailableXorAmount = 19999.9,
-                isEnoughXorAvailable = true,
-                areAttemptsPaidSuccessfully = true,
-                isIssuancePaid = false,
-                logIn = true,
-                soraBackEndUrl = BuildConfig.SORA_API_BASE_URL,
+                    userAvailableXorAmount = 19999.9,
+                    isEnoughXorAvailable = true,
+                    areAttemptsPaidSuccessfully = true,
+                    isIssuancePaid = false,
+                    logIn = true,
+                ),
             ),
         )
     }

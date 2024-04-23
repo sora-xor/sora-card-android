@@ -6,11 +6,13 @@ import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
 import com.paywings.oauth.android.sdk.service.callback.SignInWithPhoneNumberRequestOtpCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import jp.co.soramitsu.androidfoundation.format.unsafeCast
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
+import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardFlow
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
@@ -141,7 +143,14 @@ class EnterPhoneNumberViewModel @Inject constructor(
     }
 
     fun onPhoneChanged(value: TextFieldValue) {
-        if (inMemoryRepo.logIn.not() && (value.text.getOrNull(0)?.let { it == '0' } == true)) return
+        if (inMemoryRepo.flow!!.unsafeCast<SoraCardFlow.SoraCardKycFlow>().logIn.not() && (
+                value.text.getOrNull(0)?.let {
+                    it == '0'
+                } == true
+                )
+        ) {
+            return
+        }
         if (getPhoneCode().length + value.text.length > PHONE_NUMBER_LENGTH_MAX) {
             return
         }
@@ -152,7 +161,7 @@ class EnterPhoneNumberViewModel @Inject constructor(
             inputTextStateNumber = _state.value.inputTextStateNumber.copy(
                 value = numbers,
                 error = false,
-                descriptionText = if (inMemoryRepo.logIn && value.text.startsWith("0")) R.string.phone_number_leading_zero else R.string.common_no_spam,
+                descriptionText = if (inMemoryRepo.flow!!.unsafeCast<SoraCardFlow.SoraCardKycFlow>().logIn && value.text.startsWith("0")) R.string.phone_number_leading_zero else R.string.common_no_spam,
             ),
             buttonState = _state.value.buttonState.copy(enabled = numbers.text.isNotEmpty() && getPhoneCode().length + numbers.text.length >= PHONE_NUMBER_LENGTH_MIN),
         )

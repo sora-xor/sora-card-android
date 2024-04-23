@@ -15,11 +15,13 @@ import io.mockk.just
 import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
+import jp.co.soramitsu.androidfoundation.format.unsafeCast
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.sdk.SoraCardEnvironmentType
+import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardFlow
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import jp.co.soramitsu.oauth.feature.OAuthCallback
@@ -83,7 +85,7 @@ class VerifyPhoneNumberViewModelTest {
         every { inMemoryRepo.environment } returns SoraCardEnvironmentType.PRODUCTION
         every { timer.setOnTickListener(any()) } just runs
         every { timer.setOnFinishListener(any()) } just runs
-        every { inMemoryRepo.logIn } returns false
+        every { inMemoryRepo.flow!!.unsafeCast<SoraCardFlow.SoraCardKycFlow>().logIn } returns false
         every { timer.start() } returns cdTimer
         every { mainRouter.back() } just runs
         every { mainRouter.openVerifyEmail(any(), any()) } just runs

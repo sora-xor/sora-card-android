@@ -7,11 +7,13 @@ import com.paywings.oauth.android.sdk.service.callback.SignInWithPhoneNumberRequ
 import com.paywings.oauth.android.sdk.service.callback.SignInWithPhoneNumberVerifyOtpCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import jp.co.soramitsu.androidfoundation.format.unsafeCast
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.sdk.SoraCardEnvironmentType
+import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardFlow
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.verify.Timer
@@ -140,7 +142,7 @@ class VerifyPhoneNumberViewModel @Inject constructor(
 
         override fun onShowRegistrationScreen() {
             loading(false)
-            if (inMemoryRepo.logIn) {
+            if (inMemoryRepo.flow!!.unsafeCast<SoraCardFlow.SoraCardKycFlow>().logIn) {
                 mainRouter.openLogInFailedUserNotFound()
             } else {
                 mainRouter.openRegisterUser()

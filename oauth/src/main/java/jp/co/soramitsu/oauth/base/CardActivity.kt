@@ -21,8 +21,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import jp.co.soramitsu.oauth.base.extension.getParcelableCompat
-import jp.co.soramitsu.oauth.base.extension.onActivityBackPressed
+import jp.co.soramitsu.androidfoundation.fragment.onActivityBackPressed
+import jp.co.soramitsu.androidfoundation.intent.getParcelableCompat
 import jp.co.soramitsu.oauth.base.navigation.Destination
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.navigation.SdkNavGraph
@@ -59,7 +59,7 @@ class CardActivity : ComponentActivity() {
     @Inject
     lateinit var mainRouter: MainRouter
 
-    private var authCallback = object : OAuthCallback {
+    private val authCallback = object : OAuthCallback {
         override fun onOAuthSucceed() {
             vm.onAuthSucceed()
         }

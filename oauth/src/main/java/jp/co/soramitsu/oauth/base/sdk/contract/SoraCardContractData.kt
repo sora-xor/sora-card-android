@@ -10,15 +10,26 @@ import kotlinx.parcelize.Parcelize
 data class SoraCardContractData(
     val basic: SoraCardBasicContractData,
     val locale: Locale,
-    val kycCredentials: SoraCardKycCredentials,
     val soraBackEndUrl: String,
     val client: String,
-    val userAvailableXorAmount: Double,
-    val areAttemptsPaidSuccessfully: Boolean,
-    val isEnoughXorAvailable: Boolean,
-    val isIssuancePaid: Boolean,
-    val logIn: Boolean,
+    val flow: SoraCardFlow,
 ) : Parcelable
+
+@Parcelize
+sealed interface SoraCardFlow : Parcelable {
+    @Parcelize
+    data class SoraCardKycFlow(
+        val kycCredentials: SoraCardKycCredentials,
+        val userAvailableXorAmount: Double,
+        val areAttemptsPaidSuccessfully: Boolean,
+        val isEnoughXorAvailable: Boolean,
+        val isIssuancePaid: Boolean,
+        var logIn: Boolean,
+    ) : Parcelable, SoraCardFlow
+
+    @Parcelize
+    data object SoraCardGateHubFlow : SoraCardFlow
+}
 
 @Parcelize
 data class SoraCardBasicContractData(

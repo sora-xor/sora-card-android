@@ -20,6 +20,9 @@ enum class Destination(val route: String) {
     CARD_ISSUANCE_OPTIONS("oauth/cardIssuanceOptions"),
     GET_MORE_XOR_DIALOG("oauth/getMoreXorDialog"),
     USER_NOT_FOUND("oauth/userNotFound"),
+    GATEHUB_ONBOARDING_STEP_1("oauth/gatehubOnboardingStep1"),
+    GATEHUB_ONBOARDING_STEP_2("oauth/gatehubOnboardingStep2"),
+    GATEHUB_ONBOARDING_STEP_3("oauth/gatehubOnboardingStep3"),
 }
 
 const val COUNTRY_CODE = "country_code"

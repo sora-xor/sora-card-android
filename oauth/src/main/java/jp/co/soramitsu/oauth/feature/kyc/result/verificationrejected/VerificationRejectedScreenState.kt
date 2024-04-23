@@ -1,8 +1,8 @@
 package jp.co.soramitsu.oauth.feature.kyc.result.verificationrejected
 
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.ScreenStatus
-import jp.co.soramitsu.oauth.base.compose.Text
 
 data class VerificationRejectedScreenState(
     private val screenStatus: ScreenStatus,
@@ -14,13 +14,13 @@ data class VerificationRejectedScreenState(
     val phone: String,
 ) {
 
-    val kycAttemptsLeftText: Text
+    val kycAttemptsLeftText: TextValue
         get() {
             if (kycFreeAttemptsCount <= 0) {
-                return Text.StringRes(id = R.string.verification_rejected_screen_attempts_used)
+                return TextValue.StringRes(id = R.string.verification_rejected_screen_attempts_used)
             }
 
-            return Text.StringPluralWithArgs(
+            return TextValue.StringPluralWithArgs(
                 id = R.plurals.verification_rejected_screen_attempts_left,
                 amount = kycFreeAttemptsCount,
                 payload = arrayOf(kycFreeAttemptsCount),
@@ -29,15 +29,17 @@ data class VerificationRejectedScreenState(
 
     val shouldTryAgainButtonBeEnabled: Boolean = kycFreeAttemptsCount > 0
 
-    val tryAgainText: Text
+    val tryAgainText: TextValue
         get() {
             if (kycFreeAttemptsCount <= 0) {
-                return Text.StringResWithArgs(
+                return TextValue.StringResWithArgs(
                     id = R.string.verification_rejected_screen_try_again_for_euros,
                     payload = arrayOf(kycAttemptCostInEuros),
                 )
             }
 
-            return Text.StringRes(id = R.string.verification_rejected_screen_try_again_for_free)
+            return TextValue.StringRes(
+                id = R.string.verification_rejected_screen_try_again_for_free,
+            )
         }
 }

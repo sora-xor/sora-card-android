@@ -7,9 +7,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import jp.co.soramitsu.androidfoundation.compose.toTitle
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.extension.testTagAsId
 import jp.co.soramitsu.oauth.base.state.DialogAlertState
+import jp.co.soramitsu.oauth.base.testTagAsId
 import jp.co.soramitsu.ui_core.component.button.TextButton
 import jp.co.soramitsu.ui_core.component.button.properties.Order
 import jp.co.soramitsu.ui_core.component.button.properties.Size
