@@ -45,6 +45,7 @@ fun WebPageScreen(title: String, webUrl: String, viewModel: WebPageViewModel = h
                 modifier = Modifier.fillMaxSize(),
                 factory = { context ->
                     WebView(context).apply {
+                        settings.domStorageEnabled = true
                         webViewClient = object : WebViewClient() {
                             override fun onPageFinished(view: WebView?, url: String?) {
                                 super.onPageFinished(view, url)
