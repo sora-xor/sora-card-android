@@ -136,7 +136,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "jp.co.soramitsu"
             artifactId = "android-sora-card"
-            version = "1.1.1"
+            version = "1.1.2"
 
             afterEvaluate {
                 from(components["release"])
@@ -155,7 +155,7 @@ publishing {
         }
         maven {
             name = "scnRepoLocal"
-            url = uri("${project.buildDir}/scnrepo")
+            url = uri(project.layout.buildDirectory.dir("scnrepo").get().asFile.path)
         }
     }
 }
@@ -169,38 +169,19 @@ koverReport {
         filters {
             excludes {
                 classes(
-                    "*.BuildConfig",
-                    "**.models.*",
-                    "**.core.network.*",
                     "**.di.*",
-                    "**.shared_utils.wsrpc.*",
-                    "*NetworkDataSource",
-                    "*NetworkDataSource\$*",
-                    "*ChainConnection",
-                    "*ChainConnection\$*",
-                    "**.runtime.definitions.TypeDefinitionsTreeV2",
-                    "**.runtime.definitions.TypeDefinitionsTreeV2\$*",
-
-                    // TODO: Coverage these modules by tests
-                    "**.core.rpc.*",
-                    "**.core.utils.*",
-                    "**.core.extrinsic.*",
                 )
             }
         }
-
         xml {
             onCheck = true
             setReportFile(file("${project.rootDir}/report/coverage.xml"))
         }
-
         html {
             onCheck = true
         }
-
         verify {
             onCheck = true
-
             rule {
                 isEnabled = true
 
