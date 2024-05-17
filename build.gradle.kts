@@ -11,7 +11,7 @@ plugins {
 }
 
 tasks.register("clean", Delete::class) {
-    delete(rootProject.buildDir)
+    delete(rootProject.layout.buildDirectory.get().asFile.path)
 }
 
 val ktlint by configurations.creating
@@ -31,11 +31,14 @@ tasks.register<JavaExec>("ktlint") {
     classpath = ktlint
     mainClass.set("com.pinterest.ktlint.Main")
     // see https://pinterest.github.io/ktlint/install/cli/#command-line-usage for more information
+
     args(
         "**/src/**/*.kt",
         "**.kts",
         "!**/build/**",
-        "--reporter=checkstyle,output=${project.buildDir}/reports/checkstyle/ktlint.xml",
+        "--reporter=checkstyle,output=${project.layout.buildDirectory.file(
+            "ktlintreport/ktlint.xml",
+        ).get().asFile.path}",
     )
 }
 
