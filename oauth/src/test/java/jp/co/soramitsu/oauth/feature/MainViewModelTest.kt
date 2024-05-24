@@ -19,6 +19,7 @@ import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.sdk.SoraCardEnvironmentType
 import jp.co.soramitsu.oauth.base.sdk.SoraCardKycCredentials
 import jp.co.soramitsu.oauth.base.sdk.contract.IbanInfo
+import jp.co.soramitsu.oauth.base.sdk.contract.IbanStatus
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardBasicContractData
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardContractData
@@ -167,7 +168,7 @@ class MainViewModelTest {
     fun `vm launch auth success`() = runTest {
         setupViewModel(SoraCardCommonVerification.Failed)
         coEvery { pwoAuthClientProxy.isSignIn() } returns true
-        coEvery { kycRepository.getIbanStatus(any(), any()) } returns Result.success(IbanInfo("", true, ""))
+        coEvery { kycRepository.getIbanStatus(any(), any()) } returns Result.success(IbanInfo("", IbanStatus.ACTIVE, ""))
         advanceUntilIdle()
         val flow = SoraCardFlow.SoraCardKycFlow(
             SoraCardKycCredentials("", "", ""),
@@ -214,7 +215,7 @@ class MainViewModelTest {
     fun `vm launch terms and cond`() = runTest {
         setupViewModel(SoraCardCommonVerification.Failed)
         coEvery { pwoAuthClientProxy.isSignIn() } returns false
-        coEvery { kycRepository.getIbanStatus(any(), any()) } returns Result.success(IbanInfo("", true, ""))
+        coEvery { kycRepository.getIbanStatus(any(), any()) } returns Result.success(IbanInfo("", IbanStatus.ACTIVE, ""))
         coEvery { userSessionRepository.isTermsRead() } returns false
         advanceUntilIdle()
         val flow = SoraCardFlow.SoraCardKycFlow(
