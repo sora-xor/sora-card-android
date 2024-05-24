@@ -87,29 +87,16 @@ class KycRepositoryImpl(
                 val bal = response.availableBalance.let {
                     "%s%.2f".format("€", it / 100.0)
                 }
-                when (response.status) {
-                    IBAN_ACCOUNT_ACTIVE_STATUS -> {
-                        IbanInfo(
-                            iban = response.iban,
-                            active = IbanStatus.ACTIVE,
-                            balance = bal,
-                        )
-                    }
-                    IBAN_ACCOUNT_CLOSED_STATUS -> {
-                        IbanInfo(
-                            iban = response.iban,
-                            active = IbanStatus.CLOSED,
-                            balance = bal,
-                        )
-                    }
-                    else -> {
-                        IbanInfo(
-                            iban = response.statusDescription,
-                            active = IbanStatus.OTHER,
-                            balance = bal,
-                        )
-                    }
-                }
+                IbanInfo(
+                    iban = response.iban,
+                    ibanStatus = when (response.status) {
+                        IBAN_ACCOUNT_ACTIVE_STATUS -> IbanStatus.ACTIVE
+                        IBAN_ACCOUNT_CLOSED_STATUS -> IbanStatus.CLOSED
+                        else -> IbanStatus.OTHER
+                    },
+                    balance = bal,
+                    statusDescription = response.statusDescription,
+                )
             }
         }
 
