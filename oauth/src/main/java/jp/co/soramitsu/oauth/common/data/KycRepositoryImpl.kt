@@ -61,7 +61,7 @@ class KycRepositoryImpl(
     ): Result<KycResponse?> = runCatching {
         apiClient.get(
             bearerToken = accessToken,
-            url = NetworkRequest.GET_KYC_STATUS.url,
+            url = NetworkRequest.GET_KYC_LAST_STATUS.url,
             baseUrl = baseUrl,
         ).body<KycResponse?>()
     }

@@ -118,11 +118,14 @@ internal fun SdkNavGraph(
         }
 
         animatedComposable(
-            Destination.WEB_PAGE.route + Argument.TITLE.path() + Argument.URL.path(),
+            Destination.WEB_PAGE.route + Argument.TITLE.path() + Argument.URL.path() + Argument.FLAG.path(),
         ) { backStackEntry ->
             WebPageScreen(
                 title = backStackEntry.requireArguments().requireString(Argument.TITLE.arg),
                 webUrl = backStackEntry.requireArguments().requireString(Argument.URL.arg),
+                lastPage = backStackEntry.requireArguments().requireString(
+                    Argument.FLAG.arg,
+                ).toBoolean(),
             )
         }
 

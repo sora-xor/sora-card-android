@@ -9,6 +9,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptionsBuilder
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 import jp.co.soramitsu.androidfoundation.intent.isAppAvailableCompat
 import jp.co.soramitsu.oauth.feature.terms.and.conditions.model.WebUrl
 
@@ -38,6 +40,7 @@ interface MainRouter : DefaultLifecycleObserver {
     fun openVerifyEmail(email: String, autoEmailSent: Boolean, clearStack: Boolean = false)
 
     fun openWebPage(@StringRes titleRes: Int, url: WebUrl)
+    fun openWebUrl(url: String)
 
     fun openChangeEmail()
 
@@ -167,10 +170,19 @@ class MainRouterImpl : MainRouter {
         }
     }
 
+    override fun openWebUrl(url: String) {
+        val title = "SORA"
+        val encoded = URLEncoder.encode(url, StandardCharsets.UTF_8.toString())
+        navHostController?.navigate(
+            Destination.WEB_PAGE.route + title.asArgument() + encoded.asArgument() + true.asArgument(),
+        )
+    }
+
     override fun openWebPage(@StringRes titleRes: Int, url: WebUrl) {
         val title = navHostController?.context?.getString(titleRes).orEmpty()
+        val encoded = URLEncoder.encode(url.url, StandardCharsets.UTF_8.toString())
         navHostController?.navigate(
-            Destination.WEB_PAGE.route + title.asArgument() + url.asArgument(),
+            Destination.WEB_PAGE.route + title.asArgument() + encoded.asArgument() + false.asArgument(),
         )
     }
 

@@ -14,6 +14,8 @@ import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxyImpl
 import jp.co.soramitsu.oauth.common.domain.PriceInteractor
+import jp.co.soramitsu.oauth.feature.AccessTokenValidator
+import jp.co.soramitsu.oauth.feature.gatehub.GateHubRepository
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.oauth.network.SoraCardNetworkClient
 
@@ -31,6 +33,16 @@ class CommonModule {
         apiClient: SoraCardNetworkClient,
         userSessionRepository: UserSessionRepository,
     ): KycRepository = KycRepositoryImpl(apiClient, userSessionRepository)
+
+    @Singleton
+    @Provides
+    fun provideGateHubRepository(
+        apiClient: SoraCardNetworkClient,
+        accessTokenValidator: AccessTokenValidator,
+        inMemoryRepo: InMemoryRepo,
+    ): GateHubRepository {
+        return GateHubRepository(apiClient, accessTokenValidator, inMemoryRepo)
+    }
 
     @Provides
     @Singleton

@@ -38,6 +38,7 @@ enum class Argument(val arg: String) {
     LAST_NAME("lastName"),
     TITLE("title"),
     URL("url"),
+    FLAG("flag"),
     ADDITIONAL_DESCRIPTION("additionalDescription"),
 }
 

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Button
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,12 +45,23 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AuthSdkTheme {
+            AuthSdkTheme(
+                darkTheme = true,
+            ) {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     Column(modifier = Modifier.fillMaxSize()) {
                         Button(onClick = { startRegistrationFlow() }) {
                             Text("registration")
                         }
+                        Button(onClick = { startGateHub() }) {
+                            Text("exchange")
+                        }
+                        jp.co.soramitsu.ui_core.component.button.TextButton(
+                            size = Size.ExtraSmall,
+                            order = Order.SECONDARY,
+                            text = "Foo text",
+                            onClick = {},
+                        )
 
                         Text(text = Locale.getISOCountries().joinToString(";"))
                         Text(text = Locale("", "gb").displayCountry + "US".flagEmoji())
@@ -82,6 +94,18 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    private fun startGateHub() {
+        registrationLauncher.launch(
+            SoraCardContractData(
+                basic = basic(),
+                locale = Locale.getDefault(),
+                client = buildClient(),
+                soraBackEndUrl = BuildConfig.SORA_API_BASE_URL,
+                flow = SoraCardFlow.SoraCardGateHubFlow,
+            ),
+        )
     }
 
     private fun startRegistrationFlow() {

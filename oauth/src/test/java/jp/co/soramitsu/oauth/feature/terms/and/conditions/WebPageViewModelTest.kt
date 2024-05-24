@@ -8,6 +8,7 @@ import io.mockk.just
 import io.mockk.runs
 import io.mockk.verify
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
+import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
 import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import jp.co.soramitsu.oauth.feature.terms.and.conditions.model.WebUrl
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -33,24 +34,27 @@ class WebPageViewModelTest {
     @MockK
     private lateinit var mainRouter: MainRouter
 
+    @MockK
+    private lateinit var setActivityResult: SetActivityResult
+
     private lateinit var viewModel: WebPageViewModel
 
     @Before
     fun setUp() {
         every { mainRouter.back() } just runs
-        viewModel = WebPageViewModel(mainRouter)
+        viewModel = WebPageViewModel(mainRouter, setActivityResult)
     }
 
     @Test
     fun `set args EXPECT update toolbar title`() {
-        viewModel.setArgs("Title", "GENERAL_TERMS")
+        viewModel.setArgs("Title", "GENERAL_TERMS", false)
 
         assertEquals("Title", viewModel.toolbarState.value?.basic?.title)
     }
 
     @Test
     fun `set args EXPECT update state`() {
-        viewModel.setArgs("Title", "GENERAL_TERMS")
+        viewModel.setArgs("Title", "https://soracard.com/terms/", false)
 
         assertEquals(WebUrl.GENERAL_TERMS.url, viewModel.state.value.url)
     }

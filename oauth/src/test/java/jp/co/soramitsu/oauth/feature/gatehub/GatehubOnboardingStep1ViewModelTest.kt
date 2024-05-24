@@ -9,6 +9,7 @@ import io.mockk.runs
 import io.mockk.verify
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
+import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import jp.co.soramitsu.oauth.getOrAwaitValue
@@ -43,6 +44,9 @@ class GatehubOnboardingStep1ViewModelTest {
     private lateinit var mainRouter: MainRouter
 
     @MockK
+    private lateinit var inMemoryRepo: InMemoryRepo
+
+    @MockK
     private lateinit var setActivityResult: SetActivityResult
 
     private lateinit var vm: GatehubOnboardingStep1ViewModel
@@ -51,7 +55,8 @@ class GatehubOnboardingStep1ViewModelTest {
     fun setUp() {
         every { mainRouter.openGatehubOnboardingStep2() } just runs
         every { setActivityResult.setResult(any()) } just runs
-        vm = GatehubOnboardingStep1ViewModel(mainRouter, setActivityResult)
+        every { inMemoryRepo.ghExpectedExchangeVolume = any() } just runs
+        vm = GatehubOnboardingStep1ViewModel(mainRouter, setActivityResult, inMemoryRepo)
     }
 
     @Test

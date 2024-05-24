@@ -14,4 +14,7 @@ class InMemoryRepo @Inject constructor() {
     var flow: SoraCardFlow? = null
 
     var soraBackEndUrl = ""
+    var ghExpectedExchangeVolume: Int? = null
+    var ghExchangeReason = emptyList<Int>()
+    var ghSourceOfFunds = emptyList<Int>()
 }

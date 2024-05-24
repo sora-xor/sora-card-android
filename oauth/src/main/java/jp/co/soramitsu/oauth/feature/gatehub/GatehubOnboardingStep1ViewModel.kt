@@ -9,6 +9,7 @@ import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
+import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
@@ -20,6 +21,7 @@ import kotlinx.coroutines.flow.asStateFlow
 class GatehubOnboardingStep1ViewModel @Inject constructor(
     private val mainRouter: MainRouter,
     private val setActivityResult: SetActivityResult,
+    private val inMemoryRepo: InMemoryRepo,
 ) : BaseViewModel() {
 
     private val amounts = listOf(10000.0, 25000.0, 50000.0, 100000.0)
@@ -52,6 +54,7 @@ class GatehubOnboardingStep1ViewModel @Inject constructor(
                 navIcon = R.drawable.ic_toolbar_back,
             ),
         )
+        inMemoryRepo.ghExpectedExchangeVolume = null
     }
 
     override fun onToolbarNavigation() {
@@ -61,6 +64,7 @@ class GatehubOnboardingStep1ViewModel @Inject constructor(
 
     fun onItemSelected(pos: Int) {
         check(pos in 0..amounts.size)
+        inMemoryRepo.ghExpectedExchangeVolume = pos + 1
         _state.value = _state.value.copy(selectedPos = pos, buttonEnabled = true)
     }
 

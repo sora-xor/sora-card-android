@@ -8,6 +8,7 @@ import io.mockk.just
 import io.mockk.runs
 import io.mockk.verify
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
+import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import jp.co.soramitsu.oauth.getOrAwaitValue
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
@@ -41,13 +42,17 @@ class GatehubOnboardingStep2ViewModelTest {
     @MockK
     private lateinit var mainRouter: MainRouter
 
+    @MockK
+    private lateinit var inMemoryRepo: InMemoryRepo
+
     private lateinit var vm: GatehubOnboardingStep2ViewModel
 
     @Before
     fun setUp() {
         every { mainRouter.back() } just runs
         every { mainRouter.openGatehubOnboardingStep3() } just runs
-        vm = GatehubOnboardingStep2ViewModel(mainRouter)
+        every { inMemoryRepo.ghExchangeReason = any() } just runs
+        vm = GatehubOnboardingStep2ViewModel(mainRouter, inMemoryRepo)
     }
 
     @Test
