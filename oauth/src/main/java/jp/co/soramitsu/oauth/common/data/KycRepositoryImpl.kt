@@ -3,6 +3,7 @@ package jp.co.soramitsu.oauth.common.data
 import io.ktor.client.call.body
 import java.util.UUID
 import jp.co.soramitsu.oauth.base.sdk.contract.IbanInfo
+import jp.co.soramitsu.oauth.base.sdk.contract.IbanStatus
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.model.CountryCodeDto
@@ -11,6 +12,7 @@ import jp.co.soramitsu.oauth.common.model.FeesDto
 import jp.co.soramitsu.oauth.common.model.GetReferenceNumberRequest
 import jp.co.soramitsu.oauth.common.model.GetReferenceNumberResponse
 import jp.co.soramitsu.oauth.common.model.IbanAccountResponse.Companion.IBAN_ACCOUNT_ACTIVE_STATUS
+import jp.co.soramitsu.oauth.common.model.IbanAccountResponse.Companion.IBAN_ACCOUNT_CLOSED_STATUS
 import jp.co.soramitsu.oauth.common.model.IbanAccountResponseWrapper
 import jp.co.soramitsu.oauth.common.model.KycAttemptsDto
 import jp.co.soramitsu.oauth.common.model.KycResponse
@@ -85,18 +87,28 @@ class KycRepositoryImpl(
                 val bal = response.availableBalance.let {
                     "%s%.2f".format("€", it / 100.0)
                 }
-                if (response.status == IBAN_ACCOUNT_ACTIVE_STATUS) {
-                    IbanInfo(
-                        iban = response.iban,
-                        active = true,
-                        balance = bal,
-                    )
-                } else {
-                    IbanInfo(
-                        iban = response.statusDescription,
-                        active = false,
-                        balance = bal,
-                    )
+                when (response.status) {
+                    IBAN_ACCOUNT_ACTIVE_STATUS -> {
+                        IbanInfo(
+                            iban = response.iban,
+                            active = IbanStatus.ACTIVE,
+                            balance = bal,
+                        )
+                    }
+                    IBAN_ACCOUNT_CLOSED_STATUS -> {
+                        IbanInfo(
+                            iban = response.iban,
+                            active = IbanStatus.CLOSED,
+                            balance = bal,
+                        )
+                    }
+                    else -> {
+                        IbanInfo(
+                            iban = response.statusDescription,
+                            active = IbanStatus.OTHER,
+                            balance = bal,
+                        )
+                    }
                 }
             }
         }

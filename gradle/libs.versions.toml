@@ -26,7 +26,7 @@ mockk = "1.13.8"
 coroutine = "1.7.3"
 pinview = "1.4.4"
 pwoauth = "2.0.0"
-pwkyc = "1.1.0"
+pwkyc = "1.2.0"
 kover = "0.7.6"
 
 [libraries]

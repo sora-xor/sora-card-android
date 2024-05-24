@@ -5,9 +5,15 @@ import kotlinx.parcelize.Parcelize
 
 data class IbanInfo(
     val iban: String,
-    val active: Boolean,
+    val active: IbanStatus,
     val balance: String,
 )
+
+enum class IbanStatus {
+    ACTIVE,
+    CLOSED,
+    OTHER,
+}
 
 enum class SoraCardCommonVerification {
     Failed,
