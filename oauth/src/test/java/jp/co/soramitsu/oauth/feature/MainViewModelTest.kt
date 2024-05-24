@@ -28,6 +28,7 @@ import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.common.model.AccessTokenResponse
 import jp.co.soramitsu.oauth.domain.MainCoroutineRule
+import jp.co.soramitsu.oauth.feature.gatehub.GateHubRepository
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -69,6 +70,9 @@ class MainViewModelTest {
     private lateinit var setActivityResult: SetActivityResult
 
     @MockK
+    private lateinit var gateHubRepository: GateHubRepository
+
+    @MockK
     private lateinit var activity: Activity
 
     @MockK
@@ -86,6 +90,7 @@ class MainViewModelTest {
         every { mainRouter.openGetPrepared() } returns Unit
         every { mainRouter.openVerificationFailed(any()) } returns Unit
         every { mainRouter.openVerificationSuccessful() } just runs
+        every { mainRouter.openWebUrl(any()) } just runs
         every { mainRouter.openGatehubOnboardingStep1() } just runs
         every { mainRouter.openTermsAndConditions() } just runs
         every { setActivityResult.setResult(any()) } just runs
@@ -119,12 +124,15 @@ class MainViewModelTest {
             pwoAuthClientProxy,
             tokenValidator,
             setActivityResult,
+            gateHubRepository,
         )
     }
 
     @Test
     fun `vm launch gatehub`() = runTest {
         setupViewModel(SoraCardCommonVerification.Failed)
+        coEvery { gateHubRepository.onboarded() } returns Result.success(false)
+        coEvery { gateHubRepository.getIframe() } returns Result.success("iurl")
         advanceUntilIdle()
         val data = SoraCardContractData(
             basic = SoraCardBasicContractData(

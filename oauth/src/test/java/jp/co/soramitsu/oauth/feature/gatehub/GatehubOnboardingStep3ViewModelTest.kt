@@ -1,6 +1,7 @@
 package jp.co.soramitsu.oauth.feature.gatehub
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
@@ -8,6 +9,7 @@ import io.mockk.just
 import io.mockk.runs
 import io.mockk.verify
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
+import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import jp.co.soramitsu.oauth.getOrAwaitValue
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
@@ -41,13 +43,21 @@ class GatehubOnboardingStep3ViewModelTest {
     @MockK
     private lateinit var mainRouter: MainRouter
 
+    @MockK
+    private lateinit var inMemoryRepo: InMemoryRepo
+
+    @MockK
+    private lateinit var gateHubRepository: GateHubRepository
+
     private lateinit var vm: GatehubOnboardingStep3ViewModel
 
     @Before
     fun setUp() {
         every { mainRouter.back() } just runs
         every { mainRouter.openCountryList() } just runs
-        vm = GatehubOnboardingStep3ViewModel(mainRouter)
+        every { inMemoryRepo.ghSourceOfFunds = any() } just runs
+        every { mainRouter.openWebUrl(any()) } just runs
+        vm = GatehubOnboardingStep3ViewModel(mainRouter, inMemoryRepo, gateHubRepository)
     }
 
     @Test
@@ -69,8 +79,11 @@ class GatehubOnboardingStep3ViewModelTest {
     @Test
     fun `next step`() = runTest {
         advanceUntilIdle()
+        coEvery { gateHubRepository.onboardUser() } returns Result.success(0 to "")
+        coEvery { gateHubRepository.getIframe() } returns Result.success("iurl")
         vm.onNext()
-        verify { mainRouter.openCountryList() }
+        advanceUntilIdle()
+        verify { mainRouter.openWebUrl("iurl") }
     }
 
     @Test

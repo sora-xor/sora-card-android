@@ -58,7 +58,7 @@ class CardIssuanceViewModel @Inject constructor(
     }
 
     private fun fetchXorValues() = viewModelScope.launch {
-        kotlin.runCatching {
+        runCatching {
             val xorLiquiditySufficiency =
                 priceInteractor.calculateXorLiquiditySufficiency().getOrThrow()
             val euroLiquiditySufficiency =

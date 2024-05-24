@@ -3,6 +3,7 @@ package jp.co.soramitsu.oauth.feature.terms.and.conditions
 import android.annotation.SuppressLint
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,15 +22,22 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import jp.co.soramitsu.oauth.base.compose.Screen
-import jp.co.soramitsu.oauth.feature.terms.and.conditions.model.WebUrl
 import jp.co.soramitsu.ui_core.resources.Dimens
 import jp.co.soramitsu.ui_core.theme.customColors
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
-fun WebPageScreen(title: String, webUrl: String, viewModel: WebPageViewModel = hiltViewModel()) {
+fun WebPageScreen(
+    title: String,
+    webUrl: String,
+    lastPage: Boolean,
+    viewModel: WebPageViewModel = hiltViewModel(),
+) {
     LaunchedEffect(Unit) {
-        viewModel.setArgs(title, webUrl)
+        viewModel.setArgs(title, webUrl, lastPage)
+    }
+    BackHandler {
+        viewModel.onToolbarNavigation()
     }
 
     Screen(
@@ -53,7 +61,7 @@ fun WebPageScreen(title: String, webUrl: String, viewModel: WebPageViewModel = h
                             }
                         }
                         settings.javaScriptEnabled = true
-                        loadUrl(WebUrl.valueOf(webUrl).url)
+                        loadUrl(webUrl)
                     }
                 },
             )
@@ -81,7 +89,9 @@ fun ProgressDialog() {
             contentAlignment = Alignment.Center,
         ) {
             CircularProgressIndicator(
-                modifier = Modifier.size(Dimens.x6).padding(Dimens.x1),
+                modifier = Modifier
+                    .size(Dimens.x6)
+                    .padding(Dimens.x1),
                 color = MaterialTheme.customColors.fgPrimary,
             )
         }

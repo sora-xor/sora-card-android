@@ -21,6 +21,7 @@ import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.common.model.AccessTokenResponse
+import jp.co.soramitsu.oauth.feature.gatehub.GateHubRepository
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,6 +38,7 @@ class MainViewModel @Inject constructor(
     private val pwoAuthClientProxy: PWOAuthClientProxy,
     private val tokenValidator: AccessTokenValidator,
     private val setActivityResult: SetActivityResult,
+    private val gateHubRepository: GateHubRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MainScreenUiState())
@@ -74,7 +76,23 @@ class MainViewModel @Inject constructor(
     private suspend fun startFirstScreen(contract: SoraCardContractData) {
         when (contract.flow) {
             SoraCardFlow.SoraCardGateHubFlow -> {
-                mainRouter.openGatehubOnboardingStep1()
+                gateHubRepository.onboarded()
+                    .onSuccess {
+                        if (it) {
+                            gateHubRepository.getIframe()
+                                .onSuccess { url ->
+                                    mainRouter.openWebUrl(url)
+                                }
+                                .onFailure {
+                                    _uiState.value = _uiState.value.copy(error = it.localizedMessage)
+                                }
+                        } else {
+                            mainRouter.openGatehubOnboardingStep1()
+                        }
+                    }
+                    .onFailure {
+                        _uiState.value = _uiState.value.copy(error = it.localizedMessage)
+                    }
             }
 
             is SoraCardFlow.SoraCardKycFlow -> {

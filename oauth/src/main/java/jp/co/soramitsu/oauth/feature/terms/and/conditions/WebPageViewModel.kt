@@ -6,8 +6,9 @@ import javax.inject.Inject
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
+import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
+import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.feature.terms.and.conditions.model.WebPageState
-import jp.co.soramitsu.oauth.feature.terms.and.conditions.model.WebUrl
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
@@ -15,10 +16,12 @@ import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
 @HiltViewModel
 class WebPageViewModel @Inject constructor(
     private val mainRouter: MainRouter,
+    private val setActivityResult: SetActivityResult,
 ) : BaseViewModel() {
 
     var state = mutableStateOf(WebPageState())
         private set
+    private var lastPage: Boolean = false
 
     init {
         mToolbarState.value = SoramitsuToolbarState(
@@ -31,7 +34,7 @@ class WebPageViewModel @Inject constructor(
         )
     }
 
-    fun setArgs(title: String, webUrl: String) {
+    fun setArgs(title: String, webUrl: String, lp: Boolean) {
         mToolbarState.value = mToolbarState.value?.copy(
             basic = BasicToolbarState(
                 title = title,
@@ -39,7 +42,8 @@ class WebPageViewModel @Inject constructor(
                 navIcon = R.drawable.ic_toolbar_back,
             ),
         )
-        state.value = state.value.copy(url = WebUrl.valueOf(webUrl).url)
+        lastPage = lp
+        state.value = state.value.copy(url = webUrl)
     }
 
     fun onFinishLoading() {
@@ -47,6 +51,7 @@ class WebPageViewModel @Inject constructor(
     }
 
     override fun onToolbarNavigation() {
-        mainRouter.back()
+        super.onToolbarNavigation()
+        if (lastPage) setActivityResult.setResult(SoraCardResult.Canceled) else mainRouter.back()
     }
 }

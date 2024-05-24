@@ -6,6 +6,7 @@ import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
+import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
@@ -15,6 +16,7 @@ import kotlinx.coroutines.flow.asStateFlow
 @HiltViewModel
 class GatehubOnboardingStep2ViewModel @Inject constructor(
     private val mainRouter: MainRouter,
+    private val inMemoryRepo: InMemoryRepo,
 ) : BaseViewModel() {
 
     private val reasons = listOf(
@@ -46,6 +48,7 @@ class GatehubOnboardingStep2ViewModel @Inject constructor(
                 navIcon = R.drawable.ic_toolbar_back,
             ),
         )
+        inMemoryRepo.ghExchangeReason = emptyList()
     }
 
     override fun onToolbarNavigation() {
@@ -56,6 +59,7 @@ class GatehubOnboardingStep2ViewModel @Inject constructor(
     fun onItemSelected(pos: Int) {
         check(pos in 0..reasons.lastIndex)
         if (selectedItems.contains(pos)) selectedItems.remove(pos) else selectedItems.add(pos)
+        inMemoryRepo.ghExchangeReason = selectedItems.map { it + 1 }
         _state.value = _state.value.copy(selectedPos = selectedItems.toList(), buttonEnabled = true)
     }
 

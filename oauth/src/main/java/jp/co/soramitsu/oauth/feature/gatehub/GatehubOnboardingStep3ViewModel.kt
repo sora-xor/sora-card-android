@@ -1,20 +1,26 @@
 package jp.co.soramitsu.oauth.feature.gatehub
 
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
+import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
+import jp.co.soramitsu.oauth.base.state.DialogAlertState
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class GatehubOnboardingStep3ViewModel @Inject constructor(
     private val mainRouter: MainRouter,
+    private val inMemoryRepo: InMemoryRepo,
+    private val gateHubRepository: GateHubRepository,
 ) : BaseViewModel() {
 
     private val sources = listOf(
@@ -45,6 +51,7 @@ class GatehubOnboardingStep3ViewModel @Inject constructor(
                 navIcon = R.drawable.ic_toolbar_back,
             ),
         )
+        inMemoryRepo.ghSourceOfFunds = emptyList()
     }
 
     override fun onToolbarNavigation() {
@@ -55,10 +62,43 @@ class GatehubOnboardingStep3ViewModel @Inject constructor(
     fun onItemSelected(pos: Int) {
         check(pos in 0..sources.lastIndex)
         if (selectedItems.contains(pos)) selectedItems.remove(pos) else selectedItems.add(pos)
+        inMemoryRepo.ghSourceOfFunds = selectedItems.map { it + 1 }
         _state.value = _state.value.copy(selectedPos = selectedItems.toList(), buttonEnabled = true)
     }
 
     fun onNext() {
-        mainRouter.openCountryList()
+        viewModelScope.launch {
+            gateHubRepository.onboardUser()
+                .onSuccess { (code, desc) ->
+                    if (code == 0) {
+                        gateHubRepository.getIframe()
+                            .onSuccess {
+                                mainRouter.openWebUrl(it)
+                            }
+                            .onFailure {
+                                dialogState = DialogAlertState(
+                                    R.string.card_attention_text,
+                                    it.localizedMessage,
+                                    true,
+                                    { dialogState = null },
+                                    { dialogState = null },
+                                )
+                            }
+                    } else {
+                        dialogState = DialogAlertState(
+                            desc, null, true, { dialogState = null }, { dialogState = null },
+                        )
+                    }
+                }
+                .onFailure {
+                    dialogState = DialogAlertState(
+                        R.string.card_attention_text,
+                        it.localizedMessage,
+                        true,
+                        { dialogState = null },
+                        { dialogState = null },
+                    )
+                }
+        }
     }
 }
