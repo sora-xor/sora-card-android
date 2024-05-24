@@ -5,8 +5,9 @@ import kotlinx.parcelize.Parcelize
 
 data class IbanInfo(
     val iban: String,
-    val active: IbanStatus,
+    val ibanStatus: IbanStatus,
     val balance: String,
+    val statusDescription: String,
 )
 
 enum class IbanStatus {
