@@ -136,7 +136,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "jp.co.soramitsu"
             artifactId = "android-sora-card"
-            version = "1.1.6"
+            version = "1.1.7"
 
             afterEvaluate {
                 from(components["release"])
