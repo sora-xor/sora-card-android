@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
@@ -27,6 +28,7 @@ import jp.co.soramitsu.oauth.theme.AuthSdkTheme
 import jp.co.soramitsu.ui_core.component.button.FilledButton
 import jp.co.soramitsu.ui_core.component.button.properties.Order
 import jp.co.soramitsu.ui_core.component.button.properties.Size
+import jp.co.soramitsu.ui_core.theme.customColors
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
@@ -39,6 +41,8 @@ class MainActivity : ComponentActivity() {
         Log.e("srms", "contract result $it")
     }
 
+    private val dark: Boolean = false
+
     @Inject
     lateinit var facade: ClientsFacade
 
@@ -46,9 +50,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AuthSdkTheme(
-                darkTheme = true,
+                darkTheme = dark,
             ) {
-                Surface(modifier = Modifier.fillMaxSize()) {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.customColors.bgPage,
+                ) {
                     Column(modifier = Modifier.fillMaxSize()) {
                         Button(onClick = { startRegistrationFlow() }) {
                             Text("registration")
@@ -103,6 +110,7 @@ class MainActivity : ComponentActivity() {
                 locale = Locale.getDefault(),
                 client = buildClient(),
                 soraBackEndUrl = BuildConfig.SORA_API_BASE_URL,
+                clientDark = dark,
                 flow = SoraCardFlow.SoraCardGateHubFlow,
             ),
         )
@@ -115,6 +123,7 @@ class MainActivity : ComponentActivity() {
                 locale = Locale.getDefault(),
                 client = buildClient(),
                 soraBackEndUrl = BuildConfig.SORA_API_BASE_URL,
+                clientDark = dark,
                 flow = SoraCardFlow.SoraCardKycFlow(
                     kycCredentials = SoraCardKycCredentials(
                         endpointUrl = BuildConfig.SORA_CARD_KYC_ENDPOINT_URL,

@@ -16,7 +16,7 @@ class GateHubRepository(
     private val inMemoryRepo: InMemoryRepo,
 ) {
 
-    suspend fun getIframe(): Result<String> {
+    suspend fun getIframe(): Result<IframeModel> {
         val token = when (val validity = accessTokenValidator.checkAccessTokenValidity()) {
             is AccessTokenResponse.Token -> validity.token
             else -> null
@@ -32,7 +32,11 @@ class GateHubRepository(
             when (response.status.value) {
                 200 -> {
                     val body = response.body<GetIframeResponse>()
-                    body.url.orEmpty()
+                    IframeModel(
+                        code = body.sc,
+                        desc = body.sd,
+                        url = body.url.orEmpty(),
+                    )
                 }
                 401 -> {
                     throw IllegalStateException("Failed - GetIframe|Unauthorised")
@@ -131,6 +135,12 @@ private data class GetIframeRequestBody(
     val type: Int,
 )
 
+class IframeModel(
+    val code: Int,
+    val desc: String,
+    val url: String,
+)
+
 @Serializable
 private data class GetIframeResponse(
     @SerialName("CallerReferenceID")
@@ -143,8 +153,6 @@ private data class GetIframeResponse(
     val sd: String,
     @SerialName("Url")
     val url: String?,
-    @SerialName("UrlValidTo")
-    val urlValidTo: String,
 )
 
 @Serializable

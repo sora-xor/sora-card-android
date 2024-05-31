@@ -80,8 +80,15 @@ class MainViewModel @Inject constructor(
                     .onSuccess {
                         if (it) {
                             gateHubRepository.getIframe()
-                                .onSuccess { url ->
-                                    mainRouter.openWebUrl(url)
+                                .onSuccess { model ->
+                                    when (model.code) {
+                                        0 -> {
+                                            mainRouter.openWebUrl(model.url)
+                                        }
+                                        else -> {
+                                            _uiState.value = _uiState.value.copy(error = "Error ${model.code}:${model.desc}")
+                                        }
+                                    }
                                 }
                                 .onFailure {
                                     _uiState.value = _uiState.value.copy(error = it.localizedMessage)
