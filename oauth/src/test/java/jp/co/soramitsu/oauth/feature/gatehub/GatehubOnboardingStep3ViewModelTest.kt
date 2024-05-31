@@ -80,7 +80,7 @@ class GatehubOnboardingStep3ViewModelTest {
     fun `next step`() = runTest {
         advanceUntilIdle()
         coEvery { gateHubRepository.onboardUser() } returns Result.success(0 to "")
-        coEvery { gateHubRepository.getIframe() } returns Result.success("iurl")
+        coEvery { gateHubRepository.getIframe() } returns Result.success(IframeModel(0, "", "iurl"))
         vm.onNext()
         advanceUntilIdle()
         verify { mainRouter.openWebUrl("iurl") }

@@ -73,7 +73,20 @@ class GatehubOnboardingStep3ViewModel @Inject constructor(
                     if (code == 0) {
                         gateHubRepository.getIframe()
                             .onSuccess {
-                                mainRouter.openWebUrl(it)
+                                when (it.code) {
+                                    0 -> {
+                                        mainRouter.openWebUrl(it.url)
+                                    }
+                                    else -> {
+                                        dialogState = DialogAlertState(
+                                            R.string.card_attention_text,
+                                            "Error ${it.code}:${it.desc}",
+                                            true,
+                                            { dialogState = null },
+                                            { dialogState = null },
+                                        )
+                                    }
+                                }
                             }
                             .onFailure {
                                 dialogState = DialogAlertState(

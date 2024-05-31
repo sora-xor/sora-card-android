@@ -30,6 +30,7 @@ import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.common.model.AccessTokenResponse
 import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import jp.co.soramitsu.oauth.feature.gatehub.GateHubRepository
+import jp.co.soramitsu.oauth.feature.gatehub.IframeModel
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -133,7 +134,7 @@ class MainViewModelTest {
     fun `vm launch gatehub`() = runTest {
         setupViewModel(SoraCardCommonVerification.Failed)
         coEvery { gateHubRepository.onboarded() } returns Result.success(false)
-        coEvery { gateHubRepository.getIframe() } returns Result.success("iurl")
+        coEvery { gateHubRepository.getIframe() } returns Result.success(IframeModel(0, "", "iurl"))
         advanceUntilIdle()
         val data = SoraCardContractData(
             basic = SoraCardBasicContractData(
@@ -146,6 +147,7 @@ class MainViewModelTest {
             locale = Locale.ITALY,
             soraBackEndUrl = "",
             client = "",
+            clientDark = true,
             flow = SoraCardFlow.SoraCardGateHubFlow,
         )
         viewModel.launch(data, activity)
@@ -191,6 +193,7 @@ class MainViewModelTest {
             locale = Locale.ITALY,
             soraBackEndUrl = "",
             client = "",
+            clientDark = true,
             flow = flow,
         )
         viewModel.launch(data, activity)
@@ -241,6 +244,7 @@ class MainViewModelTest {
             locale = Locale.ITALY,
             soraBackEndUrl = "",
             client = "",
+            clientDark = true,
             flow = flow,
         )
         viewModel.launch(data, activity)

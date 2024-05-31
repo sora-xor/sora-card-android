@@ -100,13 +100,13 @@ class CardActivity : ComponentActivity() {
             val navController = rememberNavController()
             mainRouter.attachNavController(this, navController)
             lifecycle.addObserver(mainRouter)
-            MainCardScreen(navController)
+            MainCardScreen(navController, contractData.clientDark)
         }
     }
 
     @Composable
-    private fun MainCardScreen(navController: NavHostController) {
-        AuthSdkTheme {
+    private fun MainCardScreen(navController: NavHostController, dark: Boolean) {
+        AuthSdkTheme(darkTheme = dark) {
             Box(modifier = Modifier.fillMaxWidth()) {
                 SdkNavGraph(
                     navHostController = navController,

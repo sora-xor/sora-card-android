@@ -12,6 +12,7 @@ data class SoraCardContractData(
     val locale: Locale,
     val soraBackEndUrl: String,
     val client: String,
+    val clientDark: Boolean,
     val flow: SoraCardFlow,
 ) : Parcelable
 
