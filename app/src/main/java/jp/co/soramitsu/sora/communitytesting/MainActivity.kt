@@ -3,14 +3,17 @@ package jp.co.soramitsu.sora.communitytesting
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,6 +28,8 @@ import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardFlow
 import jp.co.soramitsu.oauth.clients.ClientsFacade
 import jp.co.soramitsu.oauth.feature.flagEmoji
 import jp.co.soramitsu.oauth.theme.AuthSdkTheme
+import jp.co.soramitsu.oauth.theme.darkScrim
+import jp.co.soramitsu.oauth.theme.lightScrim
 import jp.co.soramitsu.ui_core.component.button.FilledButton
 import jp.co.soramitsu.ui_core.component.button.properties.Order
 import jp.co.soramitsu.ui_core.component.button.properties.Size
@@ -41,22 +46,38 @@ class MainActivity : ComponentActivity() {
         Log.e("srms", "contract result $it")
     }
 
-    private val dark: Boolean = false
+    private val dark: Boolean = true
 
     @Inject
     lateinit var facade: ClientsFacade
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//        WindowCompat.setDecorFitsSystemWindows(window, false)
+        enableEdgeToEdge()
         setContent {
+            DisposableEffect(key1 = dark) {
+                enableEdgeToEdge(
+                    statusBarStyle = SystemBarStyle.auto(
+                        android.graphics.Color.TRANSPARENT,
+                        android.graphics.Color.TRANSPARENT,
+                    ) { dark },
+                    navigationBarStyle = SystemBarStyle.auto(
+                        lightScrim,
+                        darkScrim,
+                    ) { dark },
+                )
+                onDispose { }
+            }
             AuthSdkTheme(
                 darkTheme = dark,
             ) {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize(),
                     color = MaterialTheme.customColors.bgPage,
                 ) {
-                    Column(modifier = Modifier.fillMaxSize()) {
+                    Column(modifier = Modifier.fillMaxSize().systemBarsPadding()) {
                         Button(onClick = { startRegistrationFlow() }) {
                             Text("registration")
                         }
@@ -73,7 +94,11 @@ class MainActivity : ComponentActivity() {
                         Text(text = Locale.getISOCountries().joinToString(";"))
                         Text(text = Locale("", "gb").displayCountry + "US".flagEmoji())
 
-                        FilledButton(size = Size.Large, order = Order.SECONDARY, text = "text") {
+                        FilledButton(
+                            size = Size.Large,
+                            order = Order.SECONDARY,
+                            text = "text",
+                        ) {
                             lifecycleScope.launch {
                                 facade.init(
                                     basic(),

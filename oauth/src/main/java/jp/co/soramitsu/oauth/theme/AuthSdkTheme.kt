@@ -28,6 +28,9 @@ import jp.co.soramitsu.ui_core.theme.darkColors
 import jp.co.soramitsu.ui_core.theme.defaultCustomTypography
 import jp.co.soramitsu.ui_core.theme.lightColors
 
+val lightScrim = android.graphics.Color.argb(0xe6, 0xFF, 0xFF, 0xFF)
+val darkScrim = android.graphics.Color.argb(0x80, 0x1b, 0x1b, 0x1b)
+
 @Composable
 fun AuthSdkTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
     AppTheme(
