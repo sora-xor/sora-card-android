@@ -1,6 +1,5 @@
 package jp.co.soramitsu.oauth.base.compose
 
-import android.util.Log
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -50,7 +49,6 @@ fun Screen(
             )
         },
     ) { padding ->
-        Log.e("foxx", "scree $padding")
         Box(
             modifier = Modifier.fillMaxSize().padding(padding),
         ) {
