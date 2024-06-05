@@ -29,7 +29,7 @@ fun DialogAlert(state: DialogAlertState) {
             { Text(text = message, style = MaterialTheme.customTypography.textM) }
         },
         onDismissRequest = state.onDismiss,
-        backgroundColor = MaterialTheme.customColors.bgPage,
+        backgroundColor = MaterialTheme.customColors.bgSurface,
         confirmButton = {
             TextButton(
                 modifier = Modifier

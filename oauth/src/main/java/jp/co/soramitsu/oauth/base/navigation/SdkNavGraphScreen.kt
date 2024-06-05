@@ -1,8 +1,10 @@
 package jp.co.soramitsu.oauth.base.navigation
 
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -38,7 +40,11 @@ internal fun SdkNavGraph(
     startDestination: Destination,
     authCallback: OAuthCallback,
 ) {
-    NavHost(navHostController, startDestination = startDestination.route) {
+    NavHost(
+        modifier = Modifier.systemBarsPadding(),
+        navController = navHostController,
+        startDestination = startDestination.route,
+    ) {
         animatedComposable(Destination.INIT_LOADING.route) {
             InitLoadingScreen()
         }
