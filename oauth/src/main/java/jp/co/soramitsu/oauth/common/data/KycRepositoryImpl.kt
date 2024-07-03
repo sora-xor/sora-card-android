@@ -1,7 +1,7 @@
 package jp.co.soramitsu.oauth.common.data
 
-import io.ktor.client.call.body
 import java.util.UUID
+import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.sdk.contract.IbanInfo
 import jp.co.soramitsu.oauth.base.sdk.contract.IbanStatus
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
@@ -22,11 +22,20 @@ import jp.co.soramitsu.oauth.common.model.XorEuroPrice
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.oauth.network.NetworkRequest
 import jp.co.soramitsu.oauth.network.SoraCardNetworkClient
-import jp.co.soramitsu.xnetworking.basic.common.Utils.toDoubleNan
-import kotlinx.serialization.json.Json
+import kotlinx.serialization.builtins.MapSerializer
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
+
+fun String.toDoubleNan(): Double? = this.toDoubleOrNull()?.let {
+    if (it.isNaN()) null else it
+}
 
 class KycRepositoryImpl(
     private val apiClient: SoraCardNetworkClient,
+    private val inMemoryRepo: InMemoryRepo,
     private val userSessionRepository: UserSessionRepository,
 ) : KycRepository {
 
@@ -40,8 +49,9 @@ class KycRepositoryImpl(
         if (cacheReference.isNotEmpty()) return Result.success(cacheReference)
         return runCatching {
             val ref = apiClient.post(
+                header = inMemoryRepo.networkHeader,
                 bearerToken = accessToken,
-                url = NetworkRequest.GET_REFERENCE_NUMBER.url,
+                url = inMemoryRepo.url(null, NetworkRequest.GET_REFERENCE_NUMBER),
                 body = GetReferenceNumberRequest(
                     referenceID = UUID.randomUUID().toString(),
                     mobileNumber = phoneNumber,
@@ -50,8 +60,13 @@ class KycRepositoryImpl(
                     documentChanged = false,
                     additionalData = "",
                 ),
-            ).body<GetReferenceNumberResponse>()
-                .referenceNumber
+                deserializer = GetReferenceNumberResponse.serializer(),
+            ).parse { value, _ ->
+                checkNotNull(value) {
+                    // Normally should not be encountered
+                    "Failed - Internal error"
+                }.referenceNumber
+            }
             cacheReference = ref
             cacheReference
         }
@@ -62,10 +77,16 @@ class KycRepositoryImpl(
         baseUrl: String? = null,
     ): Result<KycResponse?> = runCatching {
         apiClient.get(
+            header = inMemoryRepo.networkHeader,
             bearerToken = accessToken,
-            url = NetworkRequest.GET_KYC_LAST_STATUS.url,
-            baseUrl = baseUrl,
-        ).body<KycResponse?>()
+            url = inMemoryRepo.url(baseUrl, NetworkRequest.GET_KYC_LAST_STATUS),
+            deserializer = KycResponse.serializer(),
+        ).parse { value, _ ->
+            checkNotNull(value) {
+                // Normally should not be encountered
+                "Failed - Internal error"
+            }
+        }
     }
 
     private var cacheKycResponse: Pair<SoraCardCommonVerification, KycResponse?>? = null
@@ -79,10 +100,16 @@ class KycRepositoryImpl(
     override suspend fun getIbanStatus(accessToken: String, baseUrl: String?): Result<IbanInfo?> =
         runCatching {
             val wrapper = apiClient.get(
-                accessToken,
-                NetworkRequest.GET_IBAN_DESC.url,
-                baseUrl,
-            ).body<IbanAccountResponseWrapper>()
+                header = inMemoryRepo.networkHeader,
+                bearerToken = accessToken,
+                url = inMemoryRepo.url(baseUrl, NetworkRequest.GET_IBAN_DESC),
+                deserializer = IbanAccountResponseWrapper.serializer(),
+            ).parse { value, _ ->
+                checkNotNull(value) {
+                    // Normally should not be encountered
+                    "Failed - Internal error"
+                }
+            }
             wrapper.ibans?.maxByOrNull { it.createdDate }?.let { response ->
                 val bal = response.availableBalance.let {
                     "%s%.2f".format("€", it / 100.0)
@@ -162,9 +189,16 @@ class KycRepositoryImpl(
     override suspend fun getFreeKycAttemptsInfo(accessToken: String): Result<KycAttemptsDto> {
         return runCatching {
             apiClient.get(
-                accessToken,
-                NetworkRequest.GET_KYC_FREE_ATTEMPT_INFO.url,
-            ).body()
+                header = inMemoryRepo.networkHeader,
+                bearerToken = accessToken,
+                url = inMemoryRepo.url(null, NetworkRequest.GET_KYC_FREE_ATTEMPT_INFO),
+                deserializer = KycAttemptsDto.serializer(),
+            ).parse { value, _ ->
+                checkNotNull(value) {
+                    // Normally should not be encountered
+                    "Failed - Internal error"
+                }
+            }
         }
     }
 
@@ -184,20 +218,35 @@ class KycRepositoryImpl(
 
     private suspend fun getFeesInternal(baseUrl: String? = null): Result<Pair<String, String>> =
         runCatching {
-            val dto =
-                apiClient.get(bearerToken = null, url = NetworkRequest.FEES.url, baseUrl = baseUrl)
-                    .body<FeesDto>()
+            val dto = apiClient.get(
+                header = inMemoryRepo.networkHeader,
+                bearerToken = null,
+                url = inMemoryRepo.url(baseUrl, NetworkRequest.FEES),
+                deserializer = FeesDto.serializer(),
+            ).parse { value, _ ->
+                checkNotNull(value) {
+                    // Normally should not be encountered
+                    "Failed - Internal error"
+                }
+            }
             dto.retryFee to dto.applicationFee
         }
 
     override suspend fun getCurrentXorEuroPrice(accessToken: String): Result<Double> {
         return runCatching {
             apiClient.get(
-                accessToken,
-                NetworkRequest.GET_CURRENT_XOR_EURO_PRICE.url,
-            ).body<XorEuroPrice>()
+                header = inMemoryRepo.networkHeader,
+                bearerToken = accessToken,
+                url = inMemoryRepo.url(null, NetworkRequest.GET_CURRENT_XOR_EURO_PRICE),
+                deserializer = XorEuroPrice.serializer(),
+            ).parse { value, _ ->
+                checkNotNull(value) {
+                    // Normally should not be encountered
+                    "Failed - Internal error"
+                }
+            }
         }.mapCatching {
-            it.price.toDoubleNan() ?: throw IllegalArgumentException("XOR Euro price failed")
+            it.price.toDoubleNan() ?: error("XOR Euro price failed")
         }
     }
 
@@ -211,12 +260,26 @@ class KycRepositoryImpl(
 
     private suspend fun getCountriesInternal(baseUrl: String?) = runCatching {
         val response = apiClient.get(
+            header = inMemoryRepo.networkHeader,
             bearerToken = null,
-            url = NetworkRequest.COUNTRY_CODES.url,
-            baseUrl = baseUrl,
-        ).body<String>()
-        Json.decodeFromString<Map<String, CountryCodeDto>>(response).map {
-            CountryDial(it.key, it.value.countryName, it.value.dialCode)
+            url = inMemoryRepo.url(baseUrl, NetworkRequest.COUNTRY_CODES),
+            deserializer = MapSerializer(
+                keySerializer = String.serializer(),
+                valueSerializer = CountryCodeDto.serializer()
+            )
+        ).parse { value, _ ->
+            checkNotNull(value) {
+                // Normally should not be encountered
+                "Failed - Internal error"
+            }
+        }
+
+        response.map { (code, codeInfo) ->
+            CountryDial(
+                code = code,
+                name = codeInfo.countryName,
+                dialCode = codeInfo.dialCode,
+            )
         }
     }.getOrDefault(emptyList())
 }

@@ -1,9 +1,11 @@
 package jp.co.soramitsu.oauth.base.sdk
 
+import android.os.Build
 import javax.inject.Inject
 import javax.inject.Singleton
 import jp.co.soramitsu.oauth.BuildConfig
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardFlow
+import jp.co.soramitsu.oauth.network.NetworkRequest
 
 @Singleton
 class InMemoryRepo @Inject constructor() {
@@ -17,4 +19,10 @@ class InMemoryRepo @Inject constructor() {
     var ghExpectedExchangeVolume: Int? = null
     var ghExchangeReason = emptyList<Int>()
     var ghSourceOfFunds = emptyList<Int>()
+
+    val networkHeader =
+        "$client/${Build.MANUFACTURER}/${Build.MODEL}/${Build.VERSION.SDK_INT}"
+
+    fun url(baseUrl: String?, request: NetworkRequest): String =
+        "${baseUrl ?: soraBackEndUrl}${request.url}"
 }

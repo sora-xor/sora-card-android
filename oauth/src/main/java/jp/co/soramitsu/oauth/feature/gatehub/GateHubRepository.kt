@@ -1,6 +1,5 @@
 package jp.co.soramitsu.oauth.feature.gatehub
 
-import io.ktor.client.call.body
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.clients.SoraCardTokenException
 import jp.co.soramitsu.oauth.common.model.AccessTokenResponse
@@ -24,25 +23,19 @@ class GateHubRepository(
         if (token == null) return Result.failure(SoraCardTokenException("getIframe"))
         return runCatching {
             apiClient.post(
-                token,
-                NetworkRequest.GATEWAY_GET_IFRAME.url,
-                GetIframeRequestBody(type = 2),
-            )
-        }.mapCatching { response ->
-            when (response.status.value) {
-                200 -> {
-                    val body = response.body<GetIframeResponse>()
-                    IframeModel(
-                        code = body.sc,
-                        desc = body.sd,
-                        url = body.url.orEmpty(),
-                    )
+                header = inMemoryRepo.networkHeader,
+                bearerToken = token,
+                url = inMemoryRepo.url(null, NetworkRequest.GATEWAY_GET_IFRAME),
+                body = GetIframeRequestBody(type = 2),
+                deserializer = GetIframeResponse.serializer(),
+            ).parse { value, statusCode ->
+                if (statusCode == 200 && value != null) {
+                    return@parse IframeModel(value.sc, value.sd, value.url.orEmpty())
                 }
-                401 -> {
-                    throw IllegalStateException("Failed - GetIframe|Unauthorised")
-                }
-                else -> {
-                    throw IllegalStateException("Failed - GetIframe|Internal error")
+
+                when (statusCode) {
+                    401 -> error("Failed - GetIframe|Unauthorised")
+                    else -> error("Failed - GetIframe|Internal error")
                 }
             }
         }
@@ -56,22 +49,19 @@ class GateHubRepository(
         if (token == null) return Result.failure(SoraCardTokenException("Onboarded"))
         return runCatching {
             apiClient.get(
-                token,
-                NetworkRequest.GATEWAY_ONBOARDED.url,
-            )
-        }.mapCatching { response ->
-            when (response.status.value) {
-                200 -> {
-                    response.body<OnboardedResponse>().onboarded
+                header = inMemoryRepo.networkHeader,
+                bearerToken = token,
+                url = inMemoryRepo.url(null, NetworkRequest.GATEWAY_ONBOARDED),
+                deserializer = OnboardedResponse.serializer(),
+            ).parse { value, statusCode ->
+                if (statusCode == 200 && value != null) {
+                    return@parse value.onboarded
                 }
-                401 -> {
-                    throw IllegalStateException("Failed - Onboarded|Unauthorised")
-                }
-                404 -> {
-                    throw IllegalStateException("Failed - Onboarded|Not found")
-                }
-                else -> {
-                    throw IllegalStateException("Failed - Onboarded|Internal error")
+
+                when (statusCode) {
+                    401 -> error("Failed - Onboarded|Unauthorised")
+                    404 -> error("Failed - Onboarded|Not found")
+                    else -> error("Failed - Onboarded|Internal error")
                 }
             }
         }
@@ -94,22 +84,19 @@ class GateHubRepository(
         )
         return runCatching {
             apiClient.post(
-                token,
-                NetworkRequest.GATEWAY_ONBOARD.url,
-                OnboardRequestBody(ev, or, sf),
-            )
-        }.mapCatching { response ->
-            when (response.status.value) {
-                200 -> {
-                    response.body<OnboardResponse>().let {
-                        it.sc to it.sd
-                    }
+                header = inMemoryRepo.networkHeader,
+                bearerToken = token,
+                url = inMemoryRepo.url(null, NetworkRequest.GATEWAY_ONBOARD),
+                body = OnboardRequestBody(ev, or, sf),
+                deserializer = OnboardResponse.serializer(),
+            ).parse { value, statusCode ->
+                if (statusCode == 200 && value != null) {
+                    value.let { it.sc to it.sd }
                 }
-                401 -> {
-                    throw IllegalStateException("Failed - OnboardUser|Unauthorised")
-                }
-                else -> {
-                    throw IllegalStateException("Failed - OnboardUser|Internal error")
+
+                when (statusCode) {
+                    401 -> error("Failed - OnboardUser|Unauthorised")
+                    else -> error("Failed - OnboardUser|Internal error")
                 }
             }
         }

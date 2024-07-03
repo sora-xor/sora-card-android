@@ -31,8 +31,9 @@ class CommonModule {
     @Provides
     fun provideKycRepository(
         apiClient: SoraCardNetworkClient,
+        inMemoryRepo: InMemoryRepo,
         userSessionRepository: UserSessionRepository,
-    ): KycRepository = KycRepositoryImpl(apiClient, userSessionRepository)
+    ): KycRepository = KycRepositoryImpl(apiClient, inMemoryRepo, userSessionRepository)
 
     @Singleton
     @Provides
