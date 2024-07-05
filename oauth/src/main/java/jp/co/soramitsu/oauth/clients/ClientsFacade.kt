@@ -1,9 +1,9 @@
 package jp.co.soramitsu.oauth.clients
 
 import android.content.Context
-import io.ktor.client.call.body
 import javax.inject.Inject
 import javax.inject.Singleton
+import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.sdk.contract.IbanInfo
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardBasicContractData
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
@@ -27,6 +27,7 @@ class ClientsFacade @Inject constructor(
     private val kycRepository: KycRepository,
     private val tokenValidator: AccessTokenValidator,
     private val pwoAuthClientProxy: PWOAuthClientProxy,
+    private val inMemoryRepo: InMemoryRepo,
 ) {
     companion object {
         const val TECH_SUPPORT = "techsupport@soracard.com"
@@ -75,10 +76,16 @@ class ClientsFacade @Inject constructor(
 
     private suspend fun getSupportVersion() = runCatching {
         apiClient.get(
-            null,
-            NetworkRequest.VERSION.url,
-            baseUrl,
-        ).body<VersionsDto>()
+            header = inMemoryRepo.networkHeader,
+            bearerToken = null,
+            url = inMemoryRepo.url(baseUrl, NetworkRequest.VERSION),
+            deserializer = VersionsDto.serializer(),
+        ).parse { value, _ ->
+            checkNotNull(value) {
+                // Normally should not be encountered
+                "Failed - Internal error"
+            }
+        }
     }
 
     suspend fun getKycStatus(): Result<SoraCardCommonVerification> {

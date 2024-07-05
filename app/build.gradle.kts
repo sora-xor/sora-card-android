@@ -175,6 +175,9 @@ dependencies {
     implementation(libs.activity.compose)
     implementation(libs.material)
 
+    implementation(libs.soramitsu.xnetworking.lib)
+    implementation(libs.kotlinx.serialization)
+
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)
     implementation(libs.compose.material)
@@ -185,7 +188,6 @@ dependencies {
     kapt(libs.hiltcompiler)
 
     implementation(libs.soramitsu.uicore)
-    implementation(libs.soramitsu.xnetworking.basic)
 }
 
 kapt {

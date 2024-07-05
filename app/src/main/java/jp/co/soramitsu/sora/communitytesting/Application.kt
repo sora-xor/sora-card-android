@@ -7,7 +7,11 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.HiltAndroidApp
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
-import jp.co.soramitsu.xnetworking.basic.networkclient.SoramitsuNetworkClient
+import jp.co.soramitsu.oauth.network.SoraCardNetworkClient
+import jp.co.soramitsu.xnetworking.lib.engines.rest.api.RestClient
+import jp.co.soramitsu.xnetworking.lib.engines.rest.api.models.AbstractRestClientConfig
+import jp.co.soramitsu.xnetworking.lib.engines.rest.impl.RestClientImpl
+import kotlinx.serialization.json.Json
 
 @HiltAndroidApp
 open class Application : Application()
@@ -17,8 +21,23 @@ open class Application : Application()
 class AppModule {
     @Provides
     @Singleton
-    fun provideSoramitsuNetworkClient(): SoramitsuNetworkClient = SoramitsuNetworkClient(
-        timeout = 10000,
-        logging = true,
+    fun provideRestClient(): RestClient = RestClientImpl(
+        restClientConfig = object : AbstractRestClientConfig() {
+            override fun getConnectTimeoutMillis(): Long = 30_000L
+            override fun getOrCreateJsonConfig(): Json = Json {
+                prettyPrint = true
+                isLenient = true
+                ignoreUnknownKeys = true
+            }
+            override fun getRequestTimeoutMillis(): Long = 30_000L
+            override fun getSocketTimeoutMillis(): Long = 30_000L
+            override fun isLoggingEnabled(): Boolean = BuildConfig.DEBUG
+        }
     )
+
+    @Provides
+    @Singleton
+    fun provideSoraCardNetworkClient(
+        restClient: RestClient
+    ): SoraCardNetworkClient = SoraCardNetworkClientImpl(restClient)
 }

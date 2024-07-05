@@ -1,13 +1,5 @@
 package jp.co.soramitsu.oauth.network
 
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
-import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
-import jp.co.soramitsu.xnetworking.basic.networkclient.SoramitsuNetworkClient
-
 enum class NetworkRequest(val url: String) {
     CARD_STATUS("card-status"),
     COUNTRY_CODES("country-codes"),
@@ -27,19 +19,4 @@ enum class NetworkRequest(val url: String) {
      */
     GET_CURRENT_XOR_EURO_PRICE("prices/xor_euro"),
     VERSION("version"),
-}
-
-@Module
-@InstallIn(SingletonComponent::class)
-class NetworkModule {
-
-    @Provides
-    @Singleton
-    fun provideSoraCardNetworkClient(
-        inMemoryRepo: InMemoryRepo,
-        client: SoramitsuNetworkClient,
-    ): SoraCardNetworkClient = SoraCardNetworkClient(
-        client = client,
-        inMemoryRepo = inMemoryRepo,
-    )
 }

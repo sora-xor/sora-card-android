@@ -17,8 +17,7 @@ compose-bom = "2024.05.00"
 hilt = "2.49"
 hiltnavcompose = "1.2.0"
 uicore = "0.2.32"
-xnetworking = "0.2.9"
-ktor = "2.3.1"
+xnetworking = "1.0.3"
 kotlinx-serialization-v = "1.6.3"
 navigation-compose = "2.7.7"
 datastore = "1.0.0"
@@ -55,8 +54,7 @@ ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 soramitsu-uicore = { group = "jp.co.soramitsu", name = "ui-core", version.ref = "uicore" }
-soramitsu-xnetworking-basic = { group = "jp.co.soramitsu.xnetworking", name = "basic-android", version.ref = "xnetworking" }
-ktor = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
+soramitsu-xnetworking-lib = { group = "jp.co.soramitsu.xnetworking", name = "lib-android", version.ref = "xnetworking" }
 kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-v" }
 pinview = { group = "io.github.chaosleung", name = "pinview", version.ref = "pinview" }
 pwoauth = { group = "com.paywings.oauth", name = "android-sdk", version.ref = "pwoauth" }
