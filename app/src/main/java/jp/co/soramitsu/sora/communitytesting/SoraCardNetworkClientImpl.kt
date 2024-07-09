@@ -8,7 +8,7 @@ import jp.co.soramitsu.xnetworking.lib.engines.rest.api.models.RestClientExcepti
 import kotlinx.serialization.DeserializationStrategy
 
 class SoraCardNetworkClientImpl(
-    private val restClient: RestClient
+    private val restClient: RestClient,
 ) : SoraCardNetworkClient {
 
     private companion object {
@@ -19,14 +19,14 @@ class SoraCardNetworkClientImpl(
         override val userAgent: String?,
         override val bearerToken: String?,
         override val url: String,
-        override val responseDeserializer: DeserializationStrategy<Deserializer>
+        override val responseDeserializer: DeserializationStrategy<Deserializer>,
     ) : AbstractRestServerRequest<Deserializer>()
 
     override suspend fun <T> get(
         header: String?,
         bearerToken: String?,
         url: String,
-        deserializer: DeserializationStrategy<T>
+        deserializer: DeserializationStrategy<T>,
     ): SoraCardNetworkResponse<T> {
         return try {
             val result = restClient.get(
@@ -34,21 +34,22 @@ class SoraCardNetworkClientImpl(
                     userAgent = header,
                     bearerToken = bearerToken,
                     url = url,
-                    responseDeserializer = deserializer
-                )
+                    responseDeserializer = deserializer,
+                ),
             )
 
             SoraCardNetworkResponse(
                 value = result,
-                statusCode = SUCCESS_STATUS_CODE
+                statusCode = SUCCESS_STATUS_CODE,
             )
         } catch (exception: RestClientException) {
-            if (exception !is RestClientException.WithCode)
+            if (exception !is RestClientException.WithCode) {
                 throw exception
+            }
 
             SoraCardNetworkResponse(
                 value = null,
-                statusCode = exception.code
+                statusCode = exception.code,
             )
         }
     }
@@ -67,7 +68,7 @@ class SoraCardNetworkClientImpl(
         bearerToken: String?,
         url: String,
         body: Any,
-        deserializer: DeserializationStrategy<T>
+        deserializer: DeserializationStrategy<T>,
     ): SoraCardNetworkResponse<T> {
         return try {
             val result = restClient.post(
@@ -76,21 +77,22 @@ class SoraCardNetworkClientImpl(
                     bearerToken = bearerToken,
                     url = url,
                     responseDeserializer = deserializer,
-                    body = body
-                )
+                    body = body,
+                ),
             )
 
             SoraCardNetworkResponse(
                 value = result,
-                statusCode = SUCCESS_STATUS_CODE
+                statusCode = SUCCESS_STATUS_CODE,
             )
         } catch (exception: RestClientException) {
-            if (exception !is RestClientException.WithCode)
+            if (exception !is RestClientException.WithCode) {
                 throw exception
+            }
 
             SoraCardNetworkResponse(
                 value = null,
-                statusCode = exception.code
+                statusCode = exception.code,
             )
         }
     }

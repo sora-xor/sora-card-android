@@ -31,13 +31,12 @@ class AppModule {
             }
             override fun getRequestTimeoutMillis(): Long = 30_000L
             override fun getSocketTimeoutMillis(): Long = 30_000L
-            override fun isLoggingEnabled(): Boolean = BuildConfig.DEBUG
-        }
+            override fun isLoggingEnabled(): Boolean = true
+        },
     )
 
     @Provides
     @Singleton
-    fun provideSoraCardNetworkClient(
-        restClient: RestClient
-    ): SoraCardNetworkClient = SoraCardNetworkClientImpl(restClient)
+    fun provideSoraCardNetworkClient(restClient: RestClient): SoraCardNetworkClient =
+        SoraCardNetworkClientImpl(restClient)
 }

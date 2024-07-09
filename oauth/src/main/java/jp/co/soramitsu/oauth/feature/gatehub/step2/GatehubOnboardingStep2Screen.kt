@@ -1,4 +1,4 @@
-package jp.co.soramitsu.oauth.feature.gatehub
+package jp.co.soramitsu.oauth.feature.gatehub.step2
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ScrollState
@@ -31,19 +31,19 @@ import jp.co.soramitsu.ui_core.theme.borderRadius
 import jp.co.soramitsu.ui_core.theme.customColors
 import jp.co.soramitsu.ui_core.theme.customTypography
 
-data class GatehubOnboardingStep3State(
+data class GatehubOnboardingStep2State(
     val buttonEnabled: Boolean,
-    val sources: List<TextValue>,
+    val reasons: List<TextValue>,
     val selectedPos: List<Int>? = null,
 )
 
 @Composable
-fun GatehubOnboardingStep3Screen(viewModel: GatehubOnboardingStep3ViewModel = hiltViewModel()) {
+fun GatehubOnboardingStep2Screen(viewModel: GatehubOnboardingStep2ViewModel = hiltViewModel()) {
     BackHandler {
         viewModel.onToolbarNavigation()
     }
     Screen(viewModel = viewModel) {
-        GatehubOnboardingStep3ScreenContent(
+        GatehubOnboardingStep2ScreenContent(
             scrollState = it,
             state = viewModel.state.collectAsStateWithLifecycle().value,
             onNext = viewModel::onNext,
@@ -53,9 +53,9 @@ fun GatehubOnboardingStep3Screen(viewModel: GatehubOnboardingStep3ViewModel = hi
 }
 
 @Composable
-private fun GatehubOnboardingStep3ScreenContent(
+private fun GatehubOnboardingStep2ScreenContent(
     scrollState: ScrollState,
-    state: GatehubOnboardingStep3State,
+    state: GatehubOnboardingStep2State,
     onNext: () -> Unit,
     onItemClick: (Int) -> Unit,
 ) {
@@ -75,7 +75,7 @@ private fun GatehubOnboardingStep3ScreenContent(
             Text(
                 modifier = Modifier
                     .fillMaxWidth(),
-                text = stringResource(R.string.source_of_funds),
+                text = stringResource(R.string.opening_reason),
                 style = MaterialTheme.customTypography.paragraphM,
                 color = MaterialTheme.customColors.fgPrimary,
             )
@@ -87,10 +87,10 @@ private fun GatehubOnboardingStep3ScreenContent(
                 style = MaterialTheme.customTypography.paragraphM,
                 color = MaterialTheme.customColors.fgSecondary,
             )
-            state.sources.forEachIndexed { i, amount ->
+            state.reasons.forEachIndexed { i, reason ->
                 CheckboxButton(
                     isSelected = state.selectedPos?.contains(i) == true,
-                    text = amount.retrieveString(),
+                    text = reason.retrieveString(),
                     onClick = { onItemClick.invoke(i) },
                 )
             }
@@ -98,7 +98,7 @@ private fun GatehubOnboardingStep3ScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = Dimens.x2),
-                text = stringResource(id = R.string.common_done),
+                text = stringResource(id = R.string.common_next),
                 order = Order.PRIMARY,
                 size = Size.Large,
                 enabled = state.buttonEnabled,
@@ -110,18 +110,17 @@ private fun GatehubOnboardingStep3ScreenContent(
 
 @Composable
 @Preview(showBackground = true)
-private fun PreviewGatehubOnboardingStep3ScreenContent() {
-    GatehubOnboardingStep3ScreenContent(
+private fun PreviewGatehubOnboardingStep2ScreenContent() {
+    GatehubOnboardingStep2ScreenContent(
         scrollState = rememberScrollState(),
-        state = GatehubOnboardingStep3State(
+        state = GatehubOnboardingStep2State(
             buttonEnabled = true,
-            selectedPos = listOf(1, 2),
-            sources = listOf(
-                "salary",
-                "savings",
-                "belongings",
-                "profits",
-            ).map { TextValue.SimpleText(it) },
+            selectedPos = listOf(0, 3),
+            reasons = listOf("reason 1", "reason 2", "reason 3", "reason 4").map {
+                TextValue.SimpleText(
+                    it,
+                )
+            },
         ),
         onNext = {},
         onItemClick = {},

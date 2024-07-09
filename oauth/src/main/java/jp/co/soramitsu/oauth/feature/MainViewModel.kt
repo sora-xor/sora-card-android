@@ -22,6 +22,7 @@ import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.common.model.AccessTokenResponse
 import jp.co.soramitsu.oauth.feature.gatehub.GateHubRepository
+import jp.co.soramitsu.oauth.feature.gatehub.OnboardedResult
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -78,23 +79,32 @@ class MainViewModel @Inject constructor(
             SoraCardFlow.SoraCardGateHubFlow -> {
                 gateHubRepository.onboarded()
                     .onSuccess {
-                        if (it) {
-                            gateHubRepository.getIframe()
-                                .onSuccess { model ->
-                                    when (model.code) {
-                                        0 -> {
-                                            mainRouter.openWebUrl(model.url)
-                                        }
-                                        else -> {
-                                            _uiState.value = _uiState.value.copy(error = "Error ${model.code}:${model.desc}")
+                        when (it) {
+                            OnboardedResult.Accepted -> {
+                                gateHubRepository.getIframe()
+                                    .onSuccess { model ->
+                                        when (model.code) {
+                                            0 -> {
+                                                mainRouter.openWebUrl(model.url)
+                                            }
+                                            else -> {
+                                                _uiState.value = _uiState.value.copy(error = "Error ${model.code}:${model.desc}")
+                                            }
                                         }
                                     }
-                                }
-                                .onFailure {
-                                    _uiState.value = _uiState.value.copy(error = it.localizedMessage)
-                                }
-                        } else {
-                            mainRouter.openGatehubOnboardingStep1()
+                                    .onFailure { thr ->
+                                        _uiState.value = _uiState.value.copy(error = thr.localizedMessage)
+                                    }
+                            }
+                            OnboardedResult.Pending -> {
+                                mainRouter.openGatehubOnboardingProgress()
+                            }
+                            is OnboardedResult.Rejected -> {
+                                mainRouter.openGatehubOnboardingRejected(it.reason)
+                            }
+                            OnboardedResult.OnboardingNotFound -> {
+                                mainRouter.openGatehubOnboardingStep1()
+                            }
                         }
                     }
                     .onFailure {

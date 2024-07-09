@@ -11,6 +11,7 @@ import io.mockk.verify
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.domain.MainCoroutineRule
+import jp.co.soramitsu.oauth.feature.gatehub.step3.GatehubOnboardingStep3ViewModel
 import jp.co.soramitsu.oauth.getOrAwaitValue
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -57,6 +58,7 @@ class GatehubOnboardingStep3ViewModelTest {
         every { mainRouter.openCountryList() } just runs
         every { inMemoryRepo.ghSourceOfFunds = any() } just runs
         every { mainRouter.openWebUrl(any()) } just runs
+        every { mainRouter.openGatehubOnboardingProgress() } just runs
         vm = GatehubOnboardingStep3ViewModel(mainRouter, inMemoryRepo, gateHubRepository)
     }
 
@@ -83,7 +85,7 @@ class GatehubOnboardingStep3ViewModelTest {
         coEvery { gateHubRepository.getIframe() } returns Result.success(IframeModel(0, "", "iurl"))
         vm.onNext()
         advanceUntilIdle()
-        verify { mainRouter.openWebUrl("iurl") }
+        verify { mainRouter.openGatehubOnboardingProgress() }
     }
 
     @Test

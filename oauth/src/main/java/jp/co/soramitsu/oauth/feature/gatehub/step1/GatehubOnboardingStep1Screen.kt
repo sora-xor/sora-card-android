@@ -1,4 +1,4 @@
-package jp.co.soramitsu.oauth.feature.gatehub
+package jp.co.soramitsu.oauth.feature.gatehub.step1
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ScrollState
@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import jp.co.soramitsu.androidfoundation.format.EURO_SIGN
 import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.androidfoundation.format.retrieveString
 import jp.co.soramitsu.oauth.R
@@ -31,19 +32,19 @@ import jp.co.soramitsu.ui_core.theme.borderRadius
 import jp.co.soramitsu.ui_core.theme.customColors
 import jp.co.soramitsu.ui_core.theme.customTypography
 
-data class GatehubOnboardingStep2State(
+data class GatehubOnboardingStep1State(
     val buttonEnabled: Boolean,
-    val reasons: List<TextValue>,
-    val selectedPos: List<Int>? = null,
+    val amounts: List<TextValue>,
+    val selectedPos: Int? = null,
 )
 
 @Composable
-fun GatehubOnboardingStep2Screen(viewModel: GatehubOnboardingStep2ViewModel = hiltViewModel()) {
+fun GatehubOnboardingStep1Screen(viewModel: GatehubOnboardingStep1ViewModel = hiltViewModel()) {
     BackHandler {
         viewModel.onToolbarNavigation()
     }
     Screen(viewModel = viewModel) {
-        GatehubOnboardingStep2ScreenContent(
+        GatehubOnboardingStep1ScreenContent(
             scrollState = it,
             state = viewModel.state.collectAsStateWithLifecycle().value,
             onNext = viewModel::onNext,
@@ -53,9 +54,9 @@ fun GatehubOnboardingStep2Screen(viewModel: GatehubOnboardingStep2ViewModel = hi
 }
 
 @Composable
-private fun GatehubOnboardingStep2ScreenContent(
+private fun GatehubOnboardingStep1ScreenContent(
     scrollState: ScrollState,
-    state: GatehubOnboardingStep2State,
+    state: GatehubOnboardingStep1State,
     onNext: () -> Unit,
     onItemClick: (Int) -> Unit,
 ) {
@@ -75,7 +76,7 @@ private fun GatehubOnboardingStep2ScreenContent(
             Text(
                 modifier = Modifier
                     .fillMaxWidth(),
-                text = stringResource(R.string.opening_reason),
+                text = stringResource(R.string.expected_volume),
                 style = MaterialTheme.customTypography.paragraphM,
                 color = MaterialTheme.customColors.fgPrimary,
             )
@@ -83,14 +84,14 @@ private fun GatehubOnboardingStep2ScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = Dimens.x2, bottom = Dimens.x1),
-                text = stringResource(R.string.select_many),
+                text = stringResource(R.string.select_one),
                 style = MaterialTheme.customTypography.paragraphM,
                 color = MaterialTheme.customColors.fgSecondary,
             )
-            state.reasons.forEachIndexed { i, reason ->
+            state.amounts.forEachIndexed { i, amount ->
                 CheckboxButton(
-                    isSelected = state.selectedPos?.contains(i) == true,
-                    text = reason.retrieveString(),
+                    isSelected = i == state.selectedPos,
+                    text = amount.retrieveString(),
                     onClick = { onItemClick.invoke(i) },
                 )
             }
@@ -110,17 +111,13 @@ private fun GatehubOnboardingStep2ScreenContent(
 
 @Composable
 @Preview(showBackground = true)
-private fun PreviewGatehubOnboardingStep2ScreenContent() {
-    GatehubOnboardingStep2ScreenContent(
+private fun PreviewGatehubOnboardingStep1ScreenContent() {
+    GatehubOnboardingStep1ScreenContent(
         scrollState = rememberScrollState(),
-        state = GatehubOnboardingStep2State(
+        state = GatehubOnboardingStep1State(
             buttonEnabled = true,
-            selectedPos = listOf(0, 3),
-            reasons = listOf("reason 1", "reason 2", "reason 3", "reason 4").map {
-                TextValue.SimpleText(
-                    it,
-                )
-            },
+            selectedPos = 1,
+            amounts = listOf("23.0", "782.2").map { TextValue.SimpleText("$it$EURO_SIGN") },
         ),
         onNext = {},
         onItemClick = {},

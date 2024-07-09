@@ -23,6 +23,8 @@ enum class Destination(val route: String) {
     GATEHUB_ONBOARDING_STEP_1("oauth/gatehubOnboardingStep1"),
     GATEHUB_ONBOARDING_STEP_2("oauth/gatehubOnboardingStep2"),
     GATEHUB_ONBOARDING_STEP_3("oauth/gatehubOnboardingStep3"),
+    GATEHUB_ONBOARDING_PROGRESS("oauth/gatehubOnboardingProgress"),
+    GATEHUB_ONBOARDING_REJECTED("oauth/gatehubOnboardingRejected"),
 }
 
 const val COUNTRY_CODE = "country_code"
