@@ -24,17 +24,13 @@ import jp.co.soramitsu.oauth.network.NetworkRequest
 import jp.co.soramitsu.oauth.network.SoraCardNetworkClient
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.contentOrNull
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
 
 fun String.toDoubleNan(): Double? = this.toDoubleOrNull()?.let {
     if (it.isNaN()) null else it
 }
 
 class KycRepositoryImpl(
-    private val apiClient: SoraCardNetworkClient,
+    private val apiClient: SoraCardNetworkClient.Adapter,
     private val inMemoryRepo: InMemoryRepo,
     private val userSessionRepository: UserSessionRepository,
 ) : KycRepository {

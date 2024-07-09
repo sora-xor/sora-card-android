@@ -23,7 +23,7 @@ class SoraCardTokenException(val type: String) : IllegalStateException(
 @Singleton
 class ClientsFacade @Inject constructor(
     private val userSessionRepository: UserSessionRepository,
-    private val apiClient: SoraCardNetworkClient,
+    private val apiClient: SoraCardNetworkClient.Adapter,
     private val kycRepository: KycRepository,
     private val tokenValidator: AccessTokenValidator,
     private val pwoAuthClientProxy: PWOAuthClientProxy,

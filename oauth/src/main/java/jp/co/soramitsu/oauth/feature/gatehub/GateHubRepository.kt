@@ -10,7 +10,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 class GateHubRepository(
-    private val apiClient: SoraCardNetworkClient,
+    private val apiClient: SoraCardNetworkClient.Adapter,
     private val accessTokenValidator: AccessTokenValidator,
     private val inMemoryRepo: InMemoryRepo,
 ) {

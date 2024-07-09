@@ -30,7 +30,7 @@ class CommonModule {
     @Singleton
     @Provides
     fun provideKycRepository(
-        apiClient: SoraCardNetworkClient,
+        apiClient: SoraCardNetworkClient.Adapter,
         inMemoryRepo: InMemoryRepo,
         userSessionRepository: UserSessionRepository,
     ): KycRepository = KycRepositoryImpl(apiClient, inMemoryRepo, userSessionRepository)
@@ -38,7 +38,7 @@ class CommonModule {
     @Singleton
     @Provides
     fun provideGateHubRepository(
-        apiClient: SoraCardNetworkClient,
+        apiClient: SoraCardNetworkClient.Adapter,
         accessTokenValidator: AccessTokenValidator,
         inMemoryRepo: InMemoryRepo,
     ): GateHubRepository {
