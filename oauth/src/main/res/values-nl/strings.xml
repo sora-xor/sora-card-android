@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
+  <string name="almost_there">Almost there!</string>
   <string name="cant_fetch_data">Kan gegevens niet ophalen</string>
   <string name="cant_fetch_refresh">Kan geen gegevens ophalen, tik om te vernieuwen.</string>
   <string name="card_attention_text">Aandacht</string>
@@ -35,6 +36,7 @@
   <string name="common_next">Next</string>
   <string name="common_no_spam">Geen spam! Alleen om uw account te beveiligen</string>
   <string name="common_ok">OK</string>
+  <string name="common_onboarding">Onboarding</string>
   <string name="common_resend_code">Code nogmaals versturen</string>
   <string name="common_resend_link">Link nogmaals versturen</string>
   <string name="common_resend_timer" formatted="false">Opnieuw verzenden in %02d:%02d</string>
@@ -57,8 +59,11 @@
   <string name="enter_phone_number_description">U ontvangt een verificatiecode via SMS.</string>
   <string name="enter_phone_number_phone_input_field_label">Telefoonnummer</string>
   <string name="entry_card_info">Kaart info</string>
+  <string name="error_occured">Unfortunately, an error occurred.</string>
   <string name="exchange_xor">Exchange XOR</string>
   <string name="expected_volume">What is your expected exchange volume?</string>
+  <string name="gatehub_onboarding_description">Please wait while we set everything up.</string>
+  <string name="gatehub_unable_complete">We were unable to complete the onboarding process.</string>
   <string name="get_more_xor_dialog_buy_option">Koop XOR met EUR</string>
   <string name="get_more_xor_dialog_deposit_option">XOR storten</string>
   <string name="get_more_xor_dialog_description">U kunt ruilen voor XOR of kopen met Euro</string>

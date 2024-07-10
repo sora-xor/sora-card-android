@@ -1,4 +1,4 @@
-package jp.co.soramitsu.oauth.feature.gatehub
+package jp.co.soramitsu.oauth.feature.gatehub.step3
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -9,6 +9,7 @@ import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.state.DialogAlertState
+import jp.co.soramitsu.oauth.feature.gatehub.GateHubRepository
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
@@ -71,32 +72,7 @@ class GatehubOnboardingStep3ViewModel @Inject constructor(
             gateHubRepository.onboardUser()
                 .onSuccess { (code, desc) ->
                     if (code == 0) {
-                        gateHubRepository.getIframe()
-                            .onSuccess {
-                                when (it.code) {
-                                    0 -> {
-                                        mainRouter.openWebUrl(it.url)
-                                    }
-                                    else -> {
-                                        dialogState = DialogAlertState(
-                                            R.string.card_attention_text,
-                                            "Error ${it.code}:${it.desc}",
-                                            true,
-                                            { dialogState = null },
-                                            { dialogState = null },
-                                        )
-                                    }
-                                }
-                            }
-                            .onFailure {
-                                dialogState = DialogAlertState(
-                                    R.string.card_attention_text,
-                                    it.localizedMessage,
-                                    true,
-                                    { dialogState = null },
-                                    { dialogState = null },
-                                )
-                            }
+                        mainRouter.openGatehubOnboardingProgress()
                     } else {
                         dialogState = DialogAlertState(
                             desc, null, true, { dialogState = null }, { dialogState = null },

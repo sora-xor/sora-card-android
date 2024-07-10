@@ -29,11 +29,21 @@ class GateHubRepository(
                 body = GetIframeRequestBody(type = 2),
                 deserializer = GetIframeResponse.serializer(),
             ).parse { value, statusCode ->
-                if (statusCode == 200 && value != null) {
-                    return@parse IframeModel(value.sc, value.sd, value.url.orEmpty())
-                }
-
                 when (statusCode) {
+                    200 -> {
+                        if (value != null) {
+                            if (value.url.isNullOrEmpty()) {
+                                error("Failed - GetIframe|Url is not valid")
+                            }
+                            IframeModel(
+                                value.sc,
+                                value.sd,
+                                value.url,
+                            )
+                        } else {
+                            error("Failed - GetIframe|Null value")
+                        }
+                    }
                     401 -> error("Failed - GetIframe|Unauthorised")
                     else -> error("Failed - GetIframe|Internal error")
                 }
@@ -41,7 +51,7 @@ class GateHubRepository(
         }
     }
 
-    suspend fun onboarded(): Result<Boolean> {
+    suspend fun onboarded(): Result<OnboardedResult> {
         val token = when (val validity = accessTokenValidator.checkAccessTokenValidity()) {
             is AccessTokenResponse.Token -> validity.token
             else -> null
@@ -54,13 +64,22 @@ class GateHubRepository(
                 url = inMemoryRepo.url(null, NetworkRequest.GATEWAY_ONBOARDED),
                 deserializer = OnboardedResponse.serializer(),
             ).parse { value, statusCode ->
-                if (statusCode == 200 && value != null) {
-                    return@parse value.onboarded
-                }
-
                 when (statusCode) {
+                    200 -> {
+                        if (value != null) {
+                            when (value.vs) {
+                                0 -> OnboardedResult.Pending
+                                1 -> OnboardedResult.Accepted
+                                2 -> OnboardedResult.Rejected(value.vm.orEmpty())
+                                else -> error("Failed - Onboarded|Unknown status ${value.vs}")
+                            }
+                        } else {
+                            error("Failed - Onboarded|Null value")
+                        }
+                    }
+
                     401 -> error("Failed - Onboarded|Unauthorised")
-                    404 -> error("Failed - Onboarded|Not found")
+                    404 -> OnboardedResult.OnboardingNotFound
                     else -> error("Failed - Onboarded|Internal error")
                 }
             }
@@ -90,11 +109,17 @@ class GateHubRepository(
                 body = OnboardRequestBody(ev, or, sf),
                 deserializer = OnboardResponse.serializer(),
             ).parse { value, statusCode ->
-                if (statusCode == 200 && value != null) {
-                    value.let { it.sc to it.sd }
-                }
-
                 when (statusCode) {
+                    200 -> {
+                        if (value != null) {
+                            value.sc to value.sd
+                        } else {
+                            error(
+                                "Failed - OnboardUser|Null value",
+                            )
+                        }
+                    }
+
                     401 -> error("Failed - OnboardUser|Unauthorised")
                     else -> error("Failed - OnboardUser|Internal error")
                 }
@@ -128,6 +153,9 @@ class IframeModel(
     val url: String,
 )
 
+/**
+ * @param sc 0 - OK, -1 - invalid parameters, -8 - person is not onboarded
+ */
 @Serializable
 private data class GetIframeResponse(
     @SerialName("CallerReferenceID")
@@ -142,6 +170,9 @@ private data class GetIframeResponse(
     val url: String?,
 )
 
+/**
+ * @param sc 0 - ok,
+ */
 @Serializable
 private data class OnboardResponse(
     @SerialName("CallerReferenceID")
@@ -154,8 +185,28 @@ private data class OnboardResponse(
     val sd: String,
 )
 
+/**
+ * @param vs 0 - pending, 1 - accepted (final status), 2 - rejected (final status)
+ * @param vd description of current status
+ * @param vm reason for rejected verification
+ */
 @Serializable
 private data class OnboardedResponse(
-    @SerialName("onboarded")
-    val onboarded: Boolean,
+    @SerialName("person_id")
+    val pid: String,
+    @SerialName("verification_status")
+    val vs: Int,
+    @SerialName("verification_message")
+    val vm: String? = null,
+    @SerialName("verification_description")
+    val vd: String? = null,
+    @SerialName("update_time")
+    val ut: Int,
 )
+
+sealed interface OnboardedResult {
+    data object Pending : OnboardedResult
+    data class Rejected(val reason: String) : OnboardedResult
+    data object Accepted : OnboardedResult
+    data object OnboardingNotFound : OnboardedResult
+}

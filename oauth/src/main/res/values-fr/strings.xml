@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
+  <string name="almost_there">Almost there!</string>
   <string name="cant_fetch_data">Impossible de récupérer les données</string>
   <string name="cant_fetch_refresh">Impossible de récupérer les données, tapez pour rafraîchir</string>
   <string name="card_attention_text">Attention</string>
@@ -35,6 +36,7 @@
   <string name="common_next">Next</string>
   <string name="common_no_spam">Pas de spam. Seulement pour sécuriser votre compte</string>
   <string name="common_ok">OK</string>
+  <string name="common_onboarding">Onboarding</string>
   <string name="common_resend_code">Renvoyer le code</string>
   <string name="common_resend_link">Renvoyer le lien</string>
   <string name="common_resend_timer" formatted="false">Renvoyer dans %02d:%02d</string>
@@ -57,8 +59,11 @@
   <string name="enter_phone_number_description">Vous allez recevoir un code de vérification par SMS</string>
   <string name="enter_phone_number_phone_input_field_label">Numéro de téléphone</string>
   <string name="entry_card_info">Informations de la carte</string>
+  <string name="error_occured">Unfortunately, an error occurred.</string>
   <string name="exchange_xor">Exchange XOR</string>
   <string name="expected_volume">What is your expected exchange volume?</string>
+  <string name="gatehub_onboarding_description">Please wait while we set everything up.</string>
+  <string name="gatehub_unable_complete">We were unable to complete the onboarding process.</string>
   <string name="get_more_xor_dialog_buy_option">Acheter du XOR avec des EUR</string>
   <string name="get_more_xor_dialog_deposit_option">Déposer du XOR</string>
   <string name="get_more_xor_dialog_description">Vous pouvez échanger vers du XOR ou en acheter avec des Euros</string>

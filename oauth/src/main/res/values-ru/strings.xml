@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
+  <string name="almost_there">Почти готово!</string>
   <string name="cant_fetch_data">Не удается получить данные</string>
   <string name="cant_fetch_refresh">Не удается получить данные, нажмите, чтобы обновить.</string>
   <string name="card_attention_text">Внимание</string>
   <string name="card_hub_manage_card">Управление картой SORA</string>
   <string name="card_hub_manage_card_alert_title">Скачать приложение SORA Card</string>
   <string name="card_hub_manage_google_play">Для управления картой SORA Card установите официальное приложение SORA Card. Нажмите OK, чтобы перейти в Google Play.</string>
-  <string name="card_hub_title">Card details</string>
+  <string name="card_hub_title">Данные карты</string>
   <string name="card_hub_update_button">Обновите сейчас</string>
   <string name="card_hub_update_description">Вы используете устаревшую версию приложения, некоторые части могут работать не так, как задумано.</string>
   <string name="card_hub_update_title">Обновите приложение до последней версии</string>
@@ -35,6 +36,7 @@
   <string name="common_next">Следующий</string>
   <string name="common_no_spam">Никакого спама! Только для защиты вашего аккаунта</string>
   <string name="common_ok">хорошо</string>
+  <string name="common_onboarding">Регистрация</string>
   <string name="common_resend_code">Отправить код снова</string>
   <string name="common_resend_link">Отправить ссылку повторно</string>
   <string name="common_resend_timer">Отправить повторно в %02d:% 02d</string>
@@ -57,8 +59,11 @@
   <string name="enter_phone_number_description">Вы получите\nкод подтверждения по SMS</string>
   <string name="enter_phone_number_phone_input_field_label">Номер телефона</string>
   <string name="entry_card_info">Информация о карте</string>
+  <string name="error_occured">К сожалению, произошла ошибка.</string>
   <string name="exchange_xor">Обменять XOR</string>
   <string name="expected_volume">Каков ваш ожидаемый объем обмена?</string>
+  <string name="gatehub_onboarding_description">Пожалуйста, подождите, пока мы все настроим.</string>
+  <string name="gatehub_unable_complete">Нам не удалось завершить процесс регистрации.</string>
   <string name="get_more_xor_dialog_buy_option">Купить XOR с помощью карты</string>
   <string name="get_more_xor_dialog_deposit_option">Получить XOR</string>
   <string name="get_more_xor_dialog_description">Вы можете обменять на XOR или купить за евро</string>
@@ -148,7 +153,7 @@
   <string name="verify_email_title">Подтвердите ваш email</string>
   <string name="verify_phone_number_code_input_field_label">SMS-код</string>
   <string name="verify_phone_number_description">Введите SMS-код, который был отправлен\n%s</string>
-  <string name="verify_phone_number_otp_not_valid">OTP is not valid</string>
+  <string name="verify_phone_number_otp_not_valid">OTP не действителен</string>
   <string name="verify_phone_number_send_code">ОТПРАВИТЬ КОД</string>
   <string name="verify_phone_number_title">Проверьте свой номер телефона</string>
   <string name="your_phone_number">Ваш номер телефона</string>

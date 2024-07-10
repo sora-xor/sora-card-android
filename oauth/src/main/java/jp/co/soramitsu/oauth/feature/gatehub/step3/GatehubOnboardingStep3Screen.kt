@@ -1,4 +1,4 @@
-package jp.co.soramitsu.oauth.feature.gatehub
+package jp.co.soramitsu.oauth.feature.gatehub.step3
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ScrollState
@@ -17,7 +17,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import jp.co.soramitsu.androidfoundation.format.EURO_SIGN
 import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.androidfoundation.format.retrieveString
 import jp.co.soramitsu.oauth.R
@@ -32,19 +31,19 @@ import jp.co.soramitsu.ui_core.theme.borderRadius
 import jp.co.soramitsu.ui_core.theme.customColors
 import jp.co.soramitsu.ui_core.theme.customTypography
 
-data class GatehubOnboardingStep1State(
+data class GatehubOnboardingStep3State(
     val buttonEnabled: Boolean,
-    val amounts: List<TextValue>,
-    val selectedPos: Int? = null,
+    val sources: List<TextValue>,
+    val selectedPos: List<Int>? = null,
 )
 
 @Composable
-fun GatehubOnboardingStep1Screen(viewModel: GatehubOnboardingStep1ViewModel = hiltViewModel()) {
+fun GatehubOnboardingStep3Screen(viewModel: GatehubOnboardingStep3ViewModel = hiltViewModel()) {
     BackHandler {
         viewModel.onToolbarNavigation()
     }
     Screen(viewModel = viewModel) {
-        GatehubOnboardingStep1ScreenContent(
+        GatehubOnboardingStep3ScreenContent(
             scrollState = it,
             state = viewModel.state.collectAsStateWithLifecycle().value,
             onNext = viewModel::onNext,
@@ -54,9 +53,9 @@ fun GatehubOnboardingStep1Screen(viewModel: GatehubOnboardingStep1ViewModel = hi
 }
 
 @Composable
-private fun GatehubOnboardingStep1ScreenContent(
+private fun GatehubOnboardingStep3ScreenContent(
     scrollState: ScrollState,
-    state: GatehubOnboardingStep1State,
+    state: GatehubOnboardingStep3State,
     onNext: () -> Unit,
     onItemClick: (Int) -> Unit,
 ) {
@@ -76,7 +75,7 @@ private fun GatehubOnboardingStep1ScreenContent(
             Text(
                 modifier = Modifier
                     .fillMaxWidth(),
-                text = stringResource(R.string.expected_volume),
+                text = stringResource(R.string.source_of_funds),
                 style = MaterialTheme.customTypography.paragraphM,
                 color = MaterialTheme.customColors.fgPrimary,
             )
@@ -84,13 +83,13 @@ private fun GatehubOnboardingStep1ScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = Dimens.x2, bottom = Dimens.x1),
-                text = stringResource(R.string.select_one),
+                text = stringResource(R.string.select_many),
                 style = MaterialTheme.customTypography.paragraphM,
                 color = MaterialTheme.customColors.fgSecondary,
             )
-            state.amounts.forEachIndexed { i, amount ->
+            state.sources.forEachIndexed { i, amount ->
                 CheckboxButton(
-                    isSelected = i == state.selectedPos,
+                    isSelected = state.selectedPos?.contains(i) == true,
                     text = amount.retrieveString(),
                     onClick = { onItemClick.invoke(i) },
                 )
@@ -99,7 +98,7 @@ private fun GatehubOnboardingStep1ScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = Dimens.x2),
-                text = stringResource(id = R.string.common_next),
+                text = stringResource(id = R.string.common_done),
                 order = Order.PRIMARY,
                 size = Size.Large,
                 enabled = state.buttonEnabled,
@@ -111,13 +110,18 @@ private fun GatehubOnboardingStep1ScreenContent(
 
 @Composable
 @Preview(showBackground = true)
-private fun PreviewGatehubOnboardingStep1ScreenContent() {
-    GatehubOnboardingStep1ScreenContent(
+private fun PreviewGatehubOnboardingStep3ScreenContent() {
+    GatehubOnboardingStep3ScreenContent(
         scrollState = rememberScrollState(),
-        state = GatehubOnboardingStep1State(
+        state = GatehubOnboardingStep3State(
             buttonEnabled = true,
-            selectedPos = 1,
-            amounts = listOf("23.0", "782.2").map { TextValue.SimpleText("$it$EURO_SIGN") },
+            selectedPos = listOf(1, 2),
+            sources = listOf(
+                "salary",
+                "savings",
+                "belongings",
+                "profits",
+            ).map { TextValue.SimpleText(it) },
         ),
         onNext = {},
         onItemClick = {},

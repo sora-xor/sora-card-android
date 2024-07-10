@@ -59,6 +59,8 @@ interface MainRouter : DefaultLifecycleObserver {
     fun openGatehubOnboardingStep1()
     fun openGatehubOnboardingStep2()
     fun openGatehubOnboardingStep3()
+    fun openGatehubOnboardingProgress()
+    fun openGatehubOnboardingRejected(reason: String)
 }
 
 class MainRouterImpl : MainRouter {
@@ -99,6 +101,24 @@ class MainRouterImpl : MainRouter {
 
     override fun openGatehubOnboardingStep3() {
         navHostController?.navigate(Destination.GATEHUB_ONBOARDING_STEP_3.route)
+    }
+
+    override fun openGatehubOnboardingProgress() {
+        navHostController?.let {
+            it.navigate(Destination.GATEHUB_ONBOARDING_PROGRESS.route) {
+                singleTop(it)
+            }
+        }
+    }
+
+    override fun openGatehubOnboardingRejected(reason: String) {
+        navHostController?.let {
+            it.navigate(
+                route = Destination.GATEHUB_ONBOARDING_REJECTED.route + reason.asArgument(),
+            ) {
+                singleTop(it)
+            }
+        }
     }
 
     override fun openGetPrepared() {

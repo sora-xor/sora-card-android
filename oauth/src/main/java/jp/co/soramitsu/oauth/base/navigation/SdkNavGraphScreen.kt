@@ -13,9 +13,11 @@ import androidx.navigation.navArgument
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.cardissuance.CardIssuanceScreen
 import jp.co.soramitsu.oauth.feature.change.email.ChangeEmailScreen
-import jp.co.soramitsu.oauth.feature.gatehub.GatehubOnboardingStep1Screen
-import jp.co.soramitsu.oauth.feature.gatehub.GatehubOnboardingStep2Screen
-import jp.co.soramitsu.oauth.feature.gatehub.GatehubOnboardingStep3Screen
+import jp.co.soramitsu.oauth.feature.gatehub.onboarding.GatehubOnboardingProgressScreen
+import jp.co.soramitsu.oauth.feature.gatehub.rejected.GatehubOnboardingRejectedScreen
+import jp.co.soramitsu.oauth.feature.gatehub.step1.GatehubOnboardingStep1Screen
+import jp.co.soramitsu.oauth.feature.gatehub.step2.GatehubOnboardingStep2Screen
+import jp.co.soramitsu.oauth.feature.gatehub.step3.GatehubOnboardingStep3Screen
 import jp.co.soramitsu.oauth.feature.getmorexor.ChooseXorPurchaseMethodDialog
 import jp.co.soramitsu.oauth.feature.getprepared.GetPreparedScreen
 import jp.co.soramitsu.oauth.feature.kyc.result.VerificationFailedScreen
@@ -76,6 +78,21 @@ internal fun SdkNavGraph(
 
         animatedComposable(Destination.GATEHUB_ONBOARDING_STEP_3.route) {
             GatehubOnboardingStep3Screen()
+        }
+
+        animatedComposable(Destination.GATEHUB_ONBOARDING_PROGRESS.route) {
+            GatehubOnboardingProgressScreen()
+        }
+
+        animatedComposable(
+            route = Destination.GATEHUB_ONBOARDING_REJECTED.route,
+            arguments = listOf(
+                navArgument(Argument.ADDITIONAL_DESCRIPTION.arg) { type = NavType.StringType },
+            ),
+        ) { entry ->
+            GatehubOnboardingRejectedScreen(
+                reason = entry.arguments?.getString(Argument.ADDITIONAL_DESCRIPTION.arg).orEmpty(),
+            )
         }
 
         animatedComposable(

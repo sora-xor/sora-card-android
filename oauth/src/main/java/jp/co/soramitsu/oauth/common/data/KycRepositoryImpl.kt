@@ -24,10 +24,6 @@ import jp.co.soramitsu.oauth.network.NetworkRequest
 import jp.co.soramitsu.oauth.network.SoraCardNetworkClient
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.contentOrNull
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
 
 fun String.toDoubleNan(): Double? = this.toDoubleOrNull()?.let {
     if (it.isNaN()) null else it
@@ -265,8 +261,8 @@ class KycRepositoryImpl(
             url = inMemoryRepo.url(baseUrl, NetworkRequest.COUNTRY_CODES),
             deserializer = MapSerializer(
                 keySerializer = String.serializer(),
-                valueSerializer = CountryCodeDto.serializer()
-            )
+                valueSerializer = CountryCodeDto.serializer(),
+            ),
         ).parse { value, _ ->
             checkNotNull(value) {
                 // Normally should not be encountered

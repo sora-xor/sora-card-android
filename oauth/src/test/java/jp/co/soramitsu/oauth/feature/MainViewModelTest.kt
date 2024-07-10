@@ -31,6 +31,7 @@ import jp.co.soramitsu.oauth.common.model.AccessTokenResponse
 import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import jp.co.soramitsu.oauth.feature.gatehub.GateHubRepository
 import jp.co.soramitsu.oauth.feature.gatehub.IframeModel
+import jp.co.soramitsu.oauth.feature.gatehub.OnboardedResult
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -93,6 +94,7 @@ class MainViewModelTest {
         every { mainRouter.openVerificationFailed(any()) } returns Unit
         every { mainRouter.openVerificationSuccessful() } just runs
         every { mainRouter.openWebUrl(any()) } just runs
+        every { mainRouter.openGatehubOnboardingProgress() } just runs
         every { mainRouter.openGatehubOnboardingStep1() } just runs
         every { mainRouter.openTermsAndConditions() } just runs
         every { setActivityResult.setResult(any()) } just runs
@@ -133,7 +135,7 @@ class MainViewModelTest {
     @Test
     fun `vm launch gatehub`() = runTest {
         setupViewModel(SoraCardCommonVerification.Failed)
-        coEvery { gateHubRepository.onboarded() } returns Result.success(false)
+        coEvery { gateHubRepository.onboarded() } returns Result.success(OnboardedResult.Pending)
         coEvery { gateHubRepository.getIframe() } returns Result.success(IframeModel(0, "", "iurl"))
         advanceUntilIdle()
         val data = SoraCardContractData(
@@ -163,7 +165,7 @@ class MainViewModelTest {
                 recaptcha = "",
             )
         }
-        verify { mainRouter.openGatehubOnboardingStep1() }
+        verify { mainRouter.openGatehubOnboardingProgress() }
     }
 
     @Test
