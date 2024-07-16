@@ -11,6 +11,7 @@ import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
 import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import jp.co.soramitsu.oauth.feature.getmorexor.state.XorPurchaseMethod
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -22,6 +23,7 @@ class GetMoreXorViewModelTest {
     @JvmField
     val rule: TestRule = InstantTaskExecutorRule()
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 

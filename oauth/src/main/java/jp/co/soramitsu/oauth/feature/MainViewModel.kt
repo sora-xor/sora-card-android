@@ -203,10 +203,6 @@ class MainViewModel @Inject constructor(
             }
     }
 
-    private fun checkKycRequirementsFulfilled() {
-        mainRouter.openGetPrepared()
-    }
-
     fun startKycProcess(activity: Activity) {
         val contract = soraCardContractData ?: return
         val flow = contract.flow.safeCast<SoraCardFlow.SoraCardKycFlow>() ?: return
@@ -341,7 +337,7 @@ class MainViewModel @Inject constructor(
             }
 
             (kycResponse == SoraCardCommonVerification.NotFound) -> {
-                checkKycRequirementsFulfilled()
+                mainRouter.openGetPrepared()
             }
 
             kycResponse == SoraCardCommonVerification.Failed -> {

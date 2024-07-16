@@ -9,13 +9,13 @@ import io.mockk.just
 import io.mockk.runs
 import io.mockk.verify
 import jp.co.soramitsu.androidfoundation.format.unsafeCast
+import jp.co.soramitsu.androidfoundation.testing.getOrAwaitValue
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardFlow
 import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.oauth.feature.usernotfound.UserNotFoundViewModel
-import jp.co.soramitsu.oauth.getOrAwaitValue
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
