@@ -68,22 +68,15 @@ class KycRepositoryImpl(
         }
     }
 
-    private suspend fun getKycInfo(
-        accessToken: String,
-        baseUrl: String? = null,
-    ): Result<KycResponse?> = runCatching {
-        apiClient.get(
-            header = inMemoryRepo.networkHeader,
-            bearerToken = accessToken,
-            url = inMemoryRepo.url(baseUrl, NetworkRequest.GET_KYC_LAST_STATUS),
-            deserializer = KycResponse.serializer(),
-        ).parse { value, _ ->
-            checkNotNull(value) {
-                // Normally should not be encountered
-                "Failed - Internal error"
-            }
-        }
-    }
+    private suspend fun getKycInfo(accessToken: String, baseUrl: String? = null): KycResponse? =
+        runCatching {
+            apiClient.get(
+                header = inMemoryRepo.networkHeader,
+                bearerToken = accessToken,
+                url = inMemoryRepo.url(baseUrl, NetworkRequest.GET_KYC_LAST_STATUS),
+                deserializer = KycResponse.serializer(),
+            ).parse { value, _ -> value }
+        }.getOrNull()
 
     private var cacheKycResponse: Pair<SoraCardCommonVerification, KycResponse?>? = null
 
@@ -134,17 +127,19 @@ class KycRepositoryImpl(
                 )
             }
         }
-        return getKycInfo(accessToken, baseUrl).map { kycStatus ->
-            mapKycStatus(kycStatus).also {
-                cacheKycResponse = it to kycStatus
-                cacheReference = if (it == SoraCardCommonVerification.Rejected) {
-                    ""
-                } else {
-                    kycStatus?.userReferenceNumber.orEmpty()
+        return Result.success(
+            getKycInfo(accessToken, baseUrl).let { kycStatus ->
+                mapKycStatus(kycStatus).also {
+                    cacheKycResponse = it to kycStatus
+                    cacheReference = if (it == SoraCardCommonVerification.Rejected) {
+                        ""
+                    } else {
+                        kycStatus?.userReferenceNumber.orEmpty()
+                    }
+                    userSessionRepository.setKycStatus(it)
                 }
-                userSessionRepository.setKycStatus(it)
-            }
-        }
+            },
+        )
     }
 
     private fun mapKycStatus(kycResponse: KycResponse?): SoraCardCommonVerification {

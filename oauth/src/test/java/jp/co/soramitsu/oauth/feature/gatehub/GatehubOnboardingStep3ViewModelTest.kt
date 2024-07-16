@@ -8,11 +8,11 @@ import io.mockk.junit4.MockKRule
 import io.mockk.just
 import io.mockk.runs
 import io.mockk.verify
+import jp.co.soramitsu.androidfoundation.testing.getOrAwaitValue
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import jp.co.soramitsu.oauth.feature.gatehub.step3.GatehubOnboardingStep3ViewModel
-import jp.co.soramitsu.oauth.getOrAwaitValue
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
