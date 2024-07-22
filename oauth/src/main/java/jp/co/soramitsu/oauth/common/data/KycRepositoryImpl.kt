@@ -41,8 +41,8 @@ class KycRepositoryImpl(
         accessToken: String,
         phoneNumber: String?,
         email: String?,
-    ): Result<String> {
-        if (cacheReference.isNotEmpty()) return Result.success(cacheReference)
+    ): Result<Pair<Boolean, String>> {
+        if (cacheReference.isNotEmpty()) return Result.success(true to cacheReference)
         return runCatching {
             val ref = apiClient.post(
                 header = inMemoryRepo.networkHeader,
@@ -57,14 +57,15 @@ class KycRepositoryImpl(
                     additionalData = "",
                 ),
                 deserializer = GetReferenceNumberResponse.serializer(),
-            ).parse { value, _ ->
-                checkNotNull(value) {
-                    // Normally should not be encountered
-                    "Failed - Internal error"
-                }.referenceNumber
+            ).parse { value, statusCode ->
+                if (statusCode == 0 && value != null && value.referenceNumber != null) {
+                    true to value.referenceNumber
+                } else {
+                    false to "GetReferenceNumber failed: $statusCode, ${value?.statusDescription.orEmpty()}"
+                }
             }
-            cacheReference = ref
-            cacheReference
+            cacheReference = if (ref.first) ref.second else ""
+            ref
         }
     }
 

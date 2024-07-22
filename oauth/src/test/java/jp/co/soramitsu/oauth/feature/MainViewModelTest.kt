@@ -274,7 +274,7 @@ class MainViewModelTest {
         }
         coEvery {
             kycRepository.getReferenceNumber(any(), any(), any())
-        } returns Result.success("refnumber")
+        } returns Result.success(true to "refnumber")
         setupViewModel(SoraCardCommonVerification.Failed)
         advanceUntilIdle()
         viewModel.startKycProcess(activity)
