@@ -3,6 +3,10 @@ package jp.co.soramitsu.oauth.common.model
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * @param referenceID optional, handled by middleware
+ * @param mobileNumber optional, handled by middleware
+ */
 @Serializable
 data class GetReferenceNumberRequest(
     @SerialName("ReferenceID") val referenceID: String,
@@ -15,9 +19,9 @@ data class GetReferenceNumberRequest(
 
 @Serializable
 data class GetReferenceNumberResponse(
-    @SerialName("ReferenceID") val referenceID: String,
-    @SerialName("CallerReferenceID") val callerReferenceID: String,
-    @SerialName("ReferenceNumber") val referenceNumber: String,
+    @SerialName("ReferenceID") val referenceID: String?,
+    @SerialName("CallerReferenceID") val callerReferenceID: String?,
+    @SerialName("ReferenceNumber") val referenceNumber: String?,
     @SerialName("StatusCode") val statusCode: Int,
-    @SerialName("StatusDescription") val statusDescription: String,
+    @SerialName("StatusDescription") val statusDescription: String?,
 )

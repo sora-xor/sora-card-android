@@ -283,7 +283,13 @@ class MainViewModel @Inject constructor(
                                     email = email,
                                 ).onSuccess {
                                     showLoading(false)
-                                    payWingsKycClient.startKyc(it)
+                                    if (it.first) {
+                                        payWingsKycClient.startKyc(it.second)
+                                    } else {
+                                        _uiState.value = _uiState.value.copy(
+                                            error = it.second,
+                                        )
+                                    }
                                 }
                                     .onFailure {
                                         showLoading(false)

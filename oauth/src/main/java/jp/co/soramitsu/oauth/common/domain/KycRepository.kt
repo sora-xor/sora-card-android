@@ -12,7 +12,7 @@ interface KycRepository {
         accessToken: String,
         phoneNumber: String?,
         email: String?,
-    ): Result<String>
+    ): Result<Pair<Boolean, String>>
 
     suspend fun getKycLastFinalStatus(
         accessToken: String,
