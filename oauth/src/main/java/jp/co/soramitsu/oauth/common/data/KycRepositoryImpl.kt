@@ -58,7 +58,7 @@ class KycRepositoryImpl(
                 ),
                 deserializer = GetReferenceNumberResponse.serializer(),
             ).parse { value, statusCode ->
-                if (statusCode == 0 && value != null && value.referenceNumber != null) {
+                if (statusCode == 200 && value != null && value.referenceNumber != null) {
                     true to value.referenceNumber
                 } else {
                     false to "GetReferenceNumber failed: $statusCode, ${value?.statusDescription.orEmpty()}"
