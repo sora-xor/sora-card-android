@@ -27,7 +27,7 @@ def extraBuildSecrets = [
 def pipeline = new org.android.ShareFeature(
   steps: this,
   agentImage: 'build-tools/android-build-box:jdk17',
-  gitUpdateSubmodule: true,
+  gitUpdateSubmodule: false,
   buildCmd: 'clean :oauth:build',
   testCmd: 'clean :oauth:test',
   extraBuildSecrets: extraBuildSecrets,

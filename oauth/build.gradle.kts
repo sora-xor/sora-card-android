@@ -80,10 +80,17 @@ android {
         unitTests.isReturnDefaultValues = true
         targetSdk = 34
     }
+    packaging {
+        resources {
+            excludes += listOf(
+                "META-INF/LICENSE.md",
+                "META-INF/LICENSE-notice.md",
+            )
+        }
+    }
 }
 
 dependencies {
-    implementation(project(":android-foundation"))
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.lifecycle.runtime.compose)
@@ -100,6 +107,7 @@ dependencies {
     debugImplementation(libs.ui.test.manifest)
     debugImplementation(libs.ui.tooling)
 
+    implementation(libs.sw.android.foundation)
     implementation(libs.soramitsu.uicore)
     implementation(libs.kotlinx.serialization)
     implementation(libs.datastore)
@@ -134,7 +142,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "jp.co.soramitsu"
             artifactId = "android-sora-card"
-            version = "1.1.16"
+            version = "1.1.17"
 
             afterEvaluate {
                 from(components["release"])
