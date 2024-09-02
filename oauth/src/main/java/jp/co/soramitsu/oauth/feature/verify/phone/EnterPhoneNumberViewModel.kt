@@ -95,7 +95,7 @@ class EnterPhoneNumberViewModel @Inject constructor(
     private val requestOtpCallback = object : SignInWithPhoneNumberRequestOtpCallback {
         override fun onError(error: OAuthErrorCode, errorMessage: String?) {
             loading(false)
-            (getErrorMessage(error) ?: errorMessage)?.let { descriptionText ->
+            (error.description.takeIf { it.isNotEmpty() } ?: errorMessage)?.let { descriptionText ->
                 _state.value = _state.value.copy(
                     inputTextStateNumber = _state.value.inputTextStateNumber.copy(
                         error = true,
@@ -106,17 +106,6 @@ class EnterPhoneNumberViewModel @Inject constructor(
         }
 
         override fun onShowTimeBasedOtpVerificationInputScreen(accountName: String) {
-        }
-
-        private fun getErrorMessage(errorCode: OAuthErrorCode): String? {
-            return when (errorCode) {
-                OAuthErrorCode.INTERNET_CONNECTION_ISSUE -> "Check your internet connection"
-                OAuthErrorCode.INVALID_PHONE_NUMBER -> "Phone number is not valid"
-                OAuthErrorCode.USER_IS_SUSPENDED -> "Phone number is suspended"
-                else -> {
-                    null
-                }
-            }
         }
 
         override fun onShowOtpInputScreen(otpLength: Int) {

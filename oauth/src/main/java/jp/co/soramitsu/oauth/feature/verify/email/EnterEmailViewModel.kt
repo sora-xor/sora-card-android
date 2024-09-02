@@ -63,22 +63,13 @@ class EnterEmailViewModel @Inject constructor(
     private val registerUserCallback = object : RegisterUserCallback {
         override fun onError(error: OAuthErrorCode, errorMessage: String?) {
             loading(false)
-            getErrorMessage(error)?.let { descriptionText ->
+            (error.description.takeIf { it.isNotEmpty() } ?: errorMessage)?.let {
                 state = state.copy(
                     inputTextState = state.inputTextState.copy(
                         error = true,
-                        descriptionText = descriptionText,
+                        descriptionText = it,
                     ),
                 )
-            }
-        }
-
-        private fun getErrorMessage(errorCode: OAuthErrorCode): String? {
-            return when (errorCode) {
-                OAuthErrorCode.INTERNET_CONNECTION_ISSUE -> "Check your internet connection"
-                OAuthErrorCode.USER_IS_SUSPENDED -> "Phone number is suspended"
-                OAuthErrorCode.INVALID_EMAIL -> "Email is not a valid email!"
-                else -> null
             }
         }
 
