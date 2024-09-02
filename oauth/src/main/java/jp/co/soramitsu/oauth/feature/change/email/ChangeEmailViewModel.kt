@@ -43,21 +43,13 @@ class ChangeEmailViewModel @Inject constructor(
     private val changeUnverifiedEmailCallback = object : ChangeUnverifiedEmailCallback {
         override fun onError(error: OAuthErrorCode, errorMessage: String?) {
             loading(false)
-            getErrorMessage(error)?.let { descriptionText ->
+            (error.description.takeIf { it.isNotEmpty() } ?: errorMessage)?.let { descriptionText ->
                 state = state.copy(
                     inputTextState = state.inputTextState.copy(
                         error = true,
                         descriptionText = descriptionText,
                     ),
                 )
-            }
-        }
-
-        private fun getErrorMessage(errorCode: OAuthErrorCode): String? {
-            return when (errorCode) {
-                OAuthErrorCode.INTERNET_CONNECTION_ISSUE -> "Check your internet connection"
-                OAuthErrorCode.INVALID_EMAIL -> "Email is not a valid email!"
-                else -> null
             }
         }
 
