@@ -80,10 +80,10 @@ class ClientsFacade @Inject constructor(
             bearerToken = null,
             url = inMemoryRepo.url(baseUrl, NetworkRequest.VERSION),
             deserializer = VersionsDto.serializer(),
-        ).parse { value, _ ->
+        ).parse { value, _, message ->
             checkNotNull(value) {
                 // Normally should not be encountered
-                "Failed - Internal error"
+                "Failed - Internal error [$message]"
             }
         }
     }

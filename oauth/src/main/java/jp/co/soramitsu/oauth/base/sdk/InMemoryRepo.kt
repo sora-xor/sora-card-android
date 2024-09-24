@@ -17,8 +17,11 @@ class InMemoryRepo @Inject constructor() {
 
     var soraBackEndUrl = ""
     var ghExpectedExchangeVolume: Int? = null
+    var ghEmploymentStatus: Int? = null
     var ghExchangeReason = emptyList<Int>()
     var ghSourceOfFunds = emptyList<Int>()
+    var ghCountriesFrom = emptyList<String>()
+    var ghCountriesTo = emptyList<String>()
 
     val networkHeader =
         "$client/${Build.MANUFACTURER}/${Build.MODEL}/${Build.VERSION.SDK_INT}"

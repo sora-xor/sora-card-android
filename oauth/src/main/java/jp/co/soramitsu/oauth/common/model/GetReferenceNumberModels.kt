@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
  * @param mobileNumber optional, handled by middleware
  */
 @Serializable
-data class GetReferenceNumberRequest(
+internal data class GetReferenceNumberRequest(
     @SerialName("ReferenceID") val referenceID: String,
     @SerialName("MobileNumber") val mobileNumber: String?,
     @SerialName("Email") val email: String?,
@@ -18,7 +18,7 @@ data class GetReferenceNumberRequest(
 )
 
 @Serializable
-data class GetReferenceNumberResponse(
+internal data class GetReferenceNumberResponse(
     @SerialName("ReferenceID") val referenceID: String?,
     @SerialName("CallerReferenceID") val callerReferenceID: String?,
     @SerialName("ReferenceNumber") val referenceNumber: String?,

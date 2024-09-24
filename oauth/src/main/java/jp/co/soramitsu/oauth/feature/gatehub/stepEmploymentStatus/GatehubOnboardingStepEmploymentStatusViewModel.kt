@@ -1,4 +1,4 @@
-package jp.co.soramitsu.oauth.feature.gatehub.step2
+package jp.co.soramitsu.oauth.feature.gatehub.stepEmploymentStatus
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -6,7 +6,9 @@ import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
+import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
+import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
@@ -15,30 +17,28 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 @HiltViewModel
-class GatehubOnboardingStep2ViewModel @Inject constructor(
+class GatehubOnboardingStepEmploymentStatusViewModel @Inject constructor(
     private val mainRouter: MainRouter,
+    private val setActivityResult: SetActivityResult,
     private val inMemoryRepo: InMemoryRepo,
 ) : BaseViewModel() {
 
-    private val reasons = listOf(
-        R.string.item_trading,
-        R.string.item_sending_receiving_crypto,
-        R.string.item_purchasing_crypto,
-        R.string.item_holding_crypto,
-        R.string.item_receiving_mining_profits,
-        R.string.item_cross_border_tx,
+    private val statuses: List<TextValue> = listOf(
+        TextValue.StringRes(id = R.string.gatehub_item_employed),
+        TextValue.StringRes(id = R.string.gatehub_item_student),
+        TextValue.StringRes(id = R.string.gatehub_item_selfemployed),
+        TextValue.StringRes(id = R.string.gatehub_item_unemployed),
+        TextValue.StringRes(id = R.string.gatehub_item_retired),
     )
 
-    private val selectedItems = mutableListOf<Int>()
-
     private val _state = MutableStateFlow(
-        GatehubOnboardingStep2State(
+        value = GatehubOnboardingStepEmploymentStatusState(
             buttonEnabled = false,
-            reasons = reasons.map { TextValue.StringRes(it) },
+            statuses = statuses,
             selectedPos = null,
         ),
     )
-    val state = _state.asStateFlow()
+    internal val state = _state.asStateFlow()
 
     init {
         mToolbarState.value = SoramitsuToolbarState(
@@ -49,29 +49,23 @@ class GatehubOnboardingStep2ViewModel @Inject constructor(
                 navIcon = R.drawable.ic_toolbar_back,
             ),
         )
-        inMemoryRepo.ghExchangeReason = emptyList()
+        inMemoryRepo.ghEmploymentStatus = null
     }
 
     override fun onToolbarNavigation() {
         super.onToolbarNavigation()
-        mainRouter.back()
+        setActivityResult.setResult(SoraCardResult.Canceled)
     }
 
-    fun onItemSelected(pos: Int) {
-        check(pos in 0..reasons.lastIndex)
-        if (selectedItems.contains(pos)) selectedItems.remove(pos) else selectedItems.add(pos)
-        inMemoryRepo.ghExchangeReason = selectedItems.map { it + 1 }
+    fun onItemSelect(pos: Int) {
+        check(pos in 0..statuses.lastIndex)
+        inMemoryRepo.ghEmploymentStatus = pos + 1
         _state.update {
-            it.copy(selectedPos = selectedItems.toList(), buttonEnabled = true)
+            it.copy(buttonEnabled = true, selectedPos = pos)
         }
     }
 
     fun onNext() {
-        val crossBorderPos = reasons.indexOf(R.string.item_cross_border_tx)
-        if (_state.value.selectedPos?.contains(crossBorderPos) == true) {
-            mainRouter.openGatehubOnboardingStepCrossBorderTx(true)
-        } else {
-            mainRouter.openGatehubOnboardingStep3()
-        }
+        mainRouter.openGatehubOnboardingStep1()
     }
 }

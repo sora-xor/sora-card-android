@@ -103,7 +103,7 @@ class MainViewModel @Inject constructor(
                                 mainRouter.openGatehubOnboardingRejected(it.reason)
                             }
                             OnboardedResult.OnboardingNotFound -> {
-                                mainRouter.openGatehubOnboardingStep1()
+                                mainRouter.openGatehubOnboardingStepEmploymentStatus()
                             }
                         }
                     }

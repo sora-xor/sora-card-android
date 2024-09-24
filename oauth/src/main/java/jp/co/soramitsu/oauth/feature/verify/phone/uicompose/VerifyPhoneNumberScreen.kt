@@ -1,4 +1,4 @@
-package jp.co.soramitsu.oauth.feature.verify.phone
+package jp.co.soramitsu.oauth.feature.verify.phone.uicompose
 
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
@@ -15,6 +15,7 @@ import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.base.compose.maskFilter
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.verify.VerifyUserData
+import jp.co.soramitsu.oauth.feature.verify.phone.VerifyPhoneNumberViewModel
 
 @Composable
 fun VerifyPhoneNumberScreen(

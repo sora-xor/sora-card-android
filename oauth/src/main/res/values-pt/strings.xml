@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
+  <string name="add_country">Add country</string>
   <string name="almost_there">Almost there!</string>
   <string name="cant_fetch_data">Não é possível obter dados</string>
   <string name="cant_fetch_refresh">Não é possível obter dados, toque para atualizar.</string>
@@ -62,8 +63,16 @@
   <string name="error_occured">Unfortunately, an error occurred.</string>
   <string name="exchange_xor">Exchange XOR</string>
   <string name="expected_volume">What is your expected exchange volume?</string>
+  <string name="gatehub_employment_status">What is your employment status?</string>
+  <string name="gatehub_item_employed">Employed</string>
+  <string name="gatehub_item_retired">Retired</string>
+  <string name="gatehub_item_selfemployed">Self-employed</string>
+  <string name="gatehub_item_student">Student</string>
+  <string name="gatehub_item_unemployed">Unemployed</string>
   <string name="gatehub_onboarding_description">Please wait while we set everything up.</string>
   <string name="gatehub_unable_complete">We were unable to complete the onboarding process.</string>
+  <string name="gatehub_where_transfer_from">Where are your transfers from?</string>
+  <string name="gatehub_where_transfer_to">Where are your transfers to?</string>
   <string name="get_more_xor_dialog_buy_option">Comprar XOR com EUR</string>
   <string name="get_more_xor_dialog_deposit_option">Depósito XOR</string>
   <string name="get_more_xor_dialog_description">Pode trocar por XOR ou comprar com euros</string>
@@ -83,6 +92,7 @@
   <string name="get_prepared_title">Preparar-se</string>
   <string name="iban_frozen_description">Your IBAN has been frozen.\nTo find out more, contact %s</string>
   <string name="iban_pending_description">A emissão do seu IBAN está pendente.\n Caso a espera seja superior a 72h contacte-nos através de %s</string>
+  <string name="item_cross_border_tx">Cross-border transactions</string>
   <string name="item_holding_crypto">Holding crypto</string>
   <string name="item_more_than">More than %s</string>
   <string name="item_other">Other</string>
@@ -100,7 +110,7 @@
   <string name="no_free_kyc_attempts_description">Utilizou a sua tentativa gratuita para passar o processo KYC. Pedimos-lhe que aguarde até à próxima atualização da aplicação para prosseguir com as tentativas pagas.</string>
   <string name="no_free_kyc_attempts_title">Acabaram-se as tentativas gratuitas</string>
   <string name="no_number_in_database">There is no such number in the database.\nPlease enter a correct number or register a new one.</string>
-  <string name="onboarding_questions" formatted="false">Onboarding question %s of %s</string>
+  <string name="onboarding_questions">Onboarding questions</string>
   <string name="onboarding_questions_description">If you want to make an exchange, answer the following three questions.</string>
   <string name="opening_reason">What is your reason for using the exchange?</string>
   <string name="paid_attempts_available_later">Paid attempts will be available at a later stage</string>
@@ -111,10 +121,12 @@
   <string name="phone_number_leading_zero">The phone number format entered seems unusual. If issue arise, consider removing the leading \"0\".</string>
   <string name="register_new_account">Register new account</string>
   <string name="select_many">You can select multiple answers:</string>
+  <string name="select_many_countries">You can select multiple countries:</string>
   <string name="select_one">Select one of the following:</string>
   <string name="select_your_country">Escolha o seu país</string>
   <string name="sign_up_sora_card">Sign up for SORA Card</string>
   <string name="source_of_funds">What is the source of your funds?</string>
+  <string name="support_chat">Support chat</string>
   <string name="terms_and_conditions_accept_and_continue">Aceitar e continuar</string>
   <string name="terms_and_conditions_confirm_description">Ao continuar, o utilizador confirma que leu, compreendeu e aceitou estas políticas</string>
   <string name="terms_and_conditions_description">Queremos que saiba exatamente como funciona o serviço do cartão SORA, quem precisa dos seus dados e porquê. A análise destas políticas ajudá-lo-á a utilizar a aplicação com tranquilidade.</string>
@@ -155,4 +167,6 @@
   <string name="verify_phone_number_send_code">ENVIAR CÓDIGO</string>
   <string name="verify_phone_number_title">Verificar o seu número de telefone</string>
   <string name="your_phone_number">Your phone number</string>
+  <string name="your_transfers_from">Your transfers from</string>
+  <string name="your_transfers_to">Your transfers to</string>
 </resources>

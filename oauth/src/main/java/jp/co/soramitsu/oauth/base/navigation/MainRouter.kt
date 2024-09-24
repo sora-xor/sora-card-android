@@ -26,8 +26,9 @@ interface MainRouter : DefaultLifecycleObserver {
 
     fun openTermsAndConditions()
 
-    fun openCountryList()
+    fun openCountryList(singleChoice: Boolean)
     fun backWithCountry(code: String)
+    fun backWithCountries(codes: List<String>)
 
     fun openVerifyPhoneNumber(country: String, phoneNumber: String, otpLength: Int)
 
@@ -56,8 +57,10 @@ interface MainRouter : DefaultLifecycleObserver {
 
     fun navigate(destinationRoute: String)
 
+    fun openGatehubOnboardingStepEmploymentStatus()
     fun openGatehubOnboardingStep1()
     fun openGatehubOnboardingStep2()
+    fun openGatehubOnboardingStepCrossBorderTx(from: Boolean)
     fun openGatehubOnboardingStep3()
     fun openGatehubOnboardingProgress()
     fun openGatehubOnboardingRejected(reason: String)
@@ -91,12 +94,22 @@ class MainRouterImpl : MainRouter {
         navHostController?.popBackStack()
     }
 
+    override fun openGatehubOnboardingStepEmploymentStatus() {
+        navHostController?.navigate(Destination.GATEHUB_ONBOARDING_STEP_EMPLOYMENT.route)
+    }
+
     override fun openGatehubOnboardingStep1() {
         navHostController?.navigate(Destination.GATEHUB_ONBOARDING_STEP_1.route)
     }
 
     override fun openGatehubOnboardingStep2() {
         navHostController?.navigate(Destination.GATEHUB_ONBOARDING_STEP_2.route)
+    }
+
+    override fun openGatehubOnboardingStepCrossBorderTx(from: Boolean) {
+        navHostController?.navigate(
+            Destination.GATEHUB_ONBOARDING_STEP_CROSS_BORDER_TX.route + from.asArgument(),
+        )
     }
 
     override fun openGatehubOnboardingStep3() {
@@ -127,12 +140,17 @@ class MainRouterImpl : MainRouter {
         }
     }
 
-    override fun openCountryList() {
-        navHostController?.navigate(Destination.SELECT_COUNTRY.route)
+    override fun openCountryList(singleChoice: Boolean) {
+        navHostController?.navigate(Destination.SELECT_COUNTRY.route + singleChoice.asArgument())
     }
 
     override fun backWithCountry(code: String) {
         navHostController?.previousBackStackEntry?.savedStateHandle?.set(COUNTRY_CODE, code)
+        navHostController?.popBackStack()
+    }
+
+    override fun backWithCountries(codes: List<String>) {
+        navHostController?.previousBackStackEntry?.savedStateHandle?.set(COUNTRY_CODE, codes)
         navHostController?.popBackStack()
     }
 

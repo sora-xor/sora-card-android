@@ -142,7 +142,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "jp.co.soramitsu"
             artifactId = "android-sora-card"
-            version = "1.1.18"
+            version = "1.1.19"
 
             afterEvaluate {
                 from(components["release"])
@@ -168,31 +168,31 @@ publishing {
 
 kover {
     useJacoco()
-}
-
-koverReport {
-    androidReports("release") {
-        filters {
-            excludes {
-                classes(
-                    "**.di.*",
-                )
+    reports {
+        variant("debug") {
+            xml {
+                onCheck = true
+                title = "soracard xml report"
+                xmlFile = file("${project.rootDir}/report/coverage.xml")
             }
-        }
-        xml {
-            onCheck = true
-            setReportFile(file("${project.rootDir}/report/coverage.xml"))
-        }
-        html {
-            onCheck = true
-        }
-        verify {
-            onCheck = true
-            rule {
-                isEnabled = true
-
-                minBound(20)
-                // TODO: Update to 85
+            html {
+                title = "soracard html report"
+                onCheck = true
+                charset = "UTF-8"
+                htmlDir.set(file("${project.rootDir}/htmlreport"))
+            }
+            verify {
+                rule {
+                    minBound(20)
+                }
+            }
+            filters {
+                excludes {
+                    classes(
+                        "**.di.*",
+                        "**.uicompose.*",
+                    )
+                }
             }
         }
     }

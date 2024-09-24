@@ -55,7 +55,7 @@ class GatehubOnboardingStep3ViewModelTest {
     @Before
     fun setUp() {
         every { mainRouter.back() } just runs
-        every { mainRouter.openCountryList() } just runs
+        every { mainRouter.openCountryList(true) } just runs
         every { inMemoryRepo.ghSourceOfFunds = any() } just runs
         every { mainRouter.openWebUrl(any()) } just runs
         every { mainRouter.openGatehubOnboardingProgress() } just runs
@@ -66,9 +66,7 @@ class GatehubOnboardingStep3ViewModelTest {
     fun `toolbar check`() {
         val t = vm.toolbarState.getOrAwaitValue()
         assertTrue(t.type is SoramitsuToolbarType.Small)
-        assertTrue(t.basic.titleArgs?.size == 2)
-        assertEquals(3, t.basic.titleArgs?.get(0))
-        assertEquals(3, t.basic.titleArgs?.get(1))
+        assertNull(t.basic.titleArgs)
     }
 
     @Test

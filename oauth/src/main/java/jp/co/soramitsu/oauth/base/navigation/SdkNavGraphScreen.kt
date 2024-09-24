@@ -17,7 +17,9 @@ import jp.co.soramitsu.oauth.feature.gatehub.onboarding.GatehubOnboardingProgres
 import jp.co.soramitsu.oauth.feature.gatehub.rejected.GatehubOnboardingRejectedScreen
 import jp.co.soramitsu.oauth.feature.gatehub.step1.GatehubOnboardingStep1Screen
 import jp.co.soramitsu.oauth.feature.gatehub.step2.GatehubOnboardingStep2Screen
+import jp.co.soramitsu.oauth.feature.gatehub.step2crossbordertx.GatehubOnboardingCrossBorderTxScreen
 import jp.co.soramitsu.oauth.feature.gatehub.step3.GatehubOnboardingStep3Screen
+import jp.co.soramitsu.oauth.feature.gatehub.stepEmploymentStatus.GatehubOnboardingStepEmploymentStatusScreen
 import jp.co.soramitsu.oauth.feature.getmorexor.ChooseXorPurchaseMethodDialog
 import jp.co.soramitsu.oauth.feature.getprepared.GetPreparedScreen
 import jp.co.soramitsu.oauth.feature.kyc.result.VerificationFailedScreen
@@ -31,9 +33,9 @@ import jp.co.soramitsu.oauth.feature.terms.and.conditions.WebPageScreen
 import jp.co.soramitsu.oauth.feature.usernotfound.UserNotFoundScreen
 import jp.co.soramitsu.oauth.feature.verify.email.EnterEmailScreen
 import jp.co.soramitsu.oauth.feature.verify.email.VerifyEmailScreen
-import jp.co.soramitsu.oauth.feature.verify.phone.CountryListScreen
-import jp.co.soramitsu.oauth.feature.verify.phone.EnterPhoneNumberScreen
-import jp.co.soramitsu.oauth.feature.verify.phone.VerifyPhoneNumberScreen
+import jp.co.soramitsu.oauth.feature.verify.phone.uicompose.CountryListScreen
+import jp.co.soramitsu.oauth.feature.verify.phone.uicompose.EnterPhoneNumberScreen
+import jp.co.soramitsu.oauth.feature.verify.phone.uicompose.VerifyPhoneNumberScreen
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -64,12 +66,33 @@ internal fun SdkNavGraph(
             EnterPhoneNumberScreen(code.value)
         }
 
-        animatedComposable(Destination.SELECT_COUNTRY.route) {
+        animatedComposable(
+            route = Destination.SELECT_COUNTRY.route + Argument.ADDITIONAL_DESCRIPTION.path(),
+            arguments = listOf(
+                navArgument(Argument.ADDITIONAL_DESCRIPTION.arg) { type = NavType.BoolType },
+            ),
+        ) {
             CountryListScreen()
+        }
+
+        animatedComposable(Destination.GATEHUB_ONBOARDING_STEP_EMPLOYMENT.route) {
+            GatehubOnboardingStepEmploymentStatusScreen()
         }
 
         animatedComposable(Destination.GATEHUB_ONBOARDING_STEP_1.route) {
             GatehubOnboardingStep1Screen()
+        }
+
+        animatedComposable(
+            route = Destination.GATEHUB_ONBOARDING_STEP_CROSS_BORDER_TX.route + Argument.ADDITIONAL_DESCRIPTION.path(),
+            arguments = listOf(
+                navArgument(Argument.ADDITIONAL_DESCRIPTION.arg) { type = NavType.BoolType },
+            ),
+        ) {
+            val codes = it.savedStateHandle.getLiveData<List<String>>(COUNTRY_CODE).observeAsState()
+            GatehubOnboardingCrossBorderTxScreen(
+                countries = codes.value,
+            )
         }
 
         animatedComposable(Destination.GATEHUB_ONBOARDING_STEP_2.route) {
@@ -85,7 +108,7 @@ internal fun SdkNavGraph(
         }
 
         animatedComposable(
-            route = Destination.GATEHUB_ONBOARDING_REJECTED.route,
+            route = Destination.GATEHUB_ONBOARDING_REJECTED.route + Argument.ADDITIONAL_DESCRIPTION.path(),
             arguments = listOf(
                 navArgument(Argument.ADDITIONAL_DESCRIPTION.arg) { type = NavType.StringType },
             ),
@@ -96,7 +119,7 @@ internal fun SdkNavGraph(
         }
 
         animatedComposable(
-            Destination.VERIFY_PHONE_NUMBER.route + Argument.COUNTRY_CODE.path() + Argument.PHONE_NUMBER.path() + Argument.OTP_LENGTH.path(),
+            route = Destination.VERIFY_PHONE_NUMBER.route + Argument.COUNTRY_CODE.path() + Argument.PHONE_NUMBER.path() + Argument.OTP_LENGTH.path(),
             arguments = listOf(
                 navArgument(Argument.COUNTRY_CODE.arg) { type = NavType.StringType },
                 navArgument(Argument.PHONE_NUMBER.arg) { type = NavType.StringType },

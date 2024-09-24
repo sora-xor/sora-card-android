@@ -1,10 +1,12 @@
 package jp.co.soramitsu.oauth.feature.verify.phone
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
+import jp.co.soramitsu.oauth.base.navigation.Argument
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.model.CountryDial
@@ -13,20 +15,46 @@ import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+
+sealed interface CountryListMode {
+    data object SingleChoice : CountryListMode
+    class MultiChoice(
+        val selectedCodes: List<String>,
+    ) : CountryListMode
+}
 
 data class CountryListState(
     val list: List<CountryDial>,
+    val countryListMode: CountryListMode,
     val loading: Boolean,
 )
 
 @HiltViewModel
 class CountryListViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val kycRepository: KycRepository,
     private val mainRouter: MainRouter,
 ) : BaseViewModel() {
 
-    private val _state = MutableStateFlow(CountryListState(emptyList(), true))
+    private val _state = MutableStateFlow(
+        CountryListState(
+            list = emptyList(),
+            countryListMode = requireNotNull(
+                savedStateHandle[Argument.ADDITIONAL_DESCRIPTION.arg],
+            ).let {
+                if (it as Boolean) {
+                    CountryListMode.SingleChoice
+                } else {
+                    CountryListMode.MultiChoice(
+                        emptyList(),
+                    )
+                }
+            },
+            loading = true,
+        ),
+    )
     val state = _state.asStateFlow()
 
     private val all = mutableListOf<CountryDial>()
@@ -50,12 +78,14 @@ class CountryListViewModel @Inject constructor(
     }
 
     private fun filterCountries(value: String) {
-        _state.value = _state.value.copy(
-            loading = false,
-            list = all.filter { cd ->
-                cd.code.lowercase().contains(value) || cd.name.lowercase().contains(value)
-            },
-        )
+        _state.update { cls ->
+            cls.copy(
+                loading = false,
+                list = all.filter { cd ->
+                    cd.code.lowercase().contains(value) || cd.name.lowercase().contains(value)
+                },
+            )
+        }
     }
 
     override fun onToolbarSearch(value: String) {
@@ -67,6 +97,36 @@ class CountryListViewModel @Inject constructor(
     }
 
     fun onSelect(index: Int) {
-        mainRouter.backWithCountry(_state.value.list[index].code)
+        when (_state.value.countryListMode) {
+            is CountryListMode.MultiChoice -> {
+                val clickedCode = _state.value.list[index].code
+                val mode = _state.value.countryListMode as CountryListMode.MultiChoice
+                _state.update { cls ->
+                    cls.copy(
+                        countryListMode = CountryListMode.MultiChoice(
+                            selectedCodes = if (mode.selectedCodes.contains(clickedCode)) {
+                                mode.selectedCodes.filter { it != clickedCode }
+                            } else {
+                                buildList {
+                                    addAll(mode.selectedCodes)
+                                    add(clickedCode)
+                                }
+                            },
+                        ),
+                    )
+                }
+            }
+
+            CountryListMode.SingleChoice -> {
+                mainRouter.backWithCountry(_state.value.list[index].code)
+            }
+        }
+    }
+
+    fun onDone() {
+        check(_state.value.countryListMode is CountryListMode.MultiChoice)
+        mainRouter.backWithCountries(
+            (_state.value.countryListMode as CountryListMode.MultiChoice).selectedCodes,
+        )
     }
 }
