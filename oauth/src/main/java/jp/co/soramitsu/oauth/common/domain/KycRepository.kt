@@ -32,5 +32,5 @@ interface KycRepository {
     suspend fun getRetryFee(): String
     suspend fun getApplicationFee(baseUrl: String? = null): String
 
-    suspend fun getCountries(baseUrl: String? = null): List<CountryDial>
+    suspend fun getCountries(): List<CountryDial>
 }

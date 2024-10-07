@@ -28,7 +28,7 @@ class GateHubRepository(
                 url = inMemoryRepo.url(null, NetworkRequest.GATEWAY_GET_IFRAME),
                 body = GetIframeRequestBody(type = 2),
                 deserializer = GetIframeResponse.serializer(),
-            ).parse { value, statusCode ->
+            ).parse { value, statusCode, _ ->
                 when (statusCode) {
                     200 -> {
                         if (value != null) {
@@ -44,6 +44,7 @@ class GateHubRepository(
                             error("Failed - GetIframe|Null value")
                         }
                     }
+
                     401 -> error("Failed - GetIframe|Unauthorised")
                     else -> error("Failed - GetIframe|Internal error")
                 }
@@ -63,7 +64,7 @@ class GateHubRepository(
                 bearerToken = token,
                 url = inMemoryRepo.url(null, NetworkRequest.GATEWAY_ONBOARDED),
                 deserializer = OnboardedResponse.serializer(),
-            ).parse { value, statusCode ->
+            ).parse { value, statusCode, _ ->
                 when (statusCode) {
                     200 -> {
                         if (value != null) {
@@ -95,6 +96,9 @@ class GateHubRepository(
         val ev = inMemoryRepo.ghExpectedExchangeVolume ?: return Result.failure(
             IllegalArgumentException("ExpectedVolume failed"),
         )
+        val es = inMemoryRepo.ghEmploymentStatus ?: return Result.failure(
+            IllegalArgumentException("EmploymentStatus failed"),
+        )
         val or = inMemoryRepo.ghExchangeReason.takeIf { it.isNotEmpty() } ?: return Result.failure(
             IllegalArgumentException("OpeningReason failed"),
         )
@@ -106,9 +110,16 @@ class GateHubRepository(
                 header = inMemoryRepo.networkHeader,
                 bearerToken = token,
                 url = inMemoryRepo.url(null, NetworkRequest.GATEWAY_ONBOARD),
-                body = OnboardRequestBody(ev, or, sf),
+                body = OnboardRequestBody(
+                    employmentStatus = es,
+                    expectedVolume = ev,
+                    openingReason = or,
+                    sourceOfFunds = sf,
+                    crossBorderDestinationCountries = inMemoryRepo.ghCountriesTo.takeIf { it.isNotEmpty() },
+                    crossBorderOriginCountries = inMemoryRepo.ghCountriesFrom.takeIf { it.isNotEmpty() },
+                ),
                 deserializer = OnboardResponse.serializer(),
-            ).parse { value, statusCode ->
+            ).parse { value, statusCode, _ ->
                 when (statusCode) {
                     200 -> {
                         if (value != null) {
@@ -129,20 +140,26 @@ class GateHubRepository(
 }
 
 @Serializable
-private data class OnboardRequestBody(
+internal data class OnboardRequestBody(
+    @SerialName("EmploymentStatus")
+    val employmentStatus: Int,
     @SerialName("ExpectedVolume")
-    val ev: Int,
+    val expectedVolume: Int,
     @SerialName("OpeningReason")
-    val or: List<Int>,
+    val openingReason: List<Int>,
     @SerialName("SourceOfFunds")
-    val sf: List<Int>,
+    val sourceOfFunds: List<Int>,
+    @SerialName("CrossBorderDestinationCountries")
+    val crossBorderDestinationCountries: List<String>?,
+    @SerialName("CrossBorderOriginCountries")
+    val crossBorderOriginCountries: List<String>?,
 )
 
 /**
  * @param type 1-ramp withdrawal, 2-ramp deposit, 3-exchange
  */
 @Serializable
-private data class GetIframeRequestBody(
+internal data class GetIframeRequestBody(
     @SerialName("IframeType")
     val type: Int,
 )
@@ -157,7 +174,7 @@ class IframeModel(
  * @param sc 0 - OK, -1 - invalid parameters, -8 - person is not onboarded
  */
 @Serializable
-private data class GetIframeResponse(
+internal data class GetIframeResponse(
     @SerialName("CallerReferenceID")
     val crid: String,
     @SerialName("ReferenceID")
@@ -174,7 +191,7 @@ private data class GetIframeResponse(
  * @param sc 0 - ok,
  */
 @Serializable
-private data class OnboardResponse(
+internal data class OnboardResponse(
     @SerialName("CallerReferenceID")
     val crid: String,
     @SerialName("ReferenceID")
@@ -191,7 +208,7 @@ private data class OnboardResponse(
  * @param vm reason for rejected verification
  */
 @Serializable
-private data class OnboardedResponse(
+internal data class OnboardedResponse(
     @SerialName("person_id")
     val pid: String,
     @SerialName("verification_status")

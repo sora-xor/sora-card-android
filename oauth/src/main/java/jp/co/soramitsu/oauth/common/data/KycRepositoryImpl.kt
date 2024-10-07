@@ -57,11 +57,11 @@ class KycRepositoryImpl(
                     additionalData = "",
                 ),
                 deserializer = GetReferenceNumberResponse.serializer(),
-            ).parse { value, statusCode ->
+            ).parse { value, statusCode, message ->
                 if (statusCode == 200 && value != null && value.referenceNumber != null) {
                     true to value.referenceNumber
                 } else {
-                    false to "GetReferenceNumber failed: $statusCode, ${value?.statusDescription.orEmpty()}"
+                    false to "SORA CARD - GRN failed: $statusCode, $message"
                 }
             }
             cacheReference = if (ref.first) ref.second else ""
@@ -76,7 +76,7 @@ class KycRepositoryImpl(
                 bearerToken = accessToken,
                 url = inMemoryRepo.url(baseUrl, NetworkRequest.GET_KYC_LAST_STATUS),
                 deserializer = KycResponse.serializer(),
-            ).parse { value, _ -> value }
+            ).parse { value, _, _ -> value }
         }.getOrNull()
 
     private var cacheKycResponse: Pair<SoraCardCommonVerification, KycResponse?>? = null
@@ -94,7 +94,7 @@ class KycRepositoryImpl(
                 bearerToken = accessToken,
                 url = inMemoryRepo.url(baseUrl, NetworkRequest.GET_IBAN_DESC),
                 deserializer = IbanAccountResponseWrapper.serializer(),
-            ).parse { value, _ ->
+            ).parse { value, _, _ ->
                 checkNotNull(value) {
                     // Normally should not be encountered
                     "Failed - Internal error"
@@ -185,7 +185,7 @@ class KycRepositoryImpl(
                 bearerToken = accessToken,
                 url = inMemoryRepo.url(null, NetworkRequest.GET_KYC_FREE_ATTEMPT_INFO),
                 deserializer = KycAttemptsDto.serializer(),
-            ).parse { value, _ ->
+            ).parse { value, _, _ ->
                 checkNotNull(value) {
                     // Normally should not be encountered
                     "Failed - Internal error"
@@ -215,7 +215,7 @@ class KycRepositoryImpl(
                 bearerToken = null,
                 url = inMemoryRepo.url(baseUrl, NetworkRequest.FEES),
                 deserializer = FeesDto.serializer(),
-            ).parse { value, _ ->
+            ).parse { value, _, _ ->
                 checkNotNull(value) {
                     // Normally should not be encountered
                     "Failed - Internal error"
@@ -231,7 +231,7 @@ class KycRepositoryImpl(
                 bearerToken = accessToken,
                 url = inMemoryRepo.url(null, NetworkRequest.GET_CURRENT_XOR_EURO_PRICE),
                 deserializer = XorEuroPrice.serializer(),
-            ).parse { value, _ ->
+            ).parse { value, _, _ ->
                 checkNotNull(value) {
                     // Normally should not be encountered
                     "Failed - Internal error"
@@ -244,8 +244,8 @@ class KycRepositoryImpl(
 
     private val countriesCache = mutableListOf<CountryDial>()
 
-    override suspend fun getCountries(baseUrl: String?): List<CountryDial> =
-        countriesCache.takeIf { it.isNotEmpty() } ?: getCountriesInternal(baseUrl).also {
+    override suspend fun getCountries(): List<CountryDial> =
+        countriesCache.takeIf { it.isNotEmpty() } ?: getCountriesInternal(null).also {
             countriesCache.clear()
             countriesCache.addAll(it)
         }
@@ -259,10 +259,10 @@ class KycRepositoryImpl(
                 keySerializer = String.serializer(),
                 valueSerializer = CountryCodeDto.serializer(),
             ),
-        ).parse { value, _ ->
+        ).parse { value, _, message ->
             checkNotNull(value) {
                 // Normally should not be encountered
-                "Failed - Internal error"
+                "Failed - Internal error [$message]"
             }
         }
 

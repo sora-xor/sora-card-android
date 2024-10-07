@@ -13,11 +13,9 @@ class NavigationModule {
 
     @Singleton
     @Provides
-    fun provideNavigator(): MainRouterImpl = MainRouterImpl()
-
-    @Singleton
-    @Provides
-    fun provideMainRouter(impl: MainRouterImpl): MainRouter = impl
+    fun provideMainRouter(): MainRouter {
+        return MainRouterImpl()
+    }
 }
 
 @Module

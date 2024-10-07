@@ -155,6 +155,7 @@ internal class PWOAuthClientProxyImpl : PWOAuthClientProxy {
     }
 
     override suspend fun checkEmailVerified(callback: CheckEmailVerifiedCallback) {
+        if (initialized.not()) return
         PayWingsOAuthClient.instance.checkEmailVerified(callback)
     }
 

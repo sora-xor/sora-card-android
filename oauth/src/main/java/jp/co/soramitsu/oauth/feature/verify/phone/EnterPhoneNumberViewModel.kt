@@ -159,7 +159,7 @@ class EnterPhoneNumberViewModel @Inject constructor(
     private var requestOtpAttempts: Long = 0
 
     fun onSelectCountry() {
-        mainRouter.openCountryList()
+        mainRouter.openCountryList(singleChoice = true)
     }
 
     fun onRequestCode() {

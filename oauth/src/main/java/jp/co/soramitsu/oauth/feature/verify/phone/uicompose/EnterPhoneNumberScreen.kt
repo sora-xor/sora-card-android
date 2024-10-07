@@ -1,4 +1,4 @@
-package jp.co.soramitsu.oauth.feature.verify.phone
+package jp.co.soramitsu.oauth.feature.verify.phone.uicompose
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ScrollState
@@ -39,6 +39,7 @@ import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.base.testTagAsId
 import jp.co.soramitsu.oauth.feature.flagEmoji
 import jp.co.soramitsu.oauth.feature.verify.model.ButtonState
+import jp.co.soramitsu.oauth.feature.verify.phone.EnterPhoneNumberViewModel
 import jp.co.soramitsu.ui_core.component.button.FilledButton
 import jp.co.soramitsu.ui_core.component.button.LoaderWrapper
 import jp.co.soramitsu.ui_core.component.button.properties.Order

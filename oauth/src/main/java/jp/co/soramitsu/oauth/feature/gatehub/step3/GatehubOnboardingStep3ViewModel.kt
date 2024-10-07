@@ -47,7 +47,6 @@ class GatehubOnboardingStep3ViewModel @Inject constructor(
             type = SoramitsuToolbarType.Small(),
             basic = BasicToolbarState(
                 title = R.string.onboarding_questions,
-                titleArgs = arrayOf(3, 3),
                 visibility = true,
                 navIcon = R.drawable.ic_toolbar_back,
             ),

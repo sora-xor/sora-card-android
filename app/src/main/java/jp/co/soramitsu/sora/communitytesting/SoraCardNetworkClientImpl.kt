@@ -50,6 +50,7 @@ class SoraCardNetworkClientImpl(
             SoraCardNetworkResponse(
                 value = null,
                 statusCode = exception.code,
+                message = exception.message,
             )
         }
     }
@@ -93,6 +94,7 @@ class SoraCardNetworkClientImpl(
             SoraCardNetworkResponse(
                 value = null,
                 statusCode = exception.code,
+                message = exception.message,
             )
         }
     }

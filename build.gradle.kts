@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.kapt) apply false
     alias(libs.plugins.serialization) apply false
+    alias(libs.plugins.kover) apply false
     id("org.sonarqube") version "4.4.1.3373"
 }
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
+  <string name="add_country">Добавить страну</string>
   <string name="almost_there">Почти готово!</string>
   <string name="cant_fetch_data">Не удается получить данные</string>
   <string name="cant_fetch_refresh">Не удается получить данные, нажмите, чтобы обновить.</string>
@@ -62,8 +63,16 @@
   <string name="error_occured">К сожалению, произошла ошибка.</string>
   <string name="exchange_xor">Обменять XOR</string>
   <string name="expected_volume">Каков ваш ожидаемый объем обмена?</string>
+  <string name="gatehub_employment_status">Каков ваш статус занятости?</string>
+  <string name="gatehub_item_employed">Работаю</string>
+  <string name="gatehub_item_retired">На пенсии</string>
+  <string name="gatehub_item_selfemployed">Самозанятый</string>
+  <string name="gatehub_item_student">Студент</string>
+  <string name="gatehub_item_unemployed">Безработный</string>
   <string name="gatehub_onboarding_description">Пожалуйста, подождите, пока мы все настроим.</string>
   <string name="gatehub_unable_complete">Нам не удалось завершить процесс регистрации.</string>
+  <string name="gatehub_where_transfer_from">Откуда осуществляются переводы?</string>
+  <string name="gatehub_where_transfer_to">Куда осуществляются переводы?</string>
   <string name="get_more_xor_dialog_buy_option">Купить XOR с помощью карты</string>
   <string name="get_more_xor_dialog_deposit_option">Получить XOR</string>
   <string name="get_more_xor_dialog_description">Вы можете обменять на XOR или купить за евро</string>
@@ -83,6 +92,7 @@
   <string name="get_prepared_title">Подготовьтесь</string>
   <string name="iban_frozen_description">Ваш IBAN был заморожен.\nЧтобы узнать больше, свяжитесь с %s</string>
   <string name="iban_pending_description">Выдача вашего IBAN ожидается.\nВ случае ожидания более 72 часов свяжитесь с нами по адресу %s</string>
+  <string name="item_cross_border_tx">Трансграничные переводы</string>
   <string name="item_holding_crypto">Хранение криптовалюты</string>
   <string name="item_more_than">Более %s</string>
   <string name="item_other">Другое</string>
@@ -100,7 +110,7 @@
   <string name="no_free_kyc_attempts_description">Вы использовали все бесплатные попытки прохождения процедуры KYC.\n\nПросим вас дождаться следующего обновления приложения, чтобы продолжить с оплачиваемыми попытками.</string>
   <string name="no_free_kyc_attempts_title">Нет больше бесплатных попыток</string>
   <string name="no_number_in_database">В базе данных такого номера нет.\nПожалуйста, введите правильный номер или зарегистрируйте новый.</string>
-  <string name="onboarding_questions" formatted="false">Вступительный вопрос %s из %s</string>
+  <string name="onboarding_questions">Вступительные вопросы</string>
   <string name="onboarding_questions_description">Если вы хотите совершить обмен, ответьте на следующие три вопроса.</string>
   <string name="opening_reason">По какой причине вы пользуетесь биржей?</string>
   <string name="paid_attempts_available_later">Платные попытки будут доступны позднее</string>
@@ -111,10 +121,12 @@
   <string name="phone_number_leading_zero">Введенный формат телефонного номера кажется необычным. При возникновении проблемы рассмотрите возможность удаления ведущего \"0\".</string>
   <string name="register_new_account">Зарегистрировать новую учетную запись</string>
   <string name="select_many">Вы можете выбрать несколько ответов:</string>
+  <string name="select_many_countries">Вы можете выбрать несколько стран:</string>
   <string name="select_one">Выберите один из следующих вариантов:</string>
   <string name="select_your_country">Выберите свою страну</string>
   <string name="sign_up_sora_card">Зарегистрироваться для получения карты SORA</string>
   <string name="source_of_funds">Каков источник ваших средств?</string>
+  <string name="support_chat">Чат поддержки</string>
   <string name="terms_and_conditions_accept_and_continue">Принять и продолжить</string>
   <string name="terms_and_conditions_confirm_description">Продолжая, вы подтверждаете, что прочитали, поняли и приняли эти правила</string>
   <string name="terms_and_conditions_description">Мы хотим, чтобы вы знали, как именно будет работать сервис SORA Card, кому нужны ваши данные и для чего. Ознакомление с этими правилами поможет вам использовать приложение с уверенностью и спокойствием.</string>
@@ -157,4 +169,6 @@
   <string name="verify_phone_number_send_code">ОТПРАВИТЬ КОД</string>
   <string name="verify_phone_number_title">Проверьте свой номер телефона</string>
   <string name="your_phone_number">Ваш номер телефона</string>
+  <string name="your_transfers_from">Ваши переводы из</string>
+  <string name="your_transfers_to">Ваши переводы в</string>
 </resources>

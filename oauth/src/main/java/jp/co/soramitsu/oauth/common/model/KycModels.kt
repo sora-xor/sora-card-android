@@ -3,12 +3,6 @@ package jp.co.soramitsu.oauth.common.model
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-data class CountryDial(
-    val code: String,
-    val name: String,
-    val dialCode: String,
-)
-
 enum class KycStatus {
 
     Started,
@@ -48,7 +42,7 @@ data class KycResponse(
     @SerialName("rejection_reasons") val rejectionReasons: List<KycResponseRejectionReason>? = null,
 )
 
-val emptyKycResponse = KycResponse(
+internal val emptyKycResponse = KycResponse(
     "", "", "", "", KycStatus.Rejected, VerificationStatus.None, IbanStatus.None, 1000, "", null,
 )
 

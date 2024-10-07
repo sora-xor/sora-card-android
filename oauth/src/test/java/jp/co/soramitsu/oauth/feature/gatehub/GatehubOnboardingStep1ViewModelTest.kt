@@ -9,9 +9,7 @@ import io.mockk.runs
 import io.mockk.verify
 import jp.co.soramitsu.androidfoundation.testing.getOrAwaitValue
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
-import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
-import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import jp.co.soramitsu.oauth.feature.gatehub.step1.GatehubOnboardingStep1ViewModel
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
@@ -47,31 +45,28 @@ class GatehubOnboardingStep1ViewModelTest {
     @MockK
     private lateinit var inMemoryRepo: InMemoryRepo
 
-    @MockK
-    private lateinit var setActivityResult: SetActivityResult
-
     private lateinit var vm: GatehubOnboardingStep1ViewModel
 
     @Before
     fun setUp() {
         every { mainRouter.openGatehubOnboardingStep2() } just runs
-        every { setActivityResult.setResult(any()) } just runs
+        every { mainRouter.back() } just runs
         every { inMemoryRepo.ghExpectedExchangeVolume = any() } just runs
-        vm = GatehubOnboardingStep1ViewModel(mainRouter, setActivityResult, inMemoryRepo)
+        vm = GatehubOnboardingStep1ViewModel(mainRouter, inMemoryRepo)
     }
 
     @Test
     fun `toolbar check`() {
         val t = vm.toolbarState.getOrAwaitValue()
         assertTrue(t.type is SoramitsuToolbarType.Small)
-        assertTrue(t.basic.titleArgs?.size == 2)
+        assertNull(t.basic.titleArgs)
     }
 
     @Test
     fun `toolbar nav`() = runTest {
         advanceUntilIdle()
         vm.onToolbarNavigation()
-        verify { setActivityResult.setResult(SoraCardResult.Canceled) }
+        verify { mainRouter.back() }
     }
 
     @Test

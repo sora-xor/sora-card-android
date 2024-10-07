@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class XorEuroPrice(
+internal data class XorEuroPrice(
     @SerialName("pair") val pair: String,
     @SerialName("price") val price: String,
     @SerialName("source") val source: String,
@@ -12,13 +12,13 @@ data class XorEuroPrice(
 )
 
 @Serializable
-data class FeesDto(
+internal data class FeesDto(
     @SerialName("application_fee") val applicationFee: String,
     @SerialName("retry_fee") val retryFee: String,
 )
 
 @Serializable
-data class CountryCodeDto(
+internal data class CountryCodeDto(
     @SerialName("name") val countryName: String,
     @SerialName("dial_code") val dialCode: String,
 )

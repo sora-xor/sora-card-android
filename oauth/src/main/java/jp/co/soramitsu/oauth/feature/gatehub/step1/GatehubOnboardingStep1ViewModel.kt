@@ -8,9 +8,7 @@ import jp.co.soramitsu.androidfoundation.format.formatDouble
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
-import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
-import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
@@ -20,7 +18,6 @@ import kotlinx.coroutines.flow.asStateFlow
 @HiltViewModel
 class GatehubOnboardingStep1ViewModel @Inject constructor(
     private val mainRouter: MainRouter,
-    private val setActivityResult: SetActivityResult,
     private val inMemoryRepo: InMemoryRepo,
 ) : BaseViewModel() {
 
@@ -49,7 +46,6 @@ class GatehubOnboardingStep1ViewModel @Inject constructor(
             type = SoramitsuToolbarType.Small(),
             basic = BasicToolbarState(
                 title = R.string.onboarding_questions,
-                titleArgs = arrayOf(1, 3),
                 visibility = true,
                 navIcon = R.drawable.ic_toolbar_back,
             ),
@@ -59,7 +55,7 @@ class GatehubOnboardingStep1ViewModel @Inject constructor(
 
     override fun onToolbarNavigation() {
         super.onToolbarNavigation()
-        setActivityResult.setResult(SoraCardResult.Canceled)
+        mainRouter.back()
     }
 
     fun onItemSelected(pos: Int) {
