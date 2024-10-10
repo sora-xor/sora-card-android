@@ -27,7 +27,7 @@ plugins {
 val composeCompilerVersion: String by project
 
 kotlin {
-    jvmToolchain(11)
+    jvmToolchain(17)
 }
 
 android {

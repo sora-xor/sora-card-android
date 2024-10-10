@@ -32,7 +32,7 @@ plugins {
 val composeCompilerVersion: String by project
 
 kotlin {
-    jvmToolchain(11)
+    jvmToolchain(17)
 }
 
 android {
@@ -142,7 +142,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "jp.co.soramitsu"
             artifactId = "android-sora-card"
-            version = "1.1.19"
+            version = "1.1.20"
 
             afterEvaluate {
                 from(components["release"])

@@ -3,18 +3,14 @@ package jp.co.soramitsu.oauth.common.model
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-/**
- * @param referenceID optional, handled by middleware
- * @param mobileNumber optional, handled by middleware
- */
 @Serializable
 internal data class GetReferenceNumberRequest(
-    @SerialName("ReferenceID") val referenceID: String,
-    @SerialName("MobileNumber") val mobileNumber: String?,
+    @SerialName("AdditionalData") val additionalData: String?,
+    @SerialName("AddressChanged") val addressChanged: Boolean?,
+    @SerialName("CardTypeID") val cardTypeId: String?,
+    @SerialName("DocumentChanged") val documentChanged: Boolean?,
     @SerialName("Email") val email: String?,
-    @SerialName("AddressChanged") val addressChanged: Boolean,
-    @SerialName("DocumentChanged") val documentChanged: Boolean,
-    @SerialName("AdditionalData") val additionalData: String,
+    @SerialName("IbanTypeID") val ibanTypeId: String?,
 )
 
 @Serializable
