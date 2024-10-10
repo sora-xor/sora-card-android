@@ -49,12 +49,12 @@ class KycRepositoryImpl(
                 bearerToken = accessToken,
                 url = inMemoryRepo.url(null, NetworkRequest.GET_REFERENCE_NUMBER),
                 body = GetReferenceNumberRequest(
-                    referenceID = UUID.randomUUID().toString(),
-                    mobileNumber = phoneNumber,
-                    email = email,
+                    additionalData = null,
                     addressChanged = false,
+                    cardTypeId = null,
+                    email = email,
                     documentChanged = false,
-                    additionalData = "",
+                    ibanTypeId = null,
                 ),
                 deserializer = GetReferenceNumberResponse.serializer(),
             ).parse { value, statusCode, message ->
