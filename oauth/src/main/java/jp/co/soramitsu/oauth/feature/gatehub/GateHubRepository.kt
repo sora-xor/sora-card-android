@@ -119,14 +119,14 @@ class GateHubRepository(
                     crossBorderOriginCountries = inMemoryRepo.ghCountriesFrom.takeIf { it.isNotEmpty() },
                 ),
                 deserializer = OnboardResponse.serializer(),
-            ).parse { value, statusCode, _ ->
+            ).parse { value, statusCode, message ->
                 when (statusCode) {
                     200 -> {
                         if (value != null) {
                             value.sc to value.sd
                         } else {
                             error(
-                                "Failed - OnboardUser|Null value",
+                                "Failed - OnboardUser|Null value|$message",
                             )
                         }
                     }

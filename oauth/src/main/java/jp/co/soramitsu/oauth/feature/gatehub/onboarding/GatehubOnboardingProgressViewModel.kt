@@ -4,14 +4,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
-import jp.co.soramitsu.oauth.base.navigation.MainRouter
+import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
+import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
 
 @HiltViewModel
 class GatehubOnboardingProgressViewModel @Inject constructor(
-    private val mainRouter: MainRouter,
+    private val setActivityResult: SetActivityResult,
 ) : BaseViewModel() {
 
     init {
@@ -27,6 +28,8 @@ class GatehubOnboardingProgressViewModel @Inject constructor(
 
     override fun onToolbarNavigation() {
         super.onToolbarNavigation()
-        mainRouter.back()
+        setActivityResult.setResult(
+            soraCardResult = SoraCardResult.Canceled,
+        )
     }
 }
