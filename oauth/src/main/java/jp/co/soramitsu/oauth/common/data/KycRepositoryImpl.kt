@@ -1,6 +1,5 @@
 package jp.co.soramitsu.oauth.common.data
 
-import java.util.UUID
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.sdk.contract.IbanInfo
 import jp.co.soramitsu.oauth.base.sdk.contract.IbanStatus
