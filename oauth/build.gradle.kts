@@ -27,6 +27,7 @@ plugins {
     alias(libs.plugins.kapt)
     alias(libs.plugins.kover)
     id("kotlin-parcelize")
+    id("org.jetbrains.dokka")
 }
 
 val composeCompilerVersion: String by project
@@ -66,7 +67,7 @@ android {
     publishing {
         singleVariant("release") {
             withSourcesJar()
-            withJavadocJar()
+//            withJavadocJar()
         }
     }
 
@@ -88,6 +89,26 @@ android {
             )
         }
     }
+}
+
+tasks.dokkaHtml.configure {
+    dokkaSourceSets {
+        named("main") {
+            noAndroidSdkLink.set(false)
+        }
+    }
+}
+
+tasks.register<Jar>("dokkaHtmlJar") {
+    group = "publishing"
+    description = "dokka instead of javadoc"
+    dependsOn(tasks.dokkaHtml)
+    from(tasks.dokkaHtml.flatMap { it.outputDirectory })
+    archiveClassifier.set("html-docs")
+}
+
+artifacts {
+    tasks.findByName("dokkaHtmlJar")
 }
 
 dependencies {
