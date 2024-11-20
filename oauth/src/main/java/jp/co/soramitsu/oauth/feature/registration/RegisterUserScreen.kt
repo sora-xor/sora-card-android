@@ -8,11 +8,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import jp.co.soramitsu.androidfoundation.compose.toTitle
 import jp.co.soramitsu.oauth.base.compose.Screen
-import jp.co.soramitsu.ui_core.component.button.FilledButton
+import jp.co.soramitsu.oauth.styledui.FilledLargeSecondaryButton
 import jp.co.soramitsu.ui_core.component.button.LoaderWrapper
-import jp.co.soramitsu.ui_core.component.button.properties.Order
 import jp.co.soramitsu.ui_core.component.button.properties.Size
 import jp.co.soramitsu.ui_core.component.input.InputText
 import jp.co.soramitsu.ui_core.resources.Dimens
@@ -51,11 +49,9 @@ fun RegisterUserScreen(viewModel: RegisterUserViewModel = hiltViewModel()) {
                 loaderSize = Size.Large,
                 loading = state.buttonState.loading,
             ) { modifier, _ ->
-                FilledButton(
+                FilledLargeSecondaryButton(
                     modifier = modifier,
-                    order = Order.SECONDARY,
-                    size = Size.Large,
-                    text = state.buttonState.title.toTitle(),
+                    text = state.buttonState.title,
                     enabled = state.buttonState.enabled,
                     onClick = viewModel::onConfirm,
                 )

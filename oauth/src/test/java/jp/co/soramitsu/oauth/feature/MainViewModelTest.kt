@@ -25,6 +25,7 @@ import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardContractData
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardFlow
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
+import jp.co.soramitsu.oauth.clients.ui.UiStyle
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.common.model.AccessTokenResponse
@@ -151,6 +152,7 @@ class MainViewModelTest {
             client = "",
             clientDark = true,
             flow = SoraCardFlow.SoraCardGateHubFlow,
+            clientCase = UiStyle.SW,
         )
         viewModel.launch(data, activity)
         advanceUntilIdle()
@@ -197,6 +199,7 @@ class MainViewModelTest {
             client = "",
             clientDark = true,
             flow = flow,
+            clientCase = UiStyle.SW,
         )
         viewModel.launch(data, activity)
         advanceUntilIdle()
@@ -248,6 +251,7 @@ class MainViewModelTest {
             client = "",
             clientDark = true,
             flow = flow,
+            clientCase = UiStyle.SW,
         )
         viewModel.launch(data, activity)
         advanceUntilIdle()

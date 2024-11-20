@@ -19,10 +19,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.window.Dialog
-import jp.co.soramitsu.ui_core.component.button.FilledButton
-import jp.co.soramitsu.ui_core.component.button.TextButton
-import jp.co.soramitsu.ui_core.component.button.properties.Order
-import jp.co.soramitsu.ui_core.component.button.properties.Size
+import jp.co.soramitsu.androidfoundation.format.TextValue
+import jp.co.soramitsu.oauth.styledui.FilledSmallPrimaryButton
+import jp.co.soramitsu.oauth.styledui.TextLargePrimaryButton
 import jp.co.soramitsu.ui_core.component.card.ContentCard
 import jp.co.soramitsu.ui_core.resources.Dimens
 import jp.co.soramitsu.ui_core.theme.customColors
@@ -74,14 +73,13 @@ fun SelectableDialog(
                     Spacer(modifier = Modifier.height(Dimens.x1))
 
                     repeat(selectableChoices.size) { index ->
-                        TextButton(
+                        TextLargePrimaryButton(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .wrapContentHeight(),
-                            text = selectableChoices[index],
-                            size = Size.Small,
-                            order = Order.PRIMARY,
+                            text = TextValue.SimpleText(selectableChoices[index]),
                             onClick = { onChoiceSelectedClickListener.invoke(index) },
+                            enabled = true,
                         )
 
                         if (index < selectableChoices.lastIndex) {
@@ -96,11 +94,9 @@ fun SelectableDialog(
                         horizontalArrangement = Arrangement
                             .aligned(Alignment.End),
                     ) {
-                        FilledButton(
-                            text = "Cancel",
-                            order = Order.PRIMARY,
-                            size = Size.Small,
-                            onClick = onCancelClickListener::invoke,
+                        FilledSmallPrimaryButton(
+                            text = cancelText,
+                            onClick = onCancelClickListener,
                         )
                     }
                 }

@@ -31,7 +31,7 @@ import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.base.compose.ScreenStatus
 import jp.co.soramitsu.oauth.feature.YourPhoneNumberText
-import jp.co.soramitsu.ui_core.component.button.FilledButton
+import jp.co.soramitsu.oauth.styledui.FilledLargeSecondaryButton
 import jp.co.soramitsu.ui_core.component.button.TonalButton
 import jp.co.soramitsu.ui_core.component.button.properties.Order
 import jp.co.soramitsu.ui_core.component.button.properties.Size
@@ -126,14 +126,12 @@ private fun VerificationRejectedContent(
                 textAlign = TextAlign.Center,
             )
 
-            FilledButton(
+            FilledLargeSecondaryButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = Dimens.x3),
-                order = Order.SECONDARY,
                 enabled = state.shouldTryAgainButtonBeEnabled,
-                size = Size.Large,
-                text = state.tryAgainText.retrieveString(),
+                text = state.tryAgainText,
                 onClick = onTryAgain,
             )
 

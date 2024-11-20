@@ -16,15 +16,16 @@ import androidx.compose.material.AlertDialog
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.androidfoundation.fragment.onActivityBackPressed
 import jp.co.soramitsu.androidfoundation.intent.getParcelableCompat
 import jp.co.soramitsu.oauth.base.navigation.Destination
@@ -36,17 +37,16 @@ import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants.BUNDLE_EXTRA_SORA_CARD_C
 import jp.co.soramitsu.oauth.base.sdk.SoraCardConstants.EXTRA_SORA_CARD_CONTRACT_DATA
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardContractData
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
+import jp.co.soramitsu.oauth.clients.ui.localCompositionUiStyle
 import jp.co.soramitsu.oauth.common.domain.CurrentActivityRetriever
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.feature.MainViewModel
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.terms.and.conditions.ProgressDialog
+import jp.co.soramitsu.oauth.styledui.TextLargePrimaryButton
 import jp.co.soramitsu.oauth.theme.AuthSdkTheme
 import jp.co.soramitsu.oauth.theme.darkScrim
 import jp.co.soramitsu.oauth.theme.lightScrim
-import jp.co.soramitsu.ui_core.component.button.TextButton
-import jp.co.soramitsu.ui_core.component.button.properties.Order
-import jp.co.soramitsu.ui_core.component.button.properties.Size
 import jp.co.soramitsu.ui_core.resources.Dimens
 import jp.co.soramitsu.ui_core.theme.customColors
 import jp.co.soramitsu.ui_core.theme.customTypography
@@ -119,7 +119,11 @@ class CardActivity : ComponentActivity() {
             val navController = rememberNavController()
             mainRouter.attachNavController(this, navController)
             lifecycle.addObserver(mainRouter)
-            MainCardScreen(navController, contractData.clientDark)
+            CompositionLocalProvider(
+                localCompositionUiStyle provides contractData.clientCase,
+            ) {
+                MainCardScreen(navController, contractData.clientDark)
+            }
         }
     }
 
@@ -145,13 +149,12 @@ class CardActivity : ComponentActivity() {
                         backgroundColor = MaterialTheme.customColors.bgSurface,
                         onDismissRequest = vm::onHideErrorDialog,
                         confirmButton = {
-                            TextButton(
+                            TextLargePrimaryButton(
                                 modifier = Modifier
                                     .padding(vertical = Dimens.x1),
-                                text = stringResource(id = android.R.string.ok),
-                                size = Size.ExtraSmall,
-                                order = Order.SECONDARY,
+                                text = TextValue.StringRes(id = android.R.string.ok),
                                 onClick = vm::onHideErrorDialog,
+                                enabled = true,
                             )
                         },
                         title = {

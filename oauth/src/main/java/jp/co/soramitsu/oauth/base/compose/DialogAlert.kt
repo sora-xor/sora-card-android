@@ -6,13 +6,11 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import jp.co.soramitsu.androidfoundation.compose.toTitle
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.base.state.DialogAlertState
 import jp.co.soramitsu.oauth.base.testTagAsId
-import jp.co.soramitsu.ui_core.component.button.TextButton
-import jp.co.soramitsu.ui_core.component.button.properties.Order
-import jp.co.soramitsu.ui_core.component.button.properties.Size
+import jp.co.soramitsu.oauth.styledui.TextLargePrimaryButton
 import jp.co.soramitsu.ui_core.resources.Dimens
 import jp.co.soramitsu.ui_core.theme.customColors
 import jp.co.soramitsu.ui_core.theme.customTypography
@@ -31,14 +29,13 @@ fun DialogAlert(state: DialogAlertState) {
         onDismissRequest = state.onDismiss,
         backgroundColor = MaterialTheme.customColors.bgSurface,
         confirmButton = {
-            TextButton(
+            TextLargePrimaryButton(
                 modifier = Modifier
                     .testTagAsId("DialogConfirmationButton")
                     .padding(vertical = Dimens.x1),
-                text = stringResource(id = android.R.string.ok).uppercase(),
-                size = Size.ExtraSmall,
-                order = Order.SECONDARY,
+                text = TextValue.StringRes(id = android.R.string.ok),
                 onClick = state.onPositive,
+                enabled = true,
             )
         },
     )

@@ -201,6 +201,7 @@ dependencies {
     implementation(libs.hiltandroid)
     kapt(libs.hiltcompiler)
 
+    implementation(libs.sw.android.foundation)
     implementation(libs.soramitsu.uicore)
 }
 

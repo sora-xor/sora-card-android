@@ -19,6 +19,7 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.base.sdk.SoraCardEnvironmentType
 import jp.co.soramitsu.oauth.base.sdk.SoraCardKycCredentials
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardBasicContractData
@@ -26,7 +27,9 @@ import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardContract
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardContractData
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardFlow
 import jp.co.soramitsu.oauth.clients.ClientsFacade
+import jp.co.soramitsu.oauth.clients.ui.UiStyle
 import jp.co.soramitsu.oauth.feature.flagEmoji
+import jp.co.soramitsu.oauth.styledui.TextLargePrimaryButton
 import jp.co.soramitsu.oauth.theme.AuthSdkTheme
 import jp.co.soramitsu.oauth.theme.darkScrim
 import jp.co.soramitsu.oauth.theme.lightScrim
@@ -84,11 +87,10 @@ class MainActivity : ComponentActivity() {
                         Button(onClick = { startGateHub() }) {
                             Text("exchange")
                         }
-                        jp.co.soramitsu.ui_core.component.button.TextButton(
-                            size = Size.ExtraSmall,
-                            order = Order.SECONDARY,
-                            text = "Foo text",
+                        TextLargePrimaryButton(
+                            text = TextValue.SimpleText("Foo text"),
                             onClick = {},
+                            enabled = true,
                         )
 
                         Text(text = Locale.getISOCountries().joinToString(";"))
@@ -136,6 +138,7 @@ class MainActivity : ComponentActivity() {
                 client = buildClient(),
                 soraBackEndUrl = BuildConfig.SORA_API_BASE_URL,
                 clientDark = dark,
+                clientCase = UiStyle.SW,
                 flow = SoraCardFlow.SoraCardGateHubFlow,
             ),
         )
@@ -149,6 +152,7 @@ class MainActivity : ComponentActivity() {
                 client = buildClient(),
                 soraBackEndUrl = BuildConfig.SORA_API_BASE_URL,
                 clientDark = dark,
+                clientCase = UiStyle.FW,
                 flow = SoraCardFlow.SoraCardKycFlow(
                     kycCredentials = SoraCardKycCredentials(
                         endpointUrl = BuildConfig.SORA_CARD_KYC_ENDPOINT_URL,

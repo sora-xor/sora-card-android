@@ -48,12 +48,14 @@
   <string name="common_user_not_found">Номер мобильного телефона не найден, проверьте его еще раз и повторите попытку.</string>
   <string name="details_already_have_card">У меня уже есть карта</string>
   <string name="details_already_used_free_try">Вы уже использовали свою бесплатную попытку</string>
+  <string name="details_annual_service_fee">€0 годовая плата за обслуживание</string>
   <string name="details_description">Получите европейский IBAN-счет и дебетовую карту, доступные в вашем кошельке SORA</string>
   <string name="details_enough_xor_desription">У вас достаточно XOR</string>
   <string name="details_free_card_issuance_conditions_euro">или €%s регистрационный взнос</string>
   <string name="details_get_more_xor">Получить больше XOR</string>
   <string name="details_issue_card">Получение карты бесплатно</string>
   <string name="details_need_xor_desription" formatted="false">Вам нужно еще %s XOR (€ %s )</string>
+  <string name="details_title">Пополняйте SORA Card фиатом или криптовалютой и оплачивайте покупки онлайн, в магазине или снимайте деньги в банкомате</string>
   <string name="enter_email_description">Волшебная ссылка будет отправлена\nна ваш email</string>
   <string name="enter_email_input_field_label">Электронная почта</string>
   <string name="enter_email_title">Введите свой email</string>

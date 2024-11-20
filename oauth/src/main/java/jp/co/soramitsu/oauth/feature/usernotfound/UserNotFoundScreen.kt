@@ -16,10 +16,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.feature.YourPhoneNumberText
-import jp.co.soramitsu.ui_core.component.button.FilledButton
+import jp.co.soramitsu.oauth.styledui.FilledLargePrimaryButton
 import jp.co.soramitsu.ui_core.component.button.TonalButton
 import jp.co.soramitsu.ui_core.component.button.properties.Order
 import jp.co.soramitsu.ui_core.component.button.properties.Size
@@ -90,14 +91,13 @@ private fun UserNotFoundScreenInternal(
                 text = stringResource(id = R.string.try_another_number),
                 onClick = onTryAnotherNumber,
             )
-            FilledButton(
+            FilledLargePrimaryButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = Dimens.x2),
-                size = Size.Large,
-                order = Order.PRIMARY,
-                text = stringResource(id = R.string.register_new_account),
+                text = TextValue.StringRes(id = R.string.register_new_account),
                 onClick = onRegisterNewAccount,
+                enabled = true,
             )
         }
     }

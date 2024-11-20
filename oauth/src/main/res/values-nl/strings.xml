@@ -48,12 +48,14 @@
   <string name="common_user_not_found">Geen mobiel nummer gevonden, controleer het opnieuw en probeer het opnieuw.</string>
   <string name="details_already_have_card">Ik heb al een kaart</string>
   <string name="details_already_used_free_try">Je hebt je gratis poging reeds gebruikt</string>
+  <string name="details_annual_service_fee">€0 jaarlijkse service kosten</string>
   <string name="details_description">Krijg een Euro IBAN-rekening en betaalpas die toegankelijk zijn in uw SORA Wallet</string>
   <string name="details_enough_xor_desription">Je hebt genoeg XOR</string>
   <string name="details_free_card_issuance_conditions_euro">of %s € aanvraagkosten</string>
   <string name="details_get_more_xor">Verkrijg meer XOR</string>
   <string name="details_issue_card">Kaart gratis uitreiken</string>
   <string name="details_need_xor_desription" formatted="false">U hebt %s meer XOR nodig (€%s)</string>
+  <string name="details_title">Laad SORA Card op met fiat of crypto en betaal online, in de winkel of neem geld op bij een geldautomaat</string>
   <string name="enter_email_description">Magische link wordt naar je e-mail gestuurd.</string>
   <string name="enter_email_input_field_label">E-mail</string>
   <string name="enter_email_title">Voer uw e-mailadres in</string>

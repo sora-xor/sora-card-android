@@ -6,6 +6,7 @@ import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
 import com.paywings.oauth.android.sdk.service.callback.SignInWithPhoneNumberRequestOtpCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.androidfoundation.format.unsafeCast
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
@@ -59,7 +60,7 @@ class EnterPhoneNumberViewModel @Inject constructor(
                 descriptionText = R.string.common_no_spam,
             ),
             buttonState = ButtonState(
-                title = R.string.common_send_code,
+                title = TextValue.StringRes(R.string.common_send_code),
                 enabled = false,
             ),
             countryCode = "",

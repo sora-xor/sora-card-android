@@ -22,11 +22,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.common.model.countryDialList
@@ -34,9 +34,7 @@ import jp.co.soramitsu.oauth.feature.flagEmoji
 import jp.co.soramitsu.oauth.feature.verify.phone.CountryListMode
 import jp.co.soramitsu.oauth.feature.verify.phone.CountryListState
 import jp.co.soramitsu.oauth.feature.verify.phone.CountryListViewModel
-import jp.co.soramitsu.ui_core.component.button.FilledButton
-import jp.co.soramitsu.ui_core.component.button.properties.Order
-import jp.co.soramitsu.ui_core.component.button.properties.Size
+import jp.co.soramitsu.oauth.styledui.FilledLargePrimaryButton
 import jp.co.soramitsu.ui_core.resources.Dimens
 import jp.co.soramitsu.ui_core.theme.customColors
 import jp.co.soramitsu.ui_core.theme.customTypography
@@ -79,12 +77,10 @@ private fun CountriesScreen(state: CountryListState, onSelect: (Int) -> Unit, on
                 onSelect = onSelect,
             )
             if (state.countryListMode is CountryListMode.MultiChoice) {
-                FilledButton(
+                FilledLargePrimaryButton(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    text = stringResource(id = R.string.common_done),
-                    order = Order.PRIMARY,
-                    size = Size.Large,
+                    text = TextValue.StringRes(id = R.string.common_done),
                     enabled = true,
                     onClick = onDone,
                 )

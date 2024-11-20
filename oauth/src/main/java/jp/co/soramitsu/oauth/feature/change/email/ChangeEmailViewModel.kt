@@ -9,6 +9,7 @@ import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
 import com.paywings.oauth.android.sdk.service.callback.ChangeUnverifiedEmailCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
@@ -34,7 +35,7 @@ class ChangeEmailViewModel @Inject constructor(
                 descriptionText = R.string.common_no_spam,
             ),
             buttonState = ButtonState(
-                title = R.string.common_send_link,
+                title = TextValue.StringRes(R.string.common_send_link),
                 enabled = false,
             ),
         ),

@@ -17,8 +17,8 @@ import jp.co.soramitsu.androidfoundation.compose.toTitle
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.feature.OAuthCallback
+import jp.co.soramitsu.oauth.styledui.TextLargePrimaryButton
 import jp.co.soramitsu.ui_core.component.button.LoaderWrapper
-import jp.co.soramitsu.ui_core.component.button.TextButton
 import jp.co.soramitsu.ui_core.component.button.TonalButton
 import jp.co.soramitsu.ui_core.component.button.properties.Order
 import jp.co.soramitsu.ui_core.component.button.properties.Size
@@ -77,13 +77,11 @@ fun VerifyEmailScreen(
                 )
             }
 
-            TextButton(
+            TextLargePrimaryButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = Dimens.x2),
-                order = Order.SECONDARY,
-                size = Size.Large,
-                text = state.changeEmailButtonState.title.toTitle(),
+                text = state.changeEmailButtonState.title,
                 enabled = state.changeEmailButtonState.enabled,
                 onClick = viewModel::onChangeEmail,
             )

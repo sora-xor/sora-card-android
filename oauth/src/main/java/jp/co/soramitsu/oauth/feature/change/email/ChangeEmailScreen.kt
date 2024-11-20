@@ -9,6 +9,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.feature.verify.VerifyUserData
@@ -57,7 +58,7 @@ private fun PreviewChangeEmail() {
     ChangeEmailContent(
         scrollState = rememberScrollState(),
         inputTextState = InputTextState(),
-        buttonState = ButtonState(title = "Send link"),
+        buttonState = ButtonState(title = TextValue.SimpleText("Send link")),
         onEmailChanged = {},
         onConfirm = {},
     )

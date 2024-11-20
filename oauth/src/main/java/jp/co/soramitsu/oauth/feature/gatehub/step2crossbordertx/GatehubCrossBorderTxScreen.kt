@@ -31,14 +31,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.common.model.CountryDial
 import jp.co.soramitsu.oauth.common.model.countryDialList
 import jp.co.soramitsu.oauth.feature.flagEmoji
-import jp.co.soramitsu.ui_core.component.button.FilledButton
-import jp.co.soramitsu.ui_core.component.button.properties.Order
-import jp.co.soramitsu.ui_core.component.button.properties.Size
+import jp.co.soramitsu.oauth.styledui.FilledLargePrimaryButton
 import jp.co.soramitsu.ui_core.component.card.ContentCard
 import jp.co.soramitsu.ui_core.resources.Dimens
 import jp.co.soramitsu.ui_core.theme.borderRadius
@@ -172,14 +171,12 @@ private fun GatehubCrossBorderTxScreenInternal(
                 )
             }
 
-            FilledButton(
+            FilledLargePrimaryButton(
                 enabled = state.countries.isNotEmpty(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = Dimens.x2),
-                text = stringResource(id = R.string.common_done),
-                order = Order.PRIMARY,
-                size = Size.Large,
+                text = TextValue.StringRes(id = R.string.common_done),
                 onClick = onDone,
             )
         }

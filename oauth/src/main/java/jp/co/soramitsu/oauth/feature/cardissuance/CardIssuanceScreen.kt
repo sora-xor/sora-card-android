@@ -25,7 +25,7 @@ import jp.co.soramitsu.oauth.base.compose.BalanceIndicator
 import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.base.compose.ScreenStatus
 import jp.co.soramitsu.oauth.feature.cardissuance.state.CardIssuanceScreenState
-import jp.co.soramitsu.ui_core.component.button.FilledButton
+import jp.co.soramitsu.oauth.styledui.FilledLargePrimaryButton
 import jp.co.soramitsu.ui_core.component.button.OutlinedButton
 import jp.co.soramitsu.ui_core.component.button.properties.Order
 import jp.co.soramitsu.ui_core.component.button.properties.Size
@@ -128,14 +128,12 @@ private fun FreeCardIssuance(cardState: CardIssuanceScreenState, onClick: () -> 
                 label = state.xorSufficiencyText.retrieveString(),
             )
 
-            FilledButton(
+            FilledLargePrimaryButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = Dimens.x3)
                     .padding(bottom = Dimens.x3),
-                text = state.getInsufficientXorText.retrieveString(),
-                order = Order.PRIMARY,
-                size = Size.Large,
+                text = state.getInsufficientXorText,
                 enabled = state.isGetInsufficientXorButtonEnabled,
                 onClick = onClick,
             )

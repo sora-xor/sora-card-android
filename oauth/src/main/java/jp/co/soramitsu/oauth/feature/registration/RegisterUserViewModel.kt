@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.TextFieldValue
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
@@ -30,7 +31,7 @@ class RegisterUserViewModel @Inject constructor(
                 label = R.string.user_registration_last_name_input_filed_label,
             ),
             buttonState = ButtonState(
-                title = R.string.common_continue,
+                title = TextValue.StringRes(R.string.common_continue),
                 enabled = false,
             ),
         ),

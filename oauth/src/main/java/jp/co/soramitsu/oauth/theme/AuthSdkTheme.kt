@@ -2,6 +2,9 @@ package jp.co.soramitsu.oauth.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import jp.co.soramitsu.oauth.clients.ui.UiStyle
+import jp.co.soramitsu.oauth.clients.ui.localCompositionUiStyle
 import jp.co.soramitsu.oauth.theme.tokens.DayThemeColors
 import jp.co.soramitsu.oauth.theme.tokens.NightThemeColors
 import jp.co.soramitsu.oauth.theme.tokens.buttonM
@@ -33,14 +36,25 @@ val darkScrim = android.graphics.Color.argb(0x80, 0x1b, 0x1b, 0x1b)
 
 @Composable
 fun AuthSdkTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
-    AppTheme(
-        darkTheme = darkTheme,
-        lightColors = lightColors,
-        darkColors = darkColors,
-        typography = typography,
-        borderRadius = borderRadius,
-        content = content,
-    )
+    if (localCompositionUiStyle.current == UiStyle.SW) {
+        AppTheme(
+            darkTheme = darkTheme,
+            lightColors = lightColors,
+            darkColors = darkColors,
+            typography = typography,
+            borderRadius = borderRadius,
+            content = content,
+        )
+    } else {
+        AppTheme(
+            darkTheme = darkTheme,
+            lightColors = lightColorsFw,
+            darkColors = lightColorsFw,
+            typography = typography,
+            borderRadius = borderRadius,
+            content = content,
+        )
+    }
 }
 
 private val lightColors = lightColors(
@@ -115,4 +129,28 @@ private val borderRadius: BorderRadius = borderRadiuses(
     m = jp.co.soramitsu.oauth.theme.tokens.BorderRadius.M,
     ml = jp.co.soramitsu.oauth.theme.tokens.BorderRadius.ML,
     xl = jp.co.soramitsu.oauth.theme.tokens.BorderRadius.L,
+)
+
+private val lightColorsFw = lightColors(
+    accentPrimary = DayThemeColors.AccentPrimary,
+    accentPrimaryContainer = DayThemeColors.AccentPrimaryContainer,
+    accentSecondary = DayThemeColors.AccentSecondary,
+    accentSecondaryContainer = DayThemeColors.AccentSecondaryContainer,
+    accentTertiary = DayThemeColors.AccentTertiary,
+    accentTertiaryContainer = DayThemeColors.AccentTertiaryContainer,
+    bgPage = Color(0xff1c1a1b),
+    bgSurface = Color(0xff131313),
+    bgSurfaceVariant = DayThemeColors.BgSurfaceVariant,
+    bgSurfaceInverted = DayThemeColors.BgSurfaceInverted,
+    fgPrimary = NightThemeColors.FgPrimary,
+    fgSecondary = DayThemeColors.FgSecondary,
+    fgTertiary = DayThemeColors.FgTertiary,
+    fgInverted = DayThemeColors.FgInverted,
+    fgOutline = DayThemeColors.FgOutline,
+    statusSuccess = DayThemeColors.StatusSuccess,
+    statusSuccessContainer = DayThemeColors.StatusSuccessContainer,
+    statusWarning = DayThemeColors.StatusWarning,
+    statusWarningContainer = DayThemeColors.StatusWarningContainer,
+    statusError = DayThemeColors.StatusError,
+    statusErrorContainer = DayThemeColors.StatusErrorContainer,
 )

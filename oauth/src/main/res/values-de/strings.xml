@@ -48,12 +48,14 @@
   <string name="common_user_not_found">Keine Handynummer gefunden, bitte überprüfen Sie sie erneut und versuchen Sie es erneut.</string>
   <string name="details_already_have_card">Ich habe bereits eine Karte</string>
   <string name="details_already_used_free_try">Sie haben Ihren kostenlosen Versuch bereits genutzt</string>
+  <string name="details_annual_service_fee">0 € jährliche Servicegebühr</string>
   <string name="details_description">Erhalten Sie ein Euro-IBAN Konto und eine Debitkarte, auf die Sie mit Ihrem SORA Wallet zugreifen können.</string>
   <string name="details_enough_xor_desription">Sie haben genug XOR</string>
   <string name="details_free_card_issuance_conditions_euro">oder %s € Anmeldegebühr</string>
   <string name="details_get_more_xor">Hole mehr XOR</string>
   <string name="details_issue_card">Karte kostenlos ausstellen</string>
   <string name="details_need_xor_desription" formatted="false">Sie benötigen %s mehr XOR (€%s)</string>
+  <string name="details_title">Laden Sie die SORA Card mit Fiat- oder Kryptowährungen auf und zahlen Sie online, in Geschäften oder an Geldautomaten.</string>
   <string name="enter_email_description">Der Magic Link wird an Ihre E-Mail geschickt.</string>
   <string name="enter_email_input_field_label">E-Mail</string>
   <string name="enter_email_title">Ihre E-Mail eingeben</string>

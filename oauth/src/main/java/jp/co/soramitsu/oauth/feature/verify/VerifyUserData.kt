@@ -16,12 +16,11 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import jp.co.soramitsu.androidfoundation.compose.toTitle
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.base.testTagAsId
 import jp.co.soramitsu.oauth.feature.verify.model.ButtonState
-import jp.co.soramitsu.ui_core.component.button.FilledButton
+import jp.co.soramitsu.oauth.styledui.FilledLargeSecondaryButton
 import jp.co.soramitsu.ui_core.component.button.LoaderWrapper
-import jp.co.soramitsu.ui_core.component.button.properties.Order
 import jp.co.soramitsu.ui_core.component.button.properties.Size
 import jp.co.soramitsu.ui_core.component.input.InputText
 import jp.co.soramitsu.ui_core.component.input.InputTextState
@@ -76,11 +75,11 @@ internal fun VerifyUserData(
             loading = buttonState.loading,
             loaderSize = Size.Large,
         ) { modifier, _ ->
-            FilledButton(
+            FilledLargeSecondaryButton(
                 modifier = modifier.testTagAsId("PrimaryButton"),
-                order = Order.SECONDARY,
-                size = Size.Large,
-                text = buttonState.timer.takeIf { it != null } ?: buttonState.title.toTitle(),
+                text = buttonState.timer.takeIf {
+                    it != null
+                }?.let { TextValue.SimpleText(it) } ?: buttonState.title,
                 enabled = buttonState.enabled,
                 onClick = onConfirm,
             )

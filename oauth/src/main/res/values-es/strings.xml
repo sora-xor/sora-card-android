@@ -48,12 +48,14 @@
   <string name="common_user_not_found">No se ha encontrado ningún número de móvil, vuelva a comprobarlo e inténtelo de nuevo.</string>
   <string name="details_already_have_card">Ya tengo tarjeta</string>
   <string name="details_already_used_free_try">Ya ha utilizado su intento gratuito</string>
+  <string name="details_annual_service_fee">Cuota anual de servicio 0 €</string>
   <string name="details_description">Consigue una cuenta Euro IBAN y Tarjeta de Débito conectadas a tu billetera SORA</string>
   <string name="details_enough_xor_desription">Tienes suficientes XOR</string>
   <string name="details_free_card_issuance_conditions_euro">o tarifa de solicitud de %s €</string>
   <string name="details_get_more_xor">Conseguir más XOR</string>
   <string name="details_issue_card">Emitir tarjeta gratuitamente</string>
   <string name="details_need_xor_desription" formatted="false">Necesita %s más XOR (€%s)</string>
+  <string name="details_title">Recarga tu Tarjeta SORA con fiat o cripto y paga online, en la tienda o retira dinero del cajero</string>
   <string name="enter_email_description">El link mágico será enviado\n a tu correo electrónico</string>
   <string name="enter_email_input_field_label">Correo electrónico</string>
   <string name="enter_email_title">Introduzca su correo electrónico</string>

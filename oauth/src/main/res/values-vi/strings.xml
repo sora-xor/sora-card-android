@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-  <string name="add_country">Add country</string>
+  <string name="add_country">Thêm quốc gia</string>
   <string name="almost_there">Sắp đến rồi!</string>
   <string name="cant_fetch_data">Không thể tìm nạp dữ liệu</string>
   <string name="cant_fetch_refresh">Không thể tìm nạp dữ liệu, nhấn để làm mới.</string>
@@ -48,12 +48,14 @@
   <string name="common_user_not_found">Không tìm thấy số điện thoại di động nào, vui lòng kiểm tra lại và thử lại.</string>
   <string name="details_already_have_card">Tôi đã có thẻ</string>
   <string name="details_already_used_free_try">Bạn đã sử dụng bản dùng thử miễn phí của mình</string>
+  <string name="details_annual_service_fee">€0 phí dịch vụ hàng năm</string>
   <string name="details_description">Nhận tài khoản Euro IBAN và thẻ ghi nợ có thể truy cập trong Ví SORA của bạn</string>
   <string name="details_enough_xor_desription">Bạn có đủ XOR</string>
   <string name="details_free_card_issuance_conditions_euro">hoặc đăng ký với %s €</string>
   <string name="details_get_more_xor">Nhận thêm XOR</string>
   <string name="details_issue_card">Phát hành thẻ miễn phí</string>
   <string name="details_need_xor_desription" formatted="false">Bạn cần thêm %s XOR (€%s)</string>
+  <string name="details_title">Nạp vào SORA Card của bạn bằng tiền pháp định hoặc tiền điện tử và thanh toán trực tuyến, tại cửa hàng hoặc rút tiền từ máy ATM.</string>
   <string name="enter_email_description">Liên kết ma thuật sẽ được gửi\nđến email của bạn</string>
   <string name="enter_email_input_field_label">Email</string>
   <string name="enter_email_title">Nhập email của bạn</string>
@@ -63,16 +65,16 @@
   <string name="error_occured">Thật không may, một lỗi đã xảy ra.</string>
   <string name="exchange_xor">Trao đổi XOR</string>
   <string name="expected_volume">Khối lượng giao dịch dự kiến của bạn là bao nhiêu?</string>
-  <string name="gatehub_employment_status">What is your employment status?</string>
-  <string name="gatehub_item_employed">Employed</string>
-  <string name="gatehub_item_retired">Retired</string>
-  <string name="gatehub_item_selfemployed">Self-employed</string>
-  <string name="gatehub_item_student">Student</string>
-  <string name="gatehub_item_unemployed">Unemployed</string>
+  <string name="gatehub_employment_status">Tình trạng công việc của bạn thế nào?</string>
+  <string name="gatehub_item_employed">Đã đi làm</string>
+  <string name="gatehub_item_retired">Đã nghỉ hưu</string>
+  <string name="gatehub_item_selfemployed">Tự kinh doanh</string>
+  <string name="gatehub_item_student">Sinh viên</string>
+  <string name="gatehub_item_unemployed">Thất nghiệp</string>
   <string name="gatehub_onboarding_description">Vui lòng đợi trong khi chúng tôi thiết lập mọi thứ.</string>
   <string name="gatehub_unable_complete">Chúng tôi không thể hoàn tất quá trình giới thiệu.</string>
-  <string name="gatehub_where_transfer_from">Where are your transfers from?</string>
-  <string name="gatehub_where_transfer_to">Where are your transfers to?</string>
+  <string name="gatehub_where_transfer_from">Bạn chuyển khoản từ đâu?</string>
+  <string name="gatehub_where_transfer_to">Bạn chuyển khoản đến đâu?</string>
   <string name="get_more_xor_dialog_buy_option">Mua XOR bằng EUR</string>
   <string name="get_more_xor_dialog_deposit_option">Nạp XOR</string>
   <string name="get_more_xor_dialog_description">Bạn có thể đổi lấy XOR hoặc mua bằng Euro</string>
@@ -92,7 +94,7 @@
   <string name="get_prepared_title">Chuẩn bị sẵn sàng</string>
   <string name="iban_frozen_description">IBAN của bạn đã bị đóng băng.\n Để tìm hiểu thêm, hãy liên hệ %s</string>
   <string name="iban_pending_description">Việc cấp IBAN của bạn đang chờ xử lý.\n Trong trường hợp chờ đợi lâu hơn 72h, hãy liên hệ với chúng tôi qua %s</string>
-  <string name="item_cross_border_tx">Cross-border transactions</string>
+  <string name="item_cross_border_tx">Giao dịch xuyên biên giới</string>
   <string name="item_holding_crypto">Tiền điện tử đang có</string>
   <string name="item_more_than">Nhiều hơn %s</string>
   <string name="item_other">Khác</string>
@@ -121,7 +123,7 @@
   <string name="phone_number_leading_zero">Định dạng số điện thoại được nhập có vẻ bất thường. Nếu vấn đề phát sinh, hãy cân nhắc việc xóa số \"0\" ở đầu.</string>
   <string name="register_new_account">Đăng ký tài khoản mới</string>
   <string name="select_many">Bạn có thể chọn nhiều câu trả lời:</string>
-  <string name="select_many_countries">You can select multiple countries:</string>
+  <string name="select_many_countries">Bạn có thể chọn nhiều quốc gia:</string>
   <string name="select_one">Chọn một trong các tùy chọn sau:</string>
   <string name="select_your_country">Chọn đất nước của bạn</string>
   <string name="sign_up_sora_card">Đăng ký thẻ SORA</string>
@@ -166,6 +168,6 @@
   <string name="verify_phone_number_send_code">GỬI MÃ</string>
   <string name="verify_phone_number_title">Xác minh số điện thoại của bạn</string>
   <string name="your_phone_number">Số điện thoại của bạn</string>
-  <string name="your_transfers_from">Your transfers from</string>
-  <string name="your_transfers_to">Your transfers to</string>
+  <string name="your_transfers_from">Chuyển khoản của bạn từ</string>
+  <string name="your_transfers_to">Bạn chuyển khoản đến</string>
 </resources>

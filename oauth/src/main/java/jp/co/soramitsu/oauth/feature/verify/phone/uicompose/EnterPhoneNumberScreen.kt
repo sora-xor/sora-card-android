@@ -33,16 +33,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import jp.co.soramitsu.androidfoundation.compose.toTitle
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.base.testTagAsId
 import jp.co.soramitsu.oauth.feature.flagEmoji
 import jp.co.soramitsu.oauth.feature.verify.model.ButtonState
 import jp.co.soramitsu.oauth.feature.verify.phone.EnterPhoneNumberViewModel
-import jp.co.soramitsu.ui_core.component.button.FilledButton
+import jp.co.soramitsu.oauth.styledui.FilledLargeSecondaryButton
 import jp.co.soramitsu.ui_core.component.button.LoaderWrapper
-import jp.co.soramitsu.ui_core.component.button.properties.Order
 import jp.co.soramitsu.ui_core.component.button.properties.Size
 import jp.co.soramitsu.ui_core.component.input.InputText
 import jp.co.soramitsu.ui_core.component.input.InputTextState
@@ -195,11 +194,11 @@ private fun PhoneScreen(
             loading = buttonState.loading,
             loaderSize = Size.Large,
         ) { modifier, _ ->
-            FilledButton(
+            FilledLargeSecondaryButton(
                 modifier = modifier.testTagAsId("PrimaryButton"),
-                order = Order.SECONDARY,
-                size = Size.Large,
-                text = buttonState.timer.takeIf { it != null } ?: buttonState.title.toTitle(),
+                text = buttonState.timer.takeIf {
+                    it != null
+                }?.let { TextValue.SimpleText(it) } ?: buttonState.title,
                 enabled = buttonState.enabled,
                 onClick = onConfirm,
             )
@@ -214,7 +213,7 @@ private fun PreviewScreen() {
         scrollState = rememberScrollState(),
         inputTextStatePhoneCode = InputTextState(TextFieldValue("code")),
         inputTextStatePhoneNumber = InputTextState(TextFieldValue("number")),
-        buttonState = ButtonState("Title"),
+        buttonState = ButtonState(TextValue.SimpleText("Title")),
         countryCode = "NZ",
         countryName = "New Zealand",
         focusRequester = remember { FocusRequester() },
