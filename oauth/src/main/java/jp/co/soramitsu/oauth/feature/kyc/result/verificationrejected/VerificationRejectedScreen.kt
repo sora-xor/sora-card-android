@@ -3,6 +3,7 @@ package jp.co.soramitsu.oauth.feature.kyc.result.verificationrejected
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,15 +27,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.androidfoundation.format.retrieveString
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.compose.Screen
-import jp.co.soramitsu.oauth.base.compose.ScreenStatus
 import jp.co.soramitsu.oauth.feature.YourPhoneNumberText
-import jp.co.soramitsu.oauth.styledui.FilledLargeSecondaryButton
-import jp.co.soramitsu.ui_core.component.button.TonalButton
-import jp.co.soramitsu.ui_core.component.button.properties.Order
-import jp.co.soramitsu.ui_core.component.button.properties.Size
+import jp.co.soramitsu.oauth.uiscreens.compose.Screen
+import jp.co.soramitsu.oauth.uiscreens.compose.ScreenStatus
+import jp.co.soramitsu.oauth.uiscreens.styledui.FilledLargeSecondaryButton
+import jp.co.soramitsu.oauth.uiscreens.styledui.LargeTonalButton
+import jp.co.soramitsu.oauth.uiscreens.theme.AuthSdkTheme
 import jp.co.soramitsu.ui_core.resources.Dimens
 import jp.co.soramitsu.ui_core.theme.customColors
 import jp.co.soramitsu.ui_core.theme.customTypography
@@ -66,6 +67,7 @@ private fun VerificationRejectedContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.customColors.bgSurface)
             .padding(top = Dimens.x3, start = Dimens.x3, end = Dimens.x3, bottom = Dimens.x5),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -135,13 +137,14 @@ private fun VerificationRejectedContent(
                 onClick = onTryAgain,
             )
 
-            TonalButton(
+            LargeTonalButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = Dimens.x3),
-                order = Order.SECONDARY,
-                size = Size.Large,
-                text = stringResource(id = R.string.verification_rejected_screen_support_telegram),
+                enabled = true,
+                text = TextValue.StringRes(
+                    id = R.string.verification_rejected_screen_support_telegram,
+                ),
                 onClick = onTelegramSupport,
             )
         }
@@ -174,18 +177,19 @@ private fun ReasonRow(reason: String) {
 @Composable
 @Preview(locale = "en", showBackground = true)
 private fun PreviewApplicationRejected1() {
-    VerificationRejectedContent(
-        scrollState = rememberScrollState(),
-        state = VerificationRejectedScreenState(
-            screenStatus = ScreenStatus.READY_TO_RENDER,
-            kycFreeAttemptsCount = 5,
-            isFreeAttemptsLeft = true,
-            phone = "+876857464645634",
-            kycAttemptCostInEuros = "3.80",
-            reason = "Video was rejected",
-            reasonDetails = listOf(
-                "The user uploaded screenshot, Why did he do it, Who knows.",
-                "The user uploaded screenshot, Why did he do it, Who knows.",
+    AuthSdkTheme {
+        VerificationRejectedContent(
+            scrollState = rememberScrollState(),
+            state = VerificationRejectedScreenState(
+                screenStatus = ScreenStatus.READY_TO_RENDER,
+                kycFreeAttemptsCount = 5,
+                isFreeAttemptsLeft = true,
+                phone = "+876857464645634",
+                kycAttemptCostInEuros = "3.80",
+                reason = "Video was rejected",
+                reasonDetails = listOf(
+                    "The user uploaded screenshot, Why did he do it, Who knows.",
+                    "The user uploaded screenshot, Why did he do it, Who knows.",
 //                "The user uploaded screenshot, Why did he do it, Who knows.",
 //                "The user uploaded screenshot, Why did he do it, Who knows.",
 //                "Poor quality",
@@ -195,29 +199,32 @@ private fun PreviewApplicationRejected1() {
 //                "Damaged",
 //                "Damaged",
 //                "Damaged",
-                "Damaged",
+                    "Damaged",
+                ),
             ),
-        ),
-        onTelegramSupport = {},
-        onTryAgain = {},
-    )
+            onTelegramSupport = {},
+            onTryAgain = {},
+        )
+    }
 }
 
 @Composable
 @Preview(showBackground = true)
 private fun PreviewApplicationRejected2() {
-    VerificationRejectedContent(
-        scrollState = rememberScrollState(),
-        state = VerificationRejectedScreenState(
-            screenStatus = ScreenStatus.READY_TO_RENDER,
-            kycFreeAttemptsCount = 0,
-            isFreeAttemptsLeft = false,
-            kycAttemptCostInEuros = "3.80",
-            reason = null,
-            phone = "+876857464645634",
-            reasonDetails = null,
-        ),
-        onTelegramSupport = {},
-        onTryAgain = {},
-    )
+    AuthSdkTheme {
+        VerificationRejectedContent(
+            scrollState = rememberScrollState(),
+            state = VerificationRejectedScreenState(
+                screenStatus = ScreenStatus.READY_TO_RENDER,
+                kycFreeAttemptsCount = 0,
+                isFreeAttemptsLeft = false,
+                kycAttemptCostInEuros = "3.80",
+                reason = null,
+                phone = "+876857464645634",
+                reasonDetails = null,
+            ),
+            onTelegramSupport = {},
+            onTryAgain = {},
+        )
+    }
 }

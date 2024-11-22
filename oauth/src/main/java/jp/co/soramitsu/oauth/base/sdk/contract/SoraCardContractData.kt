@@ -4,7 +4,7 @@ import android.os.Parcelable
 import java.util.Locale
 import jp.co.soramitsu.oauth.base.sdk.SoraCardEnvironmentType
 import jp.co.soramitsu.oauth.base.sdk.SoraCardKycCredentials
-import jp.co.soramitsu.oauth.clients.ui.UiStyle
+import jp.co.soramitsu.oauth.uiscreens.clientsui.UiStyle
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

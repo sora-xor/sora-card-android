@@ -24,7 +24,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.compose.Screen
+import jp.co.soramitsu.oauth.uiscreens.compose.Screen
+import jp.co.soramitsu.oauth.uiscreens.theme.AuthSdkTheme
 import jp.co.soramitsu.ui_core.component.card.ContentCard
 import jp.co.soramitsu.ui_core.resources.Dimens
 import jp.co.soramitsu.ui_core.theme.borderRadius
@@ -91,7 +92,9 @@ private fun GatehubOnboardingProgressScreenContent(scrollState: ScrollState) {
 @Composable
 @Preview(showBackground = true)
 private fun PreviewGatehubOnboardingProgressScreenContent() {
-    GatehubOnboardingProgressScreenContent(
-        scrollState = rememberScrollState(),
-    )
+    AuthSdkTheme {
+        GatehubOnboardingProgressScreenContent(
+            scrollState = rememberScrollState(),
+        )
+    }
 }

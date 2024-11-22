@@ -33,11 +33,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.common.model.CountryDial
 import jp.co.soramitsu.oauth.common.model.countryDialList
 import jp.co.soramitsu.oauth.feature.flagEmoji
-import jp.co.soramitsu.oauth.styledui.FilledLargePrimaryButton
+import jp.co.soramitsu.oauth.uiscreens.clientsui.UiStyle
+import jp.co.soramitsu.oauth.uiscreens.clientsui.localCompositionUiStyle
+import jp.co.soramitsu.oauth.uiscreens.compose.Screen
+import jp.co.soramitsu.oauth.uiscreens.styledui.FilledLargePrimaryButton
+import jp.co.soramitsu.oauth.uiscreens.styledui.fw.white
+import jp.co.soramitsu.oauth.uiscreens.theme.AuthSdkTheme
 import jp.co.soramitsu.ui_core.component.card.ContentCard
 import jp.co.soramitsu.ui_core.resources.Dimens
 import jp.co.soramitsu.ui_core.theme.borderRadius
@@ -154,11 +158,15 @@ private fun GatehubCrossBorderTxScreenInternal(
                     .clickable(onClick = onAddCountry),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
+                val iconTint = when (localCompositionUiStyle.current) {
+                    UiStyle.SW -> Color(0xff0a0a0a)
+                    UiStyle.FW -> white
+                }
                 Icon(
                     painter = painterResource(jp.co.soramitsu.ui_core.R.drawable.ic_plus),
                     contentDescription = null,
                     modifier = Modifier.size(24.dp),
-                    tint = Color(0xff0a0a0a),
+                    tint = iconTint,
                 )
                 Text(
                     modifier = Modifier
@@ -186,21 +194,23 @@ private fun GatehubCrossBorderTxScreenInternal(
 @Composable
 @Preview(showBackground = true)
 private fun GatehubCrossBorderTxScreenInternalPreview() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(12.dp),
-    ) {
-        GatehubCrossBorderTxScreenInternal(
-            modifier = Modifier.wrapContentSize(),
-            scrollState = rememberScrollState(),
-            state = CrossBorderTxState(
-                countriesFrom = true,
-                countries = countryDialList,
-            ),
-            onDone = {},
-            onAddCountry = {},
-            onRemoveCountry = {},
-        )
+    AuthSdkTheme {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(12.dp),
+        ) {
+            GatehubCrossBorderTxScreenInternal(
+                modifier = Modifier.wrapContentSize(),
+                scrollState = rememberScrollState(),
+                state = CrossBorderTxState(
+                    countriesFrom = true,
+                    countries = countryDialList,
+                ),
+                onDone = {},
+                onAddCountry = {},
+                onRemoveCountry = {},
+            )
+        }
     }
 }

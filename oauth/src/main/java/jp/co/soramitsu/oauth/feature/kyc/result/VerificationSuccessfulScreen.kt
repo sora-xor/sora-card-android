@@ -3,6 +3,7 @@ package jp.co.soramitsu.oauth.feature.kyc.result
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,12 +21,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.feature.YourPhoneNumberText
-import jp.co.soramitsu.ui_core.component.button.TonalButton
-import jp.co.soramitsu.ui_core.component.button.properties.Order
-import jp.co.soramitsu.ui_core.component.button.properties.Size
+import jp.co.soramitsu.oauth.uiscreens.compose.Screen
+import jp.co.soramitsu.oauth.uiscreens.styledui.LargeTonalButton
+import jp.co.soramitsu.oauth.uiscreens.theme.AuthSdkTheme
 import jp.co.soramitsu.ui_core.resources.Dimens
 import jp.co.soramitsu.ui_core.theme.customColors
 import jp.co.soramitsu.ui_core.theme.customTypography
@@ -56,6 +57,7 @@ private fun VerificationSuccessfulContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.customColors.bgSurface)
             .verticalScroll(scrollState)
             .padding(top = Dimens.x3, start = Dimens.x3, end = Dimens.x3, bottom = Dimens.x5),
     ) {
@@ -80,14 +82,11 @@ private fun VerificationSuccessfulContent(
                 contentDescription = null,
             )
         }
-
-        TonalButton(
+        LargeTonalButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = Dimens.x3),
-            order = Order.SECONDARY,
-            size = Size.Large,
-            text = stringResource(R.string.common_close),
+            text = TextValue.StringRes(R.string.common_close),
             enabled = true,
             onClick = onClose,
         )
@@ -97,9 +96,11 @@ private fun VerificationSuccessfulContent(
 @Composable
 @Preview(showBackground = true)
 private fun PreviewVerificationInProgressScreen() {
-    VerificationSuccessfulContent(
-        scrollState = rememberScrollState(),
-        phone = "+123457669789",
-        onClose = {},
-    )
+    AuthSdkTheme {
+        VerificationSuccessfulContent(
+            scrollState = rememberScrollState(),
+            phone = "+123457669789",
+            onClose = {},
+        )
+    }
 }

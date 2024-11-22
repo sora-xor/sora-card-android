@@ -2,7 +2,7 @@ package jp.co.soramitsu.oauth.feature.cardissuance.state
 
 import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.compose.ScreenStatus
+import jp.co.soramitsu.oauth.uiscreens.compose.ScreenStatus
 
 data class FreeCardIssuanceState(
     val screenStatus: ScreenStatus,

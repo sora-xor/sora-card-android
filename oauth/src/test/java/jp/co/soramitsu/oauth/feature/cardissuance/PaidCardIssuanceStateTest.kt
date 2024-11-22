@@ -2,8 +2,8 @@ package jp.co.soramitsu.oauth.feature.cardissuance
 
 import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.compose.ScreenStatus
 import jp.co.soramitsu.oauth.feature.cardissuance.state.PaidCardIssuanceState
+import jp.co.soramitsu.oauth.uiscreens.compose.ScreenStatus
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Before

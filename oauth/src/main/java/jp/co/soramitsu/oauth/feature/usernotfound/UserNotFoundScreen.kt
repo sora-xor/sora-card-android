@@ -1,6 +1,7 @@
 package jp.co.soramitsu.oauth.feature.usernotfound
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,12 +19,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.feature.YourPhoneNumberText
-import jp.co.soramitsu.oauth.styledui.FilledLargePrimaryButton
-import jp.co.soramitsu.ui_core.component.button.TonalButton
-import jp.co.soramitsu.ui_core.component.button.properties.Order
-import jp.co.soramitsu.ui_core.component.button.properties.Size
+import jp.co.soramitsu.oauth.uiscreens.compose.Screen
+import jp.co.soramitsu.oauth.uiscreens.styledui.FilledLargePrimaryButton
+import jp.co.soramitsu.oauth.uiscreens.styledui.LargeTonalButton
+import jp.co.soramitsu.oauth.uiscreens.theme.AuthSdkTheme
 import jp.co.soramitsu.ui_core.resources.Dimens
 import jp.co.soramitsu.ui_core.theme.customColors
 import jp.co.soramitsu.ui_core.theme.customTypography
@@ -51,6 +51,7 @@ private fun UserNotFoundScreenInternal(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.customColors.bgSurface)
             .padding(start = Dimens.x3, end = Dimens.x3, bottom = Dimens.x5),
         verticalArrangement = Arrangement.SpaceBetween,
     ) {
@@ -84,11 +85,10 @@ private fun UserNotFoundScreenInternal(
                 .wrapContentHeight(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            TonalButton(
+            LargeTonalButton(
                 modifier = Modifier.fillMaxWidth(),
-                size = Size.Large,
-                order = Order.SECONDARY,
-                text = stringResource(id = R.string.try_another_number),
+                text = TextValue.StringRes(id = R.string.try_another_number),
+                enabled = true,
                 onClick = onTryAnotherNumber,
             )
             FilledLargePrimaryButton(
@@ -106,9 +106,11 @@ private fun UserNotFoundScreenInternal(
 @Composable
 @Preview(showBackground = true)
 private fun PreviewUserNotFoundScreenInternal() {
-    UserNotFoundScreenInternal(
-        phone = "+9886438537658377644646",
-        onRegisterNewAccount = {},
-        onTryAnotherNumber = {},
-    )
+    AuthSdkTheme {
+        UserNotFoundScreenInternal(
+            phone = "+9886438537658377644646",
+            onRegisterNewAccount = {},
+            onTryAnotherNumber = {},
+        )
+    }
 }

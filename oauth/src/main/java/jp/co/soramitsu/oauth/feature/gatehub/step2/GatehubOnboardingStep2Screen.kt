@@ -20,8 +20,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.androidfoundation.format.retrieveString
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.compose.Screen
-import jp.co.soramitsu.oauth.styledui.FilledLargePrimaryButton
+import jp.co.soramitsu.oauth.uiscreens.compose.Screen
+import jp.co.soramitsu.oauth.uiscreens.styledui.FilledLargePrimaryButton
+import jp.co.soramitsu.oauth.uiscreens.theme.AuthSdkTheme
 import jp.co.soramitsu.ui_core.component.card.ContentCard
 import jp.co.soramitsu.ui_core.component.checkbox.CheckboxButton
 import jp.co.soramitsu.ui_core.resources.Dimens
@@ -107,18 +108,20 @@ private fun GatehubOnboardingStep2ScreenContent(
 @Composable
 @Preview(showBackground = true)
 private fun PreviewGatehubOnboardingStep2ScreenContent() {
-    GatehubOnboardingStep2ScreenContent(
-        scrollState = rememberScrollState(),
-        state = GatehubOnboardingStep2State(
-            buttonEnabled = true,
-            selectedPos = listOf(0, 3),
-            reasons = listOf("reason 1", "reason 2", "reason 3", "reason 4").map {
-                TextValue.SimpleText(
-                    it,
-                )
-            },
-        ),
-        onNext = {},
-        onItemClick = {},
-    )
+    AuthSdkTheme {
+        GatehubOnboardingStep2ScreenContent(
+            scrollState = rememberScrollState(),
+            state = GatehubOnboardingStep2State(
+                buttonEnabled = true,
+                selectedPos = listOf(0, 3),
+                reasons = listOf("reason 1", "reason 2", "reason 3", "reason 4").map {
+                    TextValue.SimpleText(
+                        it,
+                    )
+                },
+            ),
+            onNext = {},
+            onItemClick = {},
+        )
+    }
 }

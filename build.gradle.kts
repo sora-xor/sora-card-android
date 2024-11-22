@@ -63,7 +63,7 @@ sonarqube {
     properties {
         property("sonar.projectKey", "sora:sora-card-android")
         property("sonar.projectName", "sora-card-android")
-        property("sonar.exclusions", "${project.projectDir}/**/*.txt")
+        property("sonar.exclusions", "${project.projectDir}/**/*.txt,**/*Screen.kt")
         property(
             "sonar.junit.reportPaths",
             "${project.projectDir}/build/reports/tests/testReleaseUnitTest",

@@ -8,6 +8,8 @@
   <string name="card_hub_manage_card">Quản lý thẻ SORA</string>
   <string name="card_hub_manage_card_alert_title">Tải ứng dụng thẻ SORA</string>
   <string name="card_hub_manage_google_play">Để quản lý Thẻ SORA của bạn, vui lòng cài đặt Ứng dụng SORA Card. Nhấn OK để được chuyển đến Google Play.</string>
+  <string name="card_hub_settings_logout_title">Đăng xuất khỏi SORA Card</string>
+  <string name="card_hub_settings_title">Cài đặt thẻ</string>
   <string name="card_hub_title">Chi tiết thẻ</string>
   <string name="card_hub_update_button">Cập nhật ngay</string>
   <string name="card_hub_update_description">Bạn đang sử dụng phiên bản hoặc ứng dụng lỗi thời, một số phần có thể không hoạt động như dự kiến.</string>
@@ -121,11 +123,15 @@
   <string name="payment_widget_unavailable_message">Tiện ích thanh toán hiện không khả dụng</string>
   <string name="payment_widget_unavailable_title">Tiện ích không khả dụng</string>
   <string name="phone_number_leading_zero">Định dạng số điện thoại được nhập có vẻ bất thường. Nếu vấn đề phát sinh, hãy cân nhắc việc xóa số \"0\" ở đầu.</string>
+  <string name="recent_activity">Recent activity</string>
+  <string name="refer_and_earn">Refer &amp; Earn</string>
+  <string name="refer_sora_card_bonus">Refer SORA Card.\nGet €20 bonus.</string>
   <string name="register_new_account">Đăng ký tài khoản mới</string>
   <string name="select_many">Bạn có thể chọn nhiều câu trả lời:</string>
   <string name="select_many_countries">Bạn có thể chọn nhiều quốc gia:</string>
   <string name="select_one">Chọn một trong các tùy chọn sau:</string>
   <string name="select_your_country">Chọn đất nước của bạn</string>
+  <string name="show_more">Show more</string>
   <string name="sign_up_sora_card">Đăng ký thẻ SORA</string>
   <string name="source_of_funds">Nguồn tiền của bạn?</string>
   <string name="support_chat">Trò chuyện với hỗ trợ</string>

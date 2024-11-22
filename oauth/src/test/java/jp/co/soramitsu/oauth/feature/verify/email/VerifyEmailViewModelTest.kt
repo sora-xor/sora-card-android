@@ -9,6 +9,8 @@ import io.mockk.junit4.MockKRule
 import io.mockk.just
 import io.mockk.runs
 import io.mockk.verify
+import jp.co.soramitsu.androidfoundation.format.TextValue
+import jp.co.soramitsu.androidfoundation.format.unsafeCast
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
@@ -83,13 +85,19 @@ class VerifyEmailViewModelTest {
 
     @Test
     fun `init EXPECT set up resend link button state`() {
-        assertEquals(R.string.common_resend_link, viewModel.state.resendLinkButtonState.title)
+        assertEquals(
+            R.string.common_resend_link,
+            viewModel.state.resendLinkButtonState.title.unsafeCast<TextValue.StringRes>().id,
+        )
         assertFalse(viewModel.state.resendLinkButtonState.enabled)
     }
 
     @Test
     fun `init EXPECT set up change email button state`() {
-        assertEquals(R.string.common_change_email, viewModel.state.changeEmailButtonState.title)
+        assertEquals(
+            R.string.common_change_email,
+            viewModel.state.changeEmailButtonState.title.unsafeCast<TextValue.StringRes>().id,
+        )
         assertTrue(viewModel.state.changeEmailButtonState.enabled)
     }
 

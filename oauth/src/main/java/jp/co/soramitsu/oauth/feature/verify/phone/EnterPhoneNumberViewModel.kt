@@ -20,7 +20,7 @@ import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.oauth.feature.telephone.LocaleService
 import jp.co.soramitsu.oauth.feature.verify.model.ButtonState
-import jp.co.soramitsu.oauth.feature.verify.phone.model.EnterPhoneNumberState
+import jp.co.soramitsu.oauth.feature.verify.phone.uiscreens.EnterPhoneNumberState
 import jp.co.soramitsu.ui_core.component.input.InputTextState
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState

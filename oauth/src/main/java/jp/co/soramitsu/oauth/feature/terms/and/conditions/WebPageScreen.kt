@@ -21,7 +21,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
-import jp.co.soramitsu.oauth.base.compose.Screen
+import jp.co.soramitsu.oauth.uiscreens.compose.Screen
 import jp.co.soramitsu.ui_core.resources.Dimens
 import jp.co.soramitsu.ui_core.theme.customColors
 
@@ -46,7 +46,8 @@ fun WebPageScreen(
         val state = viewModel.state
 
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize()
+                .background(MaterialTheme.customColors.bgSurface),
             contentAlignment = Alignment.Center,
         ) {
             AndroidView(

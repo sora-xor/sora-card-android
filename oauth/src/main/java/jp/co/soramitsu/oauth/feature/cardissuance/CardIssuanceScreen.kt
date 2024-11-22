@@ -21,11 +21,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import jp.co.soramitsu.androidfoundation.format.retrieveString
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.compose.BalanceIndicator
-import jp.co.soramitsu.oauth.base.compose.Screen
-import jp.co.soramitsu.oauth.base.compose.ScreenStatus
 import jp.co.soramitsu.oauth.feature.cardissuance.state.CardIssuanceScreenState
-import jp.co.soramitsu.oauth.styledui.FilledLargePrimaryButton
+import jp.co.soramitsu.oauth.uiscreens.compose.BalanceIndicator
+import jp.co.soramitsu.oauth.uiscreens.compose.Screen
+import jp.co.soramitsu.oauth.uiscreens.compose.ScreenStatus
+import jp.co.soramitsu.oauth.uiscreens.styledui.FilledLargePrimaryButton
+import jp.co.soramitsu.oauth.uiscreens.theme.AuthSdkTheme
 import jp.co.soramitsu.ui_core.component.button.OutlinedButton
 import jp.co.soramitsu.ui_core.component.button.properties.Order
 import jp.co.soramitsu.ui_core.component.button.properties.Size
@@ -192,15 +193,17 @@ private fun PaidCardIssuance(viewModel: CardIssuanceViewModel) {
 @Preview
 @Composable
 private fun PreviewCardIssuanceScreen() {
-    ScreenInternal(
-        state = CardIssuanceScreenState(
-            screenStatus = ScreenStatus.READY_TO_RENDER,
-            xorInsufficientAmount = 12.34,
-            euroInsufficientAmount = 34.56,
-            euroIssuanceAmount = "99.9",
-            euroLiquidityThreshold = 222.2,
-        ),
-        scrollState = rememberScrollState(),
-        onGetXorClicked = {},
-    )
+    AuthSdkTheme {
+        ScreenInternal(
+            state = CardIssuanceScreenState(
+                screenStatus = ScreenStatus.READY_TO_RENDER,
+                xorInsufficientAmount = 12.34,
+                euroInsufficientAmount = 34.56,
+                euroIssuanceAmount = "99.9",
+                euroLiquidityThreshold = 222.2,
+            ),
+            scrollState = rememberScrollState(),
+            onGetXorClicked = {},
+        )
+    }
 }

@@ -20,7 +20,7 @@ import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.verify.Timer
 import jp.co.soramitsu.oauth.feature.verify.format
 import jp.co.soramitsu.oauth.feature.verify.model.ButtonState
-import jp.co.soramitsu.oauth.feature.verify.phone.model.VerifyPhoneNumberState
+import jp.co.soramitsu.oauth.feature.verify.phone.uiscreens.VerifyPhoneNumberState
 import jp.co.soramitsu.ui_core.component.input.InputTextState
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState

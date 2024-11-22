@@ -9,6 +9,7 @@ import io.mockk.junit4.MockKRule
 import io.mockk.just
 import io.mockk.runs
 import io.mockk.verify
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.androidfoundation.format.unsafeCast
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
@@ -140,7 +141,10 @@ class EnterPhoneNumberViewModelTest {
 
     @Test
     fun `init EXPECT set up button state`() {
-        assertEquals(R.string.common_send_code, viewModel.state.value.buttonState.title)
+        assertEquals(
+            R.string.common_send_code,
+            viewModel.state.value.buttonState.title.unsafeCast<TextValue.StringRes>().id,
+        )
         assertFalse(viewModel.state.value.buttonState.enabled)
     }
 

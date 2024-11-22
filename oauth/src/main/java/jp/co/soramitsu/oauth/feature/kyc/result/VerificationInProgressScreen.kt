@@ -3,6 +3,7 @@ package jp.co.soramitsu.oauth.feature.kyc.result
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,12 +21,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.feature.YourPhoneNumberText
-import jp.co.soramitsu.ui_core.component.button.TonalButton
-import jp.co.soramitsu.ui_core.component.button.properties.Order
-import jp.co.soramitsu.ui_core.component.button.properties.Size
+import jp.co.soramitsu.oauth.uiscreens.compose.Screen
+import jp.co.soramitsu.oauth.uiscreens.styledui.LargeTonalButton
+import jp.co.soramitsu.oauth.uiscreens.theme.AuthSdkTheme
 import jp.co.soramitsu.ui_core.resources.Dimens
 import jp.co.soramitsu.ui_core.theme.customColors
 import jp.co.soramitsu.ui_core.theme.customTypography
@@ -57,6 +58,7 @@ private fun VerificationInProgressContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.customColors.bgSurface)
             .verticalScroll(scrollState)
             .padding(top = Dimens.x3, start = Dimens.x3, end = Dimens.x3, bottom = Dimens.x5),
     ) {
@@ -82,14 +84,12 @@ private fun VerificationInProgressContent(
             )
         }
 
-        TonalButton(
+        LargeTonalButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = Dimens.x3),
-            order = Order.SECONDARY,
-            size = Size.Large,
-            text = stringResource(id = R.string.verification_rejected_screen_support_telegram),
             enabled = true,
+            text = TextValue.StringRes(id = R.string.verification_rejected_screen_support_telegram),
             onClick = onClose,
         )
     }
@@ -98,11 +98,13 @@ private fun VerificationInProgressContent(
 @Preview(showBackground = true)
 @Composable
 private fun PreviewVerificationInProgressScreen() {
-    Box(modifier = Modifier.fillMaxSize()) {
-        VerificationInProgressContent(
-            scrollState = rememberScrollState(),
-            phone = "+12345678",
-            onClose = {},
-        )
+    AuthSdkTheme {
+        Box(modifier = Modifier.fillMaxSize()) {
+            VerificationInProgressContent(
+                scrollState = rememberScrollState(),
+                phone = "+12345678",
+                onClose = {},
+            )
+        }
     }
 }

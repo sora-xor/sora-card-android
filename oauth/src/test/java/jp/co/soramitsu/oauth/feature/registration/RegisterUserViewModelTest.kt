@@ -8,6 +8,8 @@ import io.mockk.junit4.MockKRule
 import io.mockk.just
 import io.mockk.runs
 import io.mockk.verify
+import jp.co.soramitsu.androidfoundation.format.TextValue
+import jp.co.soramitsu.androidfoundation.format.unsafeCast
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.domain.MainCoroutineRule
@@ -66,7 +68,10 @@ class RegisterUserViewModelTest {
 
     @Test
     fun `init EXPECT set up button state`() {
-        assertEquals(R.string.common_continue, viewModel.state.buttonState.title)
+        assertEquals(
+            R.string.common_continue,
+            viewModel.state.buttonState.title.unsafeCast<TextValue.StringRes>().id,
+        )
         assertFalse(viewModel.state.buttonState.enabled)
     }
 

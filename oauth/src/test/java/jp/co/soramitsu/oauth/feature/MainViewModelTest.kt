@@ -25,7 +25,6 @@ import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardContractData
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardFlow
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
-import jp.co.soramitsu.oauth.clients.ui.UiStyle
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.common.model.AccessTokenResponse
@@ -34,6 +33,7 @@ import jp.co.soramitsu.oauth.feature.gatehub.GateHubRepository
 import jp.co.soramitsu.oauth.feature.gatehub.IframeModel
 import jp.co.soramitsu.oauth.feature.gatehub.OnboardedResult
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
+import jp.co.soramitsu.oauth.uiscreens.clientsui.UiStyle
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest

@@ -4,7 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import jp.co.soramitsu.androidfoundation.format.retrieveString
-import jp.co.soramitsu.oauth.base.compose.SelectableDialog
+import jp.co.soramitsu.oauth.uiscreens.compose.SelectableDialog
+import jp.co.soramitsu.oauth.uiscreens.theme.AuthSdkTheme
 
 @Composable
 fun ChooseXorPurchaseMethodDialog(getMoreXorViewModel: GetMoreXorViewModel = hiltViewModel()) {
@@ -22,12 +23,14 @@ fun ChooseXorPurchaseMethodDialog(getMoreXorViewModel: GetMoreXorViewModel = hil
 @Preview(showBackground = true)
 @Composable
 private fun PreviewChooseXorPurchaseMethodDialog() {
-    SelectableDialog(
-        dialogTitle = "Title",
-        dialogDescription = "Desc",
-        selectableChoices = listOf("select 1", "select 2"),
-        cancelText = "cancel",
-        onCancelClickListener = {},
-        onChoiceSelectedClickListener = {},
-    )
+    AuthSdkTheme {
+        SelectableDialog(
+            dialogTitle = "Title",
+            dialogDescription = "Desc",
+            selectableChoices = listOf("select 1", "select 2"),
+            cancelText = "cancel",
+            onCancelClickListener = {},
+            onChoiceSelectedClickListener = {},
+        )
+    }
 }

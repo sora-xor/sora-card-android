@@ -1,5 +1,6 @@
 package jp.co.soramitsu.oauth.feature.verify.email
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,13 +15,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import jp.co.soramitsu.androidfoundation.compose.toTitle
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.feature.OAuthCallback
-import jp.co.soramitsu.oauth.styledui.TextLargePrimaryButton
+import jp.co.soramitsu.oauth.uiscreens.compose.Screen
+import jp.co.soramitsu.oauth.uiscreens.styledui.LargeTonalButton
+import jp.co.soramitsu.oauth.uiscreens.styledui.TextLargePrimaryButton
 import jp.co.soramitsu.ui_core.component.button.LoaderWrapper
-import jp.co.soramitsu.ui_core.component.button.TonalButton
-import jp.co.soramitsu.ui_core.component.button.properties.Order
 import jp.co.soramitsu.ui_core.component.button.properties.Size
 import jp.co.soramitsu.ui_core.resources.Dimens
 import jp.co.soramitsu.ui_core.theme.customColors
@@ -45,6 +46,7 @@ fun VerifyEmailScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(MaterialTheme.customColors.bgSurface)
                 .verticalScroll(scrollState)
                 .padding(top = Dimens.x1, start = Dimens.x2, end = Dimens.x2, bottom = Dimens.x5),
         ) {
@@ -65,13 +67,12 @@ fun VerifyEmailScreen(
                 loaderSize = Size.Large,
                 loading = state.resendLinkButtonState.loading,
             ) { modifier, _ ->
-                TonalButton(
-                    modifier = modifier,
-                    order = Order.SECONDARY,
-                    size = Size.Large,
-                    text = state.resendLinkButtonState.timer.takeIf {
-                        it != null
-                    } ?: state.resendLinkButtonState.title.toTitle(),
+                LargeTonalButton(
+                    text = TextValue.SimpleText(
+                        state.resendLinkButtonState.timer.takeIf {
+                            it != null
+                        } ?: state.resendLinkButtonState.title.toTitle(),
+                    ),
                     enabled = state.resendLinkButtonState.enabled,
                     onClick = viewModel::onResendLink,
                 )

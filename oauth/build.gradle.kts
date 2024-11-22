@@ -73,6 +73,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = composeCompilerVersion
@@ -118,8 +119,12 @@ dependencies {
     implementation(libs.activity.compose)
     implementation(libs.material)
     implementation(libs.compose.navigation)
+    implementation(libs.composeConstraintLayout)
 
-    implementation(platform(libs.compose.bom))
+    implementation(platform(libs.compose.bom)) {
+        exclude(module = "material3")
+        exclude(module = "material3-android")
+    }
     implementation(libs.ui)
     implementation(libs.compose.runtime.livedata)
     implementation(libs.compose.material)
@@ -128,7 +133,10 @@ dependencies {
     debugImplementation(libs.ui.test.manifest)
     debugImplementation(libs.ui.tooling)
 
-    implementation(libs.sw.android.foundation)
+    implementation(libs.sw.android.foundation) {
+        exclude(module = "material3")
+        exclude(module = "material3-android")
+    }
     implementation(libs.soramitsu.uicore)
     implementation(libs.kotlinx.serialization)
     implementation(libs.datastore)
@@ -163,7 +171,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "jp.co.soramitsu"
             artifactId = "android-sora-card"
-            version = "1.1.21"
+            version = "1.2.0-RC1"
 
             afterEvaluate {
                 from(components["release"])

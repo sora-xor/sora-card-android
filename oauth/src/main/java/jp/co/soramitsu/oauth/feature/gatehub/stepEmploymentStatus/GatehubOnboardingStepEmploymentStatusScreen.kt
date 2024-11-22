@@ -20,8 +20,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.androidfoundation.format.retrieveString
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.compose.Screen
-import jp.co.soramitsu.oauth.styledui.FilledLargePrimaryButton
+import jp.co.soramitsu.oauth.uiscreens.compose.Screen
+import jp.co.soramitsu.oauth.uiscreens.styledui.FilledLargePrimaryButton
+import jp.co.soramitsu.oauth.uiscreens.theme.AuthSdkTheme
 import jp.co.soramitsu.ui_core.component.card.ContentCard
 import jp.co.soramitsu.ui_core.component.checkbox.CheckboxButton
 import jp.co.soramitsu.ui_core.resources.Dimens
@@ -92,7 +93,6 @@ private fun GatehubOnboardingStepEmploymentStatusScreenContent(
                 style = MaterialTheme.customTypography.paragraphM,
                 color = MaterialTheme.customColors.fgSecondary,
             )
-
             state.statuses.forEachIndexed { index, textValue ->
                 CheckboxButton(
                     isSelected = index == state.selectedPos,
@@ -116,19 +116,21 @@ private fun GatehubOnboardingStepEmploymentStatusScreenContent(
 @Preview
 @Composable
 private fun GatehubOnboardingStepEmploymentStatusScreenContentPreview() {
-    GatehubOnboardingStepEmploymentStatusScreenContent(
-        scrollState = rememberScrollState(),
-        state = GatehubOnboardingStepEmploymentStatusState(
-            buttonEnabled = true,
-            statuses = listOf(
-                TextValue.SimpleText("Working"),
-                TextValue.SimpleText("Worked"),
-                TextValue.SimpleText("Not going"),
-                TextValue.SimpleText("I do my best"),
+    AuthSdkTheme {
+        GatehubOnboardingStepEmploymentStatusScreenContent(
+            scrollState = rememberScrollState(),
+            state = GatehubOnboardingStepEmploymentStatusState(
+                buttonEnabled = true,
+                statuses = listOf(
+                    TextValue.SimpleText("Working"),
+                    TextValue.SimpleText("Worked"),
+                    TextValue.SimpleText("Not going"),
+                    TextValue.SimpleText("I do my best"),
+                ),
+                selectedPos = 1,
             ),
-            selectedPos = 1,
-        ),
-        onNext = {},
-        onItemClick = {},
-    )
+            onNext = {},
+            onItemClick = {},
+        )
+    }
 }

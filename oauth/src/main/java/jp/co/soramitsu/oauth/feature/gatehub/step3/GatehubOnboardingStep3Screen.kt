@@ -20,8 +20,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.androidfoundation.format.retrieveString
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.compose.Screen
-import jp.co.soramitsu.oauth.styledui.FilledLargePrimaryButton
+import jp.co.soramitsu.oauth.uiscreens.compose.Screen
+import jp.co.soramitsu.oauth.uiscreens.styledui.FilledLargePrimaryButton
+import jp.co.soramitsu.oauth.uiscreens.theme.AuthSdkTheme
 import jp.co.soramitsu.ui_core.component.card.ContentCard
 import jp.co.soramitsu.ui_core.component.checkbox.CheckboxButton
 import jp.co.soramitsu.ui_core.resources.Dimens
@@ -107,19 +108,21 @@ private fun GatehubOnboardingStep3ScreenContent(
 @Composable
 @Preview(showBackground = true)
 private fun PreviewGatehubOnboardingStep3ScreenContent() {
-    GatehubOnboardingStep3ScreenContent(
-        scrollState = rememberScrollState(),
-        state = GatehubOnboardingStep3State(
-            buttonEnabled = true,
-            selectedPos = listOf(1, 2),
-            sources = listOf(
-                "salary",
-                "savings",
-                "belongings",
-                "profits",
-            ).map { TextValue.SimpleText(it) },
-        ),
-        onNext = {},
-        onItemClick = {},
-    )
+    AuthSdkTheme {
+        GatehubOnboardingStep3ScreenContent(
+            scrollState = rememberScrollState(),
+            state = GatehubOnboardingStep3State(
+                buttonEnabled = true,
+                selectedPos = listOf(1, 2),
+                sources = listOf(
+                    "salary",
+                    "savings",
+                    "belongings",
+                    "profits",
+                ).map { TextValue.SimpleText(it) },
+            ),
+            onNext = {},
+            onItemClick = {},
+        )
+    }
 }
