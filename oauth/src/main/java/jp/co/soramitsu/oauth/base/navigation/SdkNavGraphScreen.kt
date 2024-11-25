@@ -33,9 +33,9 @@ import jp.co.soramitsu.oauth.feature.terms.and.conditions.WebPageScreen
 import jp.co.soramitsu.oauth.feature.usernotfound.UserNotFoundScreen
 import jp.co.soramitsu.oauth.feature.verify.email.EnterEmailScreen
 import jp.co.soramitsu.oauth.feature.verify.email.VerifyEmailScreen
-import jp.co.soramitsu.oauth.feature.verify.phone.uicompose.CountryListScreen
-import jp.co.soramitsu.oauth.feature.verify.phone.uicompose.EnterPhoneNumberScreen
-import jp.co.soramitsu.oauth.feature.verify.phone.uicompose.VerifyPhoneNumberScreen
+import jp.co.soramitsu.oauth.feature.verify.phone.uiscreens.CountryListScreen
+import jp.co.soramitsu.oauth.feature.verify.phone.uiscreens.EnterPhoneNumberScreen
+import jp.co.soramitsu.oauth.feature.verify.phone.uiscreens.VerifyPhoneNumberScreen
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable

@@ -9,6 +9,7 @@ import com.paywings.oauth.android.sdk.service.callback.CheckEmailVerifiedCallbac
 import com.paywings.oauth.android.sdk.service.callback.SendNewVerificationEmailCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
@@ -54,10 +55,10 @@ class VerifyEmailViewModel @Inject constructor(
 
         state = state.copy(
             resendLinkButtonState = state.resendLinkButtonState.copy(
-                title = R.string.common_resend_link,
+                title = TextValue.StringRes(R.string.common_resend_link),
             ),
             changeEmailButtonState = state.changeEmailButtonState.copy(
-                title = R.string.common_change_email,
+                title = TextValue.StringRes(R.string.common_change_email),
             ),
         )
 

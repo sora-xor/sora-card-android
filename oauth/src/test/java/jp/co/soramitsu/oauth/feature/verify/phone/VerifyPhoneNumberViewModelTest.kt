@@ -15,6 +15,7 @@ import io.mockk.just
 import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.androidfoundation.format.unsafeCast
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
@@ -123,7 +124,10 @@ class VerifyPhoneNumberViewModelTest {
 
     @Test
     fun `init EXPECT set up button state`() {
-        assertEquals(R.string.common_resend_code, viewModel.state.value.buttonState.title)
+        assertEquals(
+            R.string.common_resend_code,
+            viewModel.state.value.buttonState.title.unsafeCast<TextValue.StringRes>().id,
+        )
         assertFalse(viewModel.state.value.buttonState.enabled)
     }
 

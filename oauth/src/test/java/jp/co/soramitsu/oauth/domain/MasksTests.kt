@@ -1,7 +1,7 @@
 package jp.co.soramitsu.oauth.domain
 
 import androidx.compose.ui.text.AnnotatedString
-import jp.co.soramitsu.oauth.base.compose.maskFilter
+import jp.co.soramitsu.oauth.uiscreens.compose.maskFilter
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

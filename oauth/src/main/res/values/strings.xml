@@ -8,6 +8,8 @@
   <string name="card_hub_manage_card">Manage SORA Card</string>
   <string name="card_hub_manage_card_alert_title">Download SORA Card App</string>
   <string name="card_hub_manage_google_play">To manage your SORA Card, please install the official SORA Card App. Tap OK to be directed to the Google Play.</string>
+  <string name="card_hub_settings_logout_title">Log out of SORA Card</string>
+  <string name="card_hub_settings_title">Card settings</string>
   <string name="card_hub_title">Card details</string>
   <string name="card_hub_update_button">Update now</string>
   <string name="card_hub_update_description">You are using an outdated version of the app, some part might not be working as intended.</string>
@@ -48,12 +50,14 @@
   <string name="common_user_not_found">No mobile number found, please recheck it and try again.</string>
   <string name="details_already_have_card">I already have a card</string>
   <string name="details_already_used_free_try">You already used your free try</string>
+  <string name="details_annual_service_fee">€0 annual service fee</string>
   <string name="details_description">Get a Euro IBAN account and debit card accessible within your SORA Wallet</string>
   <string name="details_enough_xor_desription">You have enough XOR</string>
   <string name="details_free_card_issuance_conditions_euro">or €%s application fee</string>
   <string name="details_get_more_xor">Get more XOR</string>
   <string name="details_issue_card">Issue card for free</string>
   <string name="details_need_xor_desription" formatted="false">You need %s more XOR (€%s)</string>
+  <string name="details_title">Top up SORA Card with fiat or crypto and pay online, in-store or withdraw from an ATM</string>
   <string name="enter_email_description">Magic link will be sent\nto your email</string>
   <string name="enter_email_input_field_label">Email</string>
   <string name="enter_email_title">Enter your email</string>
@@ -119,11 +123,15 @@
   <string name="payment_widget_unavailable_message">The payment widget is currently unavailable</string>
   <string name="payment_widget_unavailable_title">Widget unavailable</string>
   <string name="phone_number_leading_zero">The phone number format entered seems unusual. If issue arise, consider removing the leading \"0\".</string>
+  <string name="recent_activity">Recent activity</string>
+  <string name="refer_and_earn">Refer &amp; Earn</string>
+  <string name="refer_sora_card_bonus">Refer SORA Card.\nGet €20 bonus.</string>
   <string name="register_new_account">Register new account</string>
   <string name="select_many">You can select multiple answers:</string>
   <string name="select_many_countries">You can select multiple countries:</string>
   <string name="select_one">Select one of the following:</string>
   <string name="select_your_country">Select your country</string>
+  <string name="show_more">Show more</string>
   <string name="sign_up_sora_card">Sign up for SORA Card</string>
   <string name="source_of_funds">What is the source of your funds?</string>
   <string name="support_chat">Support chat</string>

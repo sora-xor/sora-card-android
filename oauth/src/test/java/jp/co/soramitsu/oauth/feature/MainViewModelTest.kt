@@ -33,6 +33,7 @@ import jp.co.soramitsu.oauth.feature.gatehub.GateHubRepository
 import jp.co.soramitsu.oauth.feature.gatehub.IframeModel
 import jp.co.soramitsu.oauth.feature.gatehub.OnboardedResult
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
+import jp.co.soramitsu.oauth.uiscreens.clientsui.UiStyle
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -151,6 +152,7 @@ class MainViewModelTest {
             client = "",
             clientDark = true,
             flow = SoraCardFlow.SoraCardGateHubFlow,
+            clientCase = UiStyle.SW,
         )
         viewModel.launch(data, activity)
         advanceUntilIdle()
@@ -197,6 +199,7 @@ class MainViewModelTest {
             client = "",
             clientDark = true,
             flow = flow,
+            clientCase = UiStyle.SW,
         )
         viewModel.launch(data, activity)
         advanceUntilIdle()
@@ -248,6 +251,7 @@ class MainViewModelTest {
             client = "",
             clientDark = true,
             flow = flow,
+            clientCase = UiStyle.SW,
         )
         viewModel.launch(data, activity)
         advanceUntilIdle()

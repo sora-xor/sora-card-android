@@ -2,6 +2,7 @@ package jp.co.soramitsu.oauth.feature.gatehub.step1
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,10 +22,9 @@ import jp.co.soramitsu.androidfoundation.format.EURO_SIGN
 import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.androidfoundation.format.retrieveString
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.compose.Screen
-import jp.co.soramitsu.ui_core.component.button.FilledButton
-import jp.co.soramitsu.ui_core.component.button.properties.Order
-import jp.co.soramitsu.ui_core.component.button.properties.Size
+import jp.co.soramitsu.oauth.uiscreens.compose.Screen
+import jp.co.soramitsu.oauth.uiscreens.styledui.FilledLargePrimaryButton
+import jp.co.soramitsu.oauth.uiscreens.theme.AuthSdkTheme
 import jp.co.soramitsu.ui_core.component.card.ContentCard
 import jp.co.soramitsu.ui_core.component.checkbox.CheckboxButton
 import jp.co.soramitsu.ui_core.resources.Dimens
@@ -63,6 +63,7 @@ private fun GatehubOnboardingStep1ScreenContent(
     ContentCard(
         modifier = Modifier
             .fillMaxWidth()
+            .background(MaterialTheme.customColors.bgSurface)
             .wrapContentHeight(),
         cornerRadius = MaterialTheme.borderRadius.s,
         innerPadding = PaddingValues(Dimens.x3),
@@ -95,13 +96,11 @@ private fun GatehubOnboardingStep1ScreenContent(
                     onClick = { onItemClick.invoke(i) },
                 )
             }
-            FilledButton(
+            FilledLargePrimaryButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = Dimens.x2),
-                text = stringResource(id = R.string.common_next),
-                order = Order.PRIMARY,
-                size = Size.Large,
+                text = TextValue.StringRes(R.string.common_next),
                 enabled = state.buttonEnabled,
                 onClick = onNext,
             )
@@ -112,14 +111,16 @@ private fun GatehubOnboardingStep1ScreenContent(
 @Composable
 @Preview(showBackground = true)
 private fun PreviewGatehubOnboardingStep1ScreenContent() {
-    GatehubOnboardingStep1ScreenContent(
-        scrollState = rememberScrollState(),
-        state = GatehubOnboardingStep1State(
-            buttonEnabled = true,
-            selectedPos = 1,
-            amounts = listOf("23.0", "782.2").map { TextValue.SimpleText("$it$EURO_SIGN") },
-        ),
-        onNext = {},
-        onItemClick = {},
-    )
+    AuthSdkTheme {
+        GatehubOnboardingStep1ScreenContent(
+            scrollState = rememberScrollState(),
+            state = GatehubOnboardingStep1State(
+                buttonEnabled = true,
+                selectedPos = 1,
+                amounts = listOf("23.0", "782.2").map { TextValue.SimpleText("$it$EURO_SIGN") },
+            ),
+            onNext = {},
+            onItemClick = {},
+        )
+    }
 }

@@ -7,6 +7,7 @@ import com.paywings.oauth.android.sdk.service.callback.SignInWithPhoneNumberRequ
 import com.paywings.oauth.android.sdk.service.callback.SignInWithPhoneNumberVerifyOtpCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.androidfoundation.format.unsafeCast
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
@@ -19,7 +20,7 @@ import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.verify.Timer
 import jp.co.soramitsu.oauth.feature.verify.format
 import jp.co.soramitsu.oauth.feature.verify.model.ButtonState
-import jp.co.soramitsu.oauth.feature.verify.phone.model.VerifyPhoneNumberState
+import jp.co.soramitsu.oauth.feature.verify.phone.uiscreens.VerifyPhoneNumberState
 import jp.co.soramitsu.ui_core.component.input.InputTextState
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
@@ -51,7 +52,7 @@ class VerifyPhoneNumberViewModel @Inject constructor(
                 },
             ),
             buttonState = ButtonState(
-                title = R.string.common_resend_code,
+                title = TextValue.StringRes(R.string.common_resend_code),
                 enabled = false,
             ),
         ),

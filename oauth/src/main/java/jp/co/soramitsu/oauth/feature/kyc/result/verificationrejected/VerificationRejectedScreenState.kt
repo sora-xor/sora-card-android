@@ -2,7 +2,7 @@ package jp.co.soramitsu.oauth.feature.kyc.result.verificationrejected
 
 import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.compose.ScreenStatus
+import jp.co.soramitsu.oauth.uiscreens.compose.ScreenStatus
 
 data class VerificationRejectedScreenState(
     private val screenStatus: ScreenStatus,

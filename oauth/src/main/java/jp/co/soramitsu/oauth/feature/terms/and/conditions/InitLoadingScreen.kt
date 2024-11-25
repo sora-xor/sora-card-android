@@ -1,5 +1,6 @@
 package jp.co.soramitsu.oauth.feature.terms.and.conditions
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.CircularProgressIndicator
@@ -12,7 +13,9 @@ import jp.co.soramitsu.ui_core.theme.customColors
 @Composable
 fun InitLoadingScreen() {
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.customColors.bgSurface),
         contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator(

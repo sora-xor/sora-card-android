@@ -1,26 +1,26 @@
 [versions]
-agp = "8.7.1"
+agp = "8.7.2"
 kotlin = "1.9.24"
 junit = "4.13.2"
 coretest = "2.2.0"
 androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
-lifecycle-runtime-compose = "2.8.6"
-lifecycle-runtime-ktx = "2.8.6"
-lifecycle-viewmodel-ktx = "2.8.6"
-lifecycle-viewmodel-compose = "2.8.6"
-lifecycle-common = "2.8.6"
+lifecycle-runtime-compose = "2.8.7"
+lifecycle-runtime-ktx = "2.8.7"
+lifecycle-viewmodel-ktx = "2.8.7"
+lifecycle-viewmodel-compose = "2.8.7"
+lifecycle-common = "2.8.7"
 material = "1.12.0"
 coreKtx = "1.13.1"
 activity-compose = "1.9.3"
-compose-bom = "2024.10.00"
+compose-bom = "2024.11.00"
 hilt = "2.52"
 hiltnavcompose = "1.2.0"
-uicore = "0.2.37"
+uicore = "0.2.39"
 swAndroidFoundation = "0.0.3"
 xnetworking = "1.0.10"
 kotlinx-serialization-v = "1.6.3"
-navigation-compose = "2.8.3"
+navigation-compose = "2.8.4"
 datastore = "1.0.0"
 mockk = "1.13.11"
 coroutine = "1.8.1"
@@ -28,6 +28,7 @@ pinview = "1.4.4"
 pwoauth = "2.0.0"
 pwkyc = "1.2.2"
 kover = "0.8.3"
+composeConstraintLayout = "1.1.0-alpha05"
 
 [libraries]
 coroutine-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutine" }
@@ -64,6 +65,8 @@ pwkyc = { group = "com.paywings.kyc", name = "android-sdk", version.ref = "pwkyc
 tests-mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 tests-junit = { group = "junit", name = "junit", version.ref = "junit" }
 tests-archcore = { group = "androidx.arch.core", name = "core-testing", version.ref = "coretest" }
+composeConstraintLayout = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "composeConstraintLayout" }
+
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

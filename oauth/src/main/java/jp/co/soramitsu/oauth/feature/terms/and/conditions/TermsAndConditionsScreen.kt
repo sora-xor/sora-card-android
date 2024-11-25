@@ -19,12 +19,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.base.testTagAsId
-import jp.co.soramitsu.ui_core.component.button.FilledButton
-import jp.co.soramitsu.ui_core.component.button.properties.Order
-import jp.co.soramitsu.ui_core.component.button.properties.Size
+import jp.co.soramitsu.oauth.uiscreens.clientsui.UiStyle
+import jp.co.soramitsu.oauth.uiscreens.clientsui.localCompositionUiStyle
+import jp.co.soramitsu.oauth.uiscreens.compose.Screen
+import jp.co.soramitsu.oauth.uiscreens.styledui.FilledLargeSecondaryButton
+import jp.co.soramitsu.oauth.uiscreens.styledui.fw.black05
 import jp.co.soramitsu.ui_core.component.card.ContentCard
 import jp.co.soramitsu.ui_core.component.item.MenuItem
 import jp.co.soramitsu.ui_core.resources.Dimens
@@ -90,14 +92,13 @@ fun TermsAndConditionsScreen(viewModel: TermsAndConditionsViewModel = hiltViewMo
                 textAlign = TextAlign.Center,
             )
 
-            FilledButton(
+            FilledLargeSecondaryButton(
                 modifier = Modifier
                     .testTagAsId("AcceptAndContinue")
                     .fillMaxWidth(),
-                text = stringResource(R.string.terms_and_conditions_accept_and_continue),
-                order = Order.SECONDARY,
-                size = Size.Large,
+                text = TextValue.StringRes(R.string.terms_and_conditions_accept_and_continue),
                 onClick = viewModel::onConfirm,
+                enabled = true,
             )
         }
     }
@@ -109,6 +110,10 @@ private fun TermsAndConditionsMenu(
     onGeneralTermsClick: () -> Unit,
     onPrivacyPolicy: () -> Unit,
 ) {
+    val contentCardBackgroundColor = when (localCompositionUiStyle.current) {
+        UiStyle.SW -> MaterialTheme.customColors.bgSurface
+        UiStyle.FW -> black05
+    }
     ContentCard(
         modifier = modifier.fillMaxWidth(),
         cornerRadius = MaterialTheme.borderRadius.s,
@@ -117,7 +122,7 @@ private fun TermsAndConditionsMenu(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(MaterialTheme.borderRadius.s))
-                .background(MaterialTheme.customColors.bgSurface),
+                .background(contentCardBackgroundColor),
         ) {
             MenuItem(
                 label = stringResource(R.string.terms_and_conditions_general_terms),

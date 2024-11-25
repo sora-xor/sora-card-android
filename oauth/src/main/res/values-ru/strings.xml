@@ -8,6 +8,8 @@
   <string name="card_hub_manage_card">Управление картой SORA</string>
   <string name="card_hub_manage_card_alert_title">Скачать приложение SORA Card</string>
   <string name="card_hub_manage_google_play">Для управления картой SORA Card установите официальное приложение SORA Card. Нажмите OK, чтобы перейти в Google Play.</string>
+  <string name="card_hub_settings_logout_title">Выйти из SORA Card</string>
+  <string name="card_hub_settings_title">Настройки карты</string>
   <string name="card_hub_title">Данные карты</string>
   <string name="card_hub_update_button">Обновите сейчас</string>
   <string name="card_hub_update_description">Вы используете устаревшую версию приложения, некоторые части могут работать не так, как задумано.</string>
@@ -48,12 +50,14 @@
   <string name="common_user_not_found">Номер мобильного телефона не найден, проверьте его еще раз и повторите попытку.</string>
   <string name="details_already_have_card">У меня уже есть карта</string>
   <string name="details_already_used_free_try">Вы уже использовали свою бесплатную попытку</string>
+  <string name="details_annual_service_fee">€0 годовая плата за обслуживание</string>
   <string name="details_description">Получите европейский IBAN-счет и дебетовую карту, доступные в вашем кошельке SORA</string>
   <string name="details_enough_xor_desription">У вас достаточно XOR</string>
   <string name="details_free_card_issuance_conditions_euro">или €%s регистрационный взнос</string>
   <string name="details_get_more_xor">Получить больше XOR</string>
   <string name="details_issue_card">Получение карты бесплатно</string>
   <string name="details_need_xor_desription" formatted="false">Вам нужно еще %s XOR (€ %s )</string>
+  <string name="details_title">Пополняйте SORA Card фиатом или криптовалютой и оплачивайте покупки онлайн, в магазине или снимайте деньги в банкомате</string>
   <string name="enter_email_description">Волшебная ссылка будет отправлена\nна ваш email</string>
   <string name="enter_email_input_field_label">Электронная почта</string>
   <string name="enter_email_title">Введите свой email</string>
@@ -119,11 +123,15 @@
   <string name="payment_widget_unavailable_message">Виджет оплаты в настоящее время недоступен</string>
   <string name="payment_widget_unavailable_title">Виджет недоступен</string>
   <string name="phone_number_leading_zero">Введенный формат телефонного номера кажется необычным. При возникновении проблемы рассмотрите возможность удаления ведущего \"0\".</string>
+  <string name="recent_activity">Последние действия</string>
+  <string name="refer_and_earn">Привлекайте и зарабатывайте</string>
+  <string name="refer_sora_card_bonus">Привлекайте SORA карту.\nПолучайте €20 бонусов.</string>
   <string name="register_new_account">Зарегистрировать новую учетную запись</string>
   <string name="select_many">Вы можете выбрать несколько ответов:</string>
   <string name="select_many_countries">Вы можете выбрать несколько стран:</string>
   <string name="select_one">Выберите один из следующих вариантов:</string>
   <string name="select_your_country">Выберите свою страну</string>
+  <string name="show_more">Показать еще</string>
   <string name="sign_up_sora_card">Зарегистрироваться для получения карты SORA</string>
   <string name="source_of_funds">Каков источник ваших средств?</string>
   <string name="support_chat">Чат поддержки</string>

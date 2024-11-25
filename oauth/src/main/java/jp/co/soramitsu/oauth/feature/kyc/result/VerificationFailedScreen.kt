@@ -21,8 +21,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.feature.YourPhoneNumberText
+import jp.co.soramitsu.oauth.uiscreens.compose.Screen
+import jp.co.soramitsu.oauth.uiscreens.theme.AuthSdkTheme
 import jp.co.soramitsu.ui_core.component.button.TonalButton
 import jp.co.soramitsu.ui_core.component.button.properties.Order
 import jp.co.soramitsu.ui_core.component.button.properties.Size
@@ -114,10 +115,12 @@ private fun VerificationFailedContent(
 @Composable
 @Preview(showBackground = true)
 private fun PreviewVerificationFailedContent() {
-    VerificationFailedContent(
-        scrollState = rememberScrollState(),
-        additionalDescription = "PLACEHOLDER",
-        phone = "+12334556778",
-        onClose = {},
-    )
+    AuthSdkTheme {
+        VerificationFailedContent(
+            scrollState = rememberScrollState(),
+            additionalDescription = "PLACEHOLDER",
+            phone = "+12334556778",
+            onClose = {},
+        )
+    }
 }

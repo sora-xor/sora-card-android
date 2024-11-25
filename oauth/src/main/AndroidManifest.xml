@@ -7,7 +7,7 @@
     <application>
 
         <activity
-            android:name=".base.CardActivity"
+            android:name=".base.uiscreens.CardActivity"
             android:exported="false"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"

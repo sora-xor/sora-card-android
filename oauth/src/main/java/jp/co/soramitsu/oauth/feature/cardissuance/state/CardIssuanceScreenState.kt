@@ -1,6 +1,6 @@
 package jp.co.soramitsu.oauth.feature.cardissuance.state
 
-import jp.co.soramitsu.oauth.base.compose.ScreenStatus
+import jp.co.soramitsu.oauth.uiscreens.compose.ScreenStatus
 
 data class CardIssuanceScreenState(
     val screenStatus: ScreenStatus,

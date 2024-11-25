@@ -6,6 +6,7 @@ import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
 import com.paywings.oauth.android.sdk.service.callback.SignInWithPhoneNumberRequestOtpCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.androidfoundation.format.unsafeCast
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
@@ -19,7 +20,7 @@ import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.oauth.feature.telephone.LocaleService
 import jp.co.soramitsu.oauth.feature.verify.model.ButtonState
-import jp.co.soramitsu.oauth.feature.verify.phone.model.EnterPhoneNumberState
+import jp.co.soramitsu.oauth.feature.verify.phone.uiscreens.EnterPhoneNumberState
 import jp.co.soramitsu.ui_core.component.input.InputTextState
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
@@ -59,7 +60,7 @@ class EnterPhoneNumberViewModel @Inject constructor(
                 descriptionText = R.string.common_no_spam,
             ),
             buttonState = ButtonState(
-                title = R.string.common_send_code,
+                title = TextValue.StringRes(R.string.common_send_code),
                 enabled = false,
             ),
             countryCode = "",

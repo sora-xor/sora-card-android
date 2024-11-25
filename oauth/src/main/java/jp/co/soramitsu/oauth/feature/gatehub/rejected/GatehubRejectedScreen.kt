@@ -2,6 +2,7 @@ package jp.co.soramitsu.oauth.feature.gatehub.rejected
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,18 +17,17 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.compose.Screen
-import jp.co.soramitsu.ui_core.component.button.TonalButton
-import jp.co.soramitsu.ui_core.component.button.properties.Order
-import jp.co.soramitsu.ui_core.component.button.properties.Size
+import jp.co.soramitsu.oauth.uiscreens.compose.Screen
+import jp.co.soramitsu.oauth.uiscreens.styledui.LargeTonalButton
+import jp.co.soramitsu.oauth.uiscreens.theme.AuthSdkTheme
 import jp.co.soramitsu.ui_core.component.card.ContentCard
 import jp.co.soramitsu.ui_core.resources.Dimens
 import jp.co.soramitsu.ui_core.theme.borderRadius
@@ -60,6 +60,7 @@ private fun GatehubRejectedScreenContent(
     ContentCard(
         modifier = Modifier
             .fillMaxWidth()
+            .background(MaterialTheme.customColors.bgSurface)
             .wrapContentHeight(),
         cornerRadius = MaterialTheme.borderRadius.s,
         innerPadding = PaddingValues(Dimens.x3),
@@ -73,9 +74,9 @@ private fun GatehubRejectedScreenContent(
         ) {
             Icon(
                 modifier = Modifier.size(80.dp),
-                painter = painterResource(R.drawable.ic_rejected_80),
+                painter = painterResource(R.drawable.ic_rejected_24),
                 contentDescription = null,
-                tint = Color.Unspecified,
+                tint = MaterialTheme.customColors.statusError,
             )
             Text(
                 modifier = Modifier
@@ -104,13 +105,12 @@ private fun GatehubRejectedScreenContent(
                     textAlign = TextAlign.Center,
                 )
             }
-            TonalButton(
+            LargeTonalButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = Dimens.x3),
-                order = Order.SECONDARY,
-                size = Size.Large,
-                text = stringResource(id = R.string.common_support),
+                enabled = true,
+                text = TextValue.StringRes(R.string.common_support),
                 onClick = onSupport,
             )
         }
@@ -120,9 +120,11 @@ private fun GatehubRejectedScreenContent(
 @Composable
 @Preview(showBackground = true)
 private fun PreviewGatehubRejectedScreenContent() {
-    GatehubRejectedScreenContent(
-        reason = "Nobody known",
-        scrollState = rememberScrollState(),
-        onSupport = {},
-    )
+    AuthSdkTheme {
+        GatehubRejectedScreenContent(
+            reason = "Nobody known",
+            scrollState = rememberScrollState(),
+            onSupport = {},
+        )
+    }
 }

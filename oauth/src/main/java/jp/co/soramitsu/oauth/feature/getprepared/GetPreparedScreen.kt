@@ -27,13 +27,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.YourPhoneNumberText
-import jp.co.soramitsu.ui_core.component.button.FilledButton
-import jp.co.soramitsu.ui_core.component.button.properties.Order
-import jp.co.soramitsu.ui_core.component.button.properties.Size
+import jp.co.soramitsu.oauth.uiscreens.compose.Screen
+import jp.co.soramitsu.oauth.uiscreens.styledui.FilledLargeSecondaryButton
+import jp.co.soramitsu.oauth.uiscreens.theme.AuthSdkTheme
 import jp.co.soramitsu.ui_core.resources.Dimens
 import jp.co.soramitsu.ui_core.theme.borderRadius
 import jp.co.soramitsu.ui_core.theme.customColors
@@ -73,6 +73,7 @@ private fun GetPreparedScreenContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.customColors.bgSurface)
             .verticalScroll(scrollState)
             .padding(start = Dimens.x3, end = Dimens.x3, top = Dimens.x1, bottom = Dimens.x5),
     ) {
@@ -125,13 +126,11 @@ private fun GetPreparedScreenContent(
                 .weight(1f),
         )
 
-        FilledButton(
+        FilledLargeSecondaryButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = Dimens.x1),
-            text = stringResource(id = R.string.get_prepared_ok_title),
-            order = Order.SECONDARY,
-            size = Size.Large,
+            text = TextValue.StringRes(id = R.string.get_prepared_ok_title),
             enabled = state.buttonEnabled,
             onClick = onConfirm,
         )
@@ -196,39 +195,41 @@ private fun Step(step: Step) {
 @Preview(showBackground = true)
 @Composable
 private fun PreviewGetPreparedScreen() {
-    GetPreparedScreenContent(
-        scrollState = rememberScrollState(),
-        state = GetPreparedState(
-            totalFreeAttemptsCount = "4",
-            attemptCost = "3.80",
-            buttonEnabled = true,
-            phoneNumber = "123456",
-            steps = listOf(
-                Step(
-                    index = 1,
-                    title = R.string.get_prepared_submit_id_photo_title,
-                    description = listOf(R.string.get_prepared_submit_id_photo_description),
-                ),
-                Step(
-                    index = 2,
-                    title = R.string.get_prepared_take_selfie_title,
-                    description = listOf(R.string.get_prepared_take_selfie_description),
-                ),
-                Step(
-                    index = 3,
-                    title = R.string.get_prepared_proof_address_title,
-                    description = listOf(
-                        R.string.get_prepared_proof_address_description,
-                        R.string.get_prepared_proof_address_note,
+    AuthSdkTheme {
+        GetPreparedScreenContent(
+            scrollState = rememberScrollState(),
+            state = GetPreparedState(
+                totalFreeAttemptsCount = "4",
+                attemptCost = "3.80",
+                buttonEnabled = true,
+                phoneNumber = "123456",
+                steps = listOf(
+                    Step(
+                        index = 1,
+                        title = R.string.get_prepared_submit_id_photo_title,
+                        description = listOf(R.string.get_prepared_submit_id_photo_description),
+                    ),
+                    Step(
+                        index = 2,
+                        title = R.string.get_prepared_take_selfie_title,
+                        description = listOf(R.string.get_prepared_take_selfie_description),
+                    ),
+                    Step(
+                        index = 3,
+                        title = R.string.get_prepared_proof_address_title,
+                        description = listOf(
+                            R.string.get_prepared_proof_address_description,
+                            R.string.get_prepared_proof_address_note,
+                        ),
+                    ),
+                    Step(
+                        index = 4,
+                        title = R.string.get_prepared_personal_info_title,
+                        description = listOf(R.string.get_prepared_personal_info_description),
                     ),
                 ),
-                Step(
-                    index = 4,
-                    title = R.string.get_prepared_personal_info_title,
-                    description = listOf(R.string.get_prepared_personal_info_description),
-                ),
             ),
-        ),
-        onConfirm = {},
-    )
+            onConfirm = {},
+        )
+    }
 }

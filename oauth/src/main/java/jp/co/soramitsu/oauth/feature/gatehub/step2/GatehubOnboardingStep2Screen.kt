@@ -20,10 +20,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.androidfoundation.format.retrieveString
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.compose.Screen
-import jp.co.soramitsu.ui_core.component.button.FilledButton
-import jp.co.soramitsu.ui_core.component.button.properties.Order
-import jp.co.soramitsu.ui_core.component.button.properties.Size
+import jp.co.soramitsu.oauth.uiscreens.compose.Screen
+import jp.co.soramitsu.oauth.uiscreens.styledui.FilledLargePrimaryButton
+import jp.co.soramitsu.oauth.uiscreens.theme.AuthSdkTheme
 import jp.co.soramitsu.ui_core.component.card.ContentCard
 import jp.co.soramitsu.ui_core.component.checkbox.CheckboxButton
 import jp.co.soramitsu.ui_core.resources.Dimens
@@ -94,13 +93,11 @@ private fun GatehubOnboardingStep2ScreenContent(
                     onClick = { onItemClick.invoke(i) },
                 )
             }
-            FilledButton(
+            FilledLargePrimaryButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = Dimens.x2),
-                text = stringResource(id = R.string.common_next),
-                order = Order.PRIMARY,
-                size = Size.Large,
+                text = TextValue.StringRes(R.string.common_next),
                 enabled = state.buttonEnabled,
                 onClick = onNext,
             )
@@ -111,18 +108,20 @@ private fun GatehubOnboardingStep2ScreenContent(
 @Composable
 @Preview(showBackground = true)
 private fun PreviewGatehubOnboardingStep2ScreenContent() {
-    GatehubOnboardingStep2ScreenContent(
-        scrollState = rememberScrollState(),
-        state = GatehubOnboardingStep2State(
-            buttonEnabled = true,
-            selectedPos = listOf(0, 3),
-            reasons = listOf("reason 1", "reason 2", "reason 3", "reason 4").map {
-                TextValue.SimpleText(
-                    it,
-                )
-            },
-        ),
-        onNext = {},
-        onItemClick = {},
-    )
+    AuthSdkTheme {
+        GatehubOnboardingStep2ScreenContent(
+            scrollState = rememberScrollState(),
+            state = GatehubOnboardingStep2State(
+                buttonEnabled = true,
+                selectedPos = listOf(0, 3),
+                reasons = listOf("reason 1", "reason 2", "reason 3", "reason 4").map {
+                    TextValue.SimpleText(
+                        it,
+                    )
+                },
+            ),
+            onNext = {},
+            onItemClick = {},
+        )
+    }
 }

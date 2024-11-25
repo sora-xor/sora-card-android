@@ -2,8 +2,8 @@ package jp.co.soramitsu.oauth.feature.kyc.result.verificationrejection
 
 import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.compose.ScreenStatus
 import jp.co.soramitsu.oauth.feature.kyc.result.verificationrejected.VerificationRejectedScreenState
+import jp.co.soramitsu.oauth.uiscreens.compose.ScreenStatus
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Before
