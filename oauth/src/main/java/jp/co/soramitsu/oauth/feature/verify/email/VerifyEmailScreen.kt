@@ -16,6 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import jp.co.soramitsu.androidfoundation.compose.toTitle
 import jp.co.soramitsu.androidfoundation.format.TextValue
+import jp.co.soramitsu.androidfoundation.format.retrieveString
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.uiscreens.compose.Screen
@@ -71,7 +72,7 @@ fun VerifyEmailScreen(
                     text = TextValue.SimpleText(
                         state.resendLinkButtonState.timer.takeIf {
                             it != null
-                        } ?: state.resendLinkButtonState.title.toTitle(),
+                        } ?: state.resendLinkButtonState.title.retrieveString(),
                     ),
                     enabled = state.resendLinkButtonState.enabled,
                     onClick = viewModel::onResendLink,
