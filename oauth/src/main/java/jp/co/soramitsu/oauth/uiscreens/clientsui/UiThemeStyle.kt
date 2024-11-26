@@ -7,4 +7,4 @@ enum class UiStyle {
     FW,
 }
 
-val localCompositionUiStyle = staticCompositionLocalOf { UiStyle.FW }
+val localCompositionUiStyle = staticCompositionLocalOf { UiStyle.SW }
