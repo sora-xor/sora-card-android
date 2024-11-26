@@ -14,11 +14,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import jp.co.soramitsu.oauth.R
+import jp.co.soramitsu.oauth.uiscreens.clientsui.UiStyle
+import jp.co.soramitsu.oauth.uiscreens.clientsui.localCompositionUiStyle
 import jp.co.soramitsu.oauth.uiscreens.theme.AuthSdkTheme
 import jp.co.soramitsu.ui_core.resources.Dimens
 import jp.co.soramitsu.ui_core.theme.customColors
@@ -33,16 +36,16 @@ data class SoraCardDetailsScreenState(
     val fiatWalletDialog: Boolean,
 )
 
-data class SoraCardDetailsCallback(
-    val onReferralBannerClick: () -> Unit,
-    val onCloseReferralBannerClick: () -> Unit,
-    val onRecentActivityClick: (position: Int) -> Unit,
-    val onShowMoreRecentActivitiesClick: () -> Unit,
-    val onIbanCardShareClick: () -> Unit,
-    val onIbanCardClick: () -> Unit,
-    val onSettingsOptionClick: (position: Int) -> Unit,
-    val onExchangeXorClick: () -> Unit,
-)
+interface SoraCardDetailsCallback {
+    fun onReferralBannerClick()
+    fun onCloseReferralBannerClick()
+    fun onRecentActivityClick(position: Int)
+    fun onShowMoreRecentActivitiesClick()
+    fun onIbanCardShareClick()
+    fun onIbanCardClick()
+    fun onSettingsOptionClick(position: Int)
+    fun onExchangeXorClick()
+}
 
 @Composable
 fun SoraCardDetailsScreen(
@@ -62,8 +65,8 @@ fun SoraCardDetailsScreen(
     ) {
         SoraCardMainSoraContentCardScreen(
             soraCardMainSoraContentCardState = soraCardDetailsScreenState.soraCardMainSoraContentCardState,
-            onExchangeXor = callback.onExchangeXorClick,
-            onOptionsClick = { callback.onSettingsOptionClick.invoke(0) },
+            onExchangeXor = callback::onExchangeXorClick,
+            onOptionsClick = { callback.onSettingsOptionClick(0) },
         )
         if (soraCardDetailsScreenState.soraCardReferralBannerCardState) {
             BasicBannerCardScreen(
@@ -73,8 +76,8 @@ fun SoraCardDetailsScreen(
                 button = stringResource(id = R.string.refer_and_earn),
                 closeEnabled = false,
                 callback = BasicBannerCardCallback(
-                    onButtonClicked = callback.onReferralBannerClick,
-                    onCloseCard = callback.onCloseReferralBannerClick,
+                    onButtonClicked = callback::onReferralBannerClick,
+                    onCloseCard = callback::onCloseReferralBannerClick,
                 ),
             )
         }
@@ -82,8 +85,8 @@ fun SoraCardDetailsScreen(
             if (state.data.isNotEmpty()) {
                 SoraCardRecentActivitiesCardScreen(
                     soraCardRecentActivitiesCardState = state,
-                    onListTileClick = callback.onRecentActivityClick,
-                    onShowMoreClick = callback.onShowMoreRecentActivitiesClick,
+                    onListTileClick = callback::onRecentActivityClick,
+                    onShowMoreClick = callback::onShowMoreRecentActivitiesClick,
                 )
             }
         }
@@ -91,15 +94,15 @@ fun SoraCardDetailsScreen(
         soraCardDetailsScreenState.soraCardIBANCardState?.let { state ->
             SoraCardIBANCardScreen(
                 soraCardIBANCardState = state,
-                onShareClick = callback.onIbanCardShareClick,
-                onCardClick = callback.onIbanCardClick,
+                onShareClick = callback::onIbanCardShareClick,
+                onCardClick = callback::onIbanCardClick,
             )
         }
         soraCardDetailsScreenState.soraCardSettingsCard?.let { state ->
             if (state.settings.isNotEmpty()) {
                 SoraCardSettingsCardScreen(
                     state = state,
-                    onItemClick = callback.onSettingsOptionClick,
+                    onItemClick = callback::onSettingsOptionClick,
                 )
             }
         }
@@ -114,49 +117,76 @@ fun SoraCardDetailsScreen(
 @Preview
 @Composable
 private fun PreviewSoraCardDetailsScreen() {
-    AuthSdkTheme {
-        Box(
-            modifier = Modifier
-                .background(
-                    MaterialTheme.customColors.bgPage,
+    CompositionLocalProvider(
+        localCompositionUiStyle provides UiStyle.FW,
+    ) {
+        AuthSdkTheme {
+            Box(
+                modifier = Modifier
+                    .background(
+                        MaterialTheme.customColors.bgPage,
+                    )
+                    .fillMaxSize(),
+            ) {
+                SoraCardDetailsScreen(
+                    scrollState = rememberScrollState(),
+                    soraCardDetailsScreenState = SoraCardDetailsScreenState(
+                        soraCardMainSoraContentCardState = SoraCardMainSoraContentCardState(
+                            balance = "3665.50",
+                            phone = "987654",
+                            soraCardMenuActions = SoraCardMenuAction.entries,
+                            canStartGatehubFlow = true,
+                        ),
+                        soraCardReferralBannerCardState = true,
+                        soraCardRecentActivitiesCardState = SoraCardRecentActivitiesCardState(
+                            data = listOf(),
+                        ),
+                        soraCardIBANCardState = SoraCardIBANCardState(
+                            iban = "LT61 3250 0467 7252 5583",
+                            closed = false,
+                        ),
+                        soraCardSettingsCard = SoraCardSettingsCardState(
+                            soraCardSettingsOptions = SoraCardSettingsOption.entries,
+                            phone = "123123",
+                        ),
+                        logoutDialog = false,
+                        fiatWalletDialog = false,
+                    ),
+                    callback = object : SoraCardDetailsCallback {
+                        override fun onReferralBannerClick() {
+                            TODO("Not yet implemented")
+                        }
+
+                        override fun onCloseReferralBannerClick() {
+                            TODO("Not yet implemented")
+                        }
+
+                        override fun onRecentActivityClick(position: Int) {
+                            TODO("Not yet implemented")
+                        }
+
+                        override fun onShowMoreRecentActivitiesClick() {
+                            TODO("Not yet implemented")
+                        }
+
+                        override fun onIbanCardShareClick() {
+                            TODO("Not yet implemented")
+                        }
+
+                        override fun onIbanCardClick() {
+                            TODO("Not yet implemented")
+                        }
+
+                        override fun onSettingsOptionClick(position: Int) {
+                            TODO("Not yet implemented")
+                        }
+
+                        override fun onExchangeXorClick() {
+                            TODO("Not yet implemented")
+                        }
+                    },
                 )
-                .fillMaxSize(),
-        ) {
-            SoraCardDetailsScreen(
-                scrollState = rememberScrollState(),
-                soraCardDetailsScreenState = SoraCardDetailsScreenState(
-                    soraCardMainSoraContentCardState = SoraCardMainSoraContentCardState(
-                        balance = "3665.50",
-                        phone = "987654",
-                        soraCardMenuActions = SoraCardMenuAction.entries,
-                        canStartGatehubFlow = true,
-                    ),
-                    soraCardReferralBannerCardState = true,
-                    soraCardRecentActivitiesCardState = SoraCardRecentActivitiesCardState(
-                        data = listOf(),
-                    ),
-                    soraCardIBANCardState = SoraCardIBANCardState(
-                        iban = "LT61 3250 0467 7252 5583",
-                        closed = false,
-                    ),
-                    soraCardSettingsCard = SoraCardSettingsCardState(
-                        soraCardSettingsOptions = SoraCardSettingsOption.entries,
-                        phone = "123123",
-                    ),
-                    logoutDialog = false,
-                    fiatWalletDialog = false,
-                ),
-                callback = SoraCardDetailsCallback(
-                    onReferralBannerClick = {},
-                    onCloseReferralBannerClick = {},
-                    onRecentActivityClick = {},
-                    onShowMoreRecentActivitiesClick = {},
-                    onIbanCardShareClick = {},
-                    onIbanCardClick = {},
-                    onSettingsOptionClick = {},
-                    onExchangeXorClick = {},
-                ),
-            )
+            }
         }
     }
 }

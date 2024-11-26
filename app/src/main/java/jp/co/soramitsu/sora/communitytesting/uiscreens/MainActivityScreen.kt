@@ -1,5 +1,6 @@
 package jp.co.soramitsu.sora.communitytesting.uiscreens
 
+import android.app.Application
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -17,6 +18,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
 import java.util.Locale
 import javax.inject.Inject
 import jp.co.soramitsu.androidfoundation.format.TextValue
@@ -41,8 +43,11 @@ import jp.co.soramitsu.ui_core.theme.customColors
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
+@HiltAndroidApp
+open class Application : Application()
+
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivityScreen : ComponentActivity() {
 
     private val registrationLauncher = registerForActivityResult(
         SoraCardContract(),

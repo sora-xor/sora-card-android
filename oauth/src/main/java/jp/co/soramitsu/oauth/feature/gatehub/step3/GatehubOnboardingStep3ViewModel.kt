@@ -8,7 +8,7 @@ import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
-import jp.co.soramitsu.oauth.base.state.DialogAlertState
+import jp.co.soramitsu.oauth.base.uiscreens.DialogAlertState
 import jp.co.soramitsu.oauth.feature.gatehub.GateHubRepository
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
@@ -74,14 +74,14 @@ class GatehubOnboardingStep3ViewModel @Inject constructor(
                         mainRouter.openGatehubOnboardingProgress()
                     } else {
                         dialogState = DialogAlertState(
-                            desc, null, true, { dialogState = null }, { dialogState = null },
+                            TextValue.SimpleText(desc), null, true, { dialogState = null }, { dialogState = null },
                         )
                     }
                 }
                 .onFailure {
                     dialogState = DialogAlertState(
-                        R.string.card_attention_text,
-                        it.localizedMessage,
+                        TextValue.StringRes(R.string.card_attention_text),
+                        TextValue.SimpleText(it.localizedMessage.orEmpty()),
                         true,
                         { dialogState = null },
                         { dialogState = null },

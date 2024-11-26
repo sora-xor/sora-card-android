@@ -1,4 +1,4 @@
-package jp.co.soramitsu.sora.communitytesting.uiscreens
+package jp.co.soramitsu.soracard.commonapp
 
 import jp.co.soramitsu.oauth.network.SoraCardNetworkClient
 import jp.co.soramitsu.oauth.network.SoraCardNetworkResponse
@@ -37,7 +37,6 @@ class SoraCardNetworkClientImpl(
                     responseDeserializer = deserializer,
                 ),
             )
-
             SoraCardNetworkResponse(
                 value = result,
                 statusCode = SUCCESS_STATUS_CODE,

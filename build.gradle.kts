@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.kover) apply false
     id("org.jetbrains.dokka") version "1.9.20" apply false
     id("org.sonarqube") version "4.4.1.3373"
+    alias(libs.plugins.jetbrainsKotlinJvm) apply false
 }
 
 tasks.register("clean", Delete::class) {

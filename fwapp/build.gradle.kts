@@ -31,11 +31,11 @@ kotlin {
 }
 
 android {
-    namespace = "jp.co.soramitsu.sora.communitytesting"
+    namespace = "jp.co.soramitsu.soracard.fwapp"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "jp.co.soramitsu.sora.communitytesting"
+        applicationId = "jp.co.soramitsu.fearless.debug"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
@@ -136,13 +136,13 @@ android {
             buildConfigField(
                 "String",
                 "PLATFORM_ID",
-                maybeWrapQuotes(secret("PLATFORM_ID_TEST")!!),
+                maybeWrapQuotes(secret("PLATFORM_ID_TEST_FW")!!),
             )
 
             buildConfigField(
                 "String",
                 "RECAPTCHA_KEY",
-                maybeWrapQuotes(secret("RECAPTCH_KEY_TEST")!!),
+                maybeWrapQuotes(secret("RECAPTCH_KEY_TEST_FW")!!),
             )
 
             isMinifyEnabled = false
