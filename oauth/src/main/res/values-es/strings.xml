@@ -8,6 +8,7 @@
   <string name="card_hub_manage_card">Manage SORA Card</string>
   <string name="card_hub_manage_card_alert_title">Download SORA Card App</string>
   <string name="card_hub_manage_google_play">To manage your SORA Card, please install the official SORA Card App. Tap OK to be directed to the Google Play.</string>
+  <string name="card_hub_settings_logout_description">Estás a punto de cerrar sesión en SORA Card. Seguirás teniendo acceso a la aplicación independiente SORA Card, pero el saldo ya no estará disponible en SORA Wallet.</string>
   <string name="card_hub_settings_logout_title">Cerrar sesión de la Tarjeta SORA</string>
   <string name="card_hub_settings_title">Ajustes Tarjeta</string>
   <string name="card_hub_title">Card details</string>
@@ -134,6 +135,7 @@
   <string name="show_more">Show more</string>
   <string name="sign_up_sora_card">Sign up for SORA Card</string>
   <string name="source_of_funds">What is the source of your funds?</string>
+  <string name="status_not_started">Consiga la Tarjeta SORA</string>
   <string name="support_chat">Support chat</string>
   <string name="terms_and_conditions_accept_and_continue">Aceptar y Continuar</string>
   <string name="terms_and_conditions_confirm_description">Al continuar confirma que ha leído, entendido y aceptado estas políticas</string>

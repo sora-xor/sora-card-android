@@ -23,8 +23,8 @@ class InMemoryRepo @Inject constructor() {
     var ghCountriesFrom = emptyList<String>()
     var ghCountriesTo = emptyList<String>()
 
-    val networkHeader =
-        "$client/${Build.MANUFACTURER}/${Build.MODEL}/${Build.VERSION.SDK_INT}"
+    val networkHeader: String
+        get() = "$client/${Build.MANUFACTURER}/${Build.MODEL}/${Build.VERSION.SDK_INT}"
 
     fun url(baseUrl: String?, request: NetworkRequest): String =
         "${baseUrl ?: soraBackEndUrl}${request.url}"

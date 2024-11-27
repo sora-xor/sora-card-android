@@ -14,6 +14,9 @@ import jp.co.soramitsu.oauth.network.SoraCardNetworkResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
@@ -78,13 +81,15 @@ class GateHubRepositoryTest {
                 bearerToken = "123",
                 deserializer = OnboardResponse.serializer(),
                 url = "some url",
-                body = OnboardRequestBody(
-                    employmentStatus = 9,
-                    expectedVolume = 123,
-                    openingReason = listOf(2, 7),
-                    sourceOfFunds = listOf(8, 2),
-                    crossBorderDestinationCountries = null,
-                    crossBorderOriginCountries = null,
+                body = Json.encodeToString(
+                    OnboardRequestBody(
+                        employmentStatus = 9,
+                        expectedVolume = 123,
+                        openingReason = listOf(2, 7),
+                        sourceOfFunds = listOf(8, 2),
+                        crossBorderDestinationCountries = null,
+                        crossBorderOriginCountries = null,
+                    ),
                 ),
             )
         } returns SoraCardNetworkResponse(
@@ -111,6 +116,84 @@ class GateHubRepositoryTest {
     }
 
     @Test
+    fun `test get iframe fail wrong url`() = runTest {
+        coEvery {
+            atv.checkAccessTokenValidity()
+        } returns AccessTokenResponse.Token(token = "123", expirationTime = 123L)
+        advanceUntilIdle()
+        coEvery {
+            nc.post(
+                header = "nethed",
+                bearerToken = "123",
+                deserializer = GetIframeResponse.serializer(),
+                url = "some url",
+                body = Json.encodeToString(GetIframeRequestBody(2)),
+            )
+        } returns SoraCardNetworkResponse(
+            value = GetIframeResponse(crid = "crid", rif = "rif", sc = 2, sd = "sd", url = null),
+            statusCode = 200,
+        )
+        val r = repo.getIframe()
+        assertTrue(r.isFailure)
+        val res = r.exceptionOrNull()
+        assertTrue(res != null)
+        assertTrue(res!! is IllegalStateException)
+        assertEquals("Failed - GetIframe|Url is not valid", (res as IllegalStateException).message)
+    }
+
+    @Test
+    fun `test get iframe fail null value`() = runTest {
+        coEvery {
+            atv.checkAccessTokenValidity()
+        } returns AccessTokenResponse.Token(token = "123", expirationTime = 123L)
+        advanceUntilIdle()
+        coEvery {
+            nc.post(
+                header = "nethed",
+                bearerToken = "123",
+                deserializer = GetIframeResponse.serializer(),
+                url = "some url",
+                body = Json.encodeToString(GetIframeRequestBody(2)),
+            )
+        } returns SoraCardNetworkResponse(
+            value = null,
+            statusCode = 200,
+        )
+        val r = repo.getIframe()
+        assertTrue(r.isFailure)
+        val res = r.exceptionOrNull()
+        assertTrue(res != null)
+        assertTrue(res!! is IllegalStateException)
+        assertEquals("Failed - GetIframe|Null value", (res as IllegalStateException).message)
+    }
+
+    @Test
+    fun `test get iframe failed no auth`() = runTest {
+        coEvery {
+            atv.checkAccessTokenValidity()
+        } returns AccessTokenResponse.Token(token = "123", expirationTime = 123L)
+        advanceUntilIdle()
+        coEvery {
+            nc.post(
+                header = "nethed",
+                bearerToken = "123",
+                deserializer = GetIframeResponse.serializer(),
+                url = "some url",
+                body = Json.encodeToString(GetIframeRequestBody(2)),
+            )
+        } returns SoraCardNetworkResponse(
+            value = null,
+            statusCode = 401,
+        )
+        val r = repo.getIframe()
+        assertTrue(r.isFailure)
+        val res = r.exceptionOrNull()
+        assertTrue(res != null)
+        assertTrue(res!! is IllegalStateException)
+        assertEquals("Failed - GetIframe|Unauthorised", (res as IllegalStateException).message)
+    }
+
+    @Test
     fun `test get iframe successful`() = runTest {
         coEvery {
             atv.checkAccessTokenValidity()
@@ -122,7 +205,7 @@ class GateHubRepositoryTest {
                 bearerToken = "123",
                 deserializer = GetIframeResponse.serializer(),
                 url = "some url",
-                body = GetIframeRequestBody(2),
+                body = Json.encodeToString(GetIframeRequestBody(2)),
             )
         } returns SoraCardNetworkResponse(
             value = GetIframeResponse(crid = "crid", rif = "rif", sc = 2, sd = "sd", url = "url"),
@@ -190,5 +273,109 @@ class GateHubRepositoryTest {
         val res = r.getOrNull()
         assertTrue(res != null)
         assertTrue(res!! is OnboardedResult.Rejected)
+    }
+
+    @Test
+    fun `test onboarded pending`() = runTest {
+        coEvery {
+            atv.checkAccessTokenValidity()
+        } returns AccessTokenResponse.Token(token = "123", expirationTime = 123L)
+        coEvery {
+            nc.get(
+                header = "nethed",
+                bearerToken = "123",
+                deserializer = OnboardedResponse.serializer(),
+                url = "some url",
+            )
+        } returns SoraCardNetworkResponse(
+            value = OnboardedResponse(pid = "pid", vs = 0, vm = "vm", vd = "vd", ut = 3),
+            statusCode = 200,
+        )
+        advanceUntilIdle()
+        val r = repo.onboarded()
+        assertTrue(r.isSuccess)
+        val res = r.getOrNull()
+        assertTrue(res != null)
+        assertTrue(res!! is OnboardedResult.Pending)
+    }
+
+    @Test
+    fun `test onboarded 401`() = runTest {
+        coEvery {
+            atv.checkAccessTokenValidity()
+        } returns AccessTokenResponse.Token(token = "123", expirationTime = 123L)
+        coEvery {
+            nc.get(
+                header = "nethed",
+                bearerToken = "123",
+                deserializer = OnboardedResponse.serializer(),
+                url = "some url",
+            )
+        } returns SoraCardNetworkResponse(
+            value = null,
+            statusCode = 401,
+        )
+        advanceUntilIdle()
+        val r = repo.onboarded()
+        assertTrue(r.isFailure)
+        val res = r.exceptionOrNull()
+        assertTrue(res != null)
+        assertTrue(res!! is IllegalStateException)
+        assertEquals(
+            "Failed - Onboarded|Unauthorised (401)",
+            (res as IllegalStateException).message,
+        )
+    }
+
+    @Test
+    fun `test onboarded 404`() = runTest {
+        coEvery {
+            atv.checkAccessTokenValidity()
+        } returns AccessTokenResponse.Token(token = "123", expirationTime = 123L)
+        coEvery {
+            nc.get(
+                header = "nethed",
+                bearerToken = "123",
+                deserializer = OnboardedResponse.serializer(),
+                url = "some url",
+            )
+        } returns SoraCardNetworkResponse(
+            value = null,
+            statusCode = 404,
+        )
+        advanceUntilIdle()
+        val r = repo.onboarded()
+        assertTrue(r.isSuccess)
+        val res = r.getOrNull()
+        assertTrue(res != null)
+        assertTrue(res!! is OnboardedResult.OnboardingNotFound)
+    }
+
+    @Test
+    fun `test onboarded 408`() = runTest {
+        coEvery {
+            atv.checkAccessTokenValidity()
+        } returns AccessTokenResponse.Token(token = "123", expirationTime = 123L)
+        coEvery {
+            nc.get(
+                header = "nethed",
+                bearerToken = "123",
+                deserializer = OnboardedResponse.serializer(),
+                url = "some url",
+            )
+        } returns SoraCardNetworkResponse(
+            value = null,
+            statusCode = 408,
+        )
+        advanceUntilIdle()
+        val r = repo.onboarded()
+        assertTrue(r.isFailure)
+        val res = r.exceptionOrNull()
+        assertTrue(res != null)
+        assertTrue(res!! is IllegalStateException)
+        assertEquals(
+            "Failed - Onboarded|Internal error (408)",
+            (res as IllegalStateException).message,
+        )
     }
 }

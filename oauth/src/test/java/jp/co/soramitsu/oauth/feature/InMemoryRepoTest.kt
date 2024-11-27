@@ -40,7 +40,7 @@ class InMemoryRepoTest {
         memo.flow = SoraCardFlow.SoraCardGateHubFlow
         assertEquals(SoraCardFlow.SoraCardGateHubFlow, memo.flow)
 
-        assertEquals("jp.co.soramitsu.oauth/null/null/0", memo.networkHeader)
+        assertEquals("pac name/null/null/0", memo.networkHeader)
 
         assertEquals("", memo.soraBackEndUrl)
 
