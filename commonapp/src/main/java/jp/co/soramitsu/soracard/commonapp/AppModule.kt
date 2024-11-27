@@ -1,10 +1,8 @@
-package jp.co.soramitsu.sora.communitytesting.uiscreens
+package jp.co.soramitsu.soracard.commonapp
 
-import android.app.Application
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.HiltAndroidApp
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 import jp.co.soramitsu.oauth.network.SoraCardNetworkClient
@@ -12,9 +10,6 @@ import jp.co.soramitsu.xnetworking.lib.engines.rest.api.RestClient
 import jp.co.soramitsu.xnetworking.lib.engines.rest.api.models.AbstractRestClientConfig
 import jp.co.soramitsu.xnetworking.lib.engines.rest.impl.RestClientImpl
 import kotlinx.serialization.json.Json
-
-@HiltAndroidApp
-open class Application : Application()
 
 @Module
 @InstallIn(SingletonComponent::class)

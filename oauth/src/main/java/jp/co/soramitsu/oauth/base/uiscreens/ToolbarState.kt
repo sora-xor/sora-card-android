@@ -1,4 +1,4 @@
-package jp.co.soramitsu.oauth.base.state
+package jp.co.soramitsu.oauth.base.uiscreens
 
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.ui_core.component.toolbar.Action

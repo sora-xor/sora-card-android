@@ -17,8 +17,10 @@ def extraBuildSecrets = [
   [$class: 'StringBinding', credentialsId: 'SORA_CARD_KYC_PASSWORD_PROD', variable: 'SORA_CARD_KYC_PASSWORD_PROD'],
   [$class: 'StringBinding', credentialsId: 'SORA_CARD_KYC_PASSWORD_TEST', variable: 'SORA_CARD_KYC_PASSWORD_TEST'],
   [$class: 'StringBinding', credentialsId: 'PLATFORM_ID_TEST', variable: 'PLATFORM_ID_TEST'],
+  [$class: 'StringBinding', credentialsId: 'PLATFORM_ID_TEST_FW', variable: 'PLATFORM_ID_TEST_FW'],
   [$class: 'StringBinding', credentialsId: 'PLATFORM_ID_PROD', variable: 'PLATFORM_ID_PROD'],
   [$class: 'StringBinding', credentialsId: 'RECAPTCH_KEY_TEST', variable: 'RECAPTCH_KEY_TEST'],
+  [$class: 'StringBinding', credentialsId: 'RECAPTCH_KEY_TEST_FW', variable: 'RECAPTCH_KEY_TEST_FW'],
   [$class: 'StringBinding', credentialsId: 'RECAPTCH_KEY_PROD', variable: 'RECAPTCH_KEY_PROD'],
   [$class: 'StringBinding', credentialsId: 'SORA_BACKEND_DEBUG', variable: 'SORA_BACKEND_DEBUG'],
   [$class: 'StringBinding', credentialsId: 'SORA_BACKEND_RELEASE', variable: 'SORA_BACKEND_RELEASE']

@@ -8,7 +8,9 @@ import io.mockk.junit4.MockKRule
 import io.mockk.just
 import io.mockk.runs
 import io.mockk.verify
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.androidfoundation.testing.getOrAwaitValue
+import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.domain.MainCoroutineRule
@@ -84,6 +86,29 @@ class GatehubOnboardingStep3ViewModelTest {
         vm.onNext()
         advanceUntilIdle()
         verify { mainRouter.openGatehubOnboardingProgress() }
+    }
+
+    @Test
+    fun `next step no success`() = runTest {
+        advanceUntilIdle()
+        coEvery { gateHubRepository.onboardUser() } returns Result.success(2 to "bug")
+        vm.onNext()
+        advanceUntilIdle()
+        val ds = vm.dialogState
+        assertEquals("bug", (ds!!.title as TextValue.SimpleText).text)
+    }
+
+    @Test
+    fun `next step failed`() = runTest {
+        advanceUntilIdle()
+        coEvery {
+            gateHubRepository.onboardUser()
+        } returns Result.failure(IllegalStateException("occurred"))
+        vm.onNext()
+        advanceUntilIdle()
+        val ds = vm.dialogState
+        assertEquals(R.string.card_attention_text, (ds!!.title as TextValue.StringRes).id)
+        assertEquals("occurred", (ds.message as TextValue.SimpleText).text)
     }
 
     @Test

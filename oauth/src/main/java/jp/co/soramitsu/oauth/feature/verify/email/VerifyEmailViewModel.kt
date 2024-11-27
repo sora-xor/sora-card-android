@@ -13,7 +13,7 @@ import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
-import jp.co.soramitsu.oauth.base.state.DialogAlertState
+import jp.co.soramitsu.oauth.base.uiscreens.DialogAlertState
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
@@ -108,8 +108,8 @@ class VerifyEmailViewModel @Inject constructor(
 
         override fun onError(error: OAuthErrorCode, errorMessage: String?) {
             dialogState = DialogAlertState(
-                title = error.name,
-                message = error.description,
+                title = TextValue.SimpleText(error.name),
+                message = TextValue.SimpleText(error.description),
                 dismissAvailable = true,
                 onPositive = {
                     dialogState = null
@@ -141,8 +141,8 @@ class VerifyEmailViewModel @Inject constructor(
         override fun onError(error: OAuthErrorCode, errorMessage: String?) {
             loading(false)
             dialogState = DialogAlertState(
-                title = error.name,
-                message = error.description,
+                title = TextValue.SimpleText(error.name),
+                message = TextValue.SimpleText(error.description),
                 dismissAvailable = true,
                 onPositive = {
                     dialogState = null

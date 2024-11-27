@@ -2,12 +2,17 @@ package jp.co.soramitsu.oauth.feature.verify.email
 
 import android.os.CountDownTimer
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
+import com.paywings.oauth.android.sdk.service.callback.CheckEmailVerifiedCallback
+import com.paywings.oauth.android.sdk.service.callback.SendNewVerificationEmailCallback
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
 import io.mockk.just
 import io.mockk.runs
+import io.mockk.slot
 import io.mockk.verify
 import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.androidfoundation.format.unsafeCast
@@ -69,6 +74,8 @@ class VerifyEmailViewModelTest {
         every { timer.start() } returns cdTimer
         every { mainRouter.back() } just runs
         every { mainRouter.openChangeEmail() } just runs
+        every { mainRouter.openEnterPhoneNumber(any()) } just runs
+        coEvery { authCallback.onOAuthSucceed() } just runs
         coEvery { pwoAuthClientProxy.sendNewVerificationEmail(any()) } just runs
         viewModel = VerifyEmailViewModel(
             mainRouter,
@@ -81,6 +88,88 @@ class VerifyEmailViewModelTest {
     @Test
     fun `init EXPECT set up toolbar state`() {
         assertEquals(R.string.verify_email_title, viewModel.toolbarState.value?.basic?.title)
+    }
+
+    @Test
+    fun `check email callback`() = runTest {
+        val cb = slot<CheckEmailVerifiedCallback>()
+        coEvery { pwoAuthClientProxy.checkEmailVerified(capture(cb)) } answers {
+            cb.captured.onSignInSuccessful()
+        }
+        advanceUntilIdle()
+        viewModel.setArgs("email", false, authCallback)
+        advanceUntilIdle()
+        coVerify { authCallback.onOAuthSucceed() }
+    }
+
+    @Test
+    fun `check email callback onUserSignInRequired`() = runTest {
+        val cb = slot<CheckEmailVerifiedCallback>()
+        coEvery { pwoAuthClientProxy.checkEmailVerified(capture(cb)) } answers {
+            cb.captured.onUserSignInRequired()
+        }
+        advanceUntilIdle()
+        viewModel.setArgs("email", false, authCallback)
+        advanceUntilIdle()
+        coVerify { mainRouter.openEnterPhoneNumber(true) }
+    }
+
+    @Test
+    fun `check email callback onError`() = runTest {
+        val cb = slot<CheckEmailVerifiedCallback>()
+        coEvery { pwoAuthClientProxy.checkEmailVerified(capture(cb)) } answers {
+            cb.captured.onError(OAuthErrorCode.INVALID_EMAIL, "mess")
+        }
+        advanceUntilIdle()
+        viewModel.setArgs("email", false, authCallback)
+        advanceUntilIdle()
+        val ds = viewModel.dialogState!!
+        assertEquals("INVALID_EMAIL", (ds.title as TextValue.SimpleText).text)
+        assertEquals(
+            "Email is not a valid email address.",
+            (ds.message as TextValue.SimpleText).text,
+        )
+    }
+
+    @Test
+    fun `send verification email onError`() = runTest {
+        val cb = slot<SendNewVerificationEmailCallback>()
+        coEvery { pwoAuthClientProxy.sendNewVerificationEmail(capture(cb)) } answers {
+            cb.captured.onError(OAuthErrorCode.INVALID_EMAIL, "mess")
+        }
+        advanceUntilIdle()
+        viewModel.onResendLink()
+        advanceUntilIdle()
+        val ds = viewModel.dialogState!!
+        assertEquals("INVALID_EMAIL", (ds.title as TextValue.SimpleText).text)
+        assertEquals(
+            "Email is not a valid email address.",
+            (ds.message as TextValue.SimpleText).text,
+        )
+    }
+
+    @Test
+    fun `send verification email onUserSignInRequired`() = runTest {
+        val cb = slot<SendNewVerificationEmailCallback>()
+        coEvery { pwoAuthClientProxy.sendNewVerificationEmail(capture(cb)) } answers {
+            cb.captured.onUserSignInRequired()
+        }
+        advanceUntilIdle()
+        viewModel.onResendLink()
+        advanceUntilIdle()
+        coVerify { mainRouter.openEnterPhoneNumber(true) }
+    }
+
+    @Test
+    fun `send verification email onShowEmailConfirmationScreen`() = runTest {
+        val cb = slot<SendNewVerificationEmailCallback>()
+        coEvery { pwoAuthClientProxy.sendNewVerificationEmail(capture(cb)) } answers {
+            cb.captured.onShowEmailConfirmationScreen("mail", true)
+        }
+        advanceUntilIdle()
+        viewModel.onResendLink()
+        advanceUntilIdle()
+        verify { timer.start() }
     }
 
     @Test
