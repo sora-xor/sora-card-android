@@ -82,7 +82,7 @@ class FwMainActivityScreen : ComponentActivity() {
                 client = buildClient(),
                 soraBackEndUrl = BuildConfig.SORA_API_BASE_URL,
                 clientDark = true,
-                clientCase = UiStyle.SW,
+                clientCase = UiStyle.FW,
                 flow = SoraCardFlow.SoraCardGateHubFlow,
             ),
         )
@@ -96,7 +96,7 @@ class FwMainActivityScreen : ComponentActivity() {
                 client = buildClient(),
                 soraBackEndUrl = BuildConfig.SORA_API_BASE_URL,
                 clientDark = true,
-                clientCase = UiStyle.SW,
+                clientCase = UiStyle.FW,
                 flow = SoraCardFlow.SoraCardKycFlow(
                     kycCredentials = SoraCardKycCredentials(
                         endpointUrl = BuildConfig.SORA_CARD_KYC_ENDPOINT_URL,

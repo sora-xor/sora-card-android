@@ -67,7 +67,7 @@ class SoraCardNetworkClientImpl(
         header: String?,
         bearerToken: String?,
         url: String,
-        body: Any,
+        body: String,
         deserializer: DeserializationStrategy<T>,
     ): SoraCardNetworkResponse<T> {
         return try {

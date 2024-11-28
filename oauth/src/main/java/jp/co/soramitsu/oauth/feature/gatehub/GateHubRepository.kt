@@ -8,6 +8,8 @@ import jp.co.soramitsu.oauth.network.NetworkRequest
 import jp.co.soramitsu.oauth.network.SoraCardNetworkClient
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class GateHubRepository(
     private val apiClient: SoraCardNetworkClient,
@@ -26,7 +28,7 @@ class GateHubRepository(
                 header = inMemoryRepo.networkHeader,
                 bearerToken = token,
                 url = inMemoryRepo.url(null, NetworkRequest.GATEWAY_GET_IFRAME),
-                body = GetIframeRequestBody(type = 2),
+                body = Json.encodeToString(GetIframeRequestBody(type = 2)),
                 deserializer = GetIframeResponse.serializer(),
             ).parse { value, statusCode, _ ->
                 when (statusCode) {
@@ -79,9 +81,9 @@ class GateHubRepository(
                         }
                     }
 
-                    401 -> error("Failed - Onboarded|Unauthorised")
+                    401 -> error("Failed - Onboarded|Unauthorised ($statusCode)")
                     404 -> OnboardedResult.OnboardingNotFound
-                    else -> error("Failed - Onboarded|Internal error")
+                    else -> error("Failed - Onboarded|Internal error ($statusCode)")
                 }
             }
         }
@@ -110,13 +112,15 @@ class GateHubRepository(
                 header = inMemoryRepo.networkHeader,
                 bearerToken = token,
                 url = inMemoryRepo.url(null, NetworkRequest.GATEWAY_ONBOARD),
-                body = OnboardRequestBody(
-                    employmentStatus = es,
-                    expectedVolume = ev,
-                    openingReason = or,
-                    sourceOfFunds = sf,
-                    crossBorderDestinationCountries = inMemoryRepo.ghCountriesTo.takeIf { it.isNotEmpty() },
-                    crossBorderOriginCountries = inMemoryRepo.ghCountriesFrom.takeIf { it.isNotEmpty() },
+                body = Json.encodeToString(
+                    OnboardRequestBody(
+                        employmentStatus = es,
+                        expectedVolume = ev,
+                        openingReason = or,
+                        sourceOfFunds = sf,
+                        crossBorderDestinationCountries = inMemoryRepo.ghCountriesTo.takeIf { it.isNotEmpty() },
+                        crossBorderOriginCountries = inMemoryRepo.ghCountriesFrom.takeIf { it.isNotEmpty() },
+                    ),
                 ),
                 deserializer = OnboardResponse.serializer(),
             ).parse { value, statusCode, message ->
@@ -132,7 +136,7 @@ class GateHubRepository(
                     }
 
                     401 -> error("Failed - OnboardUser|Unauthorised")
-                    else -> error("Failed - OnboardUser|Internal error")
+                    else -> error("Failed - OnboardUser|Internal error ($statusCode $message)")
                 }
             }
         }

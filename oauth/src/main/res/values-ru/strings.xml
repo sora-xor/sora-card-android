@@ -8,6 +8,7 @@
   <string name="card_hub_manage_card">Управление картой SORA</string>
   <string name="card_hub_manage_card_alert_title">Скачать приложение SORA Card</string>
   <string name="card_hub_manage_google_play">Для управления картой SORA Card установите официальное приложение SORA Card. Нажмите OK, чтобы перейти в Google Play.</string>
+  <string name="card_hub_settings_logout_description">Вы собираетесь выйти из SORA Card. У вас по-прежнему будет доступ непосредственно в приложении SORA Card, но баланс больше не будет доступен для вас в кошельке SORA.</string>
   <string name="card_hub_settings_logout_title">Выйти из SORA Card</string>
   <string name="card_hub_settings_title">Настройки карты</string>
   <string name="card_hub_title">Данные карты</string>
@@ -134,6 +135,7 @@
   <string name="show_more">Показать еще</string>
   <string name="sign_up_sora_card">Зарегистрироваться для получения карты SORA</string>
   <string name="source_of_funds">Каков источник ваших средств?</string>
+  <string name="status_not_started">Получить SORA Card</string>
   <string name="support_chat">Чат поддержки</string>
   <string name="terms_and_conditions_accept_and_continue">Принять и продолжить</string>
   <string name="terms_and_conditions_confirm_description">Продолжая, вы подтверждаете, что прочитали, поняли и приняли эти правила</string>

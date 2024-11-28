@@ -8,6 +8,7 @@
   <string name="card_hub_manage_card">Quản lý thẻ SORA</string>
   <string name="card_hub_manage_card_alert_title">Tải ứng dụng thẻ SORA</string>
   <string name="card_hub_manage_google_play">Để quản lý Thẻ SORA của bạn, vui lòng cài đặt Ứng dụng SORA Card. Nhấn OK để được chuyển đến Google Play.</string>
+  <string name="card_hub_settings_logout_description">Bạn sắp đăng xuất khỏi Thẻ SORA. Bạn sẽ vẫn có quyền truy cập vào ứng dụng độc lập Thẻ SORA, nhưng số dư sẽ không còn khả dụng cho bạn trong Ví SORA.</string>
   <string name="card_hub_settings_logout_title">Đăng xuất khỏi SORA Card</string>
   <string name="card_hub_settings_title">Cài đặt thẻ</string>
   <string name="card_hub_title">Chi tiết thẻ</string>
@@ -134,6 +135,7 @@
   <string name="show_more">Show more</string>
   <string name="sign_up_sora_card">Đăng ký thẻ SORA</string>
   <string name="source_of_funds">Nguồn tiền của bạn?</string>
+  <string name="status_not_started">Nhận thẻ SORA</string>
   <string name="support_chat">Trò chuyện với hỗ trợ</string>
   <string name="terms_and_conditions_accept_and_continue">Chấp nhận &amp; Tiếp tục</string>
   <string name="terms_and_conditions_confirm_description">Bằng cách tiếp tục, bạn xác nhận rằng bạn đã đọc, hiểu và chấp nhận các chính sách này</string>
