@@ -179,6 +179,7 @@
   <string name="verify_phone_number_otp_not_valid">OTP is niet geldig</string>
   <string name="verify_phone_number_send_code">Stuur Code</string>
   <string name="verify_phone_number_title">Verifieer je telefoonnummer</string>
+  <string name="view_details">View details</string>
   <string name="your_phone_number">Your phone number</string>
   <string name="your_transfers_from">Your transfers from</string>
   <string name="your_transfers_to">Your transfers to</string>
