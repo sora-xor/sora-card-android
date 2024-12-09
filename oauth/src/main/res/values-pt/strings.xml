@@ -37,6 +37,7 @@
   <string name="common_close">Fechar</string>
   <string name="common_continue">Continuar</string>
   <string name="common_done">Done</string>
+  <string name="common_fiat">Fiat</string>
   <string name="common_next">Next</string>
   <string name="common_no_spam">Não é spam! Apenas para proteger a sua conta</string>
   <string name="common_ok">ok</string>
@@ -46,6 +47,7 @@
   <string name="common_resend_timer" formatted="false">Reenviar em %02d:%02d</string>
   <string name="common_send_code">Enviar código SMS</string>
   <string name="common_send_link">Enviar Link</string>
+  <string name="common_sora_card">SORA Card</string>
   <string name="common_support">Apoio</string>
   <string name="common_try_again">Tentar novamente</string>
   <string name="common_user_not_found">Não foi encontrado nenhum número de telemóvel, verifique-o novamente e tente de novo.</string>
@@ -78,6 +80,7 @@
   <string name="gatehub_unable_complete">We were unable to complete the onboarding process.</string>
   <string name="gatehub_where_transfer_from">Where are your transfers from?</string>
   <string name="gatehub_where_transfer_to">Where are your transfers to?</string>
+  <string name="get_iban_bank_account">Get a Euro IBAN bank account and a debit card</string>
   <string name="get_more_xor_dialog_buy_option">Comprar XOR com EUR</string>
   <string name="get_more_xor_dialog_deposit_option">Depósito XOR</string>
   <string name="get_more_xor_dialog_description">Pode trocar por XOR ou comprar com euros</string>

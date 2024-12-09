@@ -37,6 +37,7 @@
   <string name="common_close">Sluiten</string>
   <string name="common_continue">Doorgaan</string>
   <string name="common_done">Done</string>
+  <string name="common_fiat">Fiat</string>
   <string name="common_next">Next</string>
   <string name="common_no_spam">Geen spam! Alleen om uw account te beveiligen</string>
   <string name="common_ok">OK</string>
@@ -46,6 +47,7 @@
   <string name="common_resend_timer" formatted="false">Opnieuw verzenden in %02d:%02d</string>
   <string name="common_send_code">SMS code verzenden</string>
   <string name="common_send_link">Link nogmaals versturen</string>
+  <string name="common_sora_card">SORA Card</string>
   <string name="common_support">Support</string>
   <string name="common_try_again">Probeer het nog eens</string>
   <string name="common_user_not_found">Geen mobiel nummer gevonden, controleer het opnieuw en probeer het opnieuw.</string>
@@ -78,6 +80,7 @@
   <string name="gatehub_unable_complete">We were unable to complete the onboarding process.</string>
   <string name="gatehub_where_transfer_from">Where are your transfers from?</string>
   <string name="gatehub_where_transfer_to">Where are your transfers to?</string>
+  <string name="get_iban_bank_account">Get a Euro IBAN bank account and a debit card</string>
   <string name="get_more_xor_dialog_buy_option">Koop XOR met EUR</string>
   <string name="get_more_xor_dialog_deposit_option">XOR storten</string>
   <string name="get_more_xor_dialog_description">U kunt ruilen voor XOR of kopen met Euro</string>

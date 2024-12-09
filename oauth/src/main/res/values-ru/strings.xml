@@ -37,6 +37,7 @@
   <string name="common_close">Закрыть</string>
   <string name="common_continue">Продолжить</string>
   <string name="common_done">Готово</string>
+  <string name="common_fiat">Фиат</string>
   <string name="common_next">Следующий</string>
   <string name="common_no_spam">Никакого спама! Только для защиты вашего аккаунта</string>
   <string name="common_ok">хорошо</string>
@@ -46,6 +47,7 @@
   <string name="common_resend_timer">Отправить повторно в %02d:% 02d</string>
   <string name="common_send_code">Отправить SMS-код</string>
   <string name="common_send_link">Отправить ссылку</string>
+  <string name="common_sora_card">SORA карта</string>
   <string name="common_support">Поддержка</string>
   <string name="common_try_again">Повторить</string>
   <string name="common_user_not_found">Номер мобильного телефона не найден, проверьте его еще раз и повторите попытку.</string>
@@ -78,6 +80,7 @@
   <string name="gatehub_unable_complete">Нам не удалось завершить процесс регистрации.</string>
   <string name="gatehub_where_transfer_from">Откуда осуществляются переводы?</string>
   <string name="gatehub_where_transfer_to">Куда осуществляются переводы?</string>
+  <string name="get_iban_bank_account">Получите IBAN банковский счет в евро и дебетовую карту</string>
   <string name="get_more_xor_dialog_buy_option">Купить XOR с помощью карты</string>
   <string name="get_more_xor_dialog_deposit_option">Получить XOR</string>
   <string name="get_more_xor_dialog_description">Вы можете обменять на XOR или купить за евро</string>

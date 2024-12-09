@@ -37,6 +37,7 @@
   <string name="common_close">Đóng</string>
   <string name="common_continue">Tiếp tục</string>
   <string name="common_done">Xong</string>
+  <string name="common_fiat">Fiat</string>
   <string name="common_next">Tiếp</string>
   <string name="common_no_spam">Không có thư rác! Chỉ để bảo mật tài khoản của bạn</string>
   <string name="common_ok">ok</string>
@@ -46,6 +47,7 @@
   <string name="common_resend_timer" formatted="false">Gửi lại sau %02d:%02d</string>
   <string name="common_send_code">Gửi mã SMS</string>
   <string name="common_send_link">Gửi link</string>
+  <string name="common_sora_card">SORA Card</string>
   <string name="common_support">Hỗ trợ</string>
   <string name="common_try_again">Thử lại</string>
   <string name="common_user_not_found">Không tìm thấy số điện thoại di động nào, vui lòng kiểm tra lại và thử lại.</string>
@@ -78,6 +80,7 @@
   <string name="gatehub_unable_complete">Chúng tôi không thể hoàn tất quá trình giới thiệu.</string>
   <string name="gatehub_where_transfer_from">Bạn chuyển khoản từ đâu?</string>
   <string name="gatehub_where_transfer_to">Bạn chuyển khoản đến đâu?</string>
+  <string name="get_iban_bank_account">Get a Euro IBAN bank account and a debit card</string>
   <string name="get_more_xor_dialog_buy_option">Mua XOR bằng EUR</string>
   <string name="get_more_xor_dialog_deposit_option">Nạp XOR</string>
   <string name="get_more_xor_dialog_description">Bạn có thể đổi lấy XOR hoặc mua bằng Euro</string>
@@ -124,15 +127,15 @@
   <string name="payment_widget_unavailable_message">Tiện ích thanh toán hiện không khả dụng</string>
   <string name="payment_widget_unavailable_title">Tiện ích không khả dụng</string>
   <string name="phone_number_leading_zero">Định dạng số điện thoại được nhập có vẻ bất thường. Nếu vấn đề phát sinh, hãy cân nhắc việc xóa số \"0\" ở đầu.</string>
-  <string name="recent_activity">Recent activity</string>
-  <string name="refer_and_earn">Refer &amp; Earn</string>
-  <string name="refer_sora_card_bonus">Refer SORA Card.\nGet €20 bonus.</string>
+  <string name="recent_activity">Hoạt động gần đây</string>
+  <string name="refer_and_earn">Giới thiệu &amp; Kiếm tiền</string>
+  <string name="refer_sora_card_bonus">Giới thiệu Thẻ SORA. \n Nhận tiền thưởng 20€.</string>
   <string name="register_new_account">Đăng ký tài khoản mới</string>
   <string name="select_many">Bạn có thể chọn nhiều câu trả lời:</string>
   <string name="select_many_countries">Bạn có thể chọn nhiều quốc gia:</string>
   <string name="select_one">Chọn một trong các tùy chọn sau:</string>
   <string name="select_your_country">Chọn đất nước của bạn</string>
-  <string name="show_more">Show more</string>
+  <string name="show_more">Hiển thị thêm</string>
   <string name="sign_up_sora_card">Đăng ký thẻ SORA</string>
   <string name="source_of_funds">Nguồn tiền của bạn?</string>
   <string name="status_not_started">Nhận thẻ SORA</string>
