@@ -80,7 +80,7 @@
   <string name="gatehub_unable_complete">Нам не удалось завершить процесс регистрации.</string>
   <string name="gatehub_where_transfer_from">Откуда осуществляются переводы?</string>
   <string name="gatehub_where_transfer_to">Куда осуществляются переводы?</string>
-  <string name="get_iban_bank_account">Получите IBAN банковский счет в евро и дебетовую карту</string>
+  <string name="get_iban_bank_account">Получите IBAN банковский счет\nв евро и дебетовую карту</string>
   <string name="get_more_xor_dialog_buy_option">Купить XOR с помощью карты</string>
   <string name="get_more_xor_dialog_deposit_option">Получить XOR</string>
   <string name="get_more_xor_dialog_description">Вы можете обменять на XOR или купить за евро</string>

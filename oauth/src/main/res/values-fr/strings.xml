@@ -80,7 +80,7 @@
   <string name="gatehub_unable_complete">We were unable to complete the onboarding process.</string>
   <string name="gatehub_where_transfer_from">Where are your transfers from?</string>
   <string name="gatehub_where_transfer_to">Where are your transfers to?</string>
-  <string name="get_iban_bank_account">Get a Euro IBAN bank account and a debit card</string>
+  <string name="get_iban_bank_account">Get a Euro IBAN bank\naccount and a debit card</string>
   <string name="get_more_xor_dialog_buy_option">Acheter du XOR avec des EUR</string>
   <string name="get_more_xor_dialog_deposit_option">Déposer du XOR</string>
   <string name="get_more_xor_dialog_description">Vous pouvez échanger vers du XOR ou en acheter avec des Euros</string>

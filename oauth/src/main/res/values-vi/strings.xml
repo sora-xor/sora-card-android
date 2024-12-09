@@ -80,7 +80,7 @@
   <string name="gatehub_unable_complete">Chúng tôi không thể hoàn tất quá trình giới thiệu.</string>
   <string name="gatehub_where_transfer_from">Bạn chuyển khoản từ đâu?</string>
   <string name="gatehub_where_transfer_to">Bạn chuyển khoản đến đâu?</string>
-  <string name="get_iban_bank_account">Get a Euro IBAN bank account and a debit card</string>
+  <string name="get_iban_bank_account">Get a Euro IBAN bank\naccount and a debit card</string>
   <string name="get_more_xor_dialog_buy_option">Mua XOR bằng EUR</string>
   <string name="get_more_xor_dialog_deposit_option">Nạp XOR</string>
   <string name="get_more_xor_dialog_description">Bạn có thể đổi lấy XOR hoặc mua bằng Euro</string>
