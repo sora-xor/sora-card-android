@@ -163,7 +163,11 @@ class KycRepositoryImpl(
             }
 
             kycResponse.kycStatus == KycStatus.Started -> {
-                SoraCardCommonVerification.Started
+                if (kycResponse.verificationStatus == VerificationStatus.Pending) {
+                    SoraCardCommonVerification.Pending
+                } else {
+                    SoraCardCommonVerification.Started
+                }
             }
 
             kycResponse.kycStatus == KycStatus.Retry -> {
