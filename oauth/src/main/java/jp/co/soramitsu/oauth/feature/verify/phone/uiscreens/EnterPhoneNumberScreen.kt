@@ -78,8 +78,10 @@ fun EnterPhoneNumberScreen(code: String?, viewModel: EnterPhoneNumberViewModel =
             onCountry = viewModel::onSelectCountry,
             onConfirm = viewModel::onRequestCode,
         )
-        LaunchedEffect(Unit) {
-            focusRequester.requestFocus()
+        LaunchedEffect(state.countryLoading) {
+            if (!state.countryLoading) {
+                focusRequester.requestFocus()
+            }
         }
     }
 }
@@ -164,6 +166,7 @@ private fun PhoneScreen(
                     Modifier
                         .testTagAsId("PhoneDialCodeInput")
                         .fillMaxWidth()
+
                 UiStyle.FW ->
                     Modifier
                         .testTagAsId("PhoneDialCodeInput")

@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
 import com.paywings.oauth.android.sdk.service.callback.SignInWithPhoneNumberRequestOtpCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.androidfoundation.format.unsafeCast
 import jp.co.soramitsu.oauth.R
@@ -30,6 +29,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class EnterPhoneNumberViewModel @Inject constructor(
@@ -133,6 +133,9 @@ class EnterPhoneNumberViewModel @Inject constructor(
     }
 
     fun onPhoneChanged(value: TextFieldValue) {
+        if (_state.value.countryLoading) {
+            return
+        }
         if (inMemoryRepo.flow!!.unsafeCast<SoraCardFlow.SoraCardKycFlow>().logIn.not() && (
                 value.text.getOrNull(0)?.let {
                     it == '0'

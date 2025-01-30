@@ -74,7 +74,14 @@ class EnterPhoneNumberViewModelTest {
     @Before
     fun setUp() {
         every { inMemoryRepo.environment } returns SoraCardEnvironmentType.PRODUCTION
-        coEvery { pwoAuthClientProxy.signInWithPhoneNumberRequestOtp(any(), any(), any(), any()) } just runs
+        coEvery {
+            pwoAuthClientProxy.signInWithPhoneNumberRequestOtp(
+                any(),
+                any(),
+                any(),
+                any(),
+            )
+        } just runs
         every { mainRouter.back() } just runs
         every { mainRouter.openCountryList(true) } just runs
         every { localeService.code } returns "US"
@@ -227,5 +234,33 @@ class EnterPhoneNumberViewModelTest {
     fun `on back EXPECT navigate back`() {
         viewModel.onToolbarNavigation()
         verify { setActivityResult.setResult(SoraCardResult.Canceled) }
+    }
+
+    @Test
+    fun `phone doesn't change while countryLoading is true EXPECT input state value blank`() =
+        runTest {
+            val initCountryLoadingState = true
+            assertEquals(initCountryLoadingState, viewModel.state.value.countryLoading)
+
+            val initPhoneState = TextFieldValue("")
+            assertEquals(initPhoneState, viewModel.state.value.inputTextStateNumber.value)
+            viewModel.onPhoneChanged(TextFieldValue("333333"))
+            assertEquals(initPhoneState, viewModel.state.value.inputTextStateNumber.value)
+            advanceUntilIdle()
+        }
+
+    @Test
+    fun `phone changed when countryLoading is false EXPECT input state value updated`() = runTest {
+        advanceUntilIdle()
+
+        val countryLoadingUpdatedState = false
+        viewModel.setLocale(null)
+        advanceUntilIdle()
+        assertEquals(countryLoadingUpdatedState, viewModel.state.value.countryLoading)
+
+        val newPhoneState = TextFieldValue("333333")
+        viewModel.onPhoneChanged(TextFieldValue("333333"))
+        advanceUntilIdle()
+        assertEquals(newPhoneState, viewModel.state.value.inputTextStateNumber.value)
     }
 }
