@@ -58,6 +58,7 @@ class EnterPhoneNumberViewModel @Inject constructor(
                 value = TextFieldValue(""),
                 label = R.string.enter_phone_number_phone_input_field_label,
                 descriptionText = R.string.common_no_spam,
+                enabled = false,
             ),
             buttonState = ButtonState(
                 title = TextValue.StringRes(R.string.common_send_code),
@@ -87,6 +88,9 @@ class EnterPhoneNumberViewModel @Inject constructor(
                     countryName = country.name,
                     inputTextStateCode = _state.value.inputTextStateCode.copy(
                         value = TextFieldValue(country.dialCode),
+                    ),
+                    inputTextStateNumber = _state.value.inputTextStateNumber.copy(
+                        enabled = true,
                     ),
                 )
             }
@@ -161,6 +165,12 @@ class EnterPhoneNumberViewModel @Inject constructor(
 
     fun onSelectCountry() {
         mainRouter.openCountryList(singleChoice = true)
+        _state.value = _state.value.copy(
+            inputTextStateNumber = _state.value.inputTextStateNumber.copy(
+                error = false,
+                descriptionText = R.string.common_no_spam
+            )
+        )
     }
 
     fun onRequestCode() {

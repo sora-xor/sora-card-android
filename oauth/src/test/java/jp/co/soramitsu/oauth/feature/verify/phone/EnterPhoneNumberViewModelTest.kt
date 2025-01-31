@@ -228,4 +228,22 @@ class EnterPhoneNumberViewModelTest {
         viewModel.onToolbarNavigation()
         verify { setActivityResult.setResult(SoraCardResult.Canceled) }
     }
+
+    @Test
+    fun `inputTextStateNumber is disabed while countryLoading is true`() =
+        runTest {
+            val initCountryLoadingState = true
+            assertEquals(initCountryLoadingState, viewModel.state.value.countryLoading)
+            assertEquals(false, viewModel.state.value.inputTextStateNumber.enabled)
+            advanceUntilIdle()
+        }
+
+    @Test
+    fun `inputTextStateNumber is enabled when countryLoading is false`() = runTest {
+        advanceUntilIdle()
+        viewModel.setLocale(null)
+        advanceUntilIdle()
+        assertEquals(false, viewModel.state.value.countryLoading)
+        assertEquals(true, viewModel.state.value.inputTextStateNumber.enabled)
+    }
 }

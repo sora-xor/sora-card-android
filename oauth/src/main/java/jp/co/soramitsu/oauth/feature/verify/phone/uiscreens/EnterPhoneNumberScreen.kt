@@ -2,17 +2,21 @@ package jp.co.soramitsu.oauth.feature.verify.phone.uiscreens
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
@@ -32,6 +36,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import jp.co.soramitsu.androidfoundation.format.TextValue
@@ -50,6 +55,7 @@ import jp.co.soramitsu.ui_core.component.button.properties.Size
 import jp.co.soramitsu.ui_core.component.input.InputText
 import jp.co.soramitsu.ui_core.component.input.InputTextState
 import jp.co.soramitsu.ui_core.resources.Dimens
+import jp.co.soramitsu.ui_core.theme.borderRadius
 import jp.co.soramitsu.ui_core.theme.customColors
 import jp.co.soramitsu.ui_core.theme.customTypography
 
@@ -70,7 +76,6 @@ fun EnterPhoneNumberScreen(code: String?, viewModel: EnterPhoneNumberViewModel =
             inputTextStatePhoneNumber = state.inputTextStateNumber,
             buttonState = state.buttonState,
             focusRequester = focusRequester,
-            onDataEnteredPhoneCode = {},
             onDataEnteredPhoneNumber = viewModel::onPhoneChanged,
             countryName = state.countryName,
             countryCode = state.countryCode,
@@ -78,8 +83,10 @@ fun EnterPhoneNumberScreen(code: String?, viewModel: EnterPhoneNumberViewModel =
             onCountry = viewModel::onSelectCountry,
             onConfirm = viewModel::onRequestCode,
         )
-        LaunchedEffect(Unit) {
-            focusRequester.requestFocus()
+        LaunchedEffect(state.countryLoading) {
+            if (!state.countryLoading) {
+                focusRequester.requestFocus()
+            }
         }
     }
 }
@@ -94,7 +101,6 @@ private fun PhoneScreen(
     countryName: String,
     countryLoading: Boolean,
     focusRequester: FocusRequester,
-    onDataEnteredPhoneCode: (TextFieldValue) -> Unit,
     onDataEnteredPhoneNumber: (TextFieldValue) -> Unit,
     onCountry: () -> Unit,
     onConfirm: () -> Unit,
@@ -164,22 +170,36 @@ private fun PhoneScreen(
                     Modifier
                         .testTagAsId("PhoneDialCodeInput")
                         .fillMaxWidth()
+
                 UiStyle.FW ->
                     Modifier
                         .testTagAsId("PhoneDialCodeInput")
                         .clip(FearlessCorneredShape())
                         .fillMaxWidth()
             }
+
             Box(
                 modifier = Modifier
-                    .wrapContentHeight()
-                    .weight(1f),
+                    .height(Dimens.InputHeight)
+                    .border(
+                        width = 1.dp,
+                        shape = RoundedCornerShape(MaterialTheme.borderRadius.ml),
+                        color = MaterialTheme.customColors.fgOutline,
+                    )
+                    .weight(1f)
+                    .clip(RoundedCornerShape(MaterialTheme.borderRadius.ml))
+                    .clickable(
+                        enabled = !countryLoading,
+                        onClick = onCountry,
+                    ),
+                contentAlignment = Alignment.CenterStart,
             ) {
-                InputText(
-                    modifier = modifier,
-                    state = inputTextStatePhoneCode,
-                    onValueChange = onDataEnteredPhoneCode,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                Text(
+                    modifier = modifier
+                        .padding(Dimens.x2),
+                    text = inputTextStatePhoneCode.value.text,
+                    style = MaterialTheme.customTypography.textM,
+                    color = MaterialTheme.customColors.fgPrimary,
                 )
             }
             Spacer(modifier = Modifier.size(Dimens.x1))
@@ -232,7 +252,6 @@ private fun PreviewScreen() {
         focusRequester = remember { FocusRequester() },
         countryLoading = false,
         onCountry = {},
-        onDataEnteredPhoneCode = {},
         onDataEnteredPhoneNumber = {},
         onConfirm = {},
     )
