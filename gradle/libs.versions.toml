@@ -1,6 +1,6 @@
 [versions]
-agp = "8.8.0"
-kotlin = "1.9.24"
+agp = "8.9.0"
+kotlin = "2.1.10"
 junit = "4.13.2"
 coretest = "2.2.0"
 androidx-test-ext-junit = "1.1.5"
@@ -11,16 +11,16 @@ lifecycle-viewmodel-ktx = "2.8.7"
 lifecycle-viewmodel-compose = "2.8.7"
 lifecycle-common = "2.8.7"
 material = "1.12.0"
-coreKtx = "1.13.1"
-activity-compose = "1.9.3"
-compose-bom = "2024.11.00"
-hilt = "2.52"
+coreKtx = "1.15.0"
+activity-compose = "1.10.1"
+compose-bom = "2025.03.00"
+hilt = "2.55"
 hiltnavcompose = "1.2.0"
 uicore = "0.2.39"
 swAndroidFoundation = "0.0.4"
-xnetworking = "1.0.10"
+xnetworking = "1.0.14"
 kotlinx-serialization-v = "1.6.3"
-navigation-compose = "2.8.4"
+navigation-compose = "2.8.9"
 datastore = "1.0.0"
 mockk = "1.13.11"
 coroutine = "1.8.1"
@@ -28,7 +28,7 @@ pinview = "1.4.4"
 pwoauth = "2.0.0"
 pwkyc = "1.2.2"
 kover = "0.8.3"
-composeConstraintLayout = "1.1.0-alpha05"
+composeConstraintLayout = "1.1.1"
 jetbrainsKotlinJvm = "1.9.24"
 
 [libraries]
@@ -78,3 +78,4 @@ kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 jetbrainsKotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
