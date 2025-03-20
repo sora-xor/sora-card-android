@@ -22,6 +22,7 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.kapt)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.compose.compiler)
 }
 
 val composeCompilerVersion: String by project
@@ -32,7 +33,7 @@ kotlin {
 
 android {
     namespace = "jp.co.soramitsu.soracard.fwapp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "jp.co.soramitsu.fearless.debug"
@@ -151,12 +152,6 @@ android {
                 "proguard-rules.pro",
             )
         }
-    }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = composeCompilerVersion
     }
     packaging {
         resources {
