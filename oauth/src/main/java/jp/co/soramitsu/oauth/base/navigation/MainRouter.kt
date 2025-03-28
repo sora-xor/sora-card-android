@@ -12,6 +12,7 @@ import androidx.navigation.NavOptionsBuilder
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import jp.co.soramitsu.androidfoundation.intent.isAppAvailableCompat
+import jp.co.soramitsu.androidfoundation.intent.openGooglePlay
 import jp.co.soramitsu.oauth.feature.terms.and.conditions.model.WebUrl
 
 interface MainRouter : DefaultLifecycleObserver {
@@ -42,6 +43,7 @@ interface MainRouter : DefaultLifecycleObserver {
 
     fun openWebPage(@StringRes titleRes: Int, url: WebUrl)
     fun openWebUrl(url: String)
+    fun openAppsMarket(app: String)
 
     fun openChangeEmail()
 
@@ -206,6 +208,10 @@ class MainRouterImpl : MainRouter {
                 popUpTo(Destination.ENTER_PHONE_NUMBER.route)
             }
         }
+    }
+
+    override fun openAppsMarket(app: String) {
+        activity?.openGooglePlay(app)
     }
 
     override fun openWebUrl(url: String) {
