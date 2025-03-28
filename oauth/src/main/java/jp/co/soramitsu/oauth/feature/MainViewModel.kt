@@ -85,7 +85,9 @@ class MainViewModel @Inject constructor(
                                     .onSuccess { model ->
                                         when (model.code) {
                                             0 -> {
-                                                mainRouter.openWebUrl(model.url)
+                                                mainRouter.openAppsMarket(
+                                                    "com.soracard.wallet.iban",
+                                                )
                                             }
                                             else -> {
                                                 _uiState.value = _uiState.value.copy(error = "Error ${model.code}:${model.desc}")

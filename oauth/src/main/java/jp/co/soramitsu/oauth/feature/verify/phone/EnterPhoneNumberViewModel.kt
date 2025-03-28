@@ -168,8 +168,8 @@ class EnterPhoneNumberViewModel @Inject constructor(
         _state.value = _state.value.copy(
             inputTextStateNumber = _state.value.inputTextStateNumber.copy(
                 error = false,
-                descriptionText = R.string.common_no_spam
-            )
+                descriptionText = R.string.common_no_spam,
+            ),
         )
     }
 

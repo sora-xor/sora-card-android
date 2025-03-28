@@ -230,13 +230,12 @@ class EnterPhoneNumberViewModelTest {
     }
 
     @Test
-    fun `inputTextStateNumber is disabed while countryLoading is true`() =
-        runTest {
-            val initCountryLoadingState = true
-            assertEquals(initCountryLoadingState, viewModel.state.value.countryLoading)
-            assertEquals(false, viewModel.state.value.inputTextStateNumber.enabled)
-            advanceUntilIdle()
-        }
+    fun `inputTextStateNumber is disabed while countryLoading is true`() = runTest {
+        val initCountryLoadingState = true
+        assertEquals(initCountryLoadingState, viewModel.state.value.countryLoading)
+        assertEquals(false, viewModel.state.value.inputTextStateNumber.enabled)
+        advanceUntilIdle()
+    }
 
     @Test
     fun `inputTextStateNumber is enabled when countryLoading is false`() = runTest {
