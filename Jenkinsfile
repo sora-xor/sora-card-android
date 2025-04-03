@@ -16,21 +16,26 @@ def extraBuildSecrets = [
   [$class: 'StringBinding', credentialsId: 'SORA_CARD_KYC_USERNAME_TEST', variable: 'SORA_CARD_KYC_USERNAME_TEST'],
   [$class: 'StringBinding', credentialsId: 'SORA_CARD_KYC_PASSWORD_PROD', variable: 'SORA_CARD_KYC_PASSWORD_PROD'],
   [$class: 'StringBinding', credentialsId: 'SORA_CARD_KYC_PASSWORD_TEST', variable: 'SORA_CARD_KYC_PASSWORD_TEST'],
+  [$class: 'StringBinding', credentialsId: 'PLATFORM_ID_TEST', variable: 'PLATFORM_ID_TEST'],
+  [$class: 'StringBinding', credentialsId: 'PLATFORM_ID_TEST_FW', variable: 'PLATFORM_ID_TEST_FW'],
+  [$class: 'StringBinding', credentialsId: 'PLATFORM_ID_PROD', variable: 'PLATFORM_ID_PROD'],
+  [$class: 'StringBinding', credentialsId: 'RECAPTCH_KEY_TEST', variable: 'RECAPTCH_KEY_TEST'],
+  [$class: 'StringBinding', credentialsId: 'RECAPTCH_KEY_TEST_FW', variable: 'RECAPTCH_KEY_TEST_FW'],
+  [$class: 'StringBinding', credentialsId: 'RECAPTCH_KEY_PROD', variable: 'RECAPTCH_KEY_PROD'],
   [$class: 'StringBinding', credentialsId: 'SORA_BACKEND_DEBUG', variable: 'SORA_BACKEND_DEBUG'],
   [$class: 'StringBinding', credentialsId: 'SORA_BACKEND_RELEASE', variable: 'SORA_BACKEND_RELEASE']
 ]
 
-new org.soramitsu.mainLibrary().call(
-  agentLabel: "android",
-  skipSonar: true,
-  skipDojo: true,
-  agentImage: "android-build-box-jdk11:latest",
-  nexusCredentials: "bot-soramitsu-rw",
-  buildCommand: './gradlew clean :oauth:build',
-  testCommand: './gradlew clean :oauth:test',
-  publishCommand: './gradlew publish',
-  publishLibrary: true,
-  skipDockerImage: true,
-  dojoProductType: "sora-card-android",
-  extraBuildSecrets: extraBuildSecrets
+def pipeline = new org.android.ShareFeature(
+  steps: this,
+  agentImage: 'build-tools/android-build-box:jdk17',
+  gitUpdateSubmodule: false,
+  buildCmd: 'clean :oauth:build',
+  testCmd: 'clean :oauth:test',
+  extraBuildSecrets: extraBuildSecrets,
+  sonarProjectKey: "sora:sora-card-android",
+  sonarProjectName: "sora-card-android",
+  dojoProductType: "sora-mobile"
 )
+
+pipeline.runPipeline()

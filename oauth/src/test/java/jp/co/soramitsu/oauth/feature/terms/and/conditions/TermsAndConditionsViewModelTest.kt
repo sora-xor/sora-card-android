@@ -1,25 +1,30 @@
 package jp.co.soramitsu.oauth.feature.terms.and.conditions
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.junit4.MockKRule
+import io.mockk.just
+import io.mockk.runs
+import io.mockk.verify
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
+import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
-import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
-import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
+import jp.co.soramitsu.oauth.domain.MainCoroutineRule
+import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.oauth.feature.terms.and.conditions.model.WebUrl
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
-import org.mockito.kotlin.verify
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@RunWith(MockitoJUnitRunner::class)
 class TermsAndConditionsViewModelTest {
 
     @Rule
@@ -27,60 +32,71 @@ class TermsAndConditionsViewModelTest {
     val rule: TestRule = InstantTaskExecutorRule()
 
     @get:Rule
+    val mockkRule = MockKRule(this)
+
+    @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-    @Mock
+    @MockK
     private lateinit var mainRouter: MainRouter
 
-    @Mock
+    @MockK
+    private lateinit var userSessionRepository: UserSessionRepository
+
+    @MockK
     private lateinit var setActivityResult: SetActivityResult
 
     private lateinit var viewModel: TermsAndConditionsViewModel
 
     @Before
     fun setUp() {
-        viewModel = TermsAndConditionsViewModel(mainRouter, setActivityResult)
+        every { setActivityResult.setResult(any()) } just runs
+        every { mainRouter.openWebPage(any(), any()) } just runs
+        every { mainRouter.openEnterPhoneNumber(any()) } just runs
+        coEvery { userSessionRepository.setTermsRead() } just runs
+        viewModel = TermsAndConditionsViewModel(mainRouter, setActivityResult, userSessionRepository)
     }
 
     @Test
     fun `init EXPECT toolbar title`() {
         assertEquals(
             R.string.terms_and_conditions_title,
-            viewModel.toolbarState.value?.basic?.title
+            viewModel.toolbarState.value?.basic?.title,
         )
     }
 
     @Test
     fun `on general terms click EXPECT navigate`() {
         viewModel.onGeneralTermsClick()
-
-        verify(mainRouter).openWebPage(
-            titleRes = R.string.terms_and_conditions_general_terms,
-            url = WebUrl.GENERAL_TERMS
-        )
+        verify {
+            mainRouter.openWebPage(
+                titleRes = R.string.terms_and_conditions_general_terms,
+                url = WebUrl.GENERAL_TERMS,
+            )
+        }
     }
 
     @Test
     fun `on privacy policy click EXPECT navigate`() {
         viewModel.onPrivacyPolicy()
-
-        verify(mainRouter).openWebPage(
-            titleRes = R.string.terms_and_conditions_privacy_policy,
-            url = WebUrl.PRIVACY_POLICY
-        )
+        verify {
+            mainRouter.openWebPage(
+                titleRes = R.string.terms_and_conditions_privacy_policy,
+                url = WebUrl.PRIVACY_POLICY,
+            )
+        }
     }
 
     @Test
-    fun `on confirm click EXPECT navigate enter phone number`() {
+    fun `on confirm click EXPECT navigate enter phone number`() = runTest {
         viewModel.onConfirm()
-
-        verify(mainRouter).openEnterPhoneNumber()
+        advanceUntilIdle()
+        verify { mainRouter.openEnterPhoneNumber() }
     }
 
     @Test
     fun `back EXPECT finish kyc`() {
         viewModel.onToolbarNavigation()
-
-        verify(setActivityResult).setResult(SoraCardResult.Canceled)
+        verify { setActivityResult.setResult(SoraCardResult.Canceled) }
     }
 }

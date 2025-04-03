@@ -1,8 +1,15 @@
 package jp.co.soramitsu.oauth.feature.terms.and.conditions
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.junit4.MockKRule
+import io.mockk.just
+import io.mockk.runs
+import io.mockk.verify
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
-import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
+import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
+import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import jp.co.soramitsu.oauth.feature.terms.and.conditions.model.WebUrl
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert.assertEquals
@@ -10,13 +17,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
-import org.mockito.kotlin.verify
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@RunWith(MockitoJUnitRunner::class)
 class WebPageViewModelTest {
 
     @Rule
@@ -24,28 +26,35 @@ class WebPageViewModelTest {
     val rule: TestRule = InstantTaskExecutorRule()
 
     @get:Rule
+    val mockkRule = MockKRule(this)
+
+    @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-    @Mock
+    @MockK
     private lateinit var mainRouter: MainRouter
+
+    @MockK
+    private lateinit var setActivityResult: SetActivityResult
 
     private lateinit var viewModel: WebPageViewModel
 
     @Before
     fun setUp() {
-        viewModel = WebPageViewModel(mainRouter)
+        every { mainRouter.back() } just runs
+        viewModel = WebPageViewModel(mainRouter, setActivityResult)
     }
 
     @Test
     fun `set args EXPECT update toolbar title`() {
-        viewModel.setArgs("Title", "GENERAL_TERMS")
+        viewModel.setArgs("Title", "GENERAL_TERMS", false)
 
         assertEquals("Title", viewModel.toolbarState.value?.basic?.title)
     }
 
     @Test
     fun `set args EXPECT update state`() {
-        viewModel.setArgs("Title", "GENERAL_TERMS")
+        viewModel.setArgs("Title", "https://soracard.com/terms/", false)
 
         assertEquals(WebUrl.GENERAL_TERMS.url, viewModel.state.value.url)
     }
@@ -53,7 +62,6 @@ class WebPageViewModelTest {
     @Test
     fun `back EXPECT navigate back`() {
         viewModel.onToolbarNavigation()
-
-        verify(mainRouter).back()
+        verify { mainRouter.back() }
     }
 }

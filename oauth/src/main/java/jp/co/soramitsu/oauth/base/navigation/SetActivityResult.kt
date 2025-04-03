@@ -1,0 +1,8 @@
+package jp.co.soramitsu.oauth.base.navigation
+
+import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
+
+interface SetActivityResult {
+
+    fun setResult(soraCardResult: SoraCardResult)
+}

@@ -4,16 +4,16 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class IbanAccountResponseWrapper(
+internal data class IbanAccountResponseWrapper(
     @SerialName("ReferenceID") val referenceID: String,
     @SerialName("CallerReferenceID") val callerReferenceID: String,
-    @SerialName("IBANs") val ibans: List<IbanAccountResponse>,
+    @SerialName("IBANs") val ibans: List<IbanAccountResponse>?,
     @SerialName("StatusCode") val statusCode: Int,
-    @SerialName("StatusDescription") val statusDescription: String
+    @SerialName("StatusDescription") val statusDescription: String,
 )
 
 @Serializable
-data class IbanAccountResponse(
+internal data class IbanAccountResponse(
     @SerialName("ID") val id: String,
     @SerialName("Iban") val iban: String,
     @SerialName("BicSwift") val bicSwift: String,
@@ -27,7 +27,7 @@ data class IbanAccountResponse(
     @SerialName("MinTransactionAmount") val minTransactionAmount: Long,
     @SerialName("MaxTransactionAmount") val maxTransactionAmount: Long,
     @SerialName("Balance") val balance: Long,
-    @SerialName("AvailableBalance") val availableBalance: Long
+    @SerialName("AvailableBalance") val availableBalance: Long,
 ) {
 
     companion object {

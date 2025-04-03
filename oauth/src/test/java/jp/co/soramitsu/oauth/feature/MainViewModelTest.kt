@@ -1,8 +1,10 @@
 package jp.co.soramitsu.oauth.feature
 
+import android.app.Activity
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.paywings.oauth.android.sdk.service.callback.GetUserDataCallback
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
@@ -10,19 +12,31 @@ import io.mockk.just
 import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
+import java.util.Locale
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
+import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
+import jp.co.soramitsu.oauth.base.sdk.SoraCardEnvironmentType
+import jp.co.soramitsu.oauth.base.sdk.SoraCardKycCredentials
+import jp.co.soramitsu.oauth.base.sdk.contract.IbanInfo
+import jp.co.soramitsu.oauth.base.sdk.contract.IbanStatus
+import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardBasicContractData
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
-import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
+import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardContractData
+import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardFlow
+import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.common.model.AccessTokenResponse
-import jp.co.soramitsu.oauth.common.navigation.flow.api.NavigationFlow
+import jp.co.soramitsu.oauth.domain.MainCoroutineRule
+import jp.co.soramitsu.oauth.feature.gatehub.GateHubRepository
+import jp.co.soramitsu.oauth.feature.gatehub.IframeModel
+import jp.co.soramitsu.oauth.feature.gatehub.OnboardedResult
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
+import jp.co.soramitsu.oauth.uiscreens.clientsui.UiStyle
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -54,10 +68,16 @@ class MainViewModelTest {
     private lateinit var tokenValidator: AccessTokenValidator
 
     @MockK
-    private lateinit var kycRequirementsUnfulfilledFlow: NavigationFlow
+    private lateinit var pwoAuthClientProxy: PWOAuthClientProxy
 
     @MockK
-    private lateinit var pwoAuthClientProxy: PWOAuthClientProxy
+    private lateinit var setActivityResult: SetActivityResult
+
+    @MockK
+    private lateinit var gateHubRepository: GateHubRepository
+
+    @MockK
+    private lateinit var activity: Activity
 
     @MockK
     private lateinit var inMemoryRepo: InMemoryRepo
@@ -67,15 +87,36 @@ class MainViewModelTest {
     @Before
     fun setUp() = runTest {
         coEvery { userSessionRepository.getAccessToken() } returns "accessToken"
-        coEvery { userSessionRepository.getAccessTokenExpirationTime() } returns System.currentTimeMillis() + 300000
+        coEvery {
+            userSessionRepository.getAccessTokenExpirationTime()
+        } returns System.currentTimeMillis() + 300000
         coEvery { userSessionRepository.setNewAccessToken(any(), any()) } returns Unit
-        coEvery { userSessionRepository.getUser() } returns Triple("refresh", "access", 0)
-        coEvery { kycRequirementsUnfulfilledFlow.start(any()) } returns Unit
-        coEvery { kycRepository.getKycLastFinalStatus(any(), any()) } returns Result.success(SoraCardCommonVerification.Successful)
         every { mainRouter.openGetPrepared() } returns Unit
         every { mainRouter.openVerificationFailed(any()) } returns Unit
         every { mainRouter.openVerificationSuccessful() } just runs
-        coEvery { tokenValidator.checkAccessTokenValidity() } returns AccessTokenResponse.Token("", 123)
+        every { mainRouter.openWebUrl(any()) } just runs
+        every { mainRouter.openGatehubOnboardingProgress() } just runs
+        every { mainRouter.openGatehubOnboardingStep1() } just runs
+        every { mainRouter.openTermsAndConditions() } just runs
+        every { setActivityResult.setResult(any()) } just runs
+        coEvery {
+            tokenValidator.checkAccessTokenValidity()
+        } returns AccessTokenResponse.Token("accessToken", 123000)
+        coEvery {
+            pwoAuthClientProxy.init(
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+            )
+        } returns (true to "")
+        every { inMemoryRepo.locale = any() } just runs
+        every { inMemoryRepo.environment = any() } just runs
+        every { inMemoryRepo.soraBackEndUrl = any() } just runs
+        every { inMemoryRepo.client = any() } just runs
+        every { inMemoryRepo.flow = any() } just runs
     }
 
     private fun setupViewModel(status: SoraCardCommonVerification) {
@@ -86,59 +127,180 @@ class MainViewModelTest {
             mainRouter,
             inMemoryRepo,
             pwoAuthClientProxy,
-            kycRequirementsUnfulfilledFlow,
             tokenValidator,
+            setActivityResult,
+            gateHubRepository,
         )
     }
 
     @Test
+    fun `vm launch gatehub`() = runTest {
+        setupViewModel(SoraCardCommonVerification.Failed)
+        coEvery { gateHubRepository.onboarded() } returns Result.success(OnboardedResult.Pending)
+        coEvery { gateHubRepository.getIframe() } returns Result.success(IframeModel(0, "", "iurl"))
+        advanceUntilIdle()
+        val data = SoraCardContractData(
+            basic = SoraCardBasicContractData(
+                apiKey = "",
+                domain = "",
+                environment = SoraCardEnvironmentType.TEST,
+                platform = "",
+                recaptcha = "",
+            ),
+            locale = Locale.ITALY,
+            soraBackEndUrl = "",
+            client = "",
+            clientDark = true,
+            flow = SoraCardFlow.SoraCardGateHubFlow,
+            clientCase = UiStyle.SW,
+        )
+        viewModel.launch(data, activity)
+        advanceUntilIdle()
+        verify { inMemoryRepo.flow = SoraCardFlow.SoraCardGateHubFlow }
+        coVerify {
+            pwoAuthClientProxy.init(
+                activity,
+                SoraCardEnvironmentType.TEST,
+                "",
+                domain = "",
+                platform = "",
+                recaptcha = "",
+            )
+        }
+        verify { mainRouter.openGatehubOnboardingProgress() }
+    }
+
+    @Test
+    fun `vm launch auth success`() = runTest {
+        setupViewModel(SoraCardCommonVerification.Failed)
+        coEvery { pwoAuthClientProxy.isSignIn() } returns true
+        coEvery {
+            kycRepository.getIbanStatus(any(), any())
+        } returns Result.success(IbanInfo("", IbanStatus.ACTIVE, "", ""))
+        advanceUntilIdle()
+        val flow = SoraCardFlow.SoraCardKycFlow(
+            SoraCardKycCredentials("", "", ""),
+            0.0,
+            true,
+            true,
+            true,
+            true,
+        )
+        val data = SoraCardContractData(
+            basic = SoraCardBasicContractData(
+                apiKey = "",
+                domain = "",
+                environment = SoraCardEnvironmentType.TEST,
+                platform = "",
+                recaptcha = "",
+            ),
+            locale = Locale.ITALY,
+            soraBackEndUrl = "",
+            client = "",
+            clientDark = true,
+            flow = flow,
+            clientCase = UiStyle.SW,
+        )
+        viewModel.launch(data, activity)
+        advanceUntilIdle()
+        verify { inMemoryRepo.flow = flow }
+        coVerify {
+            pwoAuthClientProxy.init(
+                activity,
+                SoraCardEnvironmentType.TEST,
+                "",
+                domain = "",
+                platform = "",
+                recaptcha = "",
+            )
+        }
+        verify {
+            setActivityResult.setResult(
+                SoraCardResult.Success(SoraCardCommonVerification.IbanIssued),
+            )
+        }
+    }
+
+    @Test
+    fun `vm launch terms and cond`() = runTest {
+        setupViewModel(SoraCardCommonVerification.Failed)
+        coEvery { pwoAuthClientProxy.isSignIn() } returns false
+        coEvery {
+            kycRepository.getIbanStatus(any(), any())
+        } returns Result.success(IbanInfo("", IbanStatus.ACTIVE, "", ""))
+        coEvery { userSessionRepository.isTermsRead() } returns false
+        advanceUntilIdle()
+        val flow = SoraCardFlow.SoraCardKycFlow(
+            SoraCardKycCredentials("", "", ""),
+            0.0,
+            true,
+            true,
+            true,
+            true,
+        )
+        val data = SoraCardContractData(
+            basic = SoraCardBasicContractData(
+                apiKey = "",
+                domain = "",
+                environment = SoraCardEnvironmentType.TEST,
+                platform = "",
+                recaptcha = "",
+            ),
+            locale = Locale.ITALY,
+            soraBackEndUrl = "",
+            client = "",
+            clientDark = true,
+            flow = flow,
+            clientCase = UiStyle.SW,
+        )
+        viewModel.launch(data, activity)
+        advanceUntilIdle()
+        verify { inMemoryRepo.flow = flow }
+        coVerify {
+            pwoAuthClientProxy.init(
+                activity,
+                SoraCardEnvironmentType.TEST,
+                "",
+                domain = "",
+                platform = "",
+                recaptcha = "",
+            )
+        }
+        verify { mainRouter.openTermsAndConditions() }
+    }
+
+    @Test
     fun `authCallback getUserData`() = runTest {
-        every { inMemoryRepo.isEnoughXorAvailable } returns true
         coEvery { kycRepository.hasFreeKycAttempt("accessToken") } returns Result.success(true)
-        coEvery { userSessionRepository.getRefreshToken() } returns "refreshToken"
-        coEvery { tokenValidator.checkAccessTokenValidity() } returns AccessTokenResponse.Token("token", 1000)
         val slot = slot<GetUserDataCallback>()
-        coEvery { pwoAuthClientProxy.getUserData(any(), capture(slot)) } answers {
+        coEvery { pwoAuthClientProxy.getUserData(capture(slot)) } answers {
             slot.captured.onUserData("", "", "", "", false, "")
         }
-        coEvery { userSessionRepository.setUserId(any()) } returns Unit
-        coEvery { kycRepository.getReferenceNumber(any(), any(), any()) } returns Result.success("refnumber")
+        coEvery {
+            kycRepository.getReferenceNumber(any(), any(), any())
+        } returns Result.success(true to "refnumber")
         setupViewModel(SoraCardCommonVerification.Failed)
         advanceUntilIdle()
-        viewModel.getUserData()
-        advanceUntilIdle()
-        val refNumber = viewModel.state.value?.referenceNumber
-        assertTrue(refNumber != null)
+        viewModel.startKycProcess(activity)
     }
 
     @Test
     fun `no free kyc tries EXPECT show kyc requirements unfulfilled flow started`() = runTest {
-        every { inMemoryRepo.isEnoughXorAvailable } returns false
         coEvery { kycRepository.hasFreeKycAttempt("accessToken") } returns Result.success(true)
-        setupViewModel(SoraCardCommonVerification.Failed)
-        viewModel.onAuthSucceed("accessToken")
-        advanceUntilIdle()
-        verify { kycRequirementsUnfulfilledFlow.start(any()) }
-    }
-
-    @Test
-    fun `free kyc tries available EXPECT show get prepared screen`() = runTest {
-        every { inMemoryRepo.isEnoughXorAvailable } returns true
-        coEvery { kycRepository.hasFreeKycAttempt("accessToken") } returns Result.success(true)
-        setupViewModel(SoraCardCommonVerification.Failed)
-        viewModel.onAuthSucceed("accessToken")
+        coEvery { kycRepository.getIbanStatus(any()) } returns Result.success(null)
+        setupViewModel(SoraCardCommonVerification.Started)
+        viewModel.onAuthSucceed()
         advanceUntilIdle()
         verify { mainRouter.openGetPrepared() }
     }
 
     @Test
-    fun `on onKycFailed EXPECT navigate to verification failed screen`() = runTest {
-        every { inMemoryRepo.isEnoughXorAvailable } returns true
+    fun `free kyc tries available EXPECT show get prepared screen`() = runTest {
         coEvery { kycRepository.hasFreeKycAttempt("accessToken") } returns Result.success(true)
+        coEvery { kycRepository.getIbanStatus(any()) } returns Result.success(null)
         setupViewModel(SoraCardCommonVerification.Failed)
-        val description = "description"
-        viewModel.onKycFailed(statusDescription = description)
+        viewModel.onAuthSucceed()
         advanceUntilIdle()
-        verify { mainRouter.openVerificationFailed(description) }
+        verify { mainRouter.openGetPrepared() }
     }
 }

@@ -3,6 +3,7 @@ package jp.co.soramitsu.oauth.feature.terms.and.conditions
 import android.annotation.SuppressLint
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,8 +21,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
-import jp.co.soramitsu.oauth.base.compose.Screen
-import jp.co.soramitsu.oauth.feature.terms.and.conditions.model.WebUrl
+import jp.co.soramitsu.oauth.uiscreens.compose.Screen
 import jp.co.soramitsu.ui_core.resources.Dimens
 import jp.co.soramitsu.ui_core.theme.customColors
 
@@ -30,25 +30,31 @@ import jp.co.soramitsu.ui_core.theme.customColors
 fun WebPageScreen(
     title: String,
     webUrl: String,
-    viewModel: WebPageViewModel = hiltViewModel()
+    lastPage: Boolean,
+    viewModel: WebPageViewModel = hiltViewModel(),
 ) {
     LaunchedEffect(Unit) {
-        viewModel.setArgs(title, webUrl)
+        viewModel.setArgs(title, webUrl, lastPage)
+    }
+    BackHandler {
+        viewModel.onToolbarNavigation()
     }
 
     Screen(
-        viewModel = viewModel
+        viewModel = viewModel,
     ) {
         val state = viewModel.state
 
         Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
+            modifier = Modifier.fillMaxSize()
+                .background(MaterialTheme.customColors.bgSurface),
+            contentAlignment = Alignment.Center,
         ) {
             AndroidView(
                 modifier = Modifier.fillMaxSize(),
                 factory = { context ->
                     WebView(context).apply {
+                        settings.domStorageEnabled = true
                         webViewClient = object : WebViewClient() {
                             override fun onPageFinished(view: WebView?, url: String?) {
                                 super.onPageFinished(view, url)
@@ -56,9 +62,9 @@ fun WebPageScreen(
                             }
                         }
                         settings.javaScriptEnabled = true
-                        loadUrl(WebUrl.valueOf(webUrl).url)
+                        loadUrl(webUrl)
                     }
-                }
+                },
             )
 
             if (state.value.loading) {
@@ -74,18 +80,20 @@ fun ProgressDialog() {
         onDismissRequest = {},
         properties = DialogProperties(
             dismissOnBackPress = false,
-            dismissOnClickOutside = false
-        )
+            dismissOnClickOutside = false,
+        ),
     ) {
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(Dimens.x2))
                 .background(MaterialTheme.customColors.bgSurface),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             CircularProgressIndicator(
-                modifier = Modifier.size(Dimens.x6).padding(Dimens.x1),
-                color = MaterialTheme.customColors.fgPrimary
+                modifier = Modifier
+                    .size(Dimens.x6)
+                    .padding(Dimens.x1),
+                color = MaterialTheme.customColors.fgPrimary,
             )
         }
     }

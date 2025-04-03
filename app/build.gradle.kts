@@ -1,5 +1,7 @@
-import java.util.Properties
 import java.io.FileInputStream
+import java.util.Properties
+
+@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 
 fun secret(name: String): String? {
     val fileProperties = File(rootProject.projectDir.absolutePath, "local.properties")
@@ -16,56 +18,137 @@ fun maybeWrapQuotes(s: String): String {
 }
 
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.kapt")
-    id("org.jetbrains.kotlin.android")
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.kapt)
+    alias(libs.plugins.hilt)
+}
+
+val composeCompilerVersion: String by project
+
+kotlin {
+    jvmToolchain(17)
 }
 
 android {
-    namespace = "jp.co.soramitsu.card"
+    namespace = "jp.co.soramitsu.sora.communitytesting"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "jp.co.soramitsu.card"
-        minSdk = 24
-        targetSdk = 33
+        applicationId = "jp.co.soramitsu.sora.communitytesting"
+        minSdk = 26
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
         multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary = true
+        }
     }
 
     buildTypes {
         release {
-            buildConfigField("String", "SORA_CARD_API_KEY", maybeWrapQuotes(secret("SORA_CARD_API_KEY_PROD")!!))
-            buildConfigField("String", "SORA_CARD_DOMAIN", maybeWrapQuotes(secret("SORA_CARD_DOMAIN_PROD")!!))
-            buildConfigField("String", "SORA_CARD_KYC_ENDPOINT_URL", maybeWrapQuotes(secret("SORA_CARD_KYC_ENDPOINT_URL_PROD")!!))
-            buildConfigField("String", "SORA_CARD_KYC_USERNAME", maybeWrapQuotes(secret("SORA_CARD_KYC_USERNAME_PROD")!!))
-            buildConfigField("String", "SORA_CARD_KYC_PASSWORD", maybeWrapQuotes(secret("SORA_CARD_KYC_PASSWORD_PROD")!!))
+            buildConfigField(
+                "String",
+                "SORA_CARD_API_KEY",
+                maybeWrapQuotes(secret("SORA_CARD_API_KEY_PROD")!!),
+            )
+            buildConfigField(
+                "String",
+                "SORA_CARD_DOMAIN",
+                maybeWrapQuotes(secret("SORA_CARD_DOMAIN_PROD")!!),
+            )
+            buildConfigField(
+                "String",
+                "SORA_CARD_KYC_ENDPOINT_URL",
+                maybeWrapQuotes(secret("SORA_CARD_KYC_ENDPOINT_URL_PROD")!!),
+            )
+            buildConfigField(
+                "String",
+                "SORA_CARD_KYC_USERNAME",
+                maybeWrapQuotes(secret("SORA_CARD_KYC_USERNAME_PROD")!!),
+            )
+            buildConfigField(
+                "String",
+                "SORA_CARD_KYC_PASSWORD",
+                maybeWrapQuotes(secret("SORA_CARD_KYC_PASSWORD_PROD")!!),
+            )
 
-            buildConfigField("String","SORA_API_BASE_URL",maybeWrapQuotes(secret("SORA_BACKEND_RELEASE")!!))
+            buildConfigField(
+                "String",
+                "SORA_API_BASE_URL",
+                maybeWrapQuotes(secret("SORA_BACKEND_RELEASE")!!),
+            )
+
+            buildConfigField(
+                "String",
+                "PLATFORM_ID",
+                maybeWrapQuotes(secret("PLATFORM_ID_TEST")!!),
+            )
+
+            buildConfigField(
+                "String",
+                "RECAPTCHA_KEY",
+                maybeWrapQuotes(secret("RECAPTCH_KEY_TEST")!!),
+            )
 
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
         debug {
-            buildConfigField("String", "SORA_CARD_API_KEY", maybeWrapQuotes(secret("SORA_CARD_API_KEY_TEST")!!))
-            buildConfigField("String", "SORA_CARD_DOMAIN", maybeWrapQuotes(secret("SORA_CARD_DOMAIN_TEST")!!))
-            buildConfigField("String", "SORA_CARD_KYC_ENDPOINT_URL", maybeWrapQuotes(secret("SORA_CARD_KYC_ENDPOINT_URL_TEST")!!))
-            buildConfigField("String", "SORA_CARD_KYC_USERNAME", maybeWrapQuotes(secret("SORA_CARD_KYC_USERNAME_TEST")!!))
-            buildConfigField("String", "SORA_CARD_KYC_PASSWORD", maybeWrapQuotes(secret("SORA_CARD_KYC_PASSWORD_TEST")!!))
+            buildConfigField(
+                "String",
+                "SORA_CARD_API_KEY",
+                maybeWrapQuotes(secret("SORA_CARD_API_KEY_TEST")!!),
+            )
+            buildConfigField(
+                "String",
+                "SORA_CARD_DOMAIN",
+                maybeWrapQuotes(secret("SORA_CARD_DOMAIN_TEST")!!),
+            )
+            buildConfigField(
+                "String",
+                "SORA_CARD_KYC_ENDPOINT_URL",
+                maybeWrapQuotes(secret("SORA_CARD_KYC_ENDPOINT_URL_TEST")!!),
+            )
+            buildConfigField(
+                "String",
+                "SORA_CARD_KYC_USERNAME",
+                maybeWrapQuotes(secret("SORA_CARD_KYC_USERNAME_TEST")!!),
+            )
+            buildConfigField(
+                "String",
+                "SORA_CARD_KYC_PASSWORD",
+                maybeWrapQuotes(secret("SORA_CARD_KYC_PASSWORD_TEST")!!),
+            )
 
-            buildConfigField("String","SORA_API_BASE_URL",maybeWrapQuotes(secret("SORA_BACKEND_DEBUG")!!))
+            buildConfigField(
+                "String",
+                "SORA_API_BASE_URL",
+                maybeWrapQuotes(secret("SORA_BACKEND_DEBUG")!!),
+            )
+
+            buildConfigField(
+                "String",
+                "PLATFORM_ID",
+                maybeWrapQuotes(secret("PLATFORM_ID_TEST")!!),
+            )
+
+            buildConfigField(
+                "String",
+                "RECAPTCHA_KEY",
+                maybeWrapQuotes(secret("RECAPTCH_KEY_TEST")!!),
+            )
 
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -73,15 +156,26 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.6"
+        kotlinCompilerExtensionVersion = composeCompilerVersion
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_1_8.toString()
+    packaging {
+        resources {
+            excludes += listOf(
+                "META-INF/DEPENDENCIES",
+                "META-INF/LICENSE",
+                "META-INF/LICENSE-notice.md",
+                "META-INF/LICENSE.md",
+                "META-INF/LICENSE.txt",
+                "META-INF/license.txt",
+                "META-INF/NOTICE",
+                "META-INF/NOTICE.txt",
+                "META-INF/notice.txt",
+                "META-INF/ASL2.0",
+                "META-INF/AL2.0",
+                "META-INF/LGPL2.1",
+                "META-INF/INDEX.LIST",
+                "META-INF/io.netty.versions.properties",
+            )
         }
     }
 }
@@ -89,15 +183,27 @@ android {
 dependencies {
 
     implementation(project(":oauth"))
-    implementation("com.google.android.material:material:1.9.0")
-    implementation("androidx.activity:activity-compose:1.7.2")
-    implementation("androidx.compose.material:material:1.5.0")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.5.0")
+    implementation(project(":commonapp"))
+    implementation(libs.core.ktx)
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.lifecycle.runtime.compose)
+    implementation(libs.activity.compose)
+    implementation(libs.material)
 
-    implementation( "com.google.dagger:hilt-android:2.47")
-    "kapt"("com.google.dagger:hilt-compiler:2.47")
+    implementation(libs.soramitsu.xnetworking.lib)
+    implementation(libs.kotlinx.serialization)
 
-    implementation("jp.co.soramitsu:ui-core:0.1.0")
+    implementation(platform(libs.compose.bom))
+    implementation(libs.ui)
+    implementation(libs.compose.material)
+    implementation(libs.ui.graphics)
+    implementation(libs.ui.tooling.preview)
+
+    implementation(libs.hiltandroid)
+    kapt(libs.hiltcompiler)
+
+    implementation(libs.sw.android.foundation)
+    implementation(libs.soramitsu.uicore)
 }
 
 kapt {

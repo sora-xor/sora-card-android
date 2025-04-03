@@ -3,6 +3,7 @@ package jp.co.soramitsu.oauth.feature.kyc.result
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,29 +20,31 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.compose.Screen
-import jp.co.soramitsu.ui_core.component.button.TonalButton
-import jp.co.soramitsu.ui_core.component.button.properties.Order
-import jp.co.soramitsu.ui_core.component.button.properties.Size
+import jp.co.soramitsu.oauth.feature.YourPhoneNumberText
+import jp.co.soramitsu.oauth.uiscreens.compose.Screen
+import jp.co.soramitsu.oauth.uiscreens.styledui.LargeTonalButton
+import jp.co.soramitsu.oauth.uiscreens.theme.AuthSdkTheme
 import jp.co.soramitsu.ui_core.resources.Dimens
 import jp.co.soramitsu.ui_core.theme.customColors
 import jp.co.soramitsu.ui_core.theme.customTypography
 
 @Composable
-fun VerificationInProgressScreen(
-    viewModel: VerificationInProgressViewModel = hiltViewModel()
-) {
+fun VerificationInProgressScreen(viewModel: VerificationInProgressViewModel = hiltViewModel()) {
     BackHandler {
         viewModel.onToolbarNavigation()
     }
 
     Screen(
-        viewModel = viewModel
+        viewModel = viewModel,
     ) { scrollState ->
+        val state = viewModel.state.collectAsStateWithLifecycle()
         VerificationInProgressContent(
             scrollState = scrollState,
-            onClose = viewModel::openTelegramSupport
+            phone = state.value,
+            onClose = viewModel::openTelegramSupport,
         )
     }
 }
@@ -49,55 +52,59 @@ fun VerificationInProgressScreen(
 @Composable
 private fun VerificationInProgressContent(
     scrollState: ScrollState,
-    onClose: () -> Unit
+    phone: String,
+    onClose: () -> Unit,
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.customColors.bgSurface)
             .verticalScroll(scrollState)
-            .padding(top = Dimens.x3, start = Dimens.x3, end = Dimens.x3, bottom = Dimens.x5)
+            .padding(top = Dimens.x3, start = Dimens.x3, end = Dimens.x3, bottom = Dimens.x5),
     ) {
+        YourPhoneNumberText(phone = phone)
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = Dimens.x1),
+                .padding(top = Dimens.x2),
             text = stringResource(R.string.kyc_result_verification_in_progress_description),
             style = MaterialTheme.customTypography.paragraphM,
-            color = MaterialTheme.customColors.fgPrimary
+            color = MaterialTheme.customColors.fgPrimary,
         )
 
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Image(
                 painter = painterResource(R.drawable.ic_verification_in_progress),
-                contentDescription = null
+                contentDescription = null,
             )
         }
 
-        TonalButton(
+        LargeTonalButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = Dimens.x3),
-            order = Order.SECONDARY,
-            size = Size.Large,
-            text = stringResource(id = R.string.verification_rejected_screen_support_telegram),
             enabled = true,
-            onClick = onClose
+            text = TextValue.StringRes(id = R.string.verification_rejected_screen_support_telegram),
+            onClick = onClose,
         )
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun PreviewVerificationInProgressScreen() {
-    Box(modifier = Modifier.fillMaxSize()) {
-        VerificationInProgressContent(
-            scrollState = rememberScrollState(),
-            onClose = {}
-        )
+    AuthSdkTheme {
+        Box(modifier = Modifier.fillMaxSize()) {
+            VerificationInProgressContent(
+                scrollState = rememberScrollState(),
+                phone = "+12345678",
+                onClose = {},
+            )
+        }
     }
 }

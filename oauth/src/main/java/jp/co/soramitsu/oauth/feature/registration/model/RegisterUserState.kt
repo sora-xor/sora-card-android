@@ -6,5 +6,5 @@ import jp.co.soramitsu.ui_core.component.input.InputTextState
 data class RegisterUserState(
     val firstNameState: InputTextState,
     val lastNameState: InputTextState,
-    val buttonState: ButtonState
+    val buttonState: ButtonState,
 )

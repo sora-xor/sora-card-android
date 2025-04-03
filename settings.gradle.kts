@@ -1,5 +1,5 @@
-import java.util.Properties
 import java.io.FileInputStream
+import java.util.Properties
 
 pluginManagement {
     repositories {
@@ -42,4 +42,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "android-sora-card"
 include(":app")
+include(":fwapp")
 include(":oauth")
+include(":commonapp")

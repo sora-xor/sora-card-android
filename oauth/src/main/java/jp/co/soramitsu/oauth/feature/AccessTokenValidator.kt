@@ -1,11 +1,11 @@
 package jp.co.soramitsu.oauth.feature
 
-import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
-import jp.co.soramitsu.oauth.common.model.AccessTokenResponse
-import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
+import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
+import jp.co.soramitsu.oauth.common.model.AccessTokenResponse
+import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 
 @Singleton
 class AccessTokenValidator @Inject constructor(
@@ -31,8 +31,7 @@ class AccessTokenValidator @Inject constructor(
     }
 
     private suspend fun getNewAccessToken(): AccessTokenResponse? {
-        val refreshToken = userSessionRepository.getRefreshToken()
-        val newTokenResult = pwoAuthClientProxy.getNewAccessToken(refreshToken)
+        val newTokenResult = pwoAuthClientProxy.getNewAccessToken("", "GET")
         val newTokenResultAccess = newTokenResult.accessTokenData
         if (newTokenResultAccess != null) {
             return AccessTokenResponse.Token(

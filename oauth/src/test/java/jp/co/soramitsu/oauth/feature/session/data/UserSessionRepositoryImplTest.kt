@@ -1,8 +1,14 @@
 package jp.co.soramitsu.oauth.feature.session.data
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.impl.annotations.MockK
+import io.mockk.junit4.MockKRule
+import io.mockk.just
+import io.mockk.runs
 import jp.co.soramitsu.oauth.base.data.SoraCardDataStore
-import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
+import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -10,14 +16,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@RunWith(MockitoJUnitRunner::class)
 class UserSessionRepositoryImplTest {
 
     private companion object {
@@ -41,64 +41,57 @@ class UserSessionRepositoryImplTest {
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-    @Mock
+    @get:Rule
+    val mockkRule = MockKRule(this)
+
+    @MockK
     private lateinit var soraCardDataStore: SoraCardDataStore
 
     private lateinit var repository: UserSessionRepositoryImpl
 
     @Before
     fun setUp() {
+        coEvery { soraCardDataStore.putString(any(), any()) } just runs
+        coEvery { soraCardDataStore.putLong(any(), any()) } just runs
+        coEvery { soraCardDataStore.getString("user_phone_number") } returns "+999"
+        coEvery { soraCardDataStore.getLong(any(), any()) } returns 1L
         repository = UserSessionRepositoryImpl(soraCardDataStore)
-    }
-
-    @Test
-    fun `signIn user EXPECT update refresh token`() = runTest {
-        whenever(soraCardDataStore.getString(REFRESH_TOKEN_KEY)).thenReturn(REFRESH_TOKEN_VALUE)
-
-        repository.signInUser(
-            REFRESH_TOKEN_VALUE,
-            ACCESS_TOKEN_VALUE,
-            EXPIRATION_TIME_VALUE
-        )
-
-        verify(soraCardDataStore).putString(REFRESH_TOKEN_KEY, REFRESH_TOKEN_VALUE)
-        assertEquals(REFRESH_TOKEN_VALUE, repository.getRefreshToken())
-    }
-
-    @Test
-    fun `signIn user EXPECT update access token`() = runTest {
-        whenever(soraCardDataStore.getString(ACCESS_TOKEN_KEY)).thenReturn(ACCESS_TOKEN_VALUE)
-
-        repository.signInUser(
-            REFRESH_TOKEN_VALUE,
-            ACCESS_TOKEN_VALUE,
-            EXPIRATION_TIME_VALUE
-        )
-
-        verify(soraCardDataStore).putString(ACCESS_TOKEN_KEY, ACCESS_TOKEN_VALUE)
-        assertEquals(ACCESS_TOKEN_VALUE, repository.getAccessToken())
-    }
-
-    @Test
-    fun `signIn user EXPECT update expiration time`() = runTest {
-        whenever(soraCardDataStore.getLong(ACCESS_TOKEN_EXPIRATION_TIME_KEY, 0))
-            .thenReturn(EXPIRATION_TIME_VALUE)
-
-        repository.signInUser(
-            REFRESH_TOKEN_VALUE,
-            ACCESS_TOKEN_VALUE,
-            EXPIRATION_TIME_VALUE
-        )
-
-        verify(soraCardDataStore).putLong(ACCESS_TOKEN_EXPIRATION_TIME_KEY, EXPIRATION_TIME_VALUE)
-        assertEquals(EXPIRATION_TIME_VALUE, repository.getAccessTokenExpirationTime())
     }
 
     @Test
     fun `set new access token EXPECT update the token`() = runTest {
         repository.setNewAccessToken(ACCESS_TOKEN_VALUE, EXPIRATION_TIME_VALUE)
 
-        verify(soraCardDataStore).putString(ACCESS_TOKEN_KEY, ACCESS_TOKEN_VALUE)
-        verify(soraCardDataStore).putLong(ACCESS_TOKEN_EXPIRATION_TIME_KEY, EXPIRATION_TIME_VALUE)
+        coVerify { soraCardDataStore.putString(ACCESS_TOKEN_KEY, ACCESS_TOKEN_VALUE) }
+        coVerify {
+            soraCardDataStore.putLong(
+                ACCESS_TOKEN_EXPIRATION_TIME_KEY,
+                EXPIRATION_TIME_VALUE,
+            )
+        }
+    }
+
+    @Test
+    fun `test get terms`() = runTest {
+        val read = repository.isTermsRead()
+        assertEquals(true, read)
+    }
+
+    @Test
+    fun `test set terms`() = runTest {
+        repository.setTermsRead()
+        coVerify { soraCardDataStore.putLong("TERMS_READ", 1L) }
+    }
+
+    @Test
+    fun `test get phone number`() = runTest {
+        val number = repository.getPhoneNumber()
+        assertEquals("+999", number)
+    }
+
+    @Test
+    fun `test set phone number`() = runTest {
+        repository.setPhoneNumber("123123")
+        coVerify { soraCardDataStore.putString("user_phone_number", "123123") }
     }
 }

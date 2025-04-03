@@ -2,10 +2,19 @@ package jp.co.soramitsu.oauth.feature.change.email
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.compose.ui.text.input.TextFieldValue
+import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.junit4.MockKRule
+import io.mockk.just
+import io.mockk.runs
+import io.mockk.verify
+import jp.co.soramitsu.androidfoundation.format.TextValue
+import jp.co.soramitsu.androidfoundation.format.unsafeCast
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
-import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
+import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -16,13 +25,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
-import org.mockito.kotlin.verify
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@RunWith(MockitoJUnitRunner::class)
 class ChangeEmailViewModelTest {
 
     @Rule
@@ -30,18 +34,23 @@ class ChangeEmailViewModelTest {
     val rule: TestRule = InstantTaskExecutorRule()
 
     @get:Rule
+    val mockkRule = MockKRule(this)
+
+    @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-    @Mock
+    @MockK
     private lateinit var mainRouter: MainRouter
 
-    @Mock
+    @MockK
     private lateinit var pwoAuthClientProxy: PWOAuthClientProxy
 
     private lateinit var viewModel: ChangeEmailViewModel
 
     @Before
     fun setUp() {
+        every { mainRouter.back() } just runs
+        coEvery { pwoAuthClientProxy.changeUnverifiedEmail(any(), any()) } just runs
         viewModel = ChangeEmailViewModel(mainRouter, pwoAuthClientProxy)
     }
 
@@ -58,7 +67,10 @@ class ChangeEmailViewModelTest {
 
     @Test
     fun `init EXPECT set up button state`() {
-        assertEquals(R.string.common_send_link, viewModel.state.buttonState.title)
+        assertEquals(
+            R.string.common_send_link,
+            viewModel.state.buttonState.title.unsafeCast<TextValue.StringRes>().id,
+        )
     }
 
     @Test
@@ -114,7 +126,6 @@ class ChangeEmailViewModelTest {
     @Test
     fun `back EXPECT navigate back`() {
         viewModel.onToolbarNavigation()
-
-        verify(mainRouter).back()
+        verify { mainRouter.back() }
     }
 }

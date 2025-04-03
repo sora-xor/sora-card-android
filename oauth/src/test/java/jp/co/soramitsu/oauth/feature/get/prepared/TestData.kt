@@ -19,12 +19,15 @@ object TestData {
         Step(
             index = 3,
             title = R.string.get_prepared_proof_address_title,
-            description = listOf(R.string.get_prepared_proof_address_description, R.string.get_prepared_proof_address_note),
+            description = listOf(
+                R.string.get_prepared_proof_address_description,
+                R.string.get_prepared_proof_address_note,
+            ),
         ),
         Step(
             index = 4,
             title = R.string.get_prepared_personal_info_title,
             description = listOf(R.string.get_prepared_personal_info_description),
-        )
+        ),
     )
 }

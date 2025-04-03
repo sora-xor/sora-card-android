@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
 import com.paywings.oauth.android.sdk.service.callback.ChangeUnverifiedEmailCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
@@ -19,7 +21,6 @@ import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class ChangeEmailViewModel @Inject constructor(
@@ -34,30 +35,22 @@ class ChangeEmailViewModel @Inject constructor(
                 descriptionText = R.string.common_no_spam,
             ),
             buttonState = ButtonState(
-                title = R.string.common_send_link,
+                title = TextValue.StringRes(R.string.common_send_link),
                 enabled = false,
-            )
-        )
+            ),
+        ),
     )
 
     private val changeUnverifiedEmailCallback = object : ChangeUnverifiedEmailCallback {
         override fun onError(error: OAuthErrorCode, errorMessage: String?) {
             loading(false)
-            getErrorMessage(error)?.let { descriptionText ->
+            (error.description.takeIf { it.isNotEmpty() } ?: errorMessage)?.let { descriptionText ->
                 state = state.copy(
                     inputTextState = state.inputTextState.copy(
                         error = true,
-                        descriptionText = descriptionText
-                    )
+                        descriptionText = descriptionText,
+                    ),
                 )
-            }
-        }
-
-        private fun getErrorMessage(errorCode: OAuthErrorCode): String? {
-            return when (errorCode) {
-                OAuthErrorCode.NO_INTERNET -> "Check your internet connection"
-                OAuthErrorCode.INVALID_EMAIL -> "Email is not a valid email!"
-                else -> null
             }
         }
 
@@ -73,7 +66,7 @@ class ChangeEmailViewModel @Inject constructor(
     }
 
     init {
-        _toolbarState.value = SoramitsuToolbarState(
+        mToolbarState.value = SoramitsuToolbarState(
             type = SoramitsuToolbarType.Small(),
             basic = BasicToolbarState(
                 title = R.string.enter_email_title,
@@ -90,7 +83,7 @@ class ChangeEmailViewModel @Inject constructor(
                 error = false,
                 descriptionText = R.string.common_no_spam,
             ),
-            buttonState = state.buttonState.copy(enabled = value.text.isNotEmpty())
+            buttonState = state.buttonState.copy(enabled = value.text.isNotEmpty()),
         )
     }
 
@@ -107,7 +100,7 @@ class ChangeEmailViewModel @Inject constructor(
     private fun loading(loading: Boolean) {
         state = state.copy(
             inputTextState = state.inputTextState.copy(enabled = !loading),
-            buttonState = state.buttonState.copy(loading = loading)
+            buttonState = state.buttonState.copy(loading = loading),
         )
     }
 

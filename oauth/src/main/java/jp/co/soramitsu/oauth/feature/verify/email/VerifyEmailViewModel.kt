@@ -8,10 +8,12 @@ import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
 import com.paywings.oauth.android.sdk.service.callback.CheckEmailVerifiedCallback
 import com.paywings.oauth.android.sdk.service.callback.SendNewVerificationEmailCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
-import jp.co.soramitsu.oauth.base.state.DialogAlertState
+import jp.co.soramitsu.oauth.base.uiscreens.DialogAlertState
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
@@ -23,7 +25,6 @@ import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class VerifyEmailViewModel @Inject constructor(
@@ -43,7 +44,7 @@ class VerifyEmailViewModel @Inject constructor(
     private var authCallback: OAuthCallback? = null
 
     init {
-        _toolbarState.value = SoramitsuToolbarState(
+        mToolbarState.value = SoramitsuToolbarState(
             type = SoramitsuToolbarType.Small(),
             basic = BasicToolbarState(
                 title = R.string.verify_email_title,
@@ -54,11 +55,11 @@ class VerifyEmailViewModel @Inject constructor(
 
         state = state.copy(
             resendLinkButtonState = state.resendLinkButtonState.copy(
-                title = R.string.common_resend_link
+                title = TextValue.StringRes(R.string.common_resend_link),
             ),
             changeEmailButtonState = state.changeEmailButtonState.copy(
-                title = R.string.common_change_email
-            )
+                title = TextValue.StringRes(R.string.common_change_email),
+            ),
         )
 
         setUpOtpResendTimer()
@@ -70,8 +71,8 @@ class VerifyEmailViewModel @Inject constructor(
             state = state.copy(
                 resendLinkButtonState = state.resendLinkButtonState.copy(
                     enabled = false,
-                    timer = millisUntilFinished.format()
-                )
+                    timer = millisUntilFinished.format(),
+                ),
             )
         }
 
@@ -79,8 +80,8 @@ class VerifyEmailViewModel @Inject constructor(
             state = state.copy(
                 resendLinkButtonState = state.resendLinkButtonState.copy(
                     enabled = true,
-                    timer = null
-                )
+                    timer = null,
+                ),
             )
         }
     }
@@ -97,19 +98,8 @@ class VerifyEmailViewModel @Inject constructor(
             }
         }
 
-        override fun onSignInSuccessful(
-            refreshToken: String,
-            accessToken: String,
-            accessTokenExpirationTime: Long
-        ) {
-            viewModelScope.launch {
-                userSessionRepository.signInUser(
-                    refreshToken,
-                    accessToken,
-                    accessTokenExpirationTime
-                )
-                authCallback?.onOAuthSucceed(accessToken)
-            }
+        override fun onSignInSuccessful() {
+            authCallback?.onOAuthSucceed()
         }
 
         override fun onUserSignInRequired() {
@@ -118,12 +108,12 @@ class VerifyEmailViewModel @Inject constructor(
 
         override fun onError(error: OAuthErrorCode, errorMessage: String?) {
             dialogState = DialogAlertState(
-                title = error.name,
-                message = error.description,
+                title = TextValue.SimpleText(error.name),
+                message = TextValue.SimpleText(error.description),
                 dismissAvailable = true,
                 onPositive = {
                     dialogState = null
-                }
+                },
             )
         }
     }
@@ -151,12 +141,12 @@ class VerifyEmailViewModel @Inject constructor(
         override fun onError(error: OAuthErrorCode, errorMessage: String?) {
             loading(false)
             dialogState = DialogAlertState(
-                title = error.name,
-                message = error.description,
+                title = TextValue.SimpleText(error.name),
+                message = TextValue.SimpleText(error.description),
                 dismissAvailable = true,
                 onPositive = {
                     dialogState = null
-                }
+                },
             )
         }
 
@@ -176,7 +166,7 @@ class VerifyEmailViewModel @Inject constructor(
 
     private fun loading(loading: Boolean) {
         state = state.copy(
-            resendLinkButtonState = state.resendLinkButtonState.copy(loading = loading)
+            resendLinkButtonState = state.resendLinkButtonState.copy(loading = loading),
         )
     }
 

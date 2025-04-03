@@ -1,8 +1,5 @@
 package jp.co.soramitsu.oauth.feature
 
-import com.paywings.onboarding.kyc.android.sdk.data.model.KycUserData
-import com.paywings.onboarding.kyc.android.sdk.data.model.UserCredentials
-
 data class MainScreenState(
     val kycUserData: KycUserData? = null,
     val userCredentials: UserCredentials? = null,
@@ -10,5 +7,6 @@ data class MainScreenState(
 )
 
 data class MainScreenUiState(
-    val loading: Boolean = false
+    val loading: Boolean = false,
+    val error: String? = null,
 )

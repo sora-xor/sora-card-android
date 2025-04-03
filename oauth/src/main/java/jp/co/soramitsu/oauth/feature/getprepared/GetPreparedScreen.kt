@@ -27,12 +27,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.compose.Screen
 import jp.co.soramitsu.oauth.feature.OAuthCallback
-import jp.co.soramitsu.ui_core.component.button.FilledButton
-import jp.co.soramitsu.ui_core.component.button.properties.Order
-import jp.co.soramitsu.ui_core.component.button.properties.Size
+import jp.co.soramitsu.oauth.feature.YourPhoneNumberText
+import jp.co.soramitsu.oauth.uiscreens.compose.Screen
+import jp.co.soramitsu.oauth.uiscreens.styledui.FilledLargeSecondaryButton
+import jp.co.soramitsu.oauth.uiscreens.theme.AuthSdkTheme
 import jp.co.soramitsu.ui_core.resources.Dimens
 import jp.co.soramitsu.ui_core.theme.borderRadius
 import jp.co.soramitsu.ui_core.theme.customColors
@@ -52,13 +53,13 @@ fun GetPreparedScreen(
     }
 
     Screen(
-        viewModel = viewModel
+        viewModel = viewModel,
     ) { scrollState ->
         val state = viewModel.state.collectAsStateWithLifecycle()
         GetPreparedScreenContent(
             scrollState,
             state.value,
-            onConfirm = viewModel::onConfirm
+            onConfirm = viewModel::onConfirm,
         )
     }
 }
@@ -67,29 +68,42 @@ fun GetPreparedScreen(
 private fun GetPreparedScreenContent(
     scrollState: ScrollState,
     state: GetPreparedState,
-    onConfirm: () -> Unit
+    onConfirm: () -> Unit,
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.customColors.bgSurface)
             .verticalScroll(scrollState)
             .padding(start = Dimens.x3, end = Dimens.x3, top = Dimens.x1, bottom = Dimens.x5),
     ) {
-        Box(
+        YourPhoneNumberText(phone = state.phoneNumber, topPadding = Dimens.x2)
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = Dimens.x4)
+                .padding(bottom = Dimens.x4, top = Dimens.x3)
                 .clip(RoundedCornerShape(MaterialTheme.borderRadius.s))
-                .background(MaterialTheme.customColors.accentTertiaryContainer),
-            contentAlignment = Alignment.Center
+                .background(MaterialTheme.customColors.accentTertiaryContainer)
+                .padding(Dimens.x2),
         ) {
             Text(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(Dimens.x2),
-                text = stringResource(R.string.get_prepared_alert_dynamic, state.totalFreeAttemptsCount),
+                    .fillMaxWidth(),
+                text = "%s:".format(stringResource(R.string.card_attention_text).uppercase()),
+                style = MaterialTheme.customTypography.paragraphMBold,
+                color = MaterialTheme.customColors.accentTertiary,
+            )
+            Spacer(modifier = Modifier.size(Dimens.x1))
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                text = stringResource(
+                    R.string.get_prepared_alert,
+                    state.totalFreeAttemptsCount,
+                    state.attemptCost,
+                ),
                 style = MaterialTheme.customTypography.paragraphM,
-                color = MaterialTheme.customColors.accentTertiary
+                color = MaterialTheme.customColors.accentTertiary,
             )
         }
 
@@ -99,7 +113,7 @@ private fun GetPreparedScreenContent(
                 .padding(bottom = Dimens.x4),
             text = stringResource(id = R.string.get_prepared_need),
             style = MaterialTheme.customTypography.paragraphM,
-            color = MaterialTheme.customColors.fgPrimary
+            color = MaterialTheme.customColors.fgPrimary,
         )
 
         state.steps.forEach {
@@ -109,17 +123,16 @@ private fun GetPreparedScreenContent(
         Spacer(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f)
+                .weight(1f),
         )
 
-        FilledButton(
+        FilledLargeSecondaryButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = Dimens.x1),
-            text = stringResource(id = R.string.get_prepared_ok_title),
-            order = Order.SECONDARY,
-            size = Size.Large,
-            onClick = onConfirm
+            text = TextValue.StringRes(id = R.string.get_prepared_ok_title),
+            enabled = state.buttonEnabled,
+            onClick = onConfirm,
         )
     }
 }
@@ -131,12 +144,12 @@ private fun StepIcon(modifier: Modifier = Modifier, index: Int) {
             .size(Dimens.x6)
             .clip(CircleShape)
             .background(MaterialTheme.customColors.bgPage),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Text(
             text = index.toString(),
             style = MaterialTheme.customTypography.headline2,
-            color = MaterialTheme.customColors.fgPrimary
+            color = MaterialTheme.customColors.fgPrimary,
         )
     }
 }
@@ -148,17 +161,17 @@ private fun Step(step: Step) {
             .fillMaxWidth()
             .padding(bottom = Dimens.x3),
         verticalAlignment = Alignment.Top,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         StepIcon(
             modifier = Modifier.padding(end = Dimens.x2),
-            index = step.index
+            index = step.index,
         )
 
         Column(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
                 modifier = Modifier
@@ -166,50 +179,57 @@ private fun Step(step: Step) {
                     .padding(bottom = Dimens.x1_2),
                 text = stringResource(step.title),
                 style = MaterialTheme.customTypography.headline3,
-                color = MaterialTheme.customColors.fgPrimary
+                color = MaterialTheme.customColors.fgPrimary,
             )
 
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = step.description.map { stringResource(id = it) }.joinToString("\n\n"),
                 style = MaterialTheme.customTypography.paragraphS,
-                color = MaterialTheme.customColors.fgSecondary
+                color = MaterialTheme.customColors.fgSecondary,
             )
         }
     }
 }
 
-
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun PreviewGetPreparedScreen() {
-    GetPreparedScreenContent(
-        scrollState = rememberScrollState(),
-        state = GetPreparedState(
-            totalFreeAttemptsCount = "4",
-            steps = listOf(
-                Step(
-                    index = 1,
-                    title = R.string.get_prepared_submit_id_photo_title,
-                    description = listOf(R.string.get_prepared_submit_id_photo_description),
+    AuthSdkTheme {
+        GetPreparedScreenContent(
+            scrollState = rememberScrollState(),
+            state = GetPreparedState(
+                totalFreeAttemptsCount = "4",
+                attemptCost = "3.80",
+                buttonEnabled = true,
+                phoneNumber = "123456",
+                steps = listOf(
+                    Step(
+                        index = 1,
+                        title = R.string.get_prepared_submit_id_photo_title,
+                        description = listOf(R.string.get_prepared_submit_id_photo_description),
+                    ),
+                    Step(
+                        index = 2,
+                        title = R.string.get_prepared_take_selfie_title,
+                        description = listOf(R.string.get_prepared_take_selfie_description),
+                    ),
+                    Step(
+                        index = 3,
+                        title = R.string.get_prepared_proof_address_title,
+                        description = listOf(
+                            R.string.get_prepared_proof_address_description,
+                            R.string.get_prepared_proof_address_note,
+                        ),
+                    ),
+                    Step(
+                        index = 4,
+                        title = R.string.get_prepared_personal_info_title,
+                        description = listOf(R.string.get_prepared_personal_info_description),
+                    ),
                 ),
-                Step(
-                    index = 2,
-                    title = R.string.get_prepared_take_selfie_title,
-                    description = listOf(R.string.get_prepared_take_selfie_description),
-                ),
-                Step(
-                    index = 3,
-                    title = R.string.get_prepared_proof_address_title,
-                    description = listOf(R.string.get_prepared_proof_address_description, R.string.get_prepared_proof_address_note),
-                ),
-                Step(
-                    index = 4,
-                    title = R.string.get_prepared_personal_info_title,
-                    description = listOf(R.string.get_prepared_personal_info_description),
-                ),
-            )
-        ),
-        onConfirm = {}
-    )
+            ),
+            onConfirm = {},
+        )
+    }
 }

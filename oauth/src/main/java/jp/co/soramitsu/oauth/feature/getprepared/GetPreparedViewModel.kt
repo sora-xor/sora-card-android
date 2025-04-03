@@ -1,15 +1,15 @@
 package jp.co.soramitsu.oauth.feature.getprepared
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
+import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.common.domain.KycRepository
-import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
+import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
+import jp.co.soramitsu.oauth.common.domain.PriceInteractor
 import jp.co.soramitsu.oauth.feature.OAuthCallback
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
@@ -18,22 +18,31 @@ import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class GetPreparedViewModel @Inject constructor(
     private val setActivityResult: SetActivityResult,
     private val userSessionRepository: UserSessionRepository,
     private val kycRepository: KycRepository,
+    private val priceInteractor: PriceInteractor,
+    private val pwoAuthClientProxy: PWOAuthClientProxy,
 ) : BaseViewModel() {
 
-    private val _state = MutableStateFlow(GetPreparedState(totalFreeAttemptsCount = ""))
+    private val _state =
+        MutableStateFlow(
+            GetPreparedState(
+                totalFreeAttemptsCount = "",
+                attemptCost = "",
+                buttonEnabled = true,
+                phoneNumber = "",
+            ),
+        )
     val state = _state.asStateFlow()
 
     private var authCallback: OAuthCallback? = null
 
     init {
-        _toolbarState.value = SoramitsuToolbarState(
+        mToolbarState.value = SoramitsuToolbarState(
             type = SoramitsuToolbarType.Small(),
             basic = BasicToolbarState(
                 title = R.string.get_prepared_title,
@@ -43,39 +52,36 @@ class GetPreparedViewModel @Inject constructor(
             ),
         )
 
-        _state.value = GetPreparedState(
-            totalFreeAttemptsCount = ".",
-            steps = listOf(
-                Step(
-                    index = 1,
-                    title = R.string.get_prepared_submit_id_photo_title,
-                    description = listOf(R.string.get_prepared_submit_id_photo_description),
-                ),
-                Step(
-                    index = 2,
-                    title = R.string.get_prepared_take_selfie_title,
-                    description = listOf(R.string.get_prepared_take_selfie_description),
-                ),
-                Step(
-                    index = 3,
-                    title = R.string.get_prepared_proof_address_title,
-                    description = listOf(R.string.get_prepared_proof_address_description, R.string.get_prepared_proof_address_note),
-                ),
-                Step(
-                    index = 4,
-                    title = R.string.get_prepared_personal_info_title,
-                    description = listOf(R.string.get_prepared_personal_info_description),
-                ),
-            )
-        )
         viewModelScope.launch {
             val token = userSessionRepository.getAccessToken()
-            kycRepository.getFreeKycAttemptsInfo(token)
-                .onSuccess {
-                    _state.value = _state.value.copy(
-                        totalFreeAttemptsCount = it.totalFreeAttemptsCount.toString(),
-                    )
-                }
+            _state.value = GetPreparedState(
+                totalFreeAttemptsCount = kycRepository.getFreeKycAttemptsInfo(token).getOrNull()?.totalFreeAttemptsCount?.toString().orEmpty(),
+                attemptCost = priceInteractor.calculateKycAttemptPrice(),
+                buttonEnabled = true,
+                phoneNumber = userSessionRepository.getPhoneNumber(),
+                steps = listOf(
+                    Step(
+                        index = 1,
+                        title = R.string.get_prepared_submit_id_photo_title,
+                        description = listOf(R.string.get_prepared_submit_id_photo_description),
+                    ),
+                    Step(
+                        index = 2,
+                        title = R.string.get_prepared_take_selfie_title,
+                        description = listOf(R.string.get_prepared_take_selfie_description),
+                    ),
+                    Step(
+                        index = 3,
+                        title = R.string.get_prepared_proof_address_title,
+                        description = listOf(R.string.get_prepared_proof_address_description, R.string.get_prepared_proof_address_note),
+                    ),
+                    Step(
+                        index = 4,
+                        title = R.string.get_prepared_personal_info_title,
+                        description = listOf(R.string.get_prepared_personal_info_description),
+                    ),
+                ),
+            )
         }
     }
 
@@ -83,6 +89,7 @@ class GetPreparedViewModel @Inject constructor(
         super.onToolbarAction()
         runCatching {
             viewModelScope.launch {
+                pwoAuthClientProxy.logout()
                 userSessionRepository.logOutUser()
             }.invokeOnCompletion {
                 setActivityResult.setResult(SoraCardResult.Logout)
@@ -95,6 +102,9 @@ class GetPreparedViewModel @Inject constructor(
     }
 
     fun onConfirm() {
+        _state.value = _state.value.copy(
+            buttonEnabled = false,
+        )
         authCallback?.onStartKyc()
     }
 

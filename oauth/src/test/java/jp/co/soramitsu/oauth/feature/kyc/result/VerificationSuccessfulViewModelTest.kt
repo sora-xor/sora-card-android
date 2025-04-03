@@ -1,11 +1,19 @@
 package jp.co.soramitsu.oauth.feature.kyc.result
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.junit4.MockKRule
+import io.mockk.just
+import io.mockk.runs
+import io.mockk.verify
 import jp.co.soramitsu.oauth.R
+import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
-import jp.co.soramitsu.oauth.base.test.MainCoroutineRule
-import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
+import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
+import jp.co.soramitsu.oauth.domain.MainCoroutineRule
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -16,13 +24,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
-import org.mockito.kotlin.verify
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@RunWith(MockitoJUnitRunner::class)
 class VerificationSuccessfulViewModelTest {
 
     @Rule
@@ -32,25 +35,37 @@ class VerificationSuccessfulViewModelTest {
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-    @Mock
+    @get:Rule
+    val mockkRule = MockKRule(this)
+
+    @MockK
     private lateinit var setActivityResult: SetActivityResult
 
-    @Mock
+    @MockK
+    private lateinit var pwoAuthClientProxy: PWOAuthClientProxy
+
+    @MockK
     private lateinit var userSessionRepository: UserSessionRepository
 
     private lateinit var viewModel: VerificationSuccessfulViewModel
 
     @Before
     fun setUp() {
+        every { setActivityResult.setResult(any()) } just runs
+        coEvery { userSessionRepository.getPhoneNumber() } returns "+987"
         viewModel = VerificationSuccessfulViewModel(
             setActivityResult = setActivityResult,
             userSessionRepository = userSessionRepository,
+            pwoAuthClientProxy = pwoAuthClientProxy,
         )
     }
 
     @Test
     fun `init EXPECT toolbar title`() {
-        assertEquals(R.string.verification_successful_title, viewModel.toolbarState.value?.basic?.title)
+        assertEquals(
+            R.string.verification_successful,
+            viewModel.toolbarState.value?.basic?.title,
+        )
         assertNotNull(viewModel.toolbarState.value?.basic?.navIcon)
     }
 
@@ -58,11 +73,10 @@ class VerificationSuccessfulViewModelTest {
     fun `call onClose EXPECT finish kyc`() = runTest {
         viewModel.onClose()
         advanceUntilIdle()
-
-        verify(setActivityResult).setResult(
-            SoraCardResult.Success(
-                SoraCardCommonVerification.Successful,
+        verify {
+            setActivityResult.setResult(
+                SoraCardResult.Success(SoraCardCommonVerification.Successful),
             )
-        )
+        }
     }
 }

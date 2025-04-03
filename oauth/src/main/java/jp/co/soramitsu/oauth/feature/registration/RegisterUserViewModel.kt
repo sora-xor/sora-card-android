@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.TextFieldValue
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
@@ -14,31 +16,30 @@ import jp.co.soramitsu.ui_core.component.input.InputTextState
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
-import javax.inject.Inject
 
 @HiltViewModel
 class RegisterUserViewModel @Inject constructor(
-    private val mainRouter: MainRouter
+    private val mainRouter: MainRouter,
 ) : BaseViewModel() {
 
     var state by mutableStateOf(
         RegisterUserState(
             firstNameState = InputTextState(
-                label = R.string.user_registration_first_name_input_filed_label
+                label = R.string.user_registration_first_name_input_filed_label,
             ),
             lastNameState = InputTextState(
-                label = R.string.user_registration_last_name_input_filed_label
+                label = R.string.user_registration_last_name_input_filed_label,
             ),
             buttonState = ButtonState(
-                title = R.string.common_continue,
+                title = TextValue.StringRes(R.string.common_continue),
                 enabled = false,
-            )
-        )
+            ),
+        ),
     )
         private set
 
     init {
-        _toolbarState.value = SoramitsuToolbarState(
+        mToolbarState.value = SoramitsuToolbarState(
             type = SoramitsuToolbarType.Small(),
             basic = BasicToolbarState(
                 title = R.string.user_registration_title,
@@ -67,7 +68,7 @@ class RegisterUserViewModel @Inject constructor(
     fun onConfirm() {
         mainRouter.openEnterEmail(
             firstName = state.firstNameState.value.text,
-            lastName = state.lastNameState.value.text
+            lastName = state.lastNameState.value.text,
         )
     }
 

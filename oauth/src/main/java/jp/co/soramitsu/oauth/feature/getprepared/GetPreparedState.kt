@@ -6,7 +6,10 @@ import androidx.compose.runtime.Stable
 @Stable
 data class GetPreparedState(
     val totalFreeAttemptsCount: String,
+    val attemptCost: String,
     val steps: List<Step> = emptyList(),
+    val buttonEnabled: Boolean,
+    val phoneNumber: String,
 )
 
 data class Step(

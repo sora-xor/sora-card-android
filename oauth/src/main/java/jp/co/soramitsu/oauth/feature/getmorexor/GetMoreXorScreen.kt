@@ -3,17 +3,12 @@ package jp.co.soramitsu.oauth.feature.getmorexor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import jp.co.soramitsu.oauth.base.compose.SelectableDialog
-import jp.co.soramitsu.oauth.base.compose.retrieveString
-import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
-import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
-import jp.co.soramitsu.oauth.common.navigation.flow.api.NavigationFlow
-import jp.co.soramitsu.oauth.common.navigation.flow.api.destinations.NavigationFlowDestination
+import jp.co.soramitsu.androidfoundation.format.retrieveString
+import jp.co.soramitsu.oauth.uiscreens.compose.SelectableDialog
+import jp.co.soramitsu.oauth.uiscreens.theme.AuthSdkTheme
 
 @Composable
-fun ChooseXorPurchaseMethodDialog(
-    getMoreXorViewModel: GetMoreXorViewModel = hiltViewModel()
-) {
+fun ChooseXorPurchaseMethodDialog(getMoreXorViewModel: GetMoreXorViewModel = hiltViewModel()) {
     val state = getMoreXorViewModel.choosePurchaseXorMethodState
     SelectableDialog(
         dialogTitle = state.titleText.retrieveString(),
@@ -21,27 +16,21 @@ fun ChooseXorPurchaseMethodDialog(
         selectableChoices = state.methodsTextList.map { it.retrieveString() },
         cancelText = state.cancelText.retrieveString(),
         onChoiceSelectedClickListener = { getMoreXorViewModel.onPurchaseMethodClicked(it) },
-        onCancelClickListener = getMoreXorViewModel::onCancelDialogClicked
+        onCancelClickListener = getMoreXorViewModel::onCancelDialogClicked,
     )
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun PreviewChooseXorPurchaseMethodDialog() {
-    ChooseXorPurchaseMethodDialog(
-        getMoreXorViewModel = GetMoreXorViewModel(
-            kycRequirementsUnfulfilledFlow = object : NavigationFlow {
-                override fun start(fromDestination: NavigationFlowDestination) {}
-
-                override fun proceed() {}
-
-                override fun back() {}
-
-                override fun exit() {}
-            },
-            setActivityResult = object : SetActivityResult {
-                override fun setResult(soraCardResult: SoraCardResult) {}
-            }
+    AuthSdkTheme {
+        SelectableDialog(
+            dialogTitle = "Title",
+            dialogDescription = "Desc",
+            selectableChoices = listOf("select 1", "select 2"),
+            cancelText = "cancel",
+            onCancelClickListener = {},
+            onChoiceSelectedClickListener = {},
         )
-    )
+    }
 }

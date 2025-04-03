@@ -1,6 +1,7 @@
 package jp.co.soramitsu.oauth.feature.terms.and.conditions
 
 import android.annotation.SuppressLint
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,12 +19,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
-import jp.co.soramitsu.oauth.base.compose.Screen
-import jp.co.soramitsu.oauth.base.extension.testTagAsId
-import jp.co.soramitsu.ui_core.component.button.FilledButton
-import jp.co.soramitsu.ui_core.component.button.properties.Order
-import jp.co.soramitsu.ui_core.component.button.properties.Size
+import jp.co.soramitsu.oauth.base.testTagAsId
+import jp.co.soramitsu.oauth.uiscreens.clientsui.UiStyle
+import jp.co.soramitsu.oauth.uiscreens.clientsui.localCompositionUiStyle
+import jp.co.soramitsu.oauth.uiscreens.compose.Screen
+import jp.co.soramitsu.oauth.uiscreens.styledui.FilledLargeSecondaryButton
+import jp.co.soramitsu.oauth.uiscreens.styledui.fw.black05
 import jp.co.soramitsu.ui_core.component.card.ContentCard
 import jp.co.soramitsu.ui_core.component.item.MenuItem
 import jp.co.soramitsu.ui_core.resources.Dimens
@@ -33,18 +36,19 @@ import jp.co.soramitsu.ui_core.theme.customTypography
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
-fun TermsAndConditionsScreen(
-    viewModel: TermsAndConditionsViewModel = hiltViewModel()
-) {
+fun TermsAndConditionsScreen(viewModel: TermsAndConditionsViewModel = hiltViewModel()) {
+    BackHandler {
+        viewModel.onToolbarNavigation()
+    }
     Screen(
-        viewModel = viewModel
+        viewModel = viewModel,
     ) { scrollState ->
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(scrollState)
-                .padding(top = Dimens.x1, start = Dimens.x3, end = Dimens.x3, bottom = Dimens.x5)
+                .padding(top = Dimens.x1, start = Dimens.x3, end = Dimens.x3, bottom = Dimens.x5),
         ) {
             Text(
                 modifier = Modifier
@@ -52,7 +56,7 @@ fun TermsAndConditionsScreen(
                     .padding(bottom = Dimens.x2),
                 text = stringResource(R.string.terms_and_conditions_description),
                 style = MaterialTheme.customTypography.paragraphM,
-                color = MaterialTheme.customColors.fgPrimary
+                color = MaterialTheme.customColors.fgPrimary,
             )
 
             Box(
@@ -60,7 +64,7 @@ fun TermsAndConditionsScreen(
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(MaterialTheme.borderRadius.s))
                     .background(MaterialTheme.customColors.accentTertiaryContainer),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 Text(
                     modifier = Modifier
@@ -68,7 +72,7 @@ fun TermsAndConditionsScreen(
                         .padding(Dimens.x2),
                     text = stringResource(R.string.terms_and_conditions_sora_community_alert),
                     style = MaterialTheme.customTypography.paragraphM,
-                    color = MaterialTheme.customColors.accentTertiary
+                    color = MaterialTheme.customColors.accentTertiary,
                 )
             }
 
@@ -85,17 +89,16 @@ fun TermsAndConditionsScreen(
                 text = stringResource(R.string.terms_and_conditions_confirm_description),
                 style = MaterialTheme.customTypography.textS,
                 color = MaterialTheme.customColors.fgSecondary,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
 
-            FilledButton(
+            FilledLargeSecondaryButton(
                 modifier = Modifier
                     .testTagAsId("AcceptAndContinue")
                     .fillMaxWidth(),
-                text = stringResource(R.string.terms_and_conditions_accept_and_continue),
-                order = Order.SECONDARY,
-                size = Size.Large,
-                onClick = viewModel::onConfirm
+                text = TextValue.StringRes(R.string.terms_and_conditions_accept_and_continue),
+                onClick = viewModel::onConfirm,
+                enabled = true,
             )
         }
     }
@@ -107,23 +110,27 @@ private fun TermsAndConditionsMenu(
     onGeneralTermsClick: () -> Unit,
     onPrivacyPolicy: () -> Unit,
 ) {
+    val contentCardBackgroundColor = when (localCompositionUiStyle.current) {
+        UiStyle.SW -> MaterialTheme.customColors.bgSurface
+        UiStyle.FW -> black05
+    }
     ContentCard(
         modifier = modifier.fillMaxWidth(),
-        cornerRadius = MaterialTheme.borderRadius.s
+        cornerRadius = MaterialTheme.borderRadius.s,
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(MaterialTheme.borderRadius.s))
-                .background(MaterialTheme.customColors.bgSurface)
+                .background(contentCardBackgroundColor),
         ) {
             MenuItem(
                 label = stringResource(R.string.terms_and_conditions_general_terms),
-                onClick = onGeneralTermsClick
+                onClick = onGeneralTermsClick,
             )
             MenuItem(
                 label = stringResource(R.string.terms_and_conditions_privacy_policy),
-                onClick = onPrivacyPolicy
+                onClick = onPrivacyPolicy,
             )
         }
     }

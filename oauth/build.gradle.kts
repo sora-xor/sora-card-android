@@ -1,5 +1,8 @@
-import java.util.Properties
 import java.io.FileInputStream
+import java.util.Properties
+import org.gradle.kotlin.dsl.kapt
+
+@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 
 fun secret(name: String): String? {
     val fileProperties = File(rootProject.projectDir.absolutePath, "local.properties")
@@ -16,30 +19,29 @@ fun maybeWrapQuotes(s: String): String {
 }
 
 plugins {
-    id("com.android.library")
-    id("kotlin-parcelize")
-    id("org.jetbrains.kotlin.kapt")
-    id("org.jetbrains.kotlin.android")
-    id("com.google.dagger.hilt.android")
     id("maven-publish")
-    kotlin("plugin.serialization")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.serialization)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.kapt)
+    alias(libs.plugins.kover)
+    id("kotlin-parcelize")
+    id("org.jetbrains.dokka")
 }
 
-val composeCompilerVersion by extra("1.4.6")
-val uiCoreVersion by extra("0.1.2")
-val hiltVersion by extra("2.47")
-val pwOauthSdkVersion by extra("1.3.1")
-val pwKycSdkVersion by extra("4.5.0")
-val dataStoreVersion by extra("1.0.0")
-val ktorVersion by extra("2.3.1")
+val composeCompilerVersion: String by project
+
+kotlin {
+    jvmToolchain(17)
+}
 
 android {
     namespace = "jp.co.soramitsu.oauth"
     compileSdk = 34
 
     defaultConfig {
-        minSdk = 24
-        targetSdk = 33
+        minSdk = 26
         multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -50,14 +52,14 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
         debug {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -65,88 +67,111 @@ android {
     publishing {
         singleVariant("release") {
             withSourcesJar()
-            withJavadocJar()
+//            withJavadocJar()
         }
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    } 
-    kotlinOptions {
-        jvmTarget = "1.8"
     }
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = composeCompilerVersion
     }
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+        targetSdk = 34
+    }
+    packaging {
+        resources {
+            excludes += listOf(
+                "META-INF/LICENSE.md",
+                "META-INF/LICENSE-notice.md",
+            )
+        }
+    }
+}
+
+tasks.dokkaHtml.configure {
+    dokkaSourceSets {
+        named("main") {
+            noAndroidSdkLink.set(false)
+        }
+    }
+}
+
+tasks.register<Jar>("dokkaHtmlJar") {
+    group = "publishing"
+    description = "dokka instead of javadoc"
+    dependsOn(tasks.dokkaHtml)
+    from(tasks.dokkaHtml.flatMap { it.outputDirectory })
+    archiveClassifier.set("html-docs")
+}
+
+artifacts {
+    tasks.findByName("dokkaHtmlJar")
 }
 
 dependencies {
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("androidx.core:core-ktx:1.10.1")
-    implementation("androidx.fragment:fragment-ktx:1.6.1")
+    implementation(libs.core.ktx)
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.lifecycle.runtime.compose)
+    implementation(libs.activity.compose)
+    implementation(libs.material)
+    implementation(libs.compose.navigation)
+    implementation(libs.composeConstraintLayout)
 
-    implementation("androidx.compose.ui:ui:1.5.0")
-    implementation("androidx.compose.material:material:1.5.0")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.5.0")
-    implementation("androidx.compose.runtime:runtime-livedata:1.5.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.1")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.5.0")
-
-    implementation("jp.co.soramitsu:ui-core:$uiCoreVersion")
-
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
-
-    implementation("androidx.navigation:navigation-compose:2.7.1")
-
-    implementation( "com.google.dagger:hilt-android:$hiltVersion")
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
-    "kapt"("com.google.dagger:hilt-compiler:$hiltVersion")
-
-    implementation("com.paywings.oauth:android-sdk:$pwOauthSdkVersion") {
-        exclude("com.android.support", "support-compat")
-        exclude("com.android.support", "support-media-compat")
+    implementation(platform(libs.compose.bom)) {
+        exclude(module = "material3")
+        exclude(module = "material3-android")
     }
-    implementation("com.paywings.onboarding.kyc:android-sdk:$pwKycSdkVersion") {
-        exclude("com.android.support", "support-compat")
-        exclude("com.android.support", "support-media-compat")
-        exclude(module = "pinview")
+    implementation(libs.ui)
+    implementation(libs.compose.runtime.livedata)
+    implementation(libs.compose.material)
+    implementation(libs.ui.graphics)
+    implementation(libs.ui.tooling.preview)
+    debugImplementation(libs.ui.test.manifest)
+    debugImplementation(libs.ui.tooling)
+
+    implementation(libs.sw.android.foundation) {
+        exclude(module = "material3")
+        exclude(module = "material3-android")
     }
-    implementation("io.github.chaosleung:pinview:1.4.4")
+    implementation(libs.soramitsu.uicore)
+    implementation(libs.kotlinx.serialization)
+    implementation(libs.datastore)
 
-    implementation("androidx.datastore:datastore-preferences:$dataStoreVersion")
+    implementation(libs.hiltandroid)
+    implementation(libs.hiltnavigationcompose)
+    kapt(libs.hiltcompiler)
 
-    implementation("io.ktor:ktor-client-core:$ktorVersion")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
-    implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-    implementation("io.ktor:ktor-client-logging:$ktorVersion")
-    api("io.ktor:ktor-client-okhttp:$ktorVersion")
+    implementation(libs.pwoauth)
+    implementation(libs.pwkyc) {
+        exclude(module = "idensic-mobile-sdk-videoident")
+//        exclude(module = "idensic-mobile-sdk-internal-core")
+//        exclude(module = "idensic-mobile-sdk-internal")
+    }
 
-    debugImplementation("junit:junit:4.13.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
-    implementation("junit:junit:4.13.2")
-    testImplementation("org.mockito:mockito-inline:5.2.0")
-    testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
-    testImplementation("androidx.arch.core:core-testing:2.2.0")
-    testImplementation("io.mockk:mockk:1.13.5")
+    implementation(libs.coroutine.core)
+
+    testImplementation(libs.tests.archcore)
+    testImplementation(libs.tests.junit)
+    testImplementation(libs.tests.mockk)
+    testImplementation(libs.coroutine.test)
+
+    androidTestImplementation(libs.ui.test.junit4)
 }
 
 kapt {
     correctErrorTypes = true
 }
 
-val currentVersion by extra("0.2.4")
 publishing {
     publications {
         register<MavenPublication>("release") {
             groupId = "jp.co.soramitsu"
             artifactId = "android-sora-card"
-            version = currentVersion
+            version = "1.2.0-RC9"
 
             afterEvaluate {
                 from(components["release"])
@@ -165,7 +190,39 @@ publishing {
         }
         maven {
             name = "scnRepoLocal"
-            url = uri("${project.buildDir}/scnrepo")
+            url = uri(project.layout.buildDirectory.dir("scnrepo").get().asFile.path)
+        }
+    }
+}
+
+kover {
+    useJacoco()
+    reports {
+        variant("debug") {
+            xml {
+                onCheck = true
+                title = "soracard xml report"
+                xmlFile = file("${project.rootDir}/report/coverage.xml")
+            }
+            html {
+                title = "soracard html report"
+                onCheck = true
+                charset = "UTF-8"
+                htmlDir.set(file("${project.rootDir}/htmlreport"))
+            }
+            verify {
+                rule {
+                    minBound(20)
+                }
+            }
+            filters {
+                excludes {
+                    classes(
+                        "**.di.*",
+                        "**.uicompose.*",
+                    )
+                }
+            }
         }
     }
 }

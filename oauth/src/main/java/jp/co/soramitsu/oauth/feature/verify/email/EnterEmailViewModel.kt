@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
 import com.paywings.oauth.android.sdk.service.callback.RegisterUserCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
@@ -21,7 +23,6 @@ import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class EnterEmailViewModel @Inject constructor(
@@ -37,10 +38,10 @@ class EnterEmailViewModel @Inject constructor(
                 descriptionText = R.string.common_no_spam,
             ),
             buttonState = ButtonState(
-                title = R.string.common_send_link,
+                title = TextValue.StringRes(R.string.common_send_link),
                 enabled = false,
-            )
-        )
+            ),
+        ),
     )
         private set
 
@@ -50,7 +51,7 @@ class EnterEmailViewModel @Inject constructor(
     private var authCallback: OAuthCallback? = null
 
     init {
-        _toolbarState.value = SoramitsuToolbarState(
+        mToolbarState.value = SoramitsuToolbarState(
             type = SoramitsuToolbarType.Small(),
             basic = BasicToolbarState(
                 title = R.string.enter_email_title,
@@ -63,22 +64,13 @@ class EnterEmailViewModel @Inject constructor(
     private val registerUserCallback = object : RegisterUserCallback {
         override fun onError(error: OAuthErrorCode, errorMessage: String?) {
             loading(false)
-            getErrorMessage(error)?.let { descriptionText ->
+            (error.description.takeIf { it.isNotEmpty() } ?: errorMessage)?.let {
                 state = state.copy(
                     inputTextState = state.inputTextState.copy(
                         error = true,
-                        descriptionText = descriptionText
-                    )
+                        descriptionText = it,
+                    ),
                 )
-            }
-        }
-
-        private fun getErrorMessage(errorCode: OAuthErrorCode): String? {
-            return when (errorCode) {
-                OAuthErrorCode.NO_INTERNET -> "Check your internet connection"
-                OAuthErrorCode.USER_IS_SUSPENDED -> "Phone number is suspended"
-                OAuthErrorCode.INVALID_EMAIL -> "Email is not a valid email!"
-                else -> null
             }
         }
 
@@ -87,19 +79,23 @@ class EnterEmailViewModel @Inject constructor(
             mainRouter.openVerifyEmail(email, autoEmailSent, clearStack = true)
         }
 
-        override fun onSignInSuccessful(
-            refreshToken: String,
-            accessToken: String,
-            accessTokenExpirationTime: Long
-        ) {
-            viewModelScope.launch {
-                userSessionRepository.signInUser(
-                    refreshToken,
-                    accessToken,
-                    accessTokenExpirationTime
-                )
-                authCallback?.onOAuthSucceed(accessToken)
-            }
+//        override fun onSignInSuccessful(
+//            refreshToken: String,
+//            accessToken: String,
+//            accessTokenExpirationTime: Long,
+//        ) {
+//            viewModelScope.launch {
+//                userSessionRepository.signInUser(
+//                    refreshToken,
+//                    accessToken,
+//                    accessTokenExpirationTime,
+//                )
+//                authCallback?.onOAuthSucceed(accessToken)
+//            }
+//        }
+
+        override fun onSignInSuccessful() {
+            authCallback?.onOAuthSucceed()
         }
 
         override fun onUserSignInRequired() {
@@ -125,7 +121,7 @@ class EnterEmailViewModel @Inject constructor(
                 error = false,
                 descriptionText = R.string.common_no_spam,
             ),
-            buttonState = state.buttonState.copy(enabled = value.text.isNotEmpty())
+            buttonState = state.buttonState.copy(enabled = value.text.isNotEmpty()),
         )
     }
 
@@ -144,7 +140,7 @@ class EnterEmailViewModel @Inject constructor(
     private fun loading(loading: Boolean) {
         state = state.copy(
             inputTextState = state.inputTextState.copy(enabled = !loading),
-            buttonState = state.buttonState.copy(loading = loading)
+            buttonState = state.buttonState.copy(loading = loading),
         )
     }
 

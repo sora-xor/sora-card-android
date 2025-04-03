@@ -1,18 +1,20 @@
 package jp.co.soramitsu.oauth.common.data
 
+import jp.co.soramitsu.androidfoundation.format.unsafeCast
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
+import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardFlow
 import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PriceInteractor
+import jp.co.soramitsu.oauth.common.domain.PriceInteractor.Companion.KYC_REQUIRED_BALANCE
 import jp.co.soramitsu.oauth.common.model.EuroLiquiditySufficiency
 import jp.co.soramitsu.oauth.common.model.XorLiquiditySufficiency
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
-import javax.inject.Inject
 
 class PriceInteractorImpl(
     private val userSessionRepository: UserSessionRepository,
     private val inMemoryCache: InMemoryRepo,
-    private val kycRepository: KycRepository
-): PriceInteractor {
+    private val kycRepository: KycRepository,
+) : PriceInteractor {
 
     override suspend fun calculateXorLiquiditySufficiency(): Result<XorLiquiditySufficiency> {
         val accessToken = userSessionRepository.getAccessToken()
@@ -20,15 +22,14 @@ class PriceInteractorImpl(
         return kycRepository.getCurrentXorEuroPrice(accessToken)
             .map {
                 val xorLiquidityFullPrice =
-                    inMemoryCache.euroLiquidityThreshold.div(it.price)
+                    KYC_REQUIRED_BALANCE.div(it)
 
                 XorLiquiditySufficiency(
-                    xorInsufficiency = xorLiquidityFullPrice - inMemoryCache.userAvailableXorAmount,
-                    xorLiquidityFullPrice = xorLiquidityFullPrice
+                    xorInsufficiency = xorLiquidityFullPrice - inMemoryCache.flow!!.unsafeCast<SoraCardFlow.SoraCardKycFlow>().userAvailableXorAmount,
+                    xorLiquidityFullPrice = xorLiquidityFullPrice,
                 )
             }
     }
-
 
     override suspend fun calculateEuroLiquiditySufficiency(): Result<EuroLiquiditySufficiency> {
         val accessToken = userSessionRepository.getAccessToken()
@@ -36,18 +37,18 @@ class PriceInteractorImpl(
         return kycRepository.getCurrentXorEuroPrice(accessToken)
             .map {
                 val userAvailableEuroAmount =
-                    inMemoryCache.userAvailableXorAmount.times(it.price)
+                    inMemoryCache.flow!!.unsafeCast<SoraCardFlow.SoraCardKycFlow>().userAvailableXorAmount.times(
+                        it,
+                    )
 
                 EuroLiquiditySufficiency(
-                    euroInsufficiency = inMemoryCache.euroLiquidityThreshold - userAvailableEuroAmount,
-                    euroLiquidityFullPrice = inMemoryCache.euroLiquidityThreshold.toDouble()
+                    euroInsufficiency = KYC_REQUIRED_BALANCE - userAvailableEuroAmount,
+                    euroLiquidityFullPrice = KYC_REQUIRED_BALANCE,
                 )
             }
     }
 
-    override suspend fun calculateCardIssuancePrice(): Result<Double> =
-        kotlin.runCatching { inMemoryCache.euroCardIssuancePrice.toDouble() }
+    override suspend fun calculateCardIssuancePrice(): String = kycRepository.getApplicationFee()
 
-    override suspend fun calculateKycAttemptPrice(): Result<Double> =
-        kotlin.runCatching { inMemoryCache.kycAttemptPrice }
+    override suspend fun calculateKycAttemptPrice(): String = kycRepository.getRetryFee()
 }

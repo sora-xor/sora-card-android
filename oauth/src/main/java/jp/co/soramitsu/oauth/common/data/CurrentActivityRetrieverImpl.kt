@@ -2,25 +2,25 @@ package jp.co.soramitsu.oauth.common.data
 
 import android.app.Activity
 import android.os.Looper
-import jp.co.soramitsu.oauth.common.domain.CurrentActivityRetriever
 import java.lang.ref.WeakReference
-import javax.inject.Inject
+import jp.co.soramitsu.oauth.common.domain.CurrentActivityRetriever
 
-
-class CurrentActivityRetrieverImpl: CurrentActivityRetriever {
+class CurrentActivityRetrieverImpl : CurrentActivityRetriever {
 
     private var activityWeakRef: WeakReference<Activity>? = null
 
     override fun setActivity(activity: Activity) {
-        if (!Looper.getMainLooper().isCurrentThread)
+        if (!Looper.getMainLooper().isCurrentThread) {
             throw IllegalAccessError(NOT_MAIN_THREAD_ACCESS)
+        }
 
         activityWeakRef = WeakReference(activity)
     }
 
     override fun getCurrentActivity(): Activity {
-        if (!Looper.getMainLooper().isCurrentThread)
+        if (!Looper.getMainLooper().isCurrentThread) {
             throw IllegalAccessError(NOT_MAIN_THREAD_ACCESS)
+        }
 
         return activityWeakRef?.get()
             ?: throw IllegalStateException(NULL_ACTIVITY_ACCESS)

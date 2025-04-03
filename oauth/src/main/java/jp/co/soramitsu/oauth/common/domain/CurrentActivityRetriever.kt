@@ -7,5 +7,4 @@ interface CurrentActivityRetriever {
     fun setActivity(activity: Activity)
 
     fun getCurrentActivity(): Activity
-
 }

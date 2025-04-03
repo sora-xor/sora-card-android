@@ -3,8 +3,28 @@ package jp.co.soramitsu.oauth.base.sdk.contract
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
+data class IbanInfo(
+    val iban: String,
+    val ibanStatus: IbanStatus,
+    val balance: String,
+    val statusDescription: String,
+)
+
+enum class IbanStatus {
+    ACTIVE,
+    CLOSED,
+    OTHER,
+}
+
 enum class SoraCardCommonVerification {
-    Failed, Rejected, Pending, Successful, NotFound
+    Failed,
+    Rejected,
+    Pending,
+    Successful,
+    Retry,
+    Started,
+    NotFound,
+    IbanIssued,
 }
 
 @Parcelize
@@ -18,27 +38,29 @@ sealed class SoraCardResult : Parcelable {
     @Parcelize
     data class Failure(
         val status: SoraCardCommonVerification,
-        val error: SoraCardError? = null
+        val error: SoraCardError? = null,
     ) : SoraCardResult()
 
     @Parcelize
-    object Canceled : SoraCardResult()
+    data object Canceled : SoraCardResult()
 
     @Parcelize
-    object Logout : SoraCardResult()
+    data object Logout : SoraCardResult()
 
     @Parcelize
     data class NavigateTo(
-        val screen: OutwardsScreen
+        val screen: OutwardsScreen,
     ) : SoraCardResult()
 }
 
 enum class OutwardsScreen {
-    DEPOSIT, SWAP, BUY
+    DEPOSIT,
+    SWAP,
+    BUY,
 }
 
 enum class SoraCardError {
 
     USER_NOT_FOUND,
-    EMAIL_VERIFICATION_NOT_FINISHED
+    EMAIL_VERIFICATION_NOT_FINISHED,
 }

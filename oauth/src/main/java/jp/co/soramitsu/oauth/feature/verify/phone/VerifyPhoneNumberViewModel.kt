@@ -1,41 +1,40 @@
 package jp.co.soramitsu.oauth.feature.verify.phone
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.viewModelScope
 import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
 import com.paywings.oauth.android.sdk.service.callback.SignInWithPhoneNumberRequestOtpCallback
 import com.paywings.oauth.android.sdk.service.callback.SignInWithPhoneNumberVerifyOtpCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+import jp.co.soramitsu.androidfoundation.format.TextValue
+import jp.co.soramitsu.androidfoundation.format.unsafeCast
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.base.sdk.SoraCardEnvironmentType
+import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardFlow
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.feature.OAuthCallback
-import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.oauth.feature.verify.Timer
 import jp.co.soramitsu.oauth.feature.verify.format
-import jp.co.soramitsu.oauth.feature.verify.formatForAuth
 import jp.co.soramitsu.oauth.feature.verify.model.ButtonState
-import jp.co.soramitsu.oauth.feature.verify.phone.model.VerifyPhoneNumberState
+import jp.co.soramitsu.oauth.feature.verify.phone.uiscreens.VerifyPhoneNumberState
 import jp.co.soramitsu.ui_core.component.input.InputTextState
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class VerifyPhoneNumberViewModel @Inject constructor(
     private val mainRouter: MainRouter,
-    private val userSessionRepository: UserSessionRepository,
     private val timer: Timer,
-    inMemoryRepo: InMemoryRepo,
+    private val inMemoryRepo: InMemoryRepo,
     private val pwoAuthClientProxy: PWOAuthClientProxy,
 ) : BaseViewModel() {
 
@@ -43,30 +42,31 @@ class VerifyPhoneNumberViewModel @Inject constructor(
         const val LOADING_DELAY = 300L
     }
 
-    var state by mutableStateOf(
+    private val _state = MutableStateFlow(
         VerifyPhoneNumberState(
             inputTextState = InputTextState(
                 label = if (inMemoryRepo.environment == SoraCardEnvironmentType.TEST) {
                     "Use 123456 in this field"
                 } else {
                     R.string.verify_phone_number_code_input_field_label
-                }
+                },
             ),
             buttonState = ButtonState(
-                title = R.string.common_resend_code,
+                title = TextValue.StringRes(R.string.common_resend_code),
                 enabled = false,
-            )
-        )
+            ),
+        ),
     )
-        private set
+    val state = _state.asStateFlow()
 
+    private var countryCode: String = ""
     private var phoneNumber: String = ""
     private var otpLength: Int = Int.MAX_VALUE
 
     private var authCallback: OAuthCallback? = null
 
     init {
-        _toolbarState.value = SoramitsuToolbarState(
+        mToolbarState.value = SoramitsuToolbarState(
             type = SoramitsuToolbarType.Small(),
             basic = BasicToolbarState(
                 title = R.string.verify_phone_number_title,
@@ -81,20 +81,20 @@ class VerifyPhoneNumberViewModel @Inject constructor(
 
     private fun setUpOtpResendTimer() {
         timer.setOnTickListener { millisUntilFinished ->
-            state = state.copy(
-                buttonState = state.buttonState.copy(
+            _state.value = _state.value.copy(
+                buttonState = _state.value.buttonState.copy(
                     enabled = false,
-                    timer = millisUntilFinished.format()
-                )
+                    timer = millisUntilFinished.format(),
+                ),
             )
         }
 
         timer.setOnFinishListener {
-            state = state.copy(
-                buttonState = state.buttonState.copy(
+            _state.value = _state.value.copy(
+                buttonState = _state.value.buttonState.copy(
                     enabled = true,
-                    timer = null
-                )
+                    timer = null,
+                ),
             )
         }
     }
@@ -104,10 +104,12 @@ class VerifyPhoneNumberViewModel @Inject constructor(
     }
 
     fun setArgs(
+        countryCode: String?,
         phoneNumber: String?,
         otpLength: Int?,
         authCallback: OAuthCallback,
     ) {
+        countryCode?.let { this.countryCode = it }
         phoneNumber?.let {
             this.phoneNumber = it
         }
@@ -120,12 +122,18 @@ class VerifyPhoneNumberViewModel @Inject constructor(
     private val verifyOtpCallback = object : SignInWithPhoneNumberVerifyOtpCallback {
         override fun onError(error: OAuthErrorCode, errorMessage: String?) {
             loading(false)
-            state = state.copy(
-                inputTextState = state.inputTextState.copy(
+            _state.value = _state.value.copy(
+                inputTextState = _state.value.inputTextState.copy(
                     error = true,
-                    descriptionText = error.description
-                )
+                    descriptionText = error.description,
+                ),
             )
+        }
+
+        override fun onShowTimeBasedOtpSetupScreen(accountName: String, secretKey: String) {
+        }
+
+        override fun onShowTimeBasedOtpVerificationInputScreen(accountName: String) {
         }
 
         override fun onShowEmailConfirmationScreen(email: String, autoEmailSent: Boolean) {
@@ -135,18 +143,15 @@ class VerifyPhoneNumberViewModel @Inject constructor(
 
         override fun onShowRegistrationScreen() {
             loading(false)
-            mainRouter.openRegisterUser()
+            if (inMemoryRepo.flow!!.unsafeCast<SoraCardFlow.SoraCardKycFlow>().logIn) {
+                mainRouter.openLogInFailedUserNotFound()
+            } else {
+                mainRouter.openRegisterUser()
+            }
         }
 
-        override fun onSignInSuccessful(
-            refreshToken: String,
-            accessToken: String,
-            accessTokenExpirationTime: Long
-        ) {
-            viewModelScope.launch {
-                signInUser(refreshToken, accessToken, accessTokenExpirationTime)
-                authCallback?.onOAuthSucceed(accessToken)
-            }
+        override fun onSignInSuccessful() {
+            authCallback?.onOAuthSucceed()
         }
 
         override fun onUserSignInRequired() {
@@ -155,36 +160,27 @@ class VerifyPhoneNumberViewModel @Inject constructor(
 
         override fun onVerificationFailed() {
             loading(false)
-            state = state.copy(
-                inputTextState = state.inputTextState.copy(
+            _state.value = _state.value.copy(
+                inputTextState = _state.value.inputTextState.copy(
                     error = true,
-                    descriptionText = "OTP is not valid"
-                )
+                    descriptionText = "OTP is not valid",
+                ),
             )
         }
-    }
-
-    private suspend fun signInUser(
-        refreshToken: String,
-        accessToken: String,
-        accessTokenExpirationTime: Long
-    ) {
-        userSessionRepository.signInUser(
-            refreshToken,
-            accessToken,
-            accessTokenExpirationTime
-        )
     }
 
     private val requestOtpCallback = object : SignInWithPhoneNumberRequestOtpCallback {
         override fun onError(error: OAuthErrorCode, errorMessage: String?) {
             loading(false)
-            state = state.copy(
-                inputTextState = state.inputTextState.copy(
+            _state.value = _state.value.copy(
+                inputTextState = _state.value.inputTextState.copy(
                     error = true,
-                    descriptionText = error.description
-                )
+                    descriptionText = error.description,
+                ),
             )
+        }
+
+        override fun onShowTimeBasedOtpVerificationInputScreen(accountName: String) {
         }
 
         override fun onShowOtpInputScreen(otpLength: Int) {
@@ -198,16 +194,16 @@ class VerifyPhoneNumberViewModel @Inject constructor(
             return
         }
 
-        if (value.text.length == otpLength && value.text != state.inputTextState.value.text) {
+        if (value.text.length == otpLength && value.text != _state.value.inputTextState.value.text) {
             verifyOtp()
         }
 
-        state = state.copy(
-            inputTextState = state.inputTextState.copy(
+        _state.value = _state.value.copy(
+            inputTextState = _state.value.inputTextState.copy(
                 value = value,
                 error = false,
-                descriptionText = ""
-            )
+                descriptionText = "",
+            ),
         )
     }
 
@@ -220,7 +216,7 @@ class VerifyPhoneNumberViewModel @Inject constructor(
             loading(true)
             delay(LOADING_DELAY)
             pwoAuthClientProxy.signInWithPhoneNumberVerifyOtp(
-                otp = state.inputTextState.value.text,
+                otp = _state.value.inputTextState.value.text,
                 callback = verifyOtpCallback,
             )
         }
@@ -231,16 +227,17 @@ class VerifyPhoneNumberViewModel @Inject constructor(
             loading(true)
             delay(LOADING_DELAY)
             pwoAuthClientProxy.signInWithPhoneNumberRequestOtp(
-                phoneNumber = phoneNumber.formatForAuth(),
+                countryCode = countryCode,
+                phoneNumber = phoneNumber,
                 callback = requestOtpCallback,
             )
         }
     }
 
     private fun loading(loading: Boolean) {
-        state = state.copy(
-            inputTextState = state.inputTextState.copy(enabled = !loading),
-            buttonState = state.buttonState.copy(loading = loading)
+        _state.value = _state.value.copy(
+            inputTextState = _state.value.inputTextState.copy(enabled = !loading),
+            buttonState = _state.value.buttonState.copy(loading = loading),
         )
     }
 }

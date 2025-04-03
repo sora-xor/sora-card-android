@@ -2,23 +2,24 @@ package jp.co.soramitsu.oauth.feature.kyc.result.verificationrejected
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import jp.co.soramitsu.oauth.R
 import jp.co.soramitsu.oauth.base.BaseViewModel
-import jp.co.soramitsu.oauth.base.compose.ScreenStatus
 import jp.co.soramitsu.oauth.base.navigation.MainRouter
+import jp.co.soramitsu.oauth.base.navigation.SetActivityResult
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardCommonVerification
 import jp.co.soramitsu.oauth.base.sdk.contract.SoraCardResult
 import jp.co.soramitsu.oauth.common.domain.KycRepository
+import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.common.domain.PriceInteractor
-import jp.co.soramitsu.oauth.common.navigation.engine.activityresult.api.SetActivityResult
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
+import jp.co.soramitsu.oauth.uiscreens.compose.ScreenStatus
 import jp.co.soramitsu.ui_core.component.toolbar.BasicToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarState
 import jp.co.soramitsu.ui_core.component.toolbar.SoramitsuToolbarType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class VerificationRejectedViewModel @Inject constructor(
@@ -26,7 +27,8 @@ class VerificationRejectedViewModel @Inject constructor(
     private val userSessionRepository: UserSessionRepository,
     private val kycRepository: KycRepository,
     private val setActivityResult: SetActivityResult,
-    private val priceInteractor: PriceInteractor
+    private val priceInteractor: PriceInteractor,
+    private val pwoAuthClientProxy: PWOAuthClientProxy,
 ) : BaseViewModel() {
 
     private val _verificationRejectedScreenState = MutableStateFlow(
@@ -34,19 +36,22 @@ class VerificationRejectedViewModel @Inject constructor(
             screenStatus = ScreenStatus.ERROR,
             kycFreeAttemptsCount = 0,
             isFreeAttemptsLeft = false,
-            kycAttemptCostInEuros = (-1).toDouble()
-        )
+            kycAttemptCostInEuros = "",
+            reason = null,
+            phone = "",
+            reasonDetails = null,
+        ),
     )
     val verificationRejectedScreenState = _verificationRejectedScreenState.asStateFlow()
 
     init {
-        _toolbarState.value = SoramitsuToolbarState(
+        mToolbarState.value = SoramitsuToolbarState(
             type = SoramitsuToolbarType.Small(),
             basic = BasicToolbarState(
                 title = R.string.verification_rejected_title,
                 visibility = true,
                 navIcon = R.drawable.ic_cross,
-                actionLabel = R.string.log_out
+                actionLabel = R.string.log_out,
             ),
         )
 
@@ -56,23 +61,28 @@ class VerificationRejectedViewModel @Inject constructor(
     private fun fetchKycAttemptInfo() {
         viewModelScope.launch {
             runCatching {
+                val reasons = kycRepository.getCachedKycResponse()
                 val token = userSessionRepository.getAccessToken()
+                val (actualKycAttemptsLeft, isKycAttemptsLeft) =
+                    kycRepository.getFreeKycAttemptsInfo(token)
+                        .getOrThrow().run { freeAttemptsCount to freeAttemptAvailable }
+                val kycAttemptPrice = priceInteractor.calculateKycAttemptPrice()
 
-                val (actualKycAttemptsLeft, isKycAttemptsLeft) = kycRepository.getFreeKycAttemptsInfo(token)
-                    .getOrThrow().run { freeAttemptsCount to (freeAttemptsCount != 0) }
-
-                val kycAttemptPrice = priceInteractor.calculateKycAttemptPrice().getOrThrow()
-
-                _verificationRejectedScreenState.value = _verificationRejectedScreenState.value.copy(
-                    screenStatus = ScreenStatus.READY_TO_RENDER,
-                    kycFreeAttemptsCount = actualKycAttemptsLeft,
-                    kycAttemptCostInEuros = kycAttemptPrice,
-                    isFreeAttemptsLeft = isKycAttemptsLeft,
-                )
+                _verificationRejectedScreenState.value =
+                    _verificationRejectedScreenState.value.copy(
+                        screenStatus = ScreenStatus.READY_TO_RENDER,
+                        kycFreeAttemptsCount = actualKycAttemptsLeft,
+                        kycAttemptCostInEuros = kycAttemptPrice,
+                        isFreeAttemptsLeft = if (reasons?.first == SoraCardCommonVerification.Retry) true else isKycAttemptsLeft,
+                        reason = reasons?.second?.additionalDescription,
+                        phone = userSessionRepository.getPhoneNumber(),
+                        reasonDetails = reasons?.second?.rejectionReasons?.map { it.desc },
+                    )
             }.onFailure {
-                _verificationRejectedScreenState.value = _verificationRejectedScreenState.value.copy(
-                    screenStatus = ScreenStatus.ERROR
-                )
+                _verificationRejectedScreenState.value =
+                    _verificationRejectedScreenState.value.copy(
+                        screenStatus = ScreenStatus.ERROR,
+                    )
             }
         }
     }
@@ -81,6 +91,7 @@ class VerificationRejectedViewModel @Inject constructor(
         super.onToolbarAction()
         try {
             viewModelScope.launch {
+                pwoAuthClientProxy.logout()
                 userSessionRepository.logOutUser()
             }.invokeOnCompletion {
                 setActivityResult.setResult(SoraCardResult.Logout)
@@ -96,7 +107,7 @@ class VerificationRejectedViewModel @Inject constructor(
             setActivityResult.setResult(
                 SoraCardResult.Success(
                     status = SoraCardCommonVerification.Rejected,
-                )
+                ),
             )
         }
     }

@@ -4,10 +4,10 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 import jp.co.soramitsu.oauth.base.data.SoraCardDataStore
 import jp.co.soramitsu.oauth.feature.session.data.UserSessionRepositoryImpl
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
-import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module

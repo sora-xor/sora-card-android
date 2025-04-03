@@ -4,6 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 import jp.co.soramitsu.oauth.base.sdk.InMemoryRepo
 import jp.co.soramitsu.oauth.common.data.CurrentActivityRetrieverImpl
 import jp.co.soramitsu.oauth.common.data.KycRepositoryImpl
@@ -13,9 +14,10 @@ import jp.co.soramitsu.oauth.common.domain.KycRepository
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxy
 import jp.co.soramitsu.oauth.common.domain.PWOAuthClientProxyImpl
 import jp.co.soramitsu.oauth.common.domain.PriceInteractor
+import jp.co.soramitsu.oauth.feature.AccessTokenValidator
+import jp.co.soramitsu.oauth.feature.gatehub.GateHubRepository
 import jp.co.soramitsu.oauth.feature.session.domain.UserSessionRepository
 import jp.co.soramitsu.oauth.network.SoraCardNetworkClient
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -29,23 +31,33 @@ class CommonModule {
     @Provides
     fun provideKycRepository(
         apiClient: SoraCardNetworkClient,
+        inMemoryRepo: InMemoryRepo,
         userSessionRepository: UserSessionRepository,
-    ): KycRepository = KycRepositoryImpl(apiClient, userSessionRepository)
+    ): KycRepository = KycRepositoryImpl(apiClient, inMemoryRepo, userSessionRepository)
+
+    @Singleton
+    @Provides
+    fun provideGateHubRepository(
+        apiClient: SoraCardNetworkClient,
+        accessTokenValidator: AccessTokenValidator,
+        inMemoryRepo: InMemoryRepo,
+    ): GateHubRepository {
+        return GateHubRepository(apiClient, accessTokenValidator, inMemoryRepo)
+    }
 
     @Provides
     @Singleton
-    fun provideCurrentActivityRetriever(): CurrentActivityRetriever =
-        CurrentActivityRetrieverImpl()
+    fun provideCurrentActivityRetriever(): CurrentActivityRetriever = CurrentActivityRetrieverImpl()
 
     @Provides
     @Singleton
     fun providePriceInteractor(
         userSessionRepository: UserSessionRepository,
         inMemoryRepo: InMemoryRepo,
-        kycRepository: KycRepository
+        kycRepository: KycRepository,
     ): PriceInteractor = PriceInteractorImpl(
         userSessionRepository = userSessionRepository,
         inMemoryCache = inMemoryRepo,
-        kycRepository = kycRepository
+        kycRepository = kycRepository,
     )
 }
