@@ -2,12 +2,15 @@ package jp.co.soramitsu.oauth.feature.verify.phone
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.compose.ui.text.input.TextFieldValue
+import com.paywings.oauth.android.sdk.data.enums.OAuthErrorCode
+import com.paywings.oauth.android.sdk.service.callback.SignInWithPhoneNumberRequestOtpCallback
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
 import io.mockk.just
 import io.mockk.runs
+import io.mockk.slot
 import io.mockk.verify
 import jp.co.soramitsu.androidfoundation.format.TextValue
 import jp.co.soramitsu.androidfoundation.format.unsafeCast
@@ -74,9 +77,17 @@ class EnterPhoneNumberViewModelTest {
     @Before
     fun setUp() {
         every { inMemoryRepo.environment } returns SoraCardEnvironmentType.PRODUCTION
-        coEvery { pwoAuthClientProxy.signInWithPhoneNumberRequestOtp(any(), any(), any(), any()) } just runs
+        coEvery {
+            pwoAuthClientProxy.signInWithPhoneNumberRequestOtp(
+                any(),
+                any(),
+                any(),
+                any(),
+            )
+        } just runs
         every { mainRouter.back() } just runs
         every { mainRouter.openCountryList(true) } just runs
+        every { mainRouter.openVerifyPhoneNumber(any(), any(), any()) } just runs
         every { localeService.code } returns "US"
         every { setActivityResult.setResult(any()) } just runs
         coEvery { kycRepository.getCountries() } returns listOf(CountryDial("US", "USA", "+1"))
@@ -91,6 +102,45 @@ class EnterPhoneNumberViewModelTest {
             inMemoryRepo,
             userSessionRepository,
         )
+    }
+
+    @Test
+    fun `locale empty list`() = runTest {
+        coEvery { kycRepository.getCountries() } returns emptyList()
+        advanceUntilIdle()
+        assertTrue(viewModel.state.value.countryLoading)
+        advanceUntilIdle()
+        viewModel.setLocale(null)
+        advanceUntilIdle()
+        assertFalse(viewModel.state.value.countryLoading)
+    }
+
+    @Test
+    fun `locale list uk`() = runTest {
+        advanceUntilIdle()
+        assertTrue(viewModel.state.value.countryLoading)
+        advanceUntilIdle()
+        viewModel.setLocale("uk")
+        advanceUntilIdle()
+        assertFalse(viewModel.state.value.countryLoading)
+        assertEquals("USA", viewModel.state.value.countryName)
+        assertEquals("US", viewModel.state.value.countryCode)
+    }
+
+    @Test
+    fun `locale list uk found`() = runTest {
+        coEvery { kycRepository.getCountries() } returns listOf(
+            CountryDial("US", "USA", "+1"),
+            CountryDial("UK", "United Kingdom", "+44"),
+        )
+        advanceUntilIdle()
+        assertTrue(viewModel.state.value.countryLoading)
+        advanceUntilIdle()
+        viewModel.setLocale("uk")
+        advanceUntilIdle()
+        assertFalse(viewModel.state.value.countryLoading)
+        assertEquals("United Kingdom", viewModel.state.value.countryName)
+        assertEquals("UK", viewModel.state.value.countryCode)
     }
 
     @Test
@@ -221,6 +271,128 @@ class EnterPhoneNumberViewModelTest {
         advanceUntilIdle()
 
         assertTrue(viewModel.state.value.buttonState.loading)
+    }
+
+    @Test
+    fun `request code EXPECT loading is true otp callback show otp`() = runTest {
+        val slot = slot<SignInWithPhoneNumberRequestOtpCallback>()
+        coEvery {
+            pwoAuthClientProxy.signInWithPhoneNumberRequestOtp(
+                "1",
+                "",
+                null,
+                capture(slot),
+            )
+        } answers {
+            slot.captured.onShowOtpInputScreen(6)
+        }
+        advanceUntilIdle()
+        viewModel.setLocale(null)
+        advanceUntilIdle()
+        viewModel.onRequestCode()
+        advanceUntilIdle()
+
+        verify { mainRouter.openVerifyPhoneNumber("1", "", 6) }
+    }
+
+    @Test
+    fun `request code EXPECT loading is true otp callback time based otp`() = runTest {
+        val slot = slot<SignInWithPhoneNumberRequestOtpCallback>()
+        coEvery {
+            pwoAuthClientProxy.signInWithPhoneNumberRequestOtp(
+                "1",
+                "",
+                null,
+                capture(slot),
+            )
+        } answers {
+            slot.captured.onShowTimeBasedOtpVerificationInputScreen("acc name")
+        }
+        advanceUntilIdle()
+        viewModel.setLocale(null)
+        advanceUntilIdle()
+        viewModel.onRequestCode()
+        advanceUntilIdle()
+
+        assertTrue(viewModel.state.value.buttonState.loading)
+    }
+
+    @Test
+    fun `request code EXPECT loading is true otp callback error unknown`() = runTest {
+        val slot = slot<SignInWithPhoneNumberRequestOtpCallback>()
+        coEvery {
+            pwoAuthClientProxy.signInWithPhoneNumberRequestOtp(
+                "1",
+                "",
+                null,
+                capture(slot),
+            )
+        } answers {
+            slot.captured.onError(OAuthErrorCode.UNKNOWN_ERROR, "error mess")
+        }
+        advanceUntilIdle()
+        viewModel.setLocale(null)
+        advanceUntilIdle()
+        viewModel.onRequestCode()
+        advanceUntilIdle()
+
+        assertFalse(viewModel.state.value.buttonState.loading)
+        assertTrue(viewModel.state.value.inputTextStateNumber.error)
+        assertEquals("error mess", viewModel.state.value.inputTextStateNumber.descriptionText)
+    }
+
+    @Test
+    fun `request code EXPECT loading is true otp callback error unknown desc`() = runTest {
+        val slot = slot<SignInWithPhoneNumberRequestOtpCallback>()
+        coEvery {
+            pwoAuthClientProxy.signInWithPhoneNumberRequestOtp(
+                "1",
+                "",
+                null,
+                capture(slot),
+            )
+        } answers {
+            slot.captured.onError(OAuthErrorCode.UNKNOWN_ERROR, null)
+        }
+        advanceUntilIdle()
+        viewModel.setLocale(null)
+        advanceUntilIdle()
+        viewModel.onRequestCode()
+        advanceUntilIdle()
+
+        assertFalse(viewModel.state.value.buttonState.loading)
+        assertTrue(viewModel.state.value.inputTextStateNumber.error)
+        assertEquals(
+            "Unknown error, see error detail message.",
+            viewModel.state.value.inputTextStateNumber.descriptionText,
+        )
+    }
+
+    @Test
+    fun `request code EXPECT loading is true otp callback error`() = runTest {
+        val slot = slot<SignInWithPhoneNumberRequestOtpCallback>()
+        coEvery {
+            pwoAuthClientProxy.signInWithPhoneNumberRequestOtp(
+                "1",
+                "",
+                null,
+                capture(slot),
+            )
+        } answers {
+            slot.captured.onError(OAuthErrorCode.RECAPTCHA_ERROR, "error message")
+        }
+        advanceUntilIdle()
+        viewModel.setLocale(null)
+        advanceUntilIdle()
+        viewModel.onRequestCode()
+        advanceUntilIdle()
+
+        assertFalse(viewModel.state.value.buttonState.loading)
+        assertTrue(viewModel.state.value.inputTextStateNumber.error)
+        assertEquals(
+            "An error occurred during Recaptcha client verification. Error message: ",
+            viewModel.state.value.inputTextStateNumber.descriptionText,
+        )
     }
 
     @Test

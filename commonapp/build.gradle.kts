@@ -13,7 +13,7 @@ kotlin {
 
 android {
     namespace = "jp.co.soramitsu.soracard.commonapp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 26
