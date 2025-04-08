@@ -28,6 +28,7 @@ plugins {
     alias(libs.plugins.kover)
     id("kotlin-parcelize")
     id("org.jetbrains.dokka")
+    alias(libs.plugins.composeCompiler)
 }
 
 val composeCompilerVersion: String by project
@@ -38,7 +39,7 @@ kotlin {
 
 android {
     namespace = "jp.co.soramitsu.oauth"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 26
@@ -72,15 +73,11 @@ android {
     }
 
     buildFeatures {
-        compose = true
         buildConfig = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = composeCompilerVersion
     }
     testOptions {
         unitTests.isReturnDefaultValues = true
-        targetSdk = 34
+        targetSdk = 35
     }
     packaging {
         resources {
@@ -171,7 +168,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "jp.co.soramitsu"
             artifactId = "android-sora-card"
-            version = "1.2.0-RC11-K1"
+            version = "1.2.1-K2"
 
             afterEvaluate {
                 from(components["release"])

@@ -100,14 +100,21 @@ class EnterPhoneNumberViewModel @Inject constructor(
     private val requestOtpCallback = object : SignInWithPhoneNumberRequestOtpCallback {
         override fun onError(error: OAuthErrorCode, errorMessage: String?) {
             loading(false)
-            (error.description.takeIf { it.isNotEmpty() } ?: errorMessage)?.let { descriptionText ->
-                _state.value = _state.value.copy(
-                    inputTextStateNumber = _state.value.inputTextStateNumber.copy(
-                        error = true,
-                        descriptionText = descriptionText,
-                    ),
-                )
+            val descriptionText = when (error) {
+                OAuthErrorCode.UNKNOWN_ERROR -> {
+                    errorMessage ?: error.description
+                }
+
+                else -> {
+                    error.description
+                }
             }
+            _state.value = _state.value.copy(
+                inputTextStateNumber = _state.value.inputTextStateNumber.copy(
+                    error = true,
+                    descriptionText = descriptionText,
+                ),
+            )
         }
 
         override fun onShowTimeBasedOtpVerificationInputScreen(accountName: String) {
@@ -155,7 +162,14 @@ class EnterPhoneNumberViewModel @Inject constructor(
             inputTextStateNumber = _state.value.inputTextStateNumber.copy(
                 value = numbers,
                 error = false,
-                descriptionText = if (inMemoryRepo.flow!!.unsafeCast<SoraCardFlow.SoraCardKycFlow>().logIn && value.text.startsWith("0")) R.string.phone_number_leading_zero else R.string.common_no_spam,
+                descriptionText = if (inMemoryRepo.flow!!.unsafeCast<SoraCardFlow.SoraCardKycFlow>().logIn && value.text.startsWith(
+                        "0",
+                    )
+                ) {
+                    R.string.phone_number_leading_zero
+                } else {
+                    R.string.common_no_spam
+                },
             ),
             buttonState = _state.value.buttonState.copy(enabled = numbers.text.isNotEmpty() && getPhoneCode().length + numbers.text.length >= PHONE_NUMBER_LENGTH_MIN),
         )

@@ -22,6 +22,7 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.kapt)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.composeCompiler)
 }
 
 val composeCompilerVersion: String by project
@@ -32,12 +33,12 @@ kotlin {
 
 android {
     namespace = "jp.co.soramitsu.sora.communitytesting"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "jp.co.soramitsu.sora.communitytesting"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
         multiDexEnabled = true
@@ -152,12 +153,6 @@ android {
             )
         }
     }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = composeCompilerVersion
-    }
     packaging {
         resources {
             excludes += listOf(
@@ -177,6 +172,9 @@ android {
                 "META-INF/io.netty.versions.properties",
             )
         }
+    }
+    buildFeatures {
+        buildConfig = true
     }
 }
 
